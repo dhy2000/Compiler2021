@@ -37,3 +37,9 @@ clean:
 
 testall:
 	script/testall.sh
+
+zip:
+	script/zipall.sh
+
+cleanzip:
+	rm *.zip -f
