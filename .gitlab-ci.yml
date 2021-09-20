@@ -8,6 +8,7 @@ build:
   tags:
     - myserver
   script:
+    - chmod +x script/*.sh
     - make testall
     - make cleanzip && make zip
   artifacts:
