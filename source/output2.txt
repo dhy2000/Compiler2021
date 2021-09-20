@@ -1,0 +1,73 @@
+.. push 1 to stack.
+@ Read number 1
+.. push 2 to stack.
+@ Read number 2
+.. push -1 to stack.
+@ Read operator -1
+Exec: [OP -1] 1 2 --> 3
+@ Read end of expr.
+Expression done. Result = 3
+.. push 5 to stack.
+@ Read number 5
+.. push 3 to stack.
+@ Read number 3
+.. push -2 to stack.
+@ Read operator -2
+Exec: [OP -2] 5 3 --> 2
+@ Read end of expr.
+Expression done. Result = 2
+.. push 3 to stack.
+@ Read number 3
+.. push 8 to stack.
+@ Read number 8
+.. push -3 to stack.
+@ Read operator -3
+Exec: [OP -3] 3 8 --> 24
+@ Read end of expr.
+Expression done. Result = 24
+.. push 12 to stack.
+@ Read number 12
+.. push 4 to stack.
+@ Read number 4
+.. push -4 to stack.
+@ Read operator -4
+Exec: [OP -4] 12 4 --> 3
+@ Read end of expr.
+Expression done. Result = 3
+.. push 15 to stack.
+@ Read number 15
+.. push 6 to stack.
+@ Read number 6
+.. push -5 to stack.
+@ Read operator -5
+Exec: [OP -5] 15 6 --> 3
+@ Read end of expr.
+Expression done. Result = 3
+.. push 3 to stack.
+@ Read number 3
+.. push 8 to stack.
+@ Read number 8
+.. push -1 to stack.
+@ Read operator -1
+Exec: [OP -1] 3 8 --> 11
+.. push 5 to stack.
+@ Read number 5
+.. push 3 to stack.
+@ Read number 3
+.. push -1 to stack.
+@ Read operator -1
+Exec: [OP -1] 5 3 --> 8
+.. push -3 to stack.
+@ Read operator -3
+Exec: [OP -3] 11 8 --> 88
+@ Read end of expr.
+Expression done. Result = 88
+.. push 18373000 to stack.
+@ Read number 18373000
+.. push 391 to stack.
+@ Read number 391
+.. push -1 to stack.
+@ Read operator -1
+Exec: [OP -1] 18373000 391 --> 18373391
+@ Read end of expr.
+Program end~~~, 73 108 111 118 50 18373391

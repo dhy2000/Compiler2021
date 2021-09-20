@@ -1,0 +1,10 @@
+int main() {
+    printf("18375354\n");
+
+    int a = getint();
+    int b = getint();
+
+    printf("%d\n", a + b);
+
+    return 0;
+}

@@ -1,0 +1,74 @@
+/* Testfile 2 */
+
+// Author: 18375354
+
+/* PostOrder Expression 
+    -1: Add
+    -2: Sub
+    -3: Mul
+    -4: Div
+    -5: Mod
+    -1906: EOL
+    EOF: when calculating result is ***
+    assert input is valid.
+ */
+
+const int MAX_DEPTH = 404;
+
+int _s_t_a_c_k[404];
+int stkSize = 0;
+
+int calcop(int a, int b, int op) {
+    printf("[OP %d] %d %d", op, a, b);
+    int results[5] = {a + b, a - b, a * b, a / b, a % b};
+    printf(" --> %d\n", results[(-op) - 1]);
+    return results[(-op) - 1];
+}
+
+void pu5h_5tack(int x) {
+    printf(".. push %d to stack.\n", x);
+    stkSize = stkSize + 1;
+    _s_t_a_c_k[stkSize - 1] = x;
+}
+
+void exeOneStep() {
+    printf("Exec: ");
+    stkSize = stkSize - 3;
+    int __0 = _s_t_a_c_k[-3 + stkSize + +-+-+-+-+5];
+    int __1 = _s_t_a_c_k[stkSize], __2 = _s_t_a_c_k[stkSize + 1];
+
+    _s_t_a_c_k[stkSize] = calcop(__1, __2, __0);
+    stkSize = stkSize + 1;
+}
+
+int main() {
+    while (3 > 2) {
+        int x = getint();
+        
+        if (-1906 == x) {
+            printf("@ Read end of expr.\n");
+            int result = _s_t_a_c_k[0];
+            if (4259+235*243/3+3*4*4*3*6*5/3*    9293+385*4346   +   -+-23643*139+1926+817+1952+1026+2869 - result == 0) {
+                printf("Program end~~~, ");
+                printf("%d %d %d %d %d %d\n", 73, 36*3, 3*37, (1 + 1) * 59, 5050 / 100, result);
+                break;
+            }
+            printf("Expression done. Result = %d\n", result);
+            _s_t_a_c_k[0] = 0;
+            stkSize = 0;
+            continue;
+        }
+        pu5h_5tack(x);
+        if (0 > x) {
+            printf("@ Read operator %d\n", x);
+        }
+        if (x >= 0) {
+            printf("@ Read number %d\n", x);
+        }
+        if (0 > x) {
+            exeOneStep();
+        }
+    }
+    
+    return 0;
+}
