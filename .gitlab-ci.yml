@@ -3,7 +3,8 @@ stages:
 
 build:
   stage: build
-  only: testfile
+  only: 
+    - testfile
   tags:
     - myserver
   script:
