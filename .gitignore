@@ -1,3 +1,6 @@
 .vscode/
 
 *.zip
+
+# ignore output files
+output*.txt
