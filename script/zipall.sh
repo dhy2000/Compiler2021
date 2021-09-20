@@ -12,4 +12,4 @@ do
     filelist=${filelist}" "${testfile}" "${testin}" "${testout}
 done
 
-zip -q testfile.zip ${filelist}
+zip -qj testfile.zip ${filelist}
