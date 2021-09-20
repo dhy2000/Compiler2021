@@ -43,7 +43,8 @@ void exeOneStep() {
 
 int main() {
     while (3 > 2) {
-        int x = getint();
+        int x;
+        x = getint();
         
         if (-1906 == x) {
             printf("@ Read end of expr.\n");

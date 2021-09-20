@@ -118,7 +118,10 @@ void sort_ave(int a[], int n) {
 int main() {
     printf("18375354\n");
     printf("Input n and m: \n");
-    int n = getint(), m = getint();
+    // int n = getint(), m = getint();
+    int n = 9999, m = 2333;
+    n = getint();
+    m = getint();
     if (n < 1 || n > 100 || m < 5 || m > 10) {
         printf("Wrong input range!\n");
         return 0;
