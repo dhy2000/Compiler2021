@@ -4,6 +4,8 @@ stages:
 build:
   stage: build
   only: testfile
+  tags:
+    - myserver
   script:
     - make testall
     - make cleanzip && make zip
