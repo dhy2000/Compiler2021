@@ -15,6 +15,9 @@ const int dist_init[12][12] = {
     {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1}
 };
 
+int x = 10;
+const int X = 10;
+
 const int unused_1dim[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 int temp2[12][12] = {
@@ -57,7 +60,7 @@ void matcpy(int dst[][3 * (2 + 2)], int src[][12]) {
     }
 }
 
-void mat0r(int dst[][12], int src1[][12], int src2[][12]) {
+void mat0r(int dst[][12], int src1[][X + 2], int src2[][X + 2]) {
     int i = 0;
     while (i < 12) {
         int j = 0;
