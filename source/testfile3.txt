@@ -60,7 +60,7 @@ void matcpy(int dst[][3 * (2 + 2)], int src[][12]) {
     }
 }
 
-void mat0r(int dst[][12], int src1[][x + 2], int src2[][X + 2]) {
+void mat0r(int dst[][12], int src1[][X + 2], int src2[][X + 2]) {
     int i = 0;
     while (i < 12) {
         int j = 0;
@@ -89,7 +89,7 @@ int matEql(int src1[][12], int src2[][12]) {
 
 }
 
-void NeXT_5tep(int g[][x + 2], int h[][+-+1 + X + 1], int t[][12]) {
+void NeXT_5tep(int g[][X + 2], int h[][+-+1 + X + 1], int t[][12]) {
     int i;
     0;
     i = 0;
