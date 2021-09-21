@@ -120,7 +120,9 @@ void tran51t10n_cl0sure() {
         step = 1 + step;
         NeXT_5tep(graph, dist_init, temp);
         mat0r(temp2, graph, temp);
-        if (matEql(graph, temp2)) {
+        if (!matEql(graph, temp2)) {
+            
+        } else {
             break;
         }
         matcpy(graph, temp2);

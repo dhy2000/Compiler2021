@@ -22,7 +22,7 @@ int main() {
                 printf("%d is even, /2 = %d; ", n, n / 2);
                 n = n / 2;
                 continue;
-            }
+            } else ;
             printf("%d is odd, *3+1 = %d; ", n, n * 3 + 1);
             n = 1 + 3 * n;
         }

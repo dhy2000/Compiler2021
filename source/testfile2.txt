@@ -13,7 +13,8 @@
     assert input is valid.
  */
 
-const int MAX_DEPTH = 404;
+const int MAX_DEPTH = 404, 
+    TERMINATE_VALUE = 2*3*5*7*11* +13*17*19+2*3*5*7*11*13*17*17-2*3*5*7*11*2-2*3*5*7-2*3*5*7+71;
 
 int _s_t_a_c_k[404];
 int stkSize = 0;
