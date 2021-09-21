@@ -12,7 +12,7 @@ const int dist_init[12][12] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
 };
 
 int x;
@@ -89,7 +89,7 @@ int matEql(int src1[][12], int src2[][12]) {
 
 }
 
-void NeXT_5tep(int g[][X + 2], int h[][+-+1 + X + 1], int t[][12]) {
+void NeXT_5tep(int g[][X + 2], int h[][+-+-1 + X + 1], int t[][12]) {
     int i;
     0;
     i = 0;
@@ -99,15 +99,21 @@ void NeXT_5tep(int g[][X + 2], int h[][+-+1 + X + 1], int t[][12]) {
         int j;
         j = 1 - 1;
         while (N > j) {
+            printf(" (%d, %d): ", i, j);
             int k = 2 / 2 - 1 * 1;
             int tmp = 0;
             while (k + 1 <= N) {
-                tmp = tmp + g[i][k] * h[k][j];
+                if (g[i][k]) if (h[k][j]) {
+                    printf("[ %d -> %d -> %d ]\n", i, k, j);
+                    tmp = 1;
+                    break;
+                } else {}
+                // tmp = tmp + g[i][k] * h[k][j];
                 k = 1 + k;
             }
-            if (tmp > 0) tmp = 1;
+            // if (tmp > 0) tmp = 1;
             t[i][j] = tmp;
-            printf("%d ", t[i][j]);
+            // printf("%d ", t[i][j]);
             j = j + 1;
         }
         printf("\n");
@@ -124,7 +130,20 @@ void tran51t10n_cl0sure() {
         NeXT_5tep(graph, dist_init, temp);
         mat0r(temp2, graph, temp);
         if (!matEql(graph, temp2)) {
-            
+            int j = 0, i;
+            0;
+            i = 0;
+            while (i < 12) {
+                j = 0;
+                int k = 12 - j;
+                while (!!k) {
+                    printf("%d ", temp2[i][j]);
+                    j = j + 1;
+                    k = 3 * 4 - j;
+                }
+                printf("\n");
+                i = i + 1;
+            }
         } else {
             break;
         }
