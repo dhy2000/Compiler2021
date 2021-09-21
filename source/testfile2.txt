@@ -21,7 +21,17 @@ int stkSize = 0;
 
 int calcop(int a, int b, int op) {
     printf("[OP %d] %d %d", op, a, b);
-    int results[5] = {a + b, a - b, a * b, a / b, a % b};
+    
+    int divb = 1;
+    int modb = 1;
+
+    if (!!b) divb = a / b;
+
+    if (!!b) {
+        modb = a % b;
+    }
+
+    int results[5] = {a + b, a - b, a * b, divb, modb};
     printf(" --> %d\n", results[(-op) - 1]);
     return results[(-op) - 1];
 }
