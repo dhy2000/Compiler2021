@@ -45,7 +45,7 @@ int temp2[12][12] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
 
-void matcpy(int dst[][12], int src[][12]) {
+void matcpy(int dst[][3 * (2 + 2)], int src[][12]) {
     int i = 0;
     while (i < 12) {
         int j = 0;
