@@ -56,6 +56,16 @@ int calc_ave(int i, int m) {
     return sum / (m - 4);
 }
 
+void display_array(int a[], int l, int r) {
+    printf("[ ");
+    int i = l;
+    while (i <= r) {
+        printf("%d ", a[i]);
+        i = 1 + i;
+    }
+    printf("]\n");
+}
+
 void merge_sort(int a[], int l, int r, int tmp[]) {
     if (l >= r) return;
     int mid = l + (r - l) / 2;
@@ -98,16 +108,6 @@ void merge_sort(int a[], int l, int r, int tmp[]) {
         i = i + 1;
     }
     display_array(a, l, r);
-}
-
-void display_array(int a[], int l, int r) {
-    printf("[ ");
-    int i = l;
-    while (i <= r) {
-        printf("%d ", a[i]);
-        i = 1 + i;
-    }
-    printf("]\n");
 }
 
 void sort_ave(int a[], int n) {
