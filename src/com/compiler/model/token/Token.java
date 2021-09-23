@@ -3,11 +3,9 @@ package com.compiler.model.token;
 public abstract class Token {
 
     private final TokenType type;
-    private final int lineNumber;
 
-    public Token(TokenType type, int lineNumber) {
+    public Token(TokenType type) {
         this.type = type;
-        this.lineNumber = lineNumber;
     }
 
     public boolean isReserved() {
@@ -17,10 +15,6 @@ public abstract class Token {
     // non-reserve token must override this method
     public String getContent() {
         return type.getContent();
-    }
-
-    public int getLineNumber() {
-        return lineNumber;
     }
 
     @Override

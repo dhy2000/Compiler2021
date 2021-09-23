@@ -2,10 +2,13 @@ package com.compiler.model.token;
 
 public class Ident extends Token {
 
+    /**
+     * 必须满足标识符的要求
+     */
     private final String identifier;
 
-    public Ident(int lineNumber, String identifier) {
-        super(TokenType.IDENFR, lineNumber);
+    public Ident(String identifier) {
+        super(TokenType.IDENFR);
         this.identifier = identifier;
     }
 
