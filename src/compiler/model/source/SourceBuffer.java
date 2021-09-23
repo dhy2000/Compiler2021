@@ -1,4 +1,4 @@
-package com.compiler.model.source;
+package compiler.model.source;
 
 import java.util.ArrayList;
 import java.util.List;

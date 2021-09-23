@@ -1,4 +1,4 @@
-package com.compiler.model.token;
+package compiler.model.token;
 
 public abstract class Token {
 
@@ -6,6 +6,10 @@ public abstract class Token {
 
     public Token(TokenType type) {
         this.type = type;
+    }
+
+    public String getTypeName() {
+        return type.name();
     }
 
     public boolean isReserved() {

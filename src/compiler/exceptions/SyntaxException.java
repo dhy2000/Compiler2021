@@ -1,4 +1,4 @@
-package com.compiler.exceptions;
+package compiler.exceptions;
 
 /**
  * 词法或语法错误

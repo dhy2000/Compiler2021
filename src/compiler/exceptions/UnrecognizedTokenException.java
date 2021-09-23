@@ -1,4 +1,4 @@
-package com.compiler.exceptions;
+package compiler.exceptions;
 
 /**
  * 未识别符号异常
@@ -6,7 +6,7 @@ package com.compiler.exceptions;
 public class UnrecognizedTokenException extends SyntaxException {
 
     public UnrecognizedTokenException(int line, int column, String text) {
-        super("Unrecognized Token at " + line + ":" + column + ": " + text, line, column, text);
+        super("Unrecognized Token: " + text, line, column, text);
     }
 
 }

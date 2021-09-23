@@ -1,4 +1,4 @@
-package com.compiler.model.token;
+package compiler.model.token;
 
 /**
  * 词法成分种类表

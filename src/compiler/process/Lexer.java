@@ -1,9 +1,9 @@
-package com.compiler.process;
+package compiler.process;
 
-import com.compiler.exceptions.StringNotClosedException;
-import com.compiler.exceptions.UnrecognizedTokenException;
-import com.compiler.model.source.SourceBuffer;
-import com.compiler.model.token.*;
+import compiler.exceptions.StringNotClosedException;
+import compiler.exceptions.UnrecognizedTokenException;
+import compiler.model.source.SourceBuffer;
+import compiler.model.token.*;
 
 import java.util.Objects;
 

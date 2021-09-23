@@ -1,4 +1,4 @@
-package com.compiler.model.token;
+package compiler.model.token;
 
 public class IntConst extends Token {
 

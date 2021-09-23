@@ -1,6 +1,6 @@
-package com.compiler.process;
+package compiler.process;
 
-import com.compiler.model.source.SourceBuffer;
+import compiler.model.source.SourceBuffer;
 
 import java.io.InputStream;
 import java.util.Scanner;

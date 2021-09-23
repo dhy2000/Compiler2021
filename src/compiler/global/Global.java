@@ -1,4 +1,4 @@
-package com.compiler.args;
+package compiler.global;
 
 import java.io.*;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ public class Global {
     /**
      * 参数指定输出目标, 以 -o 开头
      */
-    private static OutputStream target = System.out;
+    private static PrintStream target = System.out;
 
     public enum Operation {
         TOKENIZE("T"),
@@ -47,12 +47,12 @@ public class Global {
         Global.source = source;
     }
 
-    public static OutputStream getTarget() {
+    public static PrintStream getTarget() {
         return target;
     }
 
     private static void setTarget(OutputStream target) {
-        Global.target = target;
+        Global.target = new PrintStream(target);
     }
 
     public static boolean hasOperationOutput(Operation operation) {
