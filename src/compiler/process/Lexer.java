@@ -14,7 +14,7 @@ public class Lexer {
             throws UnrecognizedTokenException, StringNotClosedException {
         TokenStream ts = new TokenStream();
         while (!source.reachedEndOfFile()) {
-            source.skipBlanks();
+            skipBlanksAndComment(source);
             // detect reserved token
             Token nextToken = nextReservedToken(source);
             // detect Ident
@@ -75,6 +75,35 @@ public class Lexer {
             }
             return new IntConst(sb.toString());
         } else { return null; }
+    }
+
+    private static void skipLineComment(SourceBuffer source) {
+        if ("//".equals(source.followingSeq(2))) {
+            source.toNextLine();
+        }
+    }
+
+    private static void skipBlockComment(SourceBuffer source) {
+        if ("/*".equals(source.followingSeq(2))) {
+            while (!"*/".equals(source.followingSeq(2))) {
+                source.forward(1);
+            }
+        }
+    }
+
+    private static void skipBlanksAndComment(SourceBuffer source) {
+        int line = source.getLineIndex();
+        int col = source.getColumnIndex();
+        while (true) {
+            source.skipBlanks();
+            skipLineComment(source);
+            skipBlockComment(source);
+            if (source.getLineIndex() == line && source.getColumnIndex() == col) {
+                break;
+            }
+            line = source.getLineIndex();
+            col = source.getColumnIndex();
+        }
     }
 
     private static FormatString nextFormatString(SourceBuffer source) throws StringNotClosedException {

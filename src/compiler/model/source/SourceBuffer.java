@@ -35,6 +35,13 @@ public class SourceBuffer {
         return getCurrentLine().substring(columnIndex);
     }
 
+    public void toNextLine() {
+        if (!reachedEndOfFile()) {
+            lineIndex++;
+            columnIndex = 0;
+        }
+    }
+
     public boolean reachedEndOfFile() {
         return lineIndex >= lines.size();
     }
@@ -62,7 +69,7 @@ public class SourceBuffer {
     public char currentChar() {
         if (reachedEndOfLine()) { return '\n'; }
         if (reachedEndOfFile()) { return 0; }
-        return getCurrentLine().charAt(getColumnIndex());
+        return getCurrentLine().charAt(columnIndex);
     }
 
     public void skipBlanks() {
