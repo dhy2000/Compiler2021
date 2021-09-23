@@ -85,8 +85,11 @@ public class Lexer {
 
     private static void skipBlockComment(SourceBuffer source) {
         if ("/*".equals(source.followingSeq(2))) {
-            while (!"*/".equals(source.followingSeq(2))) {
+            while (!source.reachedEndOfFile() && !"*/".equals(source.followingSeq(2))) {
                 source.forward(1);
+            }
+            if ("*/".equals(source.followingSeq(2))) {
+                source.forward(2);
             }
         }
     }
