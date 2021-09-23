@@ -5,20 +5,15 @@ public class FormatString extends Token {
     /**
      * 不包括双引号
      */
-    private final String content;
+    private final String innerStr;
 
-    public FormatString(String content) {
+    public FormatString(String str) {
         super(TokenType.STRCON);
-        this.content = content;
+        this.innerStr = str;
     }
 
     @Override
     public String getContent() {
-        return content;
-    }
-
-    @Override
-    public String toString() {
-        return "\"" + getContent() + "\"";
+        return "\"" + innerStr + "\"";
     }
 }
