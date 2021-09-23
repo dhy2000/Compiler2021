@@ -2,6 +2,7 @@ package com.compiler.model.token;
 
 /**
  * 词法成分种类表
+ * 注意: 对于保留成分(保留字和运算符)有公共前缀的, 需贪心匹配 (例如 "==" 应放在 "=" 前面)
  */
 public enum TokenType {
     IDENFR,
@@ -14,7 +15,6 @@ public enum TokenType {
     CONTINUETK("continue"),
     IFTK("if"),
     ELSETK("else"),
-    NOT("!"),
     AND("&&"),
     OR("||"),
     WHILETK("while"),
@@ -26,12 +26,13 @@ public enum TokenType {
     MULT("*"),
     DIV("/"),
     MOD("%"),
-    LSS("<"),
     LEQ("<="),
-    GRE(">"),
+    LSS("<"),
     GEQ(">="),
+    GRE(">"),
     EQL("=="),
     NEQ("!="),
+    NOT("!"),
     ASSIGN("="),
     SEMICN(";"),
     COMMA(","),

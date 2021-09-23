@@ -29,6 +29,10 @@ public class SourceBuffer {
         return lines.get(lineIndex);
     }
 
+    public String getRemainingLine() {
+        return getCurrentLine().substring(columnIndex);
+    }
+
     public boolean reachedEndOfFile() {
         return lineIndex >= lines.size();
     }

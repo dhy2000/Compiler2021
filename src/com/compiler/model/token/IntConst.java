@@ -5,11 +5,13 @@ public class IntConst extends Token {
     /**
      * 32 位有符号整数
      */
+    private final String raw;
     private final int value;
 
-    public IntConst(int value) {
+    public IntConst(String raw) {
         super(TokenType.INTCON);
-        this.value = value;
+        this.raw = raw;
+        this.value = Integer.parseInt(raw);
     }
 
     public int getValue() {
@@ -18,6 +20,6 @@ public class IntConst extends Token {
 
     @Override
     public String getContent() {
-        return String.valueOf(value);
+        return raw;
     }
 }
