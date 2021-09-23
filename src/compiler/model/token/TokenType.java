@@ -8,19 +8,19 @@ public enum TokenType {
     IDENFR,
     INTCON,
     STRCON,
-    MAINTK("main"),
-    CONSTTK("const"),
-    INTTK("int"),
-    BREAKTK("break"),
-    CONTINUETK("continue"),
-    IFTK("if"),
-    ELSETK("else"),
+    MAINTK("main", true),
+    CONSTTK("const", true),
+    INTTK("int", true),
+    BREAKTK("break", true),
+    CONTINUETK("continue", true),
+    IFTK("if", true),
+    ELSETK("else", true),
     AND("&&"),
     OR("||"),
-    WHILETK("while"),
-    GETINTTK("getint"),
-    PRINTFTK("printf"),
-    RETURNTK("return"),
+    WHILETK("while", true),
+    GETINTTK("getint", true),
+    PRINTFTK("printf", true),
+    RETURNTK("return", true),
     PLUS("+"),
     MINU("-"),
     MULT("*"),
@@ -53,14 +53,27 @@ public enum TokenType {
      */
     private final String content;
 
+    /**
+     * 该保留成分是否同时满足标识符的语法
+     */
+    private final boolean identifier;
+
     TokenType() {
         this.reserved = false;
         this.content = "";
+        this.identifier = false;
     }
 
     TokenType(String content) {
         this.reserved = true;
         this.content = content;
+        this.identifier = false;
+    }
+
+    TokenType(String content, boolean identifier) {
+        this.reserved = true;
+        this.content = content;
+        this.identifier = identifier;
     }
 
     public boolean isReserved() {
@@ -69,5 +82,9 @@ public enum TokenType {
 
     public String getContent() {
         return content;
+    }
+
+    public boolean likeIdentifier() {
+        return identifier;
     }
 }

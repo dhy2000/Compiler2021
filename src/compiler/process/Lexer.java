@@ -46,6 +46,17 @@ public class Lexer {
             String token = tokenType.getContent();
             String next = source.followingSeq(token.length());
             if (token.equals(next)) {
+                // Exclude similarly identifiers
+                if (tokenType.likeIdentifier()) {
+                    String nextExtra = source.followingSeq(token.length() + 1);
+                    if (nextExtra.length() > token.length()) {
+                        char follow = nextExtra.charAt(token.length());
+                        if (follow == '_' || Character.isLetterOrDigit(follow)) {
+                            // Not a keyword
+                            continue;
+                        }
+                    }
+                }
                 source.forward(token.length());
                 return new ReservedToken(tokenType);
             }
