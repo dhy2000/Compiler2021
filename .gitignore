@@ -6,4 +6,7 @@
 /target/
 /out/
 
-
+# Test files
+testfile/
+testfile.txt
+output.txt
