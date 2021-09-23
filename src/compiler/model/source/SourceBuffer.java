@@ -21,12 +21,14 @@ public class SourceBuffer {
         return lines.size();
     }
 
-    public int getLineIndex() { return lineIndex; }
+    public int getLineIndex() { return lineIndex + 1; }
 
-    public int getColumnIndex() { return columnIndex; }
+    public int getColumnIndex() { return columnIndex + 1; }
 
     public String getCurrentLine() {
-        return lines.get(lineIndex);
+        if (!reachedEndOfFile()) {
+            return lines.get(lineIndex);
+        } else { return ""; }
     }
 
     public String getRemainingLine() {
@@ -52,6 +54,7 @@ public class SourceBuffer {
                 columnIndex = 0;
             } else {
                 columnIndex += remainSteps;
+                remainSteps = 0;
             }
         }
     }
