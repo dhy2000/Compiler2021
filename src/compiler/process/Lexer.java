@@ -40,14 +40,14 @@ public class Lexer {
     }
 
     private static ReservedToken nextReservedToken(SourceBuffer source) {
-        for (TokenType tokenType: TokenType.values()) {
-            if (!tokenType.isReserved()) { continue; }
+        for (Token.Type type : Token.Type.values()) {
+            if (!type.isReserved()) { continue; }
             // check whether match
-            String token = tokenType.getContent();
+            String token = type.getContent();
             String next = source.followingSeq(token.length());
             if (token.equals(next)) {
                 // Exclude similarly identifiers
-                if (tokenType.likeIdentifier()) {
+                if (type.likeIdentifier()) {
                     String nextExtra = source.followingSeq(token.length() + 1);
                     if (nextExtra.length() > token.length()) {
                         char follow = nextExtra.charAt(token.length());
@@ -57,8 +57,9 @@ public class Lexer {
                         }
                     }
                 }
+                int line = source.getLineIndex();
                 source.forward(token.length());
-                return new ReservedToken(tokenType);
+                return new ReservedToken(type, line);
             }
         }
         return null;
@@ -66,6 +67,7 @@ public class Lexer {
 
     private static Ident nextIdent(SourceBuffer source) {
         if (source.currentChar() == '_' || Character.isAlphabetic(source.currentChar())) {
+            int line = source.getLineIndex();
             StringBuilder sb = new StringBuilder();
             sb.append(source.currentChar());
             source.forward(1);
@@ -73,18 +75,19 @@ public class Lexer {
                 sb.append(source.currentChar());
                 source.forward(1);
             }
-            return new Ident(sb.toString());
+            return new Ident(sb.toString(), line);
         } else { return null; }
     }
 
     private static IntConst nextIntConst(SourceBuffer source) {
         StringBuilder sb = new StringBuilder();
         if (Character.isDigit(source.currentChar())) {
+            int line = source.getLineIndex();
             while (Character.isDigit(source.currentChar())) {   // single '0', continuous '0', exceed int32 range
                 sb.append(source.currentChar());
                 source.forward(1);
             }
-            return new IntConst(sb.toString());
+            return new IntConst(sb.toString(), line);
         } else { return null; }
     }
 
@@ -123,6 +126,7 @@ public class Lexer {
     private static FormatString nextFormatString(SourceBuffer source) throws StringNotClosedException {
         StringBuilder sb = new StringBuilder();
         if (source.currentChar() == '\"') {
+            int line = source.getLineIndex();
             source.forward(1);
             while (!source.reachedEndOfFile() && !source.reachedEndOfLine() && source.currentChar() != '\"') {
                 sb.append(source.currentChar());
@@ -132,7 +136,7 @@ public class Lexer {
                 throw new StringNotClosedException(source.getLineIndex(), source.getColumnIndex(), sb.toString());
             }
             source.forward(1);
-            return new FormatString(sb.toString());
+            return new FormatString(sb.toString(), line);
         } else { return null; }
     }
 }

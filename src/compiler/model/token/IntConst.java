@@ -8,8 +8,8 @@ public class IntConst extends Token {
     private final String raw;
     private final int value;
 
-    public IntConst(String raw) {
-        super(TokenType.INTCON);
+    public IntConst(String raw, int line) {
+        super(Type.INTCON, line);
         this.raw = raw;
         this.value = Integer.parseInt(raw);
     }

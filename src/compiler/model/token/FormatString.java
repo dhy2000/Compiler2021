@@ -7,8 +7,8 @@ public class FormatString extends Token {
      */
     private final String innerStr;
 
-    public FormatString(String str) {
-        super(TokenType.STRCON);
+    public FormatString(String str, int line) {
+        super(Type.STRCON, line);
         this.innerStr = str;
     }
 

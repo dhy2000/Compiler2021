@@ -7,8 +7,8 @@ public class Ident extends Token {
      */
     private final String identifier;
 
-    public Ident(String identifier) {
-        super(TokenType.IDENFR);
+    public Ident(String identifier, int line) {
+        super(Type.IDENFR, line);
         this.identifier = identifier;
     }
 
