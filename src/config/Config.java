@@ -1,10 +1,10 @@
-package compiler.global;
+package config;
 
 import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Global {
+public class Config {
 
     /**
      * 参数指定输入源, 以 -i 开头
@@ -44,7 +44,7 @@ public class Global {
     }
 
     private static void setSource(InputStream source) {
-        Global.source = source;
+        Config.source = source;
     }
 
     public static PrintStream getTarget() {
@@ -52,7 +52,7 @@ public class Global {
     }
 
     private static void setTarget(OutputStream target) {
-        Global.target = new PrintStream(target);
+        Config.target = new PrintStream(target);
     }
 
     public static boolean hasOperationOutput(Operation operation) {

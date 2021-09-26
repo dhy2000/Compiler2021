@@ -1,17 +1,16 @@
-package compiler.model.token;
+package frontend.tokenize;
+
+import frontend.tokenize.token.Token;
 
 import java.io.PrintStream;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-public class TokenStream {
+public class TokenList implements Iterable<Token> {
     private final List<Token> tokens = new LinkedList<>();
     private final ListIterator<Token> iterator = tokens.listIterator();
     private Token current = null;
 
-    public TokenStream() {}
+    public TokenList() {}
 
     public void restart() {
         while (iterator.hasPrevious()) {
@@ -44,7 +43,12 @@ public class TokenStream {
 
     public void printTo(PrintStream out) {
         for (Token token : tokens) {
-            out.println(token.getTypeName() + " " + token.getContent());
+            out.println(token.typeName() + " " + token.getContent());
         }
+    }
+
+    @Override
+    public Iterator<Token> iterator() {
+        return tokens.iterator();
     }
 }

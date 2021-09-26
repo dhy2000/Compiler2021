@@ -1,15 +1,13 @@
-package compiler.process;
-
-import compiler.model.source.SourceBuffer;
+package frontend.source;
 
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class Reader {
+public class SourceReader {
 
     private final InputStream input;
 
-    public Reader(InputStream input) {
+    public SourceReader(InputStream input) {
         this.input = input;
     }
 
@@ -17,9 +15,9 @@ public class Reader {
      * 读取源文件 (读取完毕后会自动关闭输入流)
      * @return 源代码对象
      */
-    public SourceBuffer read() {
+    public Source read() {
         Scanner cin = new Scanner(input);
-        SourceBuffer source = new SourceBuffer();
+        Source source = new Source();
         while (cin.hasNext()) {
             String line = cin.nextLine();
             source.appendLine(line);
