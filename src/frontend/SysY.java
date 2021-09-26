@@ -1,7 +1,7 @@
 package frontend;
 
 import config.Config;
-import frontend.exceptions.UnrecognizedTokenException;
+import frontend.exceptions.tokenize.UnrecognizedTokenException;
 import frontend.source.Source;
 import frontend.source.SourceReader;
 import frontend.tokenize.TokenList;

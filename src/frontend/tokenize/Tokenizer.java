@@ -1,6 +1,6 @@
 package frontend.tokenize;
 
-import frontend.exceptions.UnrecognizedTokenException;
+import frontend.exceptions.tokenize.UnrecognizedTokenException;
 import frontend.source.Source;
 import frontend.tokenize.token.Token;
 

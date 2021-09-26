@@ -7,13 +7,13 @@ public abstract class FrontendException extends Exception {
 
     private final int line; // 出错位置的行号
     private final int column;   // 出错位置的列号
-    private final String text;  // 出错位置往后的源代码文本(截取的长度由调用者决定)
+    private final String source;  // 出错位置往后的源代码文本(截取的长度由调用者决定)
 
-    public FrontendException(String tag, int line, int column, String text) {
-        super(String.format("%s at line %d col %d: %s", tag, line, column, text));
+    public FrontendException(String tag, int line, int column, String source) {
+        super(String.format("%s at line %d col %d: %s", tag, line, column, source));
         this.line = line;
         this.column = column;
-        this.text = text;
+        this.source = source;
     }
 
     public int getLineNumber() {
@@ -24,7 +24,7 @@ public abstract class FrontendException extends Exception {
         return column;
     }
 
-    public String getText() {
-        return text;
+    public String getSource() {
+        return source;
     }
 }
