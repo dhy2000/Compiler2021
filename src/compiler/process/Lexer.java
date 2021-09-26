@@ -33,7 +33,7 @@ public class Lexer {
                 ts.append(nextToken);
             } else if (!source.reachedEndOfFile()) {
                 throw new UnrecognizedTokenException(source.getLineIndex(),
-                        source.getColumnIndex(), source.getRemainingLine());
+                        source.getColumnIndex(), source.getCurrentLine());
             }
         }
         return ts;
