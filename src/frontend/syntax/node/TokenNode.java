@@ -1,6 +1,6 @@
-package frontend.parse.node;
+package frontend.syntax.node;
 
-import frontend.tokenize.token.Token;
+import frontend.lexical.token.Token;
 
 import java.util.Collections;
 import java.util.List;

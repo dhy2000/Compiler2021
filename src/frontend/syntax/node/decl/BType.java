@@ -1,4 +1,4 @@
-package frontend.parse.node.decl;
+package frontend.syntax.node.decl;
 
 public enum BType {
     INT("int")

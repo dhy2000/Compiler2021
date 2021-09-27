@@ -1,4 +1,4 @@
-package frontend.tokenize.token;
+package frontend.lexical.token;
 
 public class Ident extends Token {
 

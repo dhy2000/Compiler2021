@@ -1,4 +1,4 @@
-package frontend.parse;
+package frontend.syntax;
 
 public class Parser {
 }

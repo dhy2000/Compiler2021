@@ -1,6 +1,6 @@
 package frontend.identifier;
 
-import frontend.parse.node.ActionScope;
+import frontend.syntax.node.ActionScope;
 
 import java.util.Objects;
 

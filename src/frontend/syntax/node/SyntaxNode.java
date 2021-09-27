@@ -1,4 +1,4 @@
-package frontend.parse.node;
+package frontend.syntax.node;
 
 import java.util.Iterator;
 import java.util.List;

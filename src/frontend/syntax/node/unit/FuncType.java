@@ -1,4 +1,4 @@
-package frontend.parse.node.unit;
+package frontend.syntax.node.unit;
 
 public enum FuncType {
     VOID("void"),

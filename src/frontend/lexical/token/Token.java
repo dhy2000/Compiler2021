@@ -1,4 +1,4 @@
-package frontend.tokenize.token;
+package frontend.lexical.token;
 
 import java.util.regex.Pattern;
 

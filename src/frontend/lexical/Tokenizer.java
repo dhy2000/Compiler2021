@@ -1,8 +1,8 @@
-package frontend.tokenize;
+package frontend.lexical;
 
 import frontend.exceptions.tokenize.UnrecognizedTokenException;
 import frontend.source.Source;
-import frontend.tokenize.token.Token;
+import frontend.lexical.token.Token;
 
 import java.util.Objects;
 

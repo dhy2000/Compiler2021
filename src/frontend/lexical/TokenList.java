@@ -1,6 +1,6 @@
-package frontend.tokenize;
+package frontend.lexical;
 
-import frontend.tokenize.token.Token;
+import frontend.lexical.token.Token;
 
 import java.io.PrintStream;
 import java.util.*;

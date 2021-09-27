@@ -4,8 +4,8 @@ import config.Config;
 import frontend.exceptions.tokenize.UnrecognizedTokenException;
 import frontend.source.Source;
 import frontend.source.SourceReader;
-import frontend.tokenize.TokenList;
-import frontend.tokenize.Tokenizer;
+import frontend.lexical.TokenList;
+import frontend.lexical.Tokenizer;
 
 import java.io.InputStream;
 
