@@ -2,9 +2,6 @@ package frontend.syntax.node;
 
 import frontend.lexical.token.Token;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * 只有一个单词的语法树节点 (终结符号)
  */
@@ -21,12 +18,12 @@ public class TokenNode extends SyntaxNode {
     }
 
     @Override
-    protected List<SyntaxNode> getChildren() {
-        return Collections.emptyList();
+    public String getNodeType() {
+        return token.typeName() + " " + token.getContent();
     }
 
     @Override
-    public String getNodeType() {
-        return token.typeName() + " " + token.getContent();
+    public void display() {
+        System.out.println(getNodeType());
     }
 }

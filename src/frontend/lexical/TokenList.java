@@ -5,7 +5,7 @@ import frontend.lexical.token.Token;
 import java.io.PrintStream;
 import java.util.*;
 
-public class TokenList implements Iterable<Token> {
+public class TokenList {
     private final List<Token> tokens = new LinkedList<>();
     private final ListIterator<Token> iterator = tokens.listIterator();
     private Token current = null;
@@ -36,6 +36,16 @@ public class TokenList implements Iterable<Token> {
         return current;
     }
 
+    public Token getForward(int count) {
+        if (iterator.hasNext()) {
+            Token ret = iterator.next();
+            iterator.previous();
+            return ret;
+        } else {
+            return null;
+        }
+    }
+
     public void append(Token token) {
         tokens.add(token);
         restart();
@@ -45,10 +55,5 @@ public class TokenList implements Iterable<Token> {
         for (Token token : tokens) {
             out.println(token.typeName() + " " + token.getContent());
         }
-    }
-
-    @Override
-    public Iterator<Token> iterator() {
-        return tokens.iterator();
     }
 }

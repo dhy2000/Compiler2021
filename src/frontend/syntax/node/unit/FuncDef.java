@@ -1,13 +1,14 @@
-package frontend.syntax.node.decl;
+package frontend.syntax.node.unit;
 
-public abstract class Decl {
-    public enum BType {
+public class FuncDef {
+    public enum FuncType {
+        VOID("void"),
         INT("int")
         ;
 
         private final String value;
 
-        BType(String value) {
+        FuncType(String value) {
             this.value = value;
         }
 
@@ -15,8 +16,4 @@ public abstract class Decl {
             return value;
         }
     }
-
-    private BType bType;
-    private boolean constant;
-
 }
