@@ -6,10 +6,9 @@ import frontend.lexical.token.Ident;
 import frontend.lexical.token.IntConst;
 import frontend.lexical.token.Token;
 import frontend.syntax.tree.expr.multi.*;
-import frontend.syntax.tree.expr.unary.*;
 import frontend.syntax.tree.expr.unary.Number;
+import frontend.syntax.tree.expr.unary.*;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
