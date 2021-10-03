@@ -19,7 +19,7 @@ public class SysY {
         // to tokenize
         try {
             tokens = Tokenizer.tokenize(source);
-            tokens.printTo(Config.getTarget());
+            tokens.output(Config.getTarget());
         } catch (UnrecognizedTokenException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());

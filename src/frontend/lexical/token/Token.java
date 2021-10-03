@@ -1,8 +1,11 @@
 package frontend.lexical.token;
 
+import frontend.syntax.tree.Component;
+
+import java.io.PrintStream;
 import java.util.regex.Pattern;
 
-public abstract class Token {
+public abstract class Token implements Component {
 
     private final Type type;
     private final int line;
@@ -24,6 +27,10 @@ public abstract class Token {
 
     public String getContent() {
         return content;
+    }
+
+    public void output(PrintStream ps) {
+        ps.println(typeName() + " " + getContent());
     }
 
     @Override

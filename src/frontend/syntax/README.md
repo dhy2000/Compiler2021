@@ -1,15 +1,87 @@
 # 语法分析
 
-语法分析代码位于 `frontend.syntax` 包中，其中 `node` 子包内为语法树相关的类。
+语法分析代码位于 `frontend.syntax` 包中，其中 `tree` 子包内为语法树相关的类。
 
 ## 语法树建模
 
-语法树采用节点类进行维护，首先建立抽象的语法树节点类 `SyntaxNode`，在节点类维护树形数据结构，即维护该节点的父节点和子节点(列表)，并建立了对子节点容器的迭代器用于遍历语法树。同时为了方便进行语法分析的输出，语法树的节点类还需支持获取其名称。
+语法树采用多种不同的节点类进行表示。为了方便管理编译作业要求的语法分析输出，这里定义一个接口 `Component` 用于输出语法成分。
 
-建立了基本的语法树节点类后, 利用继承建立对应于不同语法成分(非终结符号)的语法树节点。为了架构的清晰，将语法成分按逻辑相近的原则分成以下类别（每个类别建立一个子包）：
+对于文法的每种成分，建立一种语法树节点类。对于每种语法成分，用属性来存储其组成成分（子节点）。对于存在 "或" 关系的非终结符，对其每个具体方向建立类，并让这些类实现同一个接口。
 
-- `expr` : 表达式, 此部分逻辑与面向对象第一单元表达式求导中的表达式解析与存储相类似，并在整个编译器前端中占据相对独立的逻辑地位。
-- `stmt` : 语句, 作为要编译的源代码中一个比较重要的语法成分也是逻辑成分
-- `decl` : 声明, 和语句的地位相近但处理逻辑相对独立，故区分开
-- `unit` : 编译单元、函数定义等较为顶层的成分
+注：在语法分析中，`<BlockItem>`, `<Decl>`, `<BType>` 三种成分不需要输出。
 
+## 表达式
+
+首先进行表达式的解析（与 OO Unit1 比较接近），表达式的解析同其他语法成分在逻辑上相对独立，因此将其单独拆分出包，以 `expr` 包存储。
+
+与表达式相关的文法如下：
+
+```text
+<Exp>           := <AddExp>
+<Cond>          := <LOrExp>
+<LVal>          := Ident { '[' <Exp> ']' } // 普通变量，一维或二维数组
+<PrimaryExp>    := '(' <Exp> ')' | <LVal> | <Number> // 三种情况, 子表达式, 左值, 字面量
+<Number>        := IntConst
+<UnaryExp>      := <PrimaryExp> | <Ident> '(' [ <FuncRParams> ] ')' | <UnaryOp> <UnaryExp> // PrimaryExp 或者 FunctionCall 或者含有一元运算符
+<UnaryOp>       := '+' | '-' | '!'  // '!' 仅能在条件表达式中出现
+<FuncRParams>   := <Exp> { ',' <Exp> } 
+<MulExp>        := <UnaryExp> | <MulExp> ( '*' | '/' | '%' ) <UnaryExp>
+<AddExp>        := <MulExp> | <AddExp> ( '+' | '-' ) <MulExp>
+<RelExp>        := <AddExp> | <RelExp> ( '<' | '>' | '<=' | '>=' ) <AddExp>
+<EqExp>         := <RelExp> | <EqExp> ( '==' | '!=' ) <RelExp>
+<LAndExp>       := <EqExp> | <LAndExp> '&&' <EqExp>
+<LOrExp>        := <LAndExp> | <LOrExp> '||' <LAndExp>
+```
+
+对于现有的文法, 在**不违反原文法**基础上为了简化存储结构，进行一些修改(以及消除左递归)
+
+```text
+<Exp>           := <AddExp> // public class Exp extends AddExp { /* Nothing */ } 或者 AddExp parseExp()
+<Cond>          := <LOrExp> // public class Cond extends LOrExp { /* Nothing */ } 或者 LOrExp parseCond()
+<LVal>          := Ident { '[' <Exp> ']' } // public class LVal { ident, class Index, List<Index> }
+<PrimaryExp>    := <SubExp> | <LVal> | <Number> // Look forward: '(' :: <SubExp>, <Ident> :: <LVal>, <IntConst> :: <Number>
+<SubExp>        := '(' <Exp> ')'
+<Number>        := IntConst   // 该节点只存一个 Token
+<BasicUnaryExp> := <PrimaryExp> | <FunctionCall>    // 即不包含 <UnaryOp> 的 <UnaryExp>
+// <BasicUnaryExp> 需要向前看 2 个符号: Ident '(' :: <FunctionCall>, Ident :: <LVal>, '(' :: <SubExp>, IntConst :: <Number>
+<FunctionCall>  := <Ident> '(' [ <FuncRParams ] ')' // 写表达式分析时 <FunctionCall> 的 parser 可以暂时留空
+<FuncRParams>   := <Exp> { ',', <Exp> } // List<Exp>
+<UnaryExp>      := { <UnaryOp> } <BasicUnaryExp> // List<UnaryOp> 
+<MulExp>        := <UnaryExp> { ('*' | '/' | '%') <UnaryExp> }    // 消左递归, 转成循环形式
+<AddExp>        := <MulExp> { ('+' | '-') <MulExp> }
+<RelExp>        := <AddExp> { ('<' | '>' | '<=' | '>=') <AddExp> }
+<EqExp>         := <RelExp> { ('==' | '!=') <RelExp> }
+<LAndExp>       := <EqExp> { '&&' <EqExp> }
+<LOrExp>        := <LAndExp> { '||' <LAndExp> }
+```
+
+对于后面几种成分（`MulExp`, `AddExp`, `RelExp`, `EqExp`, `LAndExp`, `LOrExp`)，其共同特点为由结构相同的左递归文法改成的，连续的从左向右结合的二元表达式，可以根据它们的共同特性提取出一个抽象的父类，基本结构如下：
+
+```java
+import frontend.lexical.token.Token;
+
+public abstract class MultiExp<T> { // T: 当前类低一个层次，例如 AddExp 的 T 为 MulExp
+    private final T first;
+    private final List<Token> operators;
+    private final List<T> operands;
+}
+```
+
+而以上几类具体的表达式除了自身种类，运算符种类和子节点种类不同以外，结构是很相近的（包括其输出方式），因此将它们的输出方法也在 `MultiExp` 抽象类中默认实现：
+
+```java
+import frontend.syntax.tree.Component;
+
+import java.io.PrintStream;
+
+public abstract class MultiExp<T extends Component> implements Component {
+    private final String name;
+
+    @Override
+    public void output(PrintStream ps) {
+        // 输出其子节点
+        ps.println(name);
+    }
+}
+
+```
