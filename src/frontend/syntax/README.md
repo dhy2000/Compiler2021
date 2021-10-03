@@ -12,7 +12,7 @@
 
 ### 表达式
 
-首先进行表达式的解析（与 OO Unit1 比较接近），表达式的解析同其他语法成分在逻辑上相对独立，因此将其单独拆分出包，以 `expr` 包存储。
+首先进行表达式的解析（与 OO Unit1 比较接近），表达式作为整个编译文法中较为基础的成分，其解析同其他语法成分也可以相对独立，因此将其作为一类语法成分，在工程代码中对应到 `expr` 子包。
 
 与表达式相关的文法如下：
 
@@ -73,7 +73,7 @@ public abstract class MultiExp<T> { // T: 当前类低一个层次，例如 AddE
 而以上几类具体的表达式除了自身种类，运算符种类和子节点种类不同以外，结构是很相近的（包括其输出方式），因此将它们的输出方法也在 `MultiExp` 抽象类中默认实现：
 
 ```java
-import frontend.syntax.tree.Component;
+import frontend.syntax.Component;
 
 import java.io.PrintStream;
 

@@ -1,4 +1,4 @@
-package frontend.syntax.tree.expr.multi;
+package frontend.syntax.expr.multi;
 
 import frontend.lexical.token.Token;
 

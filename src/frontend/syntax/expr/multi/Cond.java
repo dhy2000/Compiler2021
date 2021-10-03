@@ -1,6 +1,6 @@
-package frontend.syntax.tree.expr.multi;
+package frontend.syntax.expr.multi;
 
-import frontend.syntax.tree.Component;
+import frontend.syntax.Component;
 
 import java.io.PrintStream;
 

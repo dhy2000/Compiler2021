@@ -1,7 +1,7 @@
-package frontend.syntax.tree.expr.multi;
+package frontend.syntax.expr.multi;
 
 import frontend.lexical.token.Token;
-import frontend.syntax.tree.expr.unary.UnaryExp;
+import frontend.syntax.expr.unary.UnaryExp;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package frontend.syntax.tree.expr.multi;
+package frontend.syntax.expr.multi;
 
 import frontend.lexical.token.Token;
-import frontend.syntax.tree.Component;
+import frontend.syntax.Component;
 
 import java.io.PrintStream;
 import java.util.Iterator;

@@ -1,7 +1,7 @@
-package frontend.syntax.tree.expr.unary;
+package frontend.syntax.expr.unary;
 
 import frontend.lexical.token.Token;
-import frontend.syntax.tree.expr.multi.Exp;
+import frontend.syntax.expr.multi.Exp;
 
 import java.io.PrintStream;
 

@@ -1,4 +1,4 @@
-package frontend.syntax.tree;
+package frontend.syntax;
 
 import java.io.PrintStream;
 

@@ -1,9 +1,9 @@
-package frontend.syntax.tree.expr.unary;
+package frontend.syntax.expr.unary;
 
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
-import frontend.syntax.tree.Component;
-import frontend.syntax.tree.expr.multi.Exp;
+import frontend.syntax.Component;
+import frontend.syntax.expr.multi.Exp;
 
 import java.io.PrintStream;
 import java.util.Collections;

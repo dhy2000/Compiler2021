@@ -1,4 +1,4 @@
-package frontend.syntax.tree.expr.unary;
+package frontend.syntax.expr.unary;
 
 import frontend.lexical.token.IntConst;
 

@@ -1,6 +1,6 @@
 package frontend.lexical.token;
 
-import frontend.syntax.tree.Component;
+import frontend.syntax.Component;
 
 import java.io.PrintStream;
 import java.util.regex.Pattern;
