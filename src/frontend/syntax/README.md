@@ -40,11 +40,11 @@
 <PrimaryExp>    := <SubExp> | <LVal> | <Number> // Look forward: '(' :: <SubExp>, <Ident> :: <LVal>, <IntConst> :: <Number>
 <SubExp>        := '(' <Exp> ')'
 <Number>        := IntConst   // 该节点只存一个 Token
-<BasicUnaryExp> := <PrimaryExp> | <FunctionCall>    // 即不包含 <UnaryOp> 的 <UnaryExp>
+<BaseUnaryExp> := <PrimaryExp> | <FunctionCall>    // 即不包含 <UnaryOp> 的 <UnaryExp>
 // <BasicUnaryExp> 需要向前看 2 个符号: Ident '(' :: <FunctionCall>, Ident :: <LVal>, '(' :: <SubExp>, IntConst :: <Number>
 <FunctionCall>  := <Ident> '(' [ <FuncRParams ] ')'
 <FuncRParams>   := <Exp> { ',', <Exp> } // List<Exp>
-<UnaryExp>      := { <UnaryOp> } <BasicUnaryExp> // List<UnaryOp>, UnaryOp 包含在 UnaryExp 内部，不单独建类
+<UnaryExp>      := { <UnaryOp> } <BaseUnaryExp> // List<UnaryOp>, UnaryOp 包含在 UnaryExp 内部，不单独建类
 // ---------- 分割线 ----------
 <MulExp>        := <UnaryExp> { ('*' | '/' | '%') <UnaryExp> }    // 消左递归, 转成循环形式
 <AddExp>        := <MulExp> { ('+' | '-') <MulExp> }
@@ -53,8 +53,9 @@
 <LAndExp>       := <EqExp> { '&&' <EqExp> }
 <LOrExp>        := <LAndExp> { '||' <LAndExp> }
 
-<Exp>           := <AddExp> // public class Exp extends AddExp { /* Nothing */ } 或者 AddExp parseExp()
-<Cond>          := <LOrExp> // public class Cond extends LOrExp { /* Nothing */ } 或者 LOrExp parseCond()
+<Exp>           := <AddExp> // public class Exp extends AddExp { }
+<Cond>          := <LOrExp> // public class Cond extends LOrExp { }
+<ConstExp>      := <AddExp>
 ```
 
 对于分割线后面的几种成分（`MulExp`, `AddExp`, `RelExp`, `EqExp`, `LAndExp`, `LOrExp`)，其共同特点为由结构相同的左递归文法改成的，连续的从左向右结合的二元表达式，可以根据它们的共同特性提取出一个抽象的父类，基本结构如下：
@@ -87,7 +88,7 @@ public abstract class MultiExp<T extends Component> implements Component {
 }
 ```
 
-处理完以上成分之后还有两个 `<Exp>` 和 `<Cond>`，这两种节点只是在 `<AddExp>` 和 `<LOrExp>` 上套了一层，为了输出方便还是创建相应的类，持有其套的类的实例并重写输出方法。
+处理完以上成分之后还有两个 `<Exp>` 和 `<Cond>`，这两种节点只是在 `<AddExp>` 和 `<LOrExp>` 上套了一层，为了输出方便还是创建相应的类，持有其套的类的实例并重写输出方法。对于 `ConstExp` ，将其作为 `Exp` 的子类。
 
 另一方面，对于分割线以上的语法成分，它们之间没有太多共同点，因此针对每种语法成分分别建立类即可。
 
