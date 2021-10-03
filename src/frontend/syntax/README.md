@@ -42,9 +42,9 @@
 <Number>        := IntConst   // 该节点只存一个 Token
 <BasicUnaryExp> := <PrimaryExp> | <FunctionCall>    // 即不包含 <UnaryOp> 的 <UnaryExp>
 // <BasicUnaryExp> 需要向前看 2 个符号: Ident '(' :: <FunctionCall>, Ident :: <LVal>, '(' :: <SubExp>, IntConst :: <Number>
-<FunctionCall>  := <Ident> '(' [ <FuncRParams ] ')' // 写表达式分析时 <FunctionCall> 的 parser 可以暂时留空
+<FunctionCall>  := <Ident> '(' [ <FuncRParams ] ')'
 <FuncRParams>   := <Exp> { ',', <Exp> } // List<Exp>
-<UnaryExp>      := { <UnaryOp> } <BasicUnaryExp> // List<UnaryOp> 
+<UnaryExp>      := { <UnaryOp> } <BasicUnaryExp> // List<UnaryOp>, UnaryOp 包含在 UnaryExp 内部，不单独建类
 // ---------- 分割线 ----------
 <MulExp>        := <UnaryExp> { ('*' | '/' | '%') <UnaryExp> }    // 消左递归, 转成循环形式
 <AddExp>        := <MulExp> { ('+' | '-') <MulExp> }
