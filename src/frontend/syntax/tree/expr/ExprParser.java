@@ -26,6 +26,11 @@ public class ExprParser {
         this.maxLineNum = tokens.getMaxLineNumber();
     }
 
+    public ExprParser(ListIterator<Token> iterator, int maxLineNum) {
+        this.iterator = iterator;
+        this.maxLineNum = maxLineNum;
+    }
+
     // <LVal>           := Ident { '[' <Exp> ']' }
     public LVal parseLVal(Ident ident) throws InvalidSyntaxException {
         final String syntax = "<LVal>";
