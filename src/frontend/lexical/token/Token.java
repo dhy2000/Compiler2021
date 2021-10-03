@@ -21,6 +21,10 @@ public abstract class Token implements Component {
         return type.name();
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public int lineNumber() {
         return line;
     }

@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class LVal implements Component {
+public class LVal implements PrimaryExp {
 
     private final Ident name;
     private final List<Index> indexes;

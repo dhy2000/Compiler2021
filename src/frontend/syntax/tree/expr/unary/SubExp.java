@@ -5,7 +5,7 @@ import frontend.syntax.tree.expr.multi.Exp;
 
 import java.io.PrintStream;
 
-public class SubExp implements BaseUnaryExp {
+public class SubExp implements PrimaryExp {
 
     private final Token leftParenthesis;
     private final Token rightParenthesis;

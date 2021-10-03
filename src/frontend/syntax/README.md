@@ -42,7 +42,7 @@
 <Number>        := IntConst   // 该节点只存一个 Token
 <BaseUnaryExp> := <PrimaryExp> | <FunctionCall>    // 即不包含 <UnaryOp> 的 <UnaryExp>
 // <BasicUnaryExp> 需要向前看 2 个符号: Ident '(' :: <FunctionCall>, Ident :: <LVal>, '(' :: <SubExp>, IntConst :: <Number>
-<FunctionCall>  := <Ident> '(' [ <FuncRParams ] ')'
+<FunctionCall>  := <Ident> '(' [ <FuncRParams> ] ')'
 <FuncRParams>   := <Exp> { ',', <Exp> } // List<Exp>
 <UnaryExp>      := { <UnaryOp> } <BaseUnaryExp> // List<UnaryOp>, UnaryOp 包含在 UnaryExp 内部，不单独建类
 // ---------- 分割线 ----------
