@@ -1,4 +1,4 @@
-package frontend.syntax.tree.expr;
+package frontend.syntax.tree.expr.unary;
 
 import frontend.syntax.tree.Component;
 

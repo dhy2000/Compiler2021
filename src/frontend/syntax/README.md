@@ -36,8 +36,6 @@
 对于现有的文法, 在**不违反原文法**基础上为了简化存储结构，进行一些修改(以及消除左递归)
 
 ```text
-<Exp>           := <AddExp> // public class Exp extends AddExp { /* Nothing */ } 或者 AddExp parseExp()
-<Cond>          := <LOrExp> // public class Cond extends LOrExp { /* Nothing */ } 或者 LOrExp parseCond()
 <LVal>          := Ident { '[' <Exp> ']' } // public class LVal { ident, class Index, List<Index> }
 <PrimaryExp>    := <SubExp> | <LVal> | <Number> // Look forward: '(' :: <SubExp>, <Ident> :: <LVal>, <IntConst> :: <Number>
 <SubExp>        := '(' <Exp> ')'
@@ -47,15 +45,19 @@
 <FunctionCall>  := <Ident> '(' [ <FuncRParams ] ')' // 写表达式分析时 <FunctionCall> 的 parser 可以暂时留空
 <FuncRParams>   := <Exp> { ',', <Exp> } // List<Exp>
 <UnaryExp>      := { <UnaryOp> } <BasicUnaryExp> // List<UnaryOp> 
+// ---------- 分割线 ----------
 <MulExp>        := <UnaryExp> { ('*' | '/' | '%') <UnaryExp> }    // 消左递归, 转成循环形式
 <AddExp>        := <MulExp> { ('+' | '-') <MulExp> }
 <RelExp>        := <AddExp> { ('<' | '>' | '<=' | '>=') <AddExp> }
 <EqExp>         := <RelExp> { ('==' | '!=') <RelExp> }
 <LAndExp>       := <EqExp> { '&&' <EqExp> }
 <LOrExp>        := <LAndExp> { '||' <LAndExp> }
+
+<Exp>           := <AddExp> // public class Exp extends AddExp { /* Nothing */ } 或者 AddExp parseExp()
+<Cond>          := <LOrExp> // public class Cond extends LOrExp { /* Nothing */ } 或者 LOrExp parseCond()
 ```
 
-对于后面几种成分（`MulExp`, `AddExp`, `RelExp`, `EqExp`, `LAndExp`, `LOrExp`)，其共同特点为由结构相同的左递归文法改成的，连续的从左向右结合的二元表达式，可以根据它们的共同特性提取出一个抽象的父类，基本结构如下：
+对于分割线后面的几种成分（`MulExp`, `AddExp`, `RelExp`, `EqExp`, `LAndExp`, `LOrExp`)，其共同特点为由结构相同的左递归文法改成的，连续的从左向右结合的二元表达式，可以根据它们的共同特性提取出一个抽象的父类，基本结构如下：
 
 ```java
 import frontend.lexical.token.Token;
@@ -83,5 +85,10 @@ public abstract class MultiExp<T extends Component> implements Component {
         ps.println(name);
     }
 }
-
 ```
+
+处理完以上成分之后还有两个 `<Exp>` 和 `<Cond>`，这两种节点只是在 `<AddExp>` 和 `<LOrExp>` 上套了一层，为了输出方便还是创建相应的类，持有其套的类的实例并重写输出方法。
+
+另一方面，对于分割线以上的语法成分，它们之间没有太多共同点，因此针对每种语法成分分别建立类即可。
+
+由上，根据上面的分析，在编写代码时将 `expr` 包内的语法成分分成两大类（也就是拆分成两个包）：一元表达式和多元表达式。其中 `unary` 包含分割线以上的一元表达式，而 `multi` 包含分割线以下的多元表达式。
