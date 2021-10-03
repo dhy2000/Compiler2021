@@ -44,7 +44,7 @@ public class Tokenizer {
             }
             if (!source.reachedEndOfFile() && !matchToken) {
                 throw new UnrecognizedTokenException(source.getLineIndex(),
-                        source.getColumnIndex(), source.getCurrentLine());
+                        source.getCurrentLine());
             }
         }
         return ts;

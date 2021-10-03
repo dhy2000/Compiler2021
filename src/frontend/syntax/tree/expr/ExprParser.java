@@ -1,6 +1,8 @@
 package frontend.syntax.tree.expr;
 
 import frontend.lexical.TokenList;
+import frontend.lexical.token.Ident;
+import frontend.lexical.token.IntConst;
 import frontend.lexical.token.Token;
 import frontend.syntax.tree.expr.multi.*;
 import frontend.syntax.tree.expr.unary.*;
@@ -20,17 +22,17 @@ public class ExprParser {
     }
 
     // <LVal>           := Ident { '[' <Exp> ']' }
-    public LVal parseLVal() {
+    public LVal parseLVal(Ident ident) {
         return null;
     }
 
     // <SubExp>         := '(' <Exp> ')'
-    public SubExp parseSubExp() {
+    public SubExp parseSubExp(Token leftParenthesis) {
         return null;
     }
 
     // <Number>         := IntConst
-    public Number parseNumber() {
+    public Number parseNumber(IntConst number) {
         return null;
     }
 
@@ -40,7 +42,7 @@ public class ExprParser {
     }
 
     // <FunctionCall>   := <Ident> '(' [ <FuncRParams ] ')'
-    private FunctionCall parseFunctionCall() {
+    private FunctionCall parseFunctionCall(Ident ident, Token leftParenthesis) {
         return null;
     }
 
@@ -49,7 +51,7 @@ public class ExprParser {
         return null;
     }
 
-    // <BaseUnaryExp>   := <PrimaryExp> | <FunctionCall>
+    // <BaseUnaryExp>   := <PrimaryExp> | <FunctionCall> // Look forward: Ident '(' :: <FunctionCall>, Ident :: <LVal>, '(' :: <SubExp>, IntConst :: <Number>
     private BaseUnaryExp parseBaseUnaryExp() {
         return null;
     }

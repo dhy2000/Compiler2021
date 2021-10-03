@@ -7,8 +7,8 @@ import frontend.exceptions.RequiredException;
  * 标识符未定义
  */
 public class UndefinedIdentifierException extends FrontendException implements RequiredException {
-    public UndefinedIdentifierException(int line, int column, String source) {
-        super("Undefined Identifier", line, column, source);
+    public UndefinedIdentifierException(int line, String source) {
+        super("Undefined Identifier", line, source);
     }
 
     @Override

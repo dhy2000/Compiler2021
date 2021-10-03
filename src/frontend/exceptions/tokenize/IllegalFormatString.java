@@ -8,8 +8,8 @@ import frontend.exceptions.RequiredException;
  */
 public class IllegalFormatString extends FrontendException implements RequiredException {
 
-    public IllegalFormatString(int line, int column, String source) {
-        super("Illegal character in Format String", line, column, source);
+    public IllegalFormatString(int line, String source) {
+        super("Illegal character in Format String", line, source);
     }
 
     @Override

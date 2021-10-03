@@ -7,8 +7,8 @@ import frontend.exceptions.RequiredException;
  * 语句末尾缺失分号
  */
 public class MissingSemicolonException extends FrontendException implements RequiredException {
-    public MissingSemicolonException(int line, int column, String source) {
-        super("Missing ';'", line, column, source);
+    public MissingSemicolonException(int line, String source) {
+        super("Missing ';'", line, source);
     }
 
     @Override

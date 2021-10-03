@@ -11,6 +11,7 @@ public class FormatString extends Token {
         super(Type.STRCON, line, str);
         assert str.length() >= 2 && str.charAt(0) == '\"' && str.charAt(str.length() - 1) == '\"';
         this.inner = str.substring(1, str.length() - 1);
+        // TODO: check invalid character
     }
 
     public String getInner() {
