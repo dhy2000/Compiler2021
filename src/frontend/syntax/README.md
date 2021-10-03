@@ -8,6 +8,8 @@
 
 对于文法的每种成分(非终结符)，建立一种语法树节点类，并用属性来存储其组成成分（词语(终结符, 叶节点)和子节点(非终结符, 非叶节点)）。对于组成成分存在 "或" 关系的非终结符，对其每个具体方向建立类，并让这些类实现同一个接口。
 
+由于编译实验设计到的文法条目较多，工程量相较上学期面向对象课程的表达式求导单元是一个飞升，因此为了简化编译器的开发难度，将整个 `SysY` 文法按照不同的逻辑层次进行分类，分别针对每一类依次分析和编码，从而不太痛苦、不丧失很多信心地完成语法分析任务。根据语法成分出现的层次，分为：表达式、语句、变量定义、函数定义四大类。
+
 注：在语法分析中，`<BlockItem>`, `<Decl>`, `<BType>` 三种成分不需要输出。
 
 ### 表达式
@@ -96,13 +98,104 @@ public abstract class MultiExp<T extends Component> implements Component {
 
 ### 语句
 
+从表达式更往上一层的语法是语句 `Stmt` 及其相关的成分。语句是 SysY 语言（也是 C 语言）代码中的一个重要的单元。和语句相关的文法如下：
 
-### 变量定义
+```text
+<Stmt> := <LVal> '=' <Exp> ';'
+    | [<Exp>] ';'
+    | <Block>
+    | 'if' '(' <Cond> ')' <Stmt> [ 'else' <Stmt> ]
+    | 'while' '(' <Cond> ')' <Stmt>
+    | 'break' ';' | 'continue' ';'
+    | 'return' [<Exp>] ';'
+    | <LVal> '=' 'getint' '(' ')' ';'
+    | 'printf' '(' FormatString { ',' <Exp> } ')' ';'
 
+<BlockItem> := <Decl> | <Stmt>  // <Decl> 目前还未分析，相应代码暂时留空，下一节补上
+
+<Block> := '{' { <BlockItem> } '}'
+```
+
+这段文法中，`Stmt` 的可选项(分支)较多，且每种语句的含义有很大不同，为了便于在以后的阶段分开处理，因此将 `Stmt` 的每种分支进行命名并作为独立的语法成分拆分出来。文法改写如下：
+
+```text
+// 以分号结尾的简单语句
+<AssignStmt>    := <LVal> '=' <Exp> // 这些新增非终结符的组成不含分号
+<ExpStmt>       := <Exp>            // 空语句放到最后了
+<BreakStmt>     := 'break'
+<ContinueStmt>  := 'continue'
+<ReturnStmt>    := 'return' [<Exp>]
+<InputStmt>     := <LVal> '=' 'getint' '(' ')'
+<OutputStmt>    := 'printf' '(' FormatString { ',' <Exp> } ')'
+<SimpStmt>      := <AssignStmt> | <ExpStmt> | <BreakStmt> | <ContinueStmt> 
+    | <ReturnStmt> | <InputStmt> | <OutputStmt> // <SimpStmt> 是以分号结尾的语句(不含分号)的合集
+// 复杂的语句
+<BranchStmt>    := 'if' '(' <Cond> ')' <Stmt> [ 'else' <Stmt> ]
+<LoopStmt>      := 'while' '(' <Cond> ')' <Stmt>
+<CplxStmt>      := <BranchStmt> | <LoopStmt> | <Block>
+
+<Stmt>          := ';' | <SimpStmt> ';' | <CplxStmt>    // 将分号放在这里统一处理
+
+<BlockItem>     := <Decl> | <Stmt>
+
+<Block>         := '{' { <BlockItem> } '}'
+```
+
+在改写后的 `Stmt` 相关文法中，大多数分支只需要向前看 1 个符号即可够用，但判断 `AssignStmt`, `InputStmt` 和 `ExpStmt` 需要面临 `LVal` 与 `Exp` 的选择，在这里向前看的符号数量是难以确定的。回顾前一节刚刚写完的表达式部分，可以看出 `LVal` 是 `Exp` 的"子集"（即，若一个短语能够由 `LVal` 推导出来，则一定能被 `Exp` 推导），因此在向前看完其他符号后，直接进行一个 `Exp` 的 parse，由于递归下降对语法成分的匹配是贪心的（尽可能多匹配），因此若解析出来的 `Exp` 仅含有一个 `LVal` 则一定是 `LVal`，反之则不是，由此即解决了 `LVal` 和 `Exp` 的区分问题，进而完成语句部分的语法树节点类建模和解析器的编写。
+
+### 变量声明
+
+变量声明 (`Decl`) 作为和 `Stmt` 同级（均属于 `BlockItem`）但有区别（可以位于函数外定义全局变量）的语法成分，可单独分出一类进行建模与解析。
+
+相关的文法如下：
+
+```
+<Decl>          := <ConstDecl> | <VarDecl>
+<BType>         := 'int'
+// Const
+<ConstDecl>     := 'const' <BType> <ConstDef> { ',' <ConstDef> } ';'
+<ConstDef>      := Ident { '[' <ConstExp> ']' } '=' <ConstInitVal>
+<ConstInitVal>  := <ConstExp> | '{' [ <ConstInitVal> { ',' <ConstInitVal> } ] '}'
+// Var
+<VarDecl>       := <BType> <VarDef> { ',' <VarDef> } ';'
+<VarDef>        := Ident { '[' <ConstExp> ']' } | Ident { '[' <ConstExp> ']' } '=' <InitVal>
+<InitVal>       := <Exp> | '{' [ <InitVal> { ',' <InitVal> } ] '}'
+```
+
+由于上述文法中，常量声明和非常量声明是类似的，为了减少解析器中可能存在的重复代码，对文法进行改写：
+
+```
+<BType>         := 'int'
+<Decl>          := ['const'] <BType> <Def> { ',' <Def> } ';'    // 'const' 修饰若有，则表示常量
+<ArrDef>        := { '[' <ConstExp> ']' }   // 如果没有则不是数组
+<Def>           := Ident <ArrayDef> [ '=' <InitVal> ]   // 如果是常量声明则必须有
+<InitVal>       := <ExpInitVal> | <ArrInitVal>
+<ExpInitVal>    := <Exp>
+<ArrInitVal>    := '{' [ <InitVal> ] '}'    // 语义分析时要求必须个数与维度对应
+```
+
+改写后的文法相较原始的文法，将常量与变量进行了一些统一，同时将变量的初值进行了一定的层次化处理。
+
+由于改写的文法需要保证和原来的文法等价（至少要保证语法分析作业的输出是一致的，并且语义不能变），因此仍然需要对是否为常量进行区分，而区分的方式采用在相应语法节点中添加一个是否要求是常量的 `boolean` 属性，并在解析器的相应方法中通过传参来传达该信息。在进行输出和语义分析时，只需查看当前节点是否有常量标记即可区分是 `Const` 还是 `Var`。
 
 ### 函数定义
 
+行百里者半九十，完成了前面大约四分之三的工作量后，到了最后的一组文法了。函数相关的文法如下：
 
+```text
+<FuncDef>       := <FuncType> Ident '(' [<FuncFParams> ] ')' <Block>
+<MainFuncDef>   := 'int' 'main' '(' ')' <Block>
+<FuncType>      := 'void' | 'int'
+<FuncFParams>   := <FuncFParam> { ',' <FuncFParam> }
+<FuncFParam>    := <BType> Ident [ '[' ']' { '[' <ConstExp> ']' } ]
+```
+
+
+终于，完成了上述所有语法成分的解析后，以最终的一条入口文法 `CompUnit` 来宣告语法分析作业进入了尾声：
+
+```text
+<CompUnit>      := { <Decl> } { <FuncDef> } <MainFuncDef>
+```
 
 ## 语法分析器 (`Parser`) 编写
 
