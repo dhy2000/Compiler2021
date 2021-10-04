@@ -1,7 +1,7 @@
-package frontend.exceptions.semantic;
+package frontend.error.exception.semantic;
 
-import frontend.exceptions.FrontendException;
-import frontend.exceptions.RequiredException;
+import frontend.error.exception.FrontendException;
+import frontend.error.exception.RequiredException;
 
 /**
  * printf 中格式字符与表达式个数不匹配

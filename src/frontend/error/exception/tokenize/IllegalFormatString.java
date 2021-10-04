@@ -1,7 +1,7 @@
-package frontend.exceptions.tokenize;
+package frontend.error.exception.tokenize;
 
-import frontend.exceptions.FrontendException;
-import frontend.exceptions.RequiredException;
+import frontend.error.exception.FrontendException;
+import frontend.error.exception.RequiredException;
 
 /**
  * 格式字符串中含有非法符号

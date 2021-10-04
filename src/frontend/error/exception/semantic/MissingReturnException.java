@@ -1,7 +1,7 @@
-package frontend.exceptions.semantic;
+package frontend.error.exception.semantic;
 
-import frontend.exceptions.FrontendException;
-import frontend.exceptions.RequiredException;
+import frontend.error.exception.FrontendException;
+import frontend.error.exception.RequiredException;
 
 /**
  * 有返回值的函数末尾缺少 return 语句

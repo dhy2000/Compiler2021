@@ -190,12 +190,17 @@ public abstract class MultiExp<T extends Component> implements Component {
 <FuncFParam>    := <BType> Ident [ '[' ']' { '[' <ConstExp> ']' } ]
 ```
 
+这部分文法解析难度相比前面较简单，不需要改写文法，按照原文法进行解析即可。
 
 终于，完成了上述所有语法成分的解析后，以最终的一条入口文法 `CompUnit` 来宣告语法分析作业进入了尾声：
 
 ```text
 <CompUnit>      := { <Decl> } { <FuncDef> } <MainFuncDef>
 ```
+
+对于这一条文法，一大难点是如何判断接下来即将解析到的是 `Decl` 还是 `FuncDef` 还是 `MainFuncDef`。和前面类似，采取向前看符号的方法，由 `Decl`, `FuncDef`, `MainFuncDef` 的公共前缀有 2 个符号（类型，标识符），因此向前看三个符号即可确定接下来解析的方向。
+
+由此，便完成了整个 SysY 2021 文法的语法分析。本节重点从语法成分的角度分析并设计了数据结构来存储语法成分，关于语法分析器编写的一些事项位于下一节中。
 
 ## 语法分析器 (`Parser`) 编写
 

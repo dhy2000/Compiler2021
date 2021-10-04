@@ -1,7 +1,7 @@
-package frontend.exceptions.semantic;
+package frontend.error.exception.semantic;
 
-import frontend.exceptions.FrontendException;
-import frontend.exceptions.RequiredException;
+import frontend.error.exception.FrontendException;
+import frontend.error.exception.RequiredException;
 
 /**
  * void 函数中出现带返回值的 return 语句

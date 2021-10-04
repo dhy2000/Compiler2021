@@ -1,6 +1,6 @@
-package frontend.exceptions.tokenize;
+package frontend.error.exception.tokenize;
 
-import frontend.exceptions.FrontendException;
+import frontend.error.exception.FrontendException;
 
 /**
  * 未识别符号异常

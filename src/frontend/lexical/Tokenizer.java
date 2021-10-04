@@ -1,6 +1,6 @@
 package frontend.lexical;
 
-import frontend.exceptions.tokenize.UnrecognizedTokenException;
+import frontend.error.exception.tokenize.UnrecognizedTokenException;
 import frontend.source.Source;
 import frontend.lexical.token.Token;
 

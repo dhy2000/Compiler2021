@@ -1,7 +1,7 @@
-package frontend.exceptions.semantic;
+package frontend.error.exception.semantic;
 
-import frontend.exceptions.FrontendException;
-import frontend.exceptions.RequiredException;
+import frontend.error.exception.FrontendException;
+import frontend.error.exception.RequiredException;
 
 /**
  * 在非循环块中使用 break 和 continue

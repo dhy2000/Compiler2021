@@ -1,4 +1,4 @@
-package frontend.exceptions;
+package frontend.error.exception;
 
 /**
  * 课程设计中 "错误处理" 部分要求处理的错误
