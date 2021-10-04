@@ -6,6 +6,8 @@ import frontend.source.Source;
 import frontend.source.SourceReader;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
+import frontend.syntax.CompUnit;
+import frontend.syntax.CompUnitParser;
 
 import java.io.InputStream;
 
@@ -19,9 +21,14 @@ public class SysY {
         try {
             // tokenize
             tokens = Tokenizer.tokenize(source);
-            tokens.output(Config.getTarget());
+            if (Config.hasOperationOutput(Config.Operation.TOKENIZE)) {
+                tokens.output(Config.getTarget());
+            }
             // syntax parse
-
+            CompUnit compUnit = new CompUnitParser(tokens).parseCompUnit();
+            if (Config.hasOperationOutput(Config.Operation.SYNTAX_PARSE)) {
+                compUnit.output(Config.getTarget());
+            }
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
