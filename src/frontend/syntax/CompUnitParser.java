@@ -38,12 +38,12 @@ public class CompUnitParser {
         // parse Decl
         ParserUtil.detectEof(syntax, iterator, maxLineNum);
         Token type = iterator.next();
-        if (type.getType().equals(Token.Type.INTTK) || type.getType().equals(Token.Type.VOIDTK)) {
+        if (!type.getType().equals(Token.Type.INTTK) && !type.getType().equals(Token.Type.VOIDTK)) {
             throw new UnexpectedTokenException(type.lineNumber(), syntax, type);
         }
         ParserUtil.detectEof(syntax, iterator, maxLineNum);
         Token name = iterator.next();
-        if (name.getType().equals(Token.Type.IDENFR) || name.getType().equals(Token.Type.MAINTK)) {
+        if (!name.getType().equals(Token.Type.IDENFR) && !name.getType().equals(Token.Type.MAINTK)) {
             throw new UnexpectedTokenException(name.lineNumber(), syntax, type);
         }
         List<Decl> globalVars = new LinkedList<>();
@@ -53,6 +53,7 @@ public class CompUnitParser {
                 iterator.previous();
                 break; // fall into function
             }
+            iterator.previous();
             if (type.getType().equals(Token.Type.VOIDTK)) {
                 break; // fall through
             }
@@ -63,12 +64,12 @@ public class CompUnitParser {
             globalVars.add(decl);
             ParserUtil.detectEof(syntax, iterator, maxLineNum);
             type = iterator.next();
-            if (type.getType().equals(Token.Type.INTTK) || type.getType().equals(Token.Type.VOIDTK)) {
+            if (!type.getType().equals(Token.Type.INTTK) && !type.getType().equals(Token.Type.VOIDTK)) {
                 throw new UnexpectedTokenException(type.lineNumber(), syntax, type);
             }
             ParserUtil.detectEof(syntax, iterator, maxLineNum);
             name = iterator.next();
-            if (name.getType().equals(Token.Type.IDENFR) || name.getType().equals(Token.Type.MAINTK)) {
+            if (!name.getType().equals(Token.Type.IDENFR) && !name.getType().equals(Token.Type.MAINTK)) {
                 throw new UnexpectedTokenException(name.lineNumber(), syntax, type);
             }
         }
@@ -88,6 +89,15 @@ public class CompUnitParser {
                 functions.add(new FuncParser(iterator, maxLineNum).parseFuncDef(type, (Ident) name, next));
             } else {
                 throw new UnexpectedTokenException(name.lineNumber(), syntax, name, Token.Type.IDENFR);
+            }
+            ParserUtil.detectEof(syntax, iterator, maxLineNum);
+            type = iterator.next();
+            if (!type.getType().equals(Token.Type.INTTK) && !type.getType().equals(Token.Type.VOIDTK)) {
+                throw new UnexpectedTokenException(type.lineNumber(), syntax, type);
+            }
+            name = iterator.next();
+            if (!name.getType().equals(Token.Type.IDENFR) && !name.getType().equals(Token.Type.MAINTK)) {
+                throw new UnexpectedTokenException(name.lineNumber(), syntax, type);
             }
         }
         if (Objects.isNull(mainFunc)) {
