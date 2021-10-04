@@ -149,7 +149,7 @@ public abstract class MultiExp<T extends Component> implements Component {
 
 相关的文法如下：
 
-```
+```text
 <Decl>          := <ConstDecl> | <VarDecl>
 <BType>         := 'int'
 // Const
@@ -164,7 +164,7 @@ public abstract class MultiExp<T extends Component> implements Component {
 
 由于上述文法中，常量声明和非常量声明是类似的，为了减少解析器中可能存在的重复代码，对文法进行改写：
 
-```
+```text
 <BType>         := 'int'
 <Decl>          := ['const'] <BType> <Def> { ',' <Def> } ';'    // 'const' 修饰若有，则表示常量
 <ArrDef>        := { '[' <ConstExp> ']' }   // 如果没有则不是数组

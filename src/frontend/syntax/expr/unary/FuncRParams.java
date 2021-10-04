@@ -24,6 +24,10 @@ public class FuncRParams implements Component {
         return first;
     }
 
+    public int size() {
+        return params.size();
+    }
+
     public Iterator<Token> iterSeparators() {
         return separators.listIterator();
     }

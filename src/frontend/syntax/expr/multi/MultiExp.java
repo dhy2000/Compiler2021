@@ -32,6 +32,10 @@ public abstract class MultiExp<T extends Component> implements Component {
         return first;
     }
 
+    public int size() { // exclude the first operand
+        return operands.size();
+    }
+
     public Iterator<Token> iterOperator() {
         return operators.listIterator();
     }

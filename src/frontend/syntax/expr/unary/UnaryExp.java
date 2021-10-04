@@ -17,6 +17,10 @@ public class UnaryExp implements Component {
         this.base = base;
     }
 
+    public int sizeUnaryOp() {
+        return unaryOps.size();
+    }
+
     public Iterator<Token> iterUnaryOp() {
         return unaryOps.listIterator();
     }
