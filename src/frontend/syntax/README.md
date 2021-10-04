@@ -84,8 +84,8 @@ public abstract class MultiExp<T extends Component> implements Component {
 
     @Override
     public void output(PrintStream ps) {
-        // 输出其子节点
-        ps.println(name);
+        // 先输出第一个节点, 按自身的 `name` 输出
+        // 然后循环遍历跟随的节点，每输出完一个子节点后，输出一遍自身的 `name` (等价于输出一棵从左向右结合的树)
     }
 }
 ```
@@ -167,11 +167,11 @@ public abstract class MultiExp<T extends Component> implements Component {
 ```text
 <BType>         := 'int'
 <Decl>          := ['const'] <BType> <Def> { ',' <Def> } ';'    // 'const' 修饰若有，则表示常量
-<ArrDef>        := { '[' <ConstExp> ']' }   // 如果没有则不是数组
-<Def>           := Ident <ArrayDef> [ '=' <InitVal> ]   // 如果是常量声明则必须有
+<ArrDef>        := '[' <ConstExp> ']'       // 如果没有则不是数组
+<Def>           := Ident { <ArrayDef> } [ '=' <InitVal> ]   // 如果是常量声明则必须有 InitVal
 <InitVal>       := <ExpInitVal> | <ArrInitVal>
 <ExpInitVal>    := <Exp>
-<ArrInitVal>    := '{' [ <InitVal> ] '}'    // 语义分析时要求必须个数与维度对应
+<ArrInitVal>    := '{' [ <InitVal> { ',' <InitVal> } ] '}'    // 语义分析时要求必须个数与维度对应
 ```
 
 改写后的文法相较原始的文法，将常量与变量进行了一些统一，同时将变量的初值进行了一定的层次化处理。
