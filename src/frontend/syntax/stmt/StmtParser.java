@@ -199,8 +199,7 @@ public class StmtParser {
             if (!iterator.hasNext()) {
                 throw new UnexpectedEofException(maxLineNum, "<Decl>");
             }
-            Token third = iterator.next();
-            return new DeclParser(iterator, maxLineNum).parseDecl(next, second, third);
+            return new DeclParser(iterator, maxLineNum).parseDecl(next, second);
         } else {
             iterator.previous();
             return parseStmt();

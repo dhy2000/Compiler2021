@@ -20,18 +20,22 @@ public class FuncParser {
         this.maxLineNum = maxLineNum;
     }
 
+    // <FuncDef>       := <FuncType> Ident '(' [<FuncFParams> ] ')' <Block>
     public FuncDef parseFuncDef(Token funcType, Ident ident, Token leftParenthesis) {
         return null;
     }
 
+    // <MainFuncDef>   := 'int' 'main' '(' ')' <Block>
     public MainFuncDef parseMainFuncDef(Token intTk, Token mainTk, Token leftParenthesis) {
         return null;
     }
 
+    // <FuncFParams>   := <FuncFParam> { ',' <FuncFParam> }
     public FuncFParams parseFuncFParams() {
         return null;
     }
 
+    // <FuncFParam>    := <BType> Ident [ '[' ']' { '[' <ConstExp> ']' } ]
     public FuncFParam parseFuncFParam() {
         return null;
     }
