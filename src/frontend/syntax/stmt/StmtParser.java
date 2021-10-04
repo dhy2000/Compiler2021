@@ -5,6 +5,7 @@ import frontend.error.exception.syntax.UnexpectedTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.FormatString;
 import frontend.lexical.token.Token;
+import frontend.syntax.decl.DeclParser;
 import frontend.syntax.expr.ExprParser;
 import frontend.syntax.expr.multi.AddExp;
 import frontend.syntax.expr.multi.Cond;
@@ -199,18 +200,55 @@ public class StmtParser {
     }
 
     // <BlockItem>     := <Decl> | <Stmt>
-    public BlockItem parseBlockItem() {
-        return null;
+    public BlockItem parseBlockItem() throws UnexpectedEofException, UnexpectedTokenException {
+        if (!iterator.hasNext()) {
+            throw new UnexpectedEofException(maxLineNum, "<BlockItem>");
+        }
+        Token next = iterator.next();
+        if (next.getType().equals(Token.Type.INTTK)) {
+            Token second = getSpecifiedToken(Token.Type.IDENFR, "<Decl>");
+            if (!iterator.hasNext()) {
+                throw new UnexpectedEofException(maxLineNum, "<Decl>");
+            }
+            Token third = iterator.next();
+            return new DeclParser(iterator, maxLineNum).parseDecl(next, second, third);
+        } else {
+            iterator.previous();
+            return parseStmt();
+        }
     }
 
     // <Block>         := '{' { <BlockItem> } '}'
-    public Block parseBlock(Token leftBrace) {
-        return null;
+    public Block parseBlock(Token leftBrace) throws UnexpectedTokenException, UnexpectedEofException {
+        List<BlockItem> blockItems = new LinkedList<>();
+        while (iterator.hasNext()) {
+            Token end = iterator.next();
+            if (end.getType().equals(Token.Type.RBRACE)) {
+                return new Block(leftBrace, end, blockItems);
+            }
+            BlockItem item = parseBlockItem();
+            blockItems.add(item);
+        }
+        throw new UnexpectedEofException(maxLineNum, "<Block>");
     }
 
     // <Stmt>          := ';' | <SplStmt> ';' | <CplStmt>
-    public Stmt parseStmt() {
-        return null;
+    public Stmt parseStmt() throws UnexpectedEofException, UnexpectedTokenException {
+        final String syntax = "<Stmt>";
+        if (!iterator.hasNext()) {
+            throw new UnexpectedEofException(maxLineNum, syntax);
+        }
+        Token first = iterator.next();
+        if (first.getType().equals(Token.Type.SEMICN)) {
+            return new Stmt(first); // empty stmt
+        } else if (first.getType().equals(Token.Type.LBRACE) || first.getType().equals(Token.Type.IFTK) || first.getType().equals(Token.Type.WHILETK)) {
+            CplStmt cplStmt = parseComplexStmt(first);
+            return new Stmt(cplStmt);
+        } else {
+            SplStmt splStmt = parseSimpleStmt(first);
+            Token semi = getSpecifiedToken(Token.Type.SEMICN, syntax);
+            return new Stmt(splStmt, semi);
+        }
     }
 
 }
