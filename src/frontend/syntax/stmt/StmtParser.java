@@ -5,6 +5,7 @@ import frontend.error.exception.syntax.UnexpectedTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.FormatString;
 import frontend.lexical.token.Token;
+import frontend.syntax.ParserUtil;
 import frontend.syntax.decl.DeclParser;
 import frontend.syntax.expr.ExprParser;
 import frontend.syntax.expr.multi.AddExp;
@@ -78,16 +79,16 @@ public class StmtParser {
     // <InputStmt>     := <LVal> '=' 'getint' '(' ')'
     public InputStmt parseInputStmt(LVal target, Token assignTk, Token getIntTk) throws UnexpectedTokenException, UnexpectedEofException {
         final String syntax = "<InputStmt>";
-        Token leftParenthesis = getSpecifiedToken(Token.Type.LPARENT, syntax);
-        Token rightParenthesis = getSpecifiedToken(Token.Type.RPARENT, syntax);
+        Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
+        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new InputStmt(target, assignTk, getIntTk, leftParenthesis, rightParenthesis);
     }
 
     // <OutputStmt>    := 'printf' '(' FormatString { ',' <Exp> } ')'
     public OutputStmt parseOutputStmt(Token printfTk) throws UnexpectedTokenException, UnexpectedEofException {
         final String syntax = "<OutputStmt>";
-        Token leftParenthesis = getSpecifiedToken(Token.Type.LPARENT, syntax);
-        Token formatString = getSpecifiedToken(Token.Type.STRCON, syntax);
+        Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
+        Token formatString = ParserUtil.getSpecifiedToken(Token.Type.STRCON, syntax, iterator, maxLineNum);
         List<Token> commas = new LinkedList<>();
         List<Exp> exps = new LinkedList<>();
         while (iterator.hasNext()) {
@@ -100,7 +101,7 @@ public class StmtParser {
             Exp exp = new ExprParser(iterator, maxLineNum).parseExp();
             exps.add(exp);
         }
-        Token rightParenthesis = getSpecifiedToken(Token.Type.RPARENT, syntax);
+        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new OutputStmt(printfTk, leftParenthesis, rightParenthesis, (FormatString) formatString, commas, exps);
     }
 
@@ -149,25 +150,13 @@ public class StmtParser {
         return parseExpStmt(exp);
     }
 
-    private Token getSpecifiedToken(Token.Type type, String syntaxName) throws UnexpectedTokenException, UnexpectedEofException {
-        // TODO: Missing right parenthesis or bracket processing
-        if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, syntaxName);
-        }
-        Token next = iterator.next();
-        if (!next.getType().equals(type)) {
-            throw new UnexpectedTokenException(next.lineNumber(), syntaxName, next, type);
-        }
-        return next;
-    }
-
     // <IfStmt>        := 'if' '(' <Cond> ')' <Stmt> [ 'else' <Stmt> ]
     public IfStmt parseIfStmt(Token ifTk) throws UnexpectedTokenException, UnexpectedEofException {
         assert ifTk.getType().equals(Token.Type.IFTK);
         final String syntax = "<IfStmt>";
-        Token leftParenthesis = getSpecifiedToken(Token.Type.LPARENT, syntax);
+        Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Cond cond = new ExprParser(iterator, maxLineNum).parseCond();
-        Token rightParenthesis = getSpecifiedToken(Token.Type.RPARENT, syntax);
+        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         Stmt thenStmt = parseStmt();
         Token elseTk;
         if (iterator.hasNext() && (elseTk = iterator.next()).getType().equals(Token.Type.ELSETK)) {
@@ -182,9 +171,9 @@ public class StmtParser {
     // <WhileStmt>     := 'while' '(' <Cond> ')' <Stmt>
     public WhileStmt parseWhileStmt(Token whileTk) throws UnexpectedTokenException, UnexpectedEofException {
         final String syntax = "<WhileStmt>";
-        Token leftParenthesis = getSpecifiedToken(Token.Type.LPARENT, syntax);
+        Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Cond cond = new ExprParser(iterator, maxLineNum).parseCond();
-        Token rightParenthesis = getSpecifiedToken(Token.Type.RPARENT, syntax);
+        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         Stmt stmt = parseStmt();
         return new WhileStmt(whileTk, leftParenthesis, cond, rightParenthesis, stmt);
     }
@@ -206,7 +195,7 @@ public class StmtParser {
         }
         Token next = iterator.next();
         if (next.getType().equals(Token.Type.INTTK)) {
-            Token second = getSpecifiedToken(Token.Type.IDENFR, "<Decl>");
+            Token second = ParserUtil.getSpecifiedToken(Token.Type.IDENFR, "<Decl>", iterator, maxLineNum);
             if (!iterator.hasNext()) {
                 throw new UnexpectedEofException(maxLineNum, "<Decl>");
             }
@@ -246,7 +235,7 @@ public class StmtParser {
             return new Stmt(cplStmt);
         } else {
             SplStmt splStmt = parseSimpleStmt(first);
-            Token semi = getSpecifiedToken(Token.Type.SEMICN, syntax);
+            Token semi = ParserUtil.getSpecifiedToken(Token.Type.SEMICN, syntax, iterator, maxLineNum);
             return new Stmt(splStmt, semi);
         }
     }
