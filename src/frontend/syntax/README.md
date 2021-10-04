@@ -127,14 +127,14 @@ public abstract class MultiExp<T extends Component> implements Component {
 <ReturnStmt>    := 'return' [<Exp>]
 <InputStmt>     := <LVal> '=' 'getint' '(' ')'
 <OutputStmt>    := 'printf' '(' FormatString { ',' <Exp> } ')'
-<SimpStmt>      := <AssignStmt> | <ExpStmt> | <BreakStmt> | <ContinueStmt> 
+<SplStmt>      := <AssignStmt> | <ExpStmt> | <BreakStmt> | <ContinueStmt> 
     | <ReturnStmt> | <InputStmt> | <OutputStmt> // <SimpStmt> 是以分号结尾的语句(不含分号)的合集
 // 复杂的语句
 <BranchStmt>    := 'if' '(' <Cond> ')' <Stmt> [ 'else' <Stmt> ]
 <LoopStmt>      := 'while' '(' <Cond> ')' <Stmt>
-<CplxStmt>      := <BranchStmt> | <LoopStmt> | <Block>
+<CplStmt>      := <BranchStmt> | <LoopStmt> | <Block>
 
-<Stmt>          := ';' | <SimpStmt> ';' | <CplxStmt>    // 将分号放在这里统一处理
+<Stmt>          := ';' | <SplStmt> ';' | <CplStmt>    // 将分号放在这里统一处理
 
 <BlockItem>     := <Decl> | <Stmt>
 
