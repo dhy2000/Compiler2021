@@ -4,6 +4,7 @@ import frontend.lexical.token.Token;
 import frontend.syntax.stmt.complex.BlockItem;
 
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +42,17 @@ public class Decl implements BlockItem, Constable {
         this.separators = separators;
         this.follows = follows;
         this.semicolon = semicolon;
+    }
+
+    public Decl(Token bType, Def first, Token semicolon) {
+        assert bType.getType().equals(Token.Type.INTTK);
+        assert semicolon.getType().equals(Token.Type.SEMICN);
+        this.constTk = null;
+        this.bType = bType;
+        this.first = first;
+        this.semicolon = semicolon;
+        this.separators = Collections.emptyList();
+        this.follows = Collections.emptyList();
     }
 
 
