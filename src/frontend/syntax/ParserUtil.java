@@ -18,4 +18,10 @@ public class ParserUtil {
         }
         return next;
     }
+
+    public static void detectEof(String syntaxName, Iterator<Token> iterator, int maxLineNum) throws UnexpectedEofException {
+        if (!iterator.hasNext()) {
+            throw new UnexpectedEofException(maxLineNum, syntaxName);
+        }
+    }
 }
