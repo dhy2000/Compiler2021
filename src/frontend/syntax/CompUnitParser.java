@@ -32,77 +32,71 @@ public class CompUnitParser {
         this.maxLineNum = maxLineNum;
     }
 
+    private Token getNextToken() throws UnexpectedEofException {    // extract duplicated code
+        ParserUtil.detectEof("<CompUnit>", iterator, maxLineNum);
+        return iterator.next();
+    }
+
     // <CompUnit>      := { <Decl> } { <FuncDef> } <MainFuncDef>
     public CompUnit parseCompUnit() throws UnexpectedTokenException, UnexpectedEofException, NoMainFuncException {
         final String syntax = "<CompUnit>";
+        Token first = getNextToken();
+        Token second = getNextToken();
+        Token third = null;
         // parse Decl
-        ParserUtil.detectEof(syntax, iterator, maxLineNum);
-        Token type = iterator.next();
-        if (!type.getType().equals(Token.Type.INTTK) && !type.getType().equals(Token.Type.VOIDTK)) {
-            throw new UnexpectedTokenException(type.lineNumber(), syntax, type);
-        }
-        ParserUtil.detectEof(syntax, iterator, maxLineNum);
-        Token name = iterator.next();
-        if (!name.getType().equals(Token.Type.IDENFR) && !name.getType().equals(Token.Type.MAINTK)) {
-            throw new UnexpectedTokenException(name.lineNumber(), syntax, type);
-        }
-        List<Decl> globalVars = new LinkedList<>();
+        List<Decl> globalVariables = new LinkedList<>();
         while (iterator.hasNext()) {
-            Token next = iterator.next();
-            if (next.getType().equals(Token.Type.LPARENT)) {
-                iterator.previous();
-                break; // fall into function
+            // const int
+            // int ident ~'('
+            if (first.getType().equals(Token.Type.CONSTTK) && second.getType().equals(Token.Type.INTTK)) {
+                globalVariables.add(new DeclParser(iterator, maxLineNum).parseDecl(first, second));
+            } else if (first.getType().equals(Token.Type.INTTK) && second.getType().equals(Token.Type.IDENFR)) {
+                third = getNextToken();
+                if (!third.getType().equals(Token.Type.LPARENT)) {
+                    iterator.previous();
+                    third = null;
+                    globalVariables.add(new DeclParser(iterator, maxLineNum).parseDecl(first, second));
+                } else {
+                    break; // fall through to function
+                }
+            } else {
+                break;
             }
-            iterator.previous();
-            if (type.getType().equals(Token.Type.VOIDTK)) {
-                break; // fall through
-            }
-            if (name.getType().equals(Token.Type.MAINTK)) {
-                break; // fall through
-            }
-            Decl decl = new DeclParser(iterator, maxLineNum).parseDecl(type, name);
-            globalVars.add(decl);
-            ParserUtil.detectEof(syntax, iterator, maxLineNum);
-            type = iterator.next();
-            if (!type.getType().equals(Token.Type.INTTK) && !type.getType().equals(Token.Type.VOIDTK)) {
-                throw new UnexpectedTokenException(type.lineNumber(), syntax, type);
-            }
-            ParserUtil.detectEof(syntax, iterator, maxLineNum);
-            name = iterator.next();
-            if (!name.getType().equals(Token.Type.IDENFR) && !name.getType().equals(Token.Type.MAINTK)) {
-                throw new UnexpectedTokenException(name.lineNumber(), syntax, type);
-            }
+            first = getNextToken();
+            second = getNextToken();
         }
+
         // parse FuncDef
         List<FuncDef> functions = new LinkedList<>();
         MainFuncDef mainFunc = null;
-        while (iterator.hasNext()) {
-            Token next = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
-            if (name.getType().equals(Token.Type.MAINTK)) {
-                if (type.getType().equals(Token.Type.INTTK)) {
-                    mainFunc = new FuncParser(iterator, maxLineNum).parseMainFuncDef(type, name, next);
-                    break;
-                } else {
-                    throw new UnexpectedTokenException(type.lineNumber(), syntax, type, Token.Type.INTTK);
-                }
-            } else if (name.getType().equals(Token.Type.IDENFR)) {
-                functions.add(new FuncParser(iterator, maxLineNum).parseFuncDef(type, (Ident) name, next));
-            } else {
-                throw new UnexpectedTokenException(name.lineNumber(), syntax, name, Token.Type.IDENFR);
-            }
-            ParserUtil.detectEof(syntax, iterator, maxLineNum);
-            type = iterator.next();
-            if (!type.getType().equals(Token.Type.INTTK) && !type.getType().equals(Token.Type.VOIDTK)) {
-                throw new UnexpectedTokenException(type.lineNumber(), syntax, type);
-            }
-            name = iterator.next();
-            if (!name.getType().equals(Token.Type.IDENFR) && !name.getType().equals(Token.Type.MAINTK)) {
-                throw new UnexpectedTokenException(name.lineNumber(), syntax, type);
-            }
+        if (Objects.isNull(third)) {
+            third = getNextToken();
         }
+        while (iterator.hasNext()) {
+            if (first.getType().equals(Token.Type.INTTK) && second.getType().equals(Token.Type.MAINTK) && third.getType().equals(Token.Type.LPARENT)) {
+                mainFunc = new FuncParser(iterator, maxLineNum).parseMainFuncDef(first, second, third);
+                break;
+            } else {
+                if (!first.getType().equals(Token.Type.INTTK) && !first.getType().equals(Token.Type.VOIDTK)) {
+                    throw new UnexpectedTokenException(first.lineNumber(), "<FuncDef>", first);
+                }
+                if (!second.getType().equals(Token.Type.IDENFR)) {
+                    throw new UnexpectedTokenException(second.lineNumber(), "<FuncDef>", second, Token.Type.IDENFR);
+                }
+                if (!third.getType().equals(Token.Type.LPARENT)) {
+                    throw new UnexpectedTokenException(third.lineNumber(), "<FuncDef>", third, Token.Type.LPARENT);
+                }
+                functions.add(new FuncParser(iterator, maxLineNum).parseFuncDef(first, (Ident) second, third));
+            }
+            first = getNextToken();
+            second = getNextToken();
+            third = getNextToken();
+        }
+
         if (Objects.isNull(mainFunc)) {
             throw new NoMainFuncException(maxLineNum, "No main function");
         }
-        return new CompUnit(globalVars, functions, mainFunc);
+
+        return new CompUnit(globalVariables, functions, mainFunc);
     }
 }

@@ -187,6 +187,7 @@ public class ExprParser {
                 operands.add(next);
             } else {
                 iterator.previous();
+                break;
             }
         }
         return new MulExp(first, operators, operands);
@@ -209,6 +210,7 @@ public class ExprParser {
                 operands.add(next);
             } else {
                 iterator.previous();
+                break;
             }
         }
         return new AddExp(first, operators, operands);
@@ -231,6 +233,7 @@ public class ExprParser {
                 operands.add(next);
             } else {
                 iterator.previous();
+                break;
             }
         }
         return new RelExp(first, operators, operands);
@@ -253,6 +256,7 @@ public class ExprParser {
                 operands.add(next);
             } else {
                 iterator.previous();
+                break;
             }
         }
         return new EqExp(first, operators, operands);
@@ -275,6 +279,7 @@ public class ExprParser {
                 operands.add(next);
             } else {
                 iterator.previous();
+                break;
             }
         }
         return new LAndExp(first, operators, operands);
@@ -297,6 +302,7 @@ public class ExprParser {
                 operands.add(next);
             } else {
                 iterator.previous();
+                break;
             }
         }
         return new LOrExp(first, operators, operands);

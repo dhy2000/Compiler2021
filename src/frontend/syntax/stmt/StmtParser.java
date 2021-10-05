@@ -194,7 +194,7 @@ public class StmtParser {
             throw new UnexpectedEofException(maxLineNum, "<BlockItem>");
         }
         Token next = iterator.next();
-        if (next.getType().equals(Token.Type.INTTK)) {
+        if (next.getType().equals(Token.Type.INTTK) || next.getType().equals(Token.Type.CONSTTK)) {
             Token second = ParserUtil.getSpecifiedToken(Token.Type.IDENFR, "<Decl>", iterator, maxLineNum);
             if (!iterator.hasNext()) {
                 throw new UnexpectedEofException(maxLineNum, "<Decl>");
@@ -214,6 +214,7 @@ public class StmtParser {
             if (end.getType().equals(Token.Type.RBRACE)) {
                 return new Block(leftBrace, end, blockItems);
             }
+            iterator.previous();
             BlockItem item = parseBlockItem();
             blockItems.add(item);
         }

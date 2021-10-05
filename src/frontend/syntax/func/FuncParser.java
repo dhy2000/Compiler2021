@@ -38,6 +38,7 @@ public class FuncParser {
             Block body = new StmtParser(iterator, maxLineNum).parseBlock(leftBrace);
             return new FuncDef(funcType, ident, leftParenthesis, rightParenthesis, body);
         } else {
+            iterator.previous();
             FuncFParams fParams = parseFuncFParams();
             rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, "<FuncDef>", iterator, maxLineNum);
             Token leftBrace = ParserUtil.getSpecifiedToken(Token.Type.LBRACE, "<Block>", iterator, maxLineNum);
