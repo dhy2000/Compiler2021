@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class LVal implements PrimaryExp {
+public class LVal implements BasePrimaryExp {
 
     private final Ident name;
     private final List<Index> indexes;
@@ -38,7 +38,6 @@ public class LVal implements PrimaryExp {
         name.output(ps);
         indexes.forEach(index -> index.output(ps));
         ps.println("<LVal>");
-        ps.println("<PrimaryExp>");
     }
 
     /**

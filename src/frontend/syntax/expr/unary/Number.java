@@ -4,7 +4,7 @@ import frontend.lexical.token.IntConst;
 
 import java.io.PrintStream;
 
-public class Number implements PrimaryExp {
+public class Number implements BasePrimaryExp {
 
     private final IntConst value;
 
@@ -20,6 +20,5 @@ public class Number implements PrimaryExp {
     public void output(PrintStream ps) {
         value.output(ps);
         ps.println("<Number>");
-        ps.println("<PrimaryExp>");
     }
 }

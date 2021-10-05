@@ -2,9 +2,21 @@ package frontend.syntax.expr.unary;
 
 import java.io.PrintStream;
 
-public interface PrimaryExp extends BaseUnaryExp {
+public class PrimaryExp implements BaseUnaryExp {
+
+    private final BasePrimaryExp base;
+
+    public PrimaryExp(BasePrimaryExp base) {
+        this.base = base;
+    }
+
+    public BasePrimaryExp getBase() {
+        return base;
+    }
+
     @Override
-    default void output(PrintStream ps) {
+    public void output(PrintStream ps) {
+        base.output(ps);
         ps.println("<PrimaryExp>");
     }
 }

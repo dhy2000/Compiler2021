@@ -90,9 +90,9 @@ public class ExprParser {
             throw new UnexpectedEofException(maxLineNum, syntax);
         }
         switch (first.getType()) {
-            case IDENFR: return parseLVal((Ident) first);
-            case INTCON: return parseNumber((IntConst) first);
-            case LPARENT: return parseSubExp(first);
+            case IDENFR: return new PrimaryExp(parseLVal((Ident) first));
+            case INTCON: return new PrimaryExp(parseNumber((IntConst) first));
+            case LPARENT: return new PrimaryExp(parseSubExp(first));
             default: throw new UnexpectedTokenException(first.lineNumber(), syntax, first);
         }
     }

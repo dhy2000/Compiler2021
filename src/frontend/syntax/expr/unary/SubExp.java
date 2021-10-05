@@ -5,7 +5,7 @@ import frontend.syntax.expr.multi.Exp;
 
 import java.io.PrintStream;
 
-public class SubExp implements PrimaryExp {
+public class SubExp implements BasePrimaryExp {
 
     private final Token leftParenthesis;
     private final Token rightParenthesis;
@@ -34,6 +34,5 @@ public class SubExp implements PrimaryExp {
         leftParenthesis.output(ps);
         exp.output(ps);
         rightParenthesis.output(ps);
-        ps.println("<PrimaryExp>");
     }
 }

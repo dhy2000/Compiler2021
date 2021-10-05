@@ -12,15 +12,14 @@ import frontend.syntax.expr.multi.AddExp;
 import frontend.syntax.expr.multi.Cond;
 import frontend.syntax.expr.multi.Exp;
 import frontend.syntax.expr.multi.MulExp;
-import frontend.syntax.expr.unary.BaseUnaryExp;
-import frontend.syntax.expr.unary.LVal;
-import frontend.syntax.expr.unary.UnaryExp;
+import frontend.syntax.expr.unary.*;
 import frontend.syntax.stmt.complex.*;
 import frontend.syntax.stmt.simple.*;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 public class StmtParser {
     private final ListIterator<Token> iterator;
@@ -106,6 +105,23 @@ public class StmtParser {
         return new OutputStmt(printfTk, leftParenthesis, rightParenthesis, (FormatString) formatString, commas, exps);
     }
 
+    private LVal extractLValFromExp(Exp exp) {
+        AddExp addExp = exp.getAddExp();
+        MulExp mulExp = addExp.getFirst();
+        UnaryExp unaryExp = mulExp.getFirst();
+        BaseUnaryExp baseUnaryExp = unaryExp.getBase();
+        if (!(baseUnaryExp instanceof PrimaryExp)) {
+            return null;
+        }
+        PrimaryExp primaryExp = (PrimaryExp) baseUnaryExp;
+        BasePrimaryExp base = primaryExp.getBase();
+        if (base instanceof LVal) {
+            if (addExp.size() == 0 && mulExp.size() == 0 && unaryExp.sizeUnaryOp() == 0) { return (LVal) base; }
+            else return null;
+        }
+        return null;
+    }
+
     // <SplStmt>      := <AssignStmt> | <ExpStmt> | <BreakStmt> | <ContinueStmt> | <ReturnStmt> | <InputStmt> | <OutputStmt>
     public SplStmt parseSimpleStmt(Token first) throws UnexpectedTokenException, UnexpectedEofException {
         final String syntax = "<SplStmt>";
@@ -121,11 +137,9 @@ public class StmtParser {
         Exp exp = new ExprParser(iterator, maxLineNum).parseExp();
         // check whether is lVal
 
-        AddExp addExp = exp.getAddExp();
-        MulExp mulExp = addExp.getFirst();
-        UnaryExp unaryExp = mulExp.getFirst();
-        BaseUnaryExp baseUnaryExp = unaryExp.getBase();
-        if (baseUnaryExp instanceof LVal && addExp.size() == 0 && mulExp.size() == 0 && unaryExp.sizeUnaryOp() == 0) {
+
+        LVal target = extractLValFromExp(exp);
+        if (Objects.nonNull(target)) {
             // is lVal
             if (!iterator.hasNext()) {
                 throw new UnexpectedEofException(maxLineNum, syntax);
@@ -138,10 +152,10 @@ public class StmtParser {
                 }
                 Token twice = iterator.next();
                 if (twice.getType().equals(Token.Type.GETINTTK)) {
-                    return parseInputStmt((LVal) baseUnaryExp, next, twice);
+                    return parseInputStmt(target, next, twice);
                 } else {
                     iterator.previous();
-                    return parseAssignStmt((LVal) baseUnaryExp, next);
+                    return parseAssignStmt(target, next);
                 }
             } else {
                 iterator.previous();
