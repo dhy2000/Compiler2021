@@ -52,5 +52,6 @@ public class MainFuncDef implements Component {
         leftParenthesis.output(ps);
         rightParenthesis.output(ps);
         body.output(ps);
+        ps.println("<MainFuncDef>");
     }
 }

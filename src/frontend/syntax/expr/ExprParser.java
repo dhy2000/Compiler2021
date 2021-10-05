@@ -7,6 +7,7 @@ import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.IntConst;
 import frontend.lexical.token.Token;
+import frontend.syntax.ParserUtil;
 import frontend.syntax.expr.multi.*;
 import frontend.syntax.expr.unary.Number;
 import frontend.syntax.expr.unary.*;
@@ -40,7 +41,8 @@ public class ExprParser {
         while (iterator.hasNext()) {
             Token left = iterator.next();
             if (!Token.Type.LBRACK.equals(left.getType())) {
-                throw new UnexpectedTokenException(left.lineNumber(), syntax, left, Token.Type.LBRACK);
+                iterator.previous();
+                break;
             }
             Exp exp = parseExp();
             // TODO: Missing Right Bracket
@@ -107,6 +109,7 @@ public class ExprParser {
         }
         iterator.previous();    // undo get token
         FuncRParams rParams = parseFuncRParams(parseExp());
+        next = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new FunctionCall(ident, leftParenthesis, next, rParams);
     }
 
@@ -178,10 +181,8 @@ public class ExprParser {
         List<UnaryExp> operands = new LinkedList<>();
         while (iterator.hasNext()) {
             Token op = iterator.next();
-            if (Token.Type.MULT.equals(op.getType()) || Token.Type.DIV.equals(op.getType()) || Token.Type.MOD.equals(op.getType())) {
-                if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
-                }
+            if (Token.Type.MULT.equals(op.getType()) || Token.Type.DIV.equals(op.getType())
+                    || Token.Type.MOD.equals(op.getType())) {
                 UnaryExp next = parseUnaryExp();
                 operators.add(op);
                 operands.add(next);
@@ -202,9 +203,6 @@ public class ExprParser {
         while (iterator.hasNext()) {
             Token op = iterator.next();
             if (Token.Type.PLUS.equals(op.getType()) || Token.Type.MINU.equals(op.getType())) {
-                if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
-                }
                 MulExp next = parseMulExp();
                 operators.add(op);
                 operands.add(next);
@@ -224,10 +222,8 @@ public class ExprParser {
         List<AddExp> operands = new LinkedList<>();
         while (iterator.hasNext()) {
             Token op = iterator.next();
-            if (Token.Type.PLUS.equals(op.getType()) || Token.Type.MINU.equals(op.getType())) {
-                if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
-                }
+            if (Token.Type.LSS.equals(op.getType()) || Token.Type.GRE.equals(op.getType())
+                    || Token.Type.LEQ.equals(op.getType()) || Token.Type.GEQ.equals(op.getType())) {
                 AddExp next = parseAddExp();
                 operators.add(op);
                 operands.add(next);
@@ -247,10 +243,7 @@ public class ExprParser {
         List<RelExp> operands = new LinkedList<>();
         while (iterator.hasNext()) {
             Token op = iterator.next();
-            if (Token.Type.PLUS.equals(op.getType()) || Token.Type.MINU.equals(op.getType())) {
-                if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
-                }
+            if (Token.Type.EQL.equals(op.getType()) || Token.Type.NEQ.equals(op.getType())) {
                 RelExp next = parseRelExp();
                 operators.add(op);
                 operands.add(next);
@@ -270,10 +263,7 @@ public class ExprParser {
         List<EqExp> operands = new LinkedList<>();
         while (iterator.hasNext()) {
             Token op = iterator.next();
-            if (Token.Type.PLUS.equals(op.getType()) || Token.Type.MINU.equals(op.getType())) {
-                if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
-                }
+            if (Token.Type.AND.equals(op.getType())) {
                 EqExp next = parseEqExp();
                 operators.add(op);
                 operands.add(next);
@@ -293,10 +283,7 @@ public class ExprParser {
         List<LAndExp> operands = new LinkedList<>();
         while (iterator.hasNext()) {
             Token op = iterator.next();
-            if (Token.Type.PLUS.equals(op.getType()) || Token.Type.MINU.equals(op.getType())) {
-                if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
-                }
+            if (Token.Type.OR.equals(op.getType())) {
                 LAndExp next = parseLAndExp();
                 operators.add(op);
                 operands.add(next);

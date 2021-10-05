@@ -52,7 +52,7 @@ public abstract class MultiExp<T extends Component> implements Component {
         // iterate the following nodes
         Iterator<Token> iterOperator = iterOperator();
         Iterator<T> iterOperand = iterOperand();
-        while (iterOperator().hasNext() && iterOperand().hasNext()) {
+        while (iterOperator.hasNext() && iterOperand.hasNext()) {
             Token operator = iterOperator.next();
             T operand = iterOperand.next();
             operator.output(ps);

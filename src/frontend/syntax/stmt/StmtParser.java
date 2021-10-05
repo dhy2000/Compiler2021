@@ -68,6 +68,7 @@ public class StmtParser {
         }
         Token semi = iterator.next();
         if (semi.getType().equals(Token.Type.SEMICN)) {
+            iterator.previous();
             return new ReturnStmt(returnTk);
         } else {
             iterator.previous();
