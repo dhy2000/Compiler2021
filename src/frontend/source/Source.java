@@ -100,6 +100,6 @@ public class Source {
     }
 
     public void printAll(PrintStream ps) {
-        lines.forEach(s -> ps.println("STRCON \"" + s + "\""));
+        lines.forEach(ps::println);
     }
 }
