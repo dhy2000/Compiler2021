@@ -69,10 +69,10 @@ public class FuncDef implements Component {
         type.output(ps);
         name.output(ps);
         leftParenthesis.output(ps);
-        rightParenthesis.output(ps);
         if (Objects.nonNull(fParams)) {
             fParams.output(ps);
         }
+        rightParenthesis.output(ps);
         body.output(ps);
         ps.println("<FuncDef>");
     }

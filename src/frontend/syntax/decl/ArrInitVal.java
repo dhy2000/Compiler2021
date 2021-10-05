@@ -93,7 +93,7 @@ public class ArrInitVal implements InitVal {
     @Override
     public void output(PrintStream ps) {
         leftBrace.output(ps);
-        if (isSingle()) {
+        if (Objects.nonNull(first)) {
             first.output(ps);
             if (isMultiple()) {
                 Iterator<Token> iterSeparators = iterSeparators();
