@@ -209,11 +209,11 @@ public class StmtParser {
             throw new UnexpectedEofException(maxLineNum, "<BlockItem>");
         }
         Token next = iterator.next();
-        if (next.getType().equals(Token.Type.INTTK) || next.getType().equals(Token.Type.CONSTTK)) {
+        if (next.getType().equals(Token.Type.INTTK)) {
             Token second = ParserUtil.getSpecifiedToken(Token.Type.IDENFR, "<Decl>", iterator, maxLineNum);
-            if (!iterator.hasNext()) {
-                throw new UnexpectedEofException(maxLineNum, "<Decl>");
-            }
+            return new DeclParser(iterator, maxLineNum).parseDecl(next, second);
+        } else if (next.getType().equals(Token.Type.CONSTTK)) {
+            Token second = ParserUtil.getSpecifiedToken(Token.Type.INTTK, "<Decl>", iterator, maxLineNum);
             return new DeclParser(iterator, maxLineNum).parseDecl(next, second);
         } else {
             iterator.previous();
