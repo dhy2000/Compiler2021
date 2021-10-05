@@ -22,7 +22,11 @@ public class ExpInitVal implements InitVal {
     @Override
     public void output(PrintStream ps) {
         exp.output(ps);
-        ps.println("<InitVal>");
+        if (isConst()) {
+            ps.println("<ConstInitVal>");
+        } else {
+            ps.println("<InitVal>");
+        }
     }
 
     @Override

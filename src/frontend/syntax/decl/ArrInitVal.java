@@ -107,7 +107,11 @@ public class ArrInitVal implements InitVal {
             }
         }
         rightBrace.output(ps);
-        ps.println("<InitVal>");
+        if (isConst()) {
+            ps.println("<ConstInitVal>");
+        } else {
+            ps.println("<InitVal>");
+        }
     }
 
     @Override
