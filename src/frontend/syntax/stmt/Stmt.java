@@ -6,6 +6,7 @@ import frontend.syntax.stmt.complex.CplStmt;
 import frontend.syntax.stmt.simple.SplStmt;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
 public class Stmt implements BlockItem {
 
@@ -17,7 +18,7 @@ public class Stmt implements BlockItem {
 
     // Empty Statement
     public Stmt(Token semicolon) {
-        assert semicolon.getType().equals(Token.Type.SEMICN);
+        assert Objects.isNull(semicolon) || semicolon.getType().equals(Token.Type.SEMICN);
         this.simpleStmt = null;
         this.complexStmt = null;
         this.semicolon = semicolon;
@@ -26,7 +27,7 @@ public class Stmt implements BlockItem {
 
     // Simple Statement with ';'
     public Stmt(SplStmt simpleStmt, Token semicolon) {
-        assert semicolon.getType().equals(Token.Type.SEMICN);
+        assert Objects.isNull(semicolon) || semicolon.getType().equals(Token.Type.SEMICN);
         this.simpleStmt = simpleStmt;
         this.semicolon = semicolon;
         this.complexStmt = null;
@@ -65,13 +66,21 @@ public class Stmt implements BlockItem {
         return semicolon;
     }
 
+    public boolean hasSemicolon() {
+        return Objects.nonNull(semicolon);
+    }
+
     @Override
     public void output(PrintStream ps) {
         if (isEmpty()) {
-            semicolon.output(ps);
+            if (hasSemicolon()) {
+                semicolon.output(ps);
+            }
         } else if (isSimple()) {
             simpleStmt.output(ps);
-            semicolon.output(ps);
+            if (hasSemicolon()) {
+                semicolon.output(ps);
+            }
         } else {
             complexStmt.output(ps);
         }
