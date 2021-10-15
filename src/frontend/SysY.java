@@ -2,8 +2,7 @@ package frontend;
 
 import config.Config;
 import frontend.error.exception.FrontendException;
-import frontend.source.Source;
-import frontend.source.SourceReader;
+import input.Source;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
 import frontend.syntax.CompUnit;
@@ -14,10 +13,11 @@ import java.io.InputStream;
 public class SysY {
 
     private TokenList tokens;
+    private CompUnit compUnit;
 
     public SysY(InputStream src) {
         // read source Code
-        Source source = new SourceReader(src).read();
+        Source source = new Source(src);
         try {
             // tokenize
             tokens = Tokenizer.tokenize(source);
@@ -25,7 +25,7 @@ public class SysY {
                 tokens.output(Config.getTarget());
             }
             // syntax parse
-            CompUnit compUnit = new CompUnitParser(tokens).parseCompUnit();
+            compUnit = new CompUnitParser(tokens).parseCompUnit();
             if (Config.hasOperationOutput(Config.Operation.SYNTAX_PARSE)) {
                 compUnit.output(Config.getTarget());
             }
@@ -39,5 +39,9 @@ public class SysY {
 
     public TokenList getTokenList() {
         return tokens;
+    }
+
+    public CompUnit getCompUnit() {
+        return compUnit;
     }
 }

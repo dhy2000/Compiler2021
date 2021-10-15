@@ -1,8 +1,10 @@
-package frontend.source;
+package input;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +14,16 @@ public class Source {
     private int line = 0;
     private int column = 0;
 
-    public Source() {
-
+    /**
+     * 根据对源代码文件的输入流构造源代码存储类
+     * @param input 输入流 (构造完成后自动关闭)
+     */
+    public Source(InputStream input) {
+        Scanner cin = new Scanner(input);
+        while (cin.hasNext()) {
+            lines.add(cin.nextLine());
+        }
+        cin.close();
     }
 
     public void appendLine(String line) {
