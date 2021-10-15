@@ -94,7 +94,7 @@ public class FuncFParam implements Component {
 
         public FirstDim(Token leftBracket, Token rightBracket) {
             assert leftBracket.getType().equals(Token.Type.LBRACK);
-            assert rightBracket.getType().equals(Token.Type.RBRACK);
+            assert Objects.isNull(rightBracket) || rightBracket.getType().equals(Token.Type.RBRACK);
             this.leftBracket = leftBracket;
             this.rightBracket = rightBracket;
         }
@@ -107,10 +107,16 @@ public class FuncFParam implements Component {
             return rightBracket;
         }
 
+        public boolean hasRightBracket() {
+            return Objects.nonNull(rightBracket);
+        }
+
         @Override
         public void output(PrintStream ps) {
             leftBracket.output(ps);
-            rightBracket.output(ps);
+            if (hasRightBracket()) {
+                rightBracket.output(ps);
+            }
         }
     }
 
@@ -131,7 +137,9 @@ public class FuncFParam implements Component {
         public void output(PrintStream ps) {
             getLeftBracket().output(ps);
             length.output(ps);
-            getRightBracket().output(ps);
+            if (hasRightBracket()) {
+                getRightBracket().output(ps);
+            }
         }
     }
 }

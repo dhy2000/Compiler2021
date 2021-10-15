@@ -1,7 +1,7 @@
 package frontend;
 
 import config.Config;
-import frontend.error.exception.FrontendException;
+import exception.FrontendException;
 import input.Source;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;

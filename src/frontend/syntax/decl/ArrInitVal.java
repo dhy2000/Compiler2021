@@ -20,7 +20,7 @@ public class ArrInitVal implements InitVal {
     // full
     public ArrInitVal(boolean constant, Token leftBrace, Token rightBrace, InitVal first, List<Token> separators, List<InitVal> follows) {
         assert leftBrace.getType().equals(Token.Type.LBRACE);
-        assert rightBrace.getType().equals(Token.Type.RBRACE);
+        assert Objects.isNull(rightBrace) || rightBrace.getType().equals(Token.Type.RBRACE);
         assert separators.size() == follows.size();
         this.constant = constant;
         this.leftBrace = leftBrace;
@@ -33,7 +33,7 @@ public class ArrInitVal implements InitVal {
     // single
     public ArrInitVal(boolean constant, Token leftBrace, Token rightBrace, InitVal first) {
         assert leftBrace.getType().equals(Token.Type.LBRACE);
-        assert rightBrace.getType().equals(Token.Type.RBRACE);
+        assert Objects.isNull(rightBrace) || rightBrace.getType().equals(Token.Type.RBRACE);
         this.constant = constant;
         this.leftBrace = leftBrace;
         this.rightBrace = rightBrace;
@@ -45,7 +45,7 @@ public class ArrInitVal implements InitVal {
     // empty
     public ArrInitVal(boolean constant, Token leftBrace, Token rightBrace) {
         assert leftBrace.getType().equals(Token.Type.LBRACE);
-        assert rightBrace.getType().equals(Token.Type.RBRACE);
+        assert Objects.isNull(rightBrace) || rightBrace.getType().equals(Token.Type.RBRACE);
         this.constant = constant;
         this.leftBrace = leftBrace;
         this.rightBrace = rightBrace;
@@ -60,6 +60,10 @@ public class ArrInitVal implements InitVal {
 
     public Token getRightBrace() {
         return rightBrace;
+    }
+
+    public boolean hasRightBrace() {
+        return Objects.nonNull(rightBrace);
     }
 
     public boolean isEmpty() {
@@ -106,7 +110,9 @@ public class ArrInitVal implements InitVal {
                 }
             }
         }
-        rightBrace.output(ps);
+        if (hasRightBrace()) {
+            rightBrace.output(ps);
+        }
         if (isConst()) {
             ps.println("<ConstInitVal>");
         } else {

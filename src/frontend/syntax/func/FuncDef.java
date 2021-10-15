@@ -52,6 +52,10 @@ public class FuncDef implements Component {
         return rightParenthesis;
     }
 
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
+    }
+
     public boolean hasFParams() {
         return Objects.nonNull(fParams);
     }
@@ -72,7 +76,9 @@ public class FuncDef implements Component {
         if (Objects.nonNull(fParams)) {
             fParams.output(ps);
         }
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
         body.output(ps);
         ps.println("<FuncDef>");
     }

@@ -1,6 +1,4 @@
-package frontend.error.exception.syntax;
-
-import frontend.error.exception.FrontendException;
+package exception;
 
 public class NoMainFuncException extends FrontendException {
     public NoMainFuncException(int line, String source) {

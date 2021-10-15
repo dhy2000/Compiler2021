@@ -1,7 +1,7 @@
 package frontend.syntax.stmt;
 
-import frontend.error.exception.syntax.UnexpectedEofException;
-import frontend.error.exception.syntax.UnexpectedTokenException;
+import exception.UnexpectedEofException;
+import exception.UnexpectedTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.FormatString;
 import frontend.lexical.token.Token;

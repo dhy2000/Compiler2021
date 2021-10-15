@@ -1,8 +1,8 @@
 package frontend.syntax;
 
-import frontend.error.exception.syntax.NoMainFuncException;
-import frontend.error.exception.syntax.UnexpectedEofException;
-import frontend.error.exception.syntax.UnexpectedTokenException;
+import exception.NoMainFuncException;
+import exception.UnexpectedEofException;
+import exception.UnexpectedTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;

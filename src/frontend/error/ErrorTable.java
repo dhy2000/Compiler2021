@@ -1,16 +1,17 @@
 package frontend.error;
 
-import frontend.error.exception.FrontendException;
+import exception.FrontendException;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.TreeSet;
 
-public class ErrorTable implements Iterable<FrontendException> {
+public class ErrorTable implements Iterable<Error> {
 
     @Override
-    public Iterator<FrontendException> iterator() {
-        return frontendExceptions.iterator();
+    public Iterator<Error> iterator() {
+        return errors.iterator();
     }
 
     private static class InstanceHolder {
@@ -23,14 +24,9 @@ public class ErrorTable implements Iterable<FrontendException> {
         return InstanceHolder.instance;
     }
 
-    private final Collection<FrontendException> frontendExceptions = new LinkedList<>();
+    private final TreeSet<Error> errors = new TreeSet<>();
 
-    public void add(FrontendException e) {
-        this.frontendExceptions.add(e);
+    public void add(Error e) {
+        errors.add(e);
     }
-
-    public boolean contains(FrontendException e) {
-        return frontendExceptions.contains(e);
-    }
-
 }

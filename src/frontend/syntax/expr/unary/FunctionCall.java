@@ -39,6 +39,10 @@ public class FunctionCall implements BaseUnaryExp {
         return rightParenthesis;
     }
 
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
+    }
+
     public boolean hasParams() {
         return Objects.nonNull(params);
     }
@@ -54,6 +58,8 @@ public class FunctionCall implements BaseUnaryExp {
         if (Objects.nonNull(params)) {
             params.output(ps);
         }
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
     }
 }

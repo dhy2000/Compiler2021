@@ -1,7 +1,7 @@
 package frontend.syntax.decl;
 
-import frontend.error.exception.syntax.UnexpectedEofException;
-import frontend.error.exception.syntax.UnexpectedTokenException;
+import exception.UnexpectedEofException;
+import exception.UnexpectedTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
@@ -30,8 +30,8 @@ public class DeclParser {
     public Decl parseDecl(Token first, Token second) throws UnexpectedTokenException, UnexpectedEofException {
         Token constTk = null;
         boolean constant = false;
-        Token bType = null;
-        Ident ident = null;
+        Token bType;
+        Ident ident;
         String syntax;
         if (first.getType().equals(Token.Type.CONSTTK) && second.getType().equals(Token.Type.INTTK)) {
             syntax = "<ConstDecl>";

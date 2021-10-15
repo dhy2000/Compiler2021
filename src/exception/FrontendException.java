@@ -1,4 +1,4 @@
-package frontend.error.exception;
+package exception;
 
 /**
  * 词法或语法错误

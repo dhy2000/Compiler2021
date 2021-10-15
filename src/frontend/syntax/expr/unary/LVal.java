@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class LVal implements BasePrimaryExp {
 
@@ -62,6 +63,10 @@ public class LVal implements BasePrimaryExp {
             return rightBracket;
         }
 
+        public boolean hasRightBracket() {
+            return Objects.nonNull(rightBracket);
+        }
+
         public Exp getIndex() {
             return index;
         }
@@ -70,7 +75,9 @@ public class LVal implements BasePrimaryExp {
         public void output(PrintStream ps) {
             leftBracket.output(ps);
             index.output(ps);
-            rightBracket.output(ps);
+            if (hasRightBracket()) {
+                rightBracket.output(ps);
+            }
         }
     }
 }

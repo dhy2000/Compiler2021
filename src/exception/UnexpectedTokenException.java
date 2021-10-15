@@ -1,6 +1,5 @@
-package frontend.error.exception.syntax;
+package exception;
 
-import frontend.error.exception.FrontendException;
 import frontend.lexical.token.Token;
 
 public class UnexpectedTokenException extends FrontendException {

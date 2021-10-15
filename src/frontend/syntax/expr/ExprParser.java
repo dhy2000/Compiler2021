@@ -1,8 +1,7 @@
 package frontend.syntax.expr;
 
-import frontend.error.exception.syntax.MissingRightBracketException;
-import frontend.error.exception.syntax.UnexpectedEofException;
-import frontend.error.exception.syntax.UnexpectedTokenException;
+import exception.UnexpectedEofException;
+import exception.UnexpectedTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.IntConst;
@@ -47,12 +46,10 @@ public class ExprParser {
             Exp exp = parseExp();
             // TODO: Missing Right Bracket
             if (!iterator.hasNext()) {
-                MissingRightBracketException.registerError(left.lineNumber(), syntax);
                 indexes.add(new LVal.Index(left, null, exp));
             } else {
                 Token right = iterator.next();
                 if (!Token.Type.RBRACK.equals(right.getType())) {
-                    MissingRightBracketException.registerError(left.lineNumber(), syntax);
                     iterator.previous();
                     indexes.add(new LVal.Index(left, null, exp));
                     continue;

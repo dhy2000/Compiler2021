@@ -4,6 +4,7 @@ import frontend.lexical.token.Token;
 import frontend.syntax.expr.multi.Exp;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
 public class SubExp implements BasePrimaryExp {
 
@@ -23,6 +24,10 @@ public class SubExp implements BasePrimaryExp {
 
     public Token getRightParenthesis() {
         return rightParenthesis;
+    }
+
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
     }
 
     public Exp getExp() {

@@ -109,6 +109,10 @@ public class Def implements Component, Constable {
             return rightBracket;
         }
 
+        public boolean hasRightBracket() {
+            return Objects.isNull(rightBracket);
+        }
+
         public ConstExp getArrLength() {
             return arrLength;
         }
@@ -117,7 +121,9 @@ public class Def implements Component, Constable {
         public void output(PrintStream ps) {
             leftBracket.output(ps);
             arrLength.output(ps);
-            rightBracket.output(ps);
+            if (hasRightBracket()) {
+                rightBracket.output(ps);
+            }
         }
     }
 }
