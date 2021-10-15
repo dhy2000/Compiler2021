@@ -14,3 +14,6 @@ output.txt
 # Archives
 *.zip
 *.jar
+
+# Notes and documents
+/doc/
