@@ -5,6 +5,7 @@ import frontend.syntax.expr.multi.Cond;
 import frontend.syntax.stmt.Stmt;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
 public class WhileStmt implements CplStmt {
 
@@ -17,7 +18,7 @@ public class WhileStmt implements CplStmt {
     public WhileStmt(Token whileTk, Token leftParenthesis, Cond condition, Token rightParenthesis, Stmt stmt) {
         assert whileTk.getType().equals(Token.Type.WHILETK);
         assert leftParenthesis.getType().equals(Token.Type.LPARENT);
-        assert rightParenthesis.getType().equals(Token.Type.RPARENT);
+        assert Objects.isNull(rightParenthesis) || rightParenthesis.getType().equals(Token.Type.RPARENT);
         this.whileTk = whileTk;
         this.leftParenthesis = leftParenthesis;
         this.condition = condition;
@@ -41,6 +42,10 @@ public class WhileStmt implements CplStmt {
         return rightParenthesis;
     }
 
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
+    }
+
     public Stmt getStmt() {
         return stmt;
     }
@@ -50,7 +55,9 @@ public class WhileStmt implements CplStmt {
         whileTk.output(ps);
         leftParenthesis.output(ps);
         condition.output(ps);
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
         stmt.output(ps);
     }
 }

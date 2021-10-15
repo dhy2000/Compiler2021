@@ -21,7 +21,7 @@ public class IfStmt implements CplStmt {
     public IfStmt(Token ifTk, Token leftParenthesis, Cond condition, Token rightParenthesis, Stmt thenStmt) {
         assert ifTk.getType().equals(Token.Type.IFTK);
         assert leftParenthesis.getType().equals(Token.Type.LPARENT);
-        assert rightParenthesis.getType().equals(Token.Type.RPARENT);
+        assert Objects.isNull(rightParenthesis) || rightParenthesis.getType().equals(Token.Type.RPARENT);
         this.ifTk = ifTk;
         this.leftParenthesis = leftParenthesis;
         this.condition = condition;
@@ -35,7 +35,7 @@ public class IfStmt implements CplStmt {
     public IfStmt(Token ifTk, Token leftParenthesis, Cond condition, Token rightParenthesis, Stmt thenStmt, Token elseTk, Stmt elseStmt) {
         assert ifTk.getType().equals(Token.Type.IFTK);
         assert leftParenthesis.getType().equals(Token.Type.LPARENT);
-        assert rightParenthesis.getType().equals(Token.Type.RPARENT);
+        assert Objects.isNull(rightParenthesis) || rightParenthesis.getType().equals(Token.Type.RPARENT);
         assert Objects.nonNull(elseTk) && elseTk.getType().equals(Token.Type.ELSETK);
         assert Objects.nonNull(elseStmt);
         this.ifTk = ifTk;
@@ -64,6 +64,10 @@ public class IfStmt implements CplStmt {
         return rightParenthesis;
     }
 
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
+    }
+
     public Stmt getThenStmt() {
         return thenStmt;
     }
@@ -85,7 +89,9 @@ public class IfStmt implements CplStmt {
         ifTk.output(ps);
         leftParenthesis.output(ps);
         condition.output(ps);
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
         thenStmt.output(ps);
         if (hasElse()) {
             elseTk.output(ps);

@@ -5,6 +5,7 @@ import frontend.syntax.Component;
 import frontend.syntax.stmt.complex.Block;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
 public class MainFuncDef implements Component {
     private final Token intTk;
@@ -41,6 +42,10 @@ public class MainFuncDef implements Component {
         return rightParenthesis;
     }
 
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
+    }
+
     public Block getBody() {
         return body;
     }
@@ -50,7 +55,9 @@ public class MainFuncDef implements Component {
         intTk.output(ps);
         mainTk.output(ps);
         leftParenthesis.output(ps);
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
         body.output(ps);
         ps.println("<MainFuncDef>");
     }

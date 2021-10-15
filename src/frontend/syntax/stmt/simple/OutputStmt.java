@@ -7,6 +7,7 @@ import frontend.syntax.expr.multi.Exp;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class OutputStmt implements SplStmt {
 
@@ -25,7 +26,7 @@ public class OutputStmt implements SplStmt {
                       List<Exp> parameters) {
         assert printfTk.getType().equals(Token.Type.PRINTFTK);
         assert leftParenthesis.getType().equals(Token.Type.LPARENT);
-        assert rightParenthesis.getType().equals(Token.Type.RPARENT);
+        assert Objects.isNull(rightParenthesis) || rightParenthesis.getType().equals(Token.Type.RPARENT);
         assert separators.size() == parameters.size();
         this.printfTk = printfTk;
         this.leftParenthesis = leftParenthesis;
@@ -45,6 +46,10 @@ public class OutputStmt implements SplStmt {
 
     public Token getRightParenthesis() {
         return rightParenthesis;
+    }
+
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
     }
 
     public FormatString getFormatString() {
@@ -72,6 +77,8 @@ public class OutputStmt implements SplStmt {
             separator.output(ps);
             parameter.output(ps);
         }
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
     }
 }

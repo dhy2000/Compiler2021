@@ -4,6 +4,7 @@ import frontend.lexical.token.Token;
 import frontend.syntax.expr.unary.LVal;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
 public class InputStmt implements SplStmt {
 
@@ -17,7 +18,7 @@ public class InputStmt implements SplStmt {
         assert assignTk.getType().equals(Token.Type.ASSIGN);
         assert getIntTk.getType().equals(Token.Type.GETINTTK);
         assert leftParenthesis.getType().equals(Token.Type.LPARENT);
-        assert rightParenthesis.getType().equals(Token.Type.RPARENT);
+        assert Objects.isNull(rightParenthesis) || rightParenthesis.getType().equals(Token.Type.RPARENT);
         this.leftVal = leftVal;
         this.assignTk = assignTk;
         this.getIntTk = getIntTk;
@@ -45,12 +46,18 @@ public class InputStmt implements SplStmt {
         return rightParenthesis;
     }
 
+    public boolean hasRightParenthesis() {
+        return Objects.nonNull(rightParenthesis);
+    }
+
     @Override
     public void output(PrintStream ps) {
         leftVal.output(ps);
         assignTk.output(ps);
         getIntTk.output(ps);
         leftParenthesis.output(ps);
-        rightParenthesis.output(ps);
+        if (hasRightParenthesis()) {
+            rightParenthesis.output(ps);
+        }
     }
 }

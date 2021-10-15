@@ -44,18 +44,8 @@ public class ExprParser {
                 break;
             }
             Exp exp = parseExp();
-            // TODO: Missing Right Bracket
-            if (!iterator.hasNext()) {
-                indexes.add(new LVal.Index(left, null, exp));
-            } else {
-                Token right = iterator.next();
-                if (!Token.Type.RBRACK.equals(right.getType())) {
-                    iterator.previous();
-                    indexes.add(new LVal.Index(left, null, exp));
-                    continue;
-                }
-                indexes.add(new LVal.Index(left, right, exp));
-            }
+            Token right = ParserUtil.getNullableToken(Token.Type.RBRACK, syntax, iterator, maxLineNum);
+            indexes.add(new LVal.Index(left, right, exp));
         }
         return new LVal(ident, indexes);
     }
@@ -64,14 +54,7 @@ public class ExprParser {
     public SubExp parseSubExp(Token leftParenthesis) throws UnexpectedTokenException, UnexpectedEofException {
         final String syntax = "<SubExp>";
         Exp exp = parseExp();
-        // TODO: Missing Right Parenthesis
-        if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, syntax);
-        }
-        Token right = iterator.next();
-        if (!Token.Type.RPARENT.equals(right.getType())) {
-            throw new UnexpectedTokenException(right.lineNumber(), syntax, right, Token.Type.RPARENT);
-        }
+        Token right = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new SubExp(leftParenthesis, right, exp);
     }
 
@@ -106,7 +89,7 @@ public class ExprParser {
         }
         iterator.previous();    // undo get token
         FuncRParams rParams = parseFuncRParams(parseExp());
-        next = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
+        next = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new FunctionCall(ident, leftParenthesis, next, rParams);
     }
 
