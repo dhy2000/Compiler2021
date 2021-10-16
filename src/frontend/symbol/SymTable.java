@@ -1,5 +1,7 @@
 package frontend.symbol;
 
+import frontend.symbol.type.ArrayType;
+import frontend.symbol.type.BasicType;
 import frontend.symbol.type.VarType;
 
 import java.util.*;
@@ -15,6 +17,7 @@ public class SymTable {
         private final String name;
         private final VarType type;
         private final boolean constant;
+        private boolean modified = false;
 
         private final Integer initValue;
         private final List<Integer> initArray;
@@ -69,6 +72,24 @@ public class SymTable {
 
         public List<Integer> getInitArray() {
             return initArray;
+        }
+
+        public boolean isModified() {
+            return modified;
+        }
+
+        public void modify() {
+            modified = true;
+        }
+
+        public boolean isInitialized() {
+            if (type instanceof ArrayType) {
+                return !initArray.isEmpty();
+            } else if (type instanceof BasicType) {
+                return Objects.nonNull(initValue);
+            } else {
+                throw new AssertionError("Symbol Type Error");
+            }
         }
     }
 
