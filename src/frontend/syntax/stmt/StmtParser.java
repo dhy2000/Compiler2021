@@ -80,7 +80,7 @@ public class StmtParser {
     public InputStmt parseInputStmt(LVal target, Token assignTk, Token getIntTk) throws UnexpectedTokenException, UnexpectedEofException {
         final String syntax = "<InputStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
-        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
+        Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new InputStmt(target, assignTk, getIntTk, leftParenthesis, rightParenthesis);
     }
 
@@ -101,7 +101,7 @@ public class StmtParser {
             Exp exp = new ExprParser(iterator, maxLineNum).parseExp();
             exps.add(exp);
         }
-        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
+        Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         return new OutputStmt(printfTk, leftParenthesis, rightParenthesis, (FormatString) formatString, commas, exps);
     }
 
@@ -171,7 +171,7 @@ public class StmtParser {
         final String syntax = "<IfStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Cond cond = new ExprParser(iterator, maxLineNum).parseCond();
-        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
+        Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         Stmt thenStmt = parseStmt();
         Token elseTk;
         if (iterator.hasNext() && (elseTk = iterator.next()).getType().equals(Token.Type.ELSETK)) {
@@ -188,7 +188,7 @@ public class StmtParser {
         final String syntax = "<WhileStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Cond cond = new ExprParser(iterator, maxLineNum).parseCond();
-        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
+        Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
         Stmt stmt = parseStmt();
         return new WhileStmt(whileTk, leftParenthesis, cond, rightParenthesis, stmt);
     }
@@ -250,7 +250,7 @@ public class StmtParser {
             return new Stmt(cplStmt);
         } else {
             SplStmt splStmt = parseSimpleStmt(first);
-            Token semi = ParserUtil.getSpecifiedToken(Token.Type.SEMICN, syntax, iterator, maxLineNum);
+            Token semi = ParserUtil.getNullableToken(Token.Type.SEMICN, syntax, iterator, maxLineNum);
             return new Stmt(splStmt, semi);
         }
     }

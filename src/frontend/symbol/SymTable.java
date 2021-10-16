@@ -14,10 +14,12 @@ public class SymTable {
     public static class Item {
         private final String name;
         private final VarType type;
+        private final boolean constant;
 
-        public Item(String name, VarType type) {
+        public Item(String name, VarType type, boolean constant) {
             this.name = name;
             this.type = type;
+            this.constant = constant;
         }
 
         public String getName() {
@@ -26,6 +28,10 @@ public class SymTable {
 
         public VarType getType() {
             return type;
+        }
+
+        public boolean isConstant() {
+            return constant;
         }
     }
 
