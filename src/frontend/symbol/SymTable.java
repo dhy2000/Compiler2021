@@ -16,10 +16,31 @@ public class SymTable {
         private final VarType type;
         private final boolean constant;
 
-        public Item(String name, VarType type, boolean constant) {
+        private final Integer initValue;
+        private final List<Integer> initArray;
+
+        public Item(String name, VarType type) {
+            this.name = name;
+            this.type = type;
+            this.constant = false;
+            this.initValue = null;
+            this.initArray = Collections.emptyList();
+        }
+
+        public Item(String name, VarType type, boolean constant, int value) {
             this.name = name;
             this.type = type;
             this.constant = constant;
+            this.initValue = value;
+            this.initArray = Collections.emptyList();
+        }
+
+        public Item(String name, VarType type, boolean constant, List<Integer> values) {
+            this.name = name;
+            this.type = type;
+            this.constant = constant;
+            this.initValue = null;
+            this.initArray = Collections.unmodifiableList(values);
         }
 
         public String getName() {
@@ -32,6 +53,22 @@ public class SymTable {
 
         public boolean isConstant() {
             return constant;
+        }
+
+        public boolean hasInitValue() {
+            return Objects.nonNull(initValue);
+        }
+
+        public boolean hasInitArray() {
+            return !initArray.isEmpty();
+        }
+
+        public Integer getInitValue() {
+            return initValue;
+        }
+
+        public List<Integer> getInitArray() {
+            return initArray;
         }
     }
 
