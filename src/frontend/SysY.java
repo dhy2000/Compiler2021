@@ -26,7 +26,7 @@ public class SysY {
             }
             // syntax parse
             compUnit = new CompUnitParser(tokens).parseCompUnit();
-            if (Config.hasOperationOutput(Config.Operation.SYNTAX_PARSE)) {
+            if (Config.hasOperationOutput(Config.Operation.SYNTAX)) {
                 compUnit.output(Config.getTarget());
             }
         } catch (FrontendException e) {

@@ -18,9 +18,11 @@ public class Config {
 
     public enum Operation {
         TOKENIZE("T"),
-        SYNTAX_PARSE("S"),
-        INTERMEDIATE_CODE("I"),
-        OBJECT_CODE("O")
+        SYNTAX("S"),
+        ERROR("E"),
+        INTERMEDIATE("I"),
+        VIRTUAL_MACHINE("V"),
+        OBJECT("O")
         ;
 
         private final String tag;
