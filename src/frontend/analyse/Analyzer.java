@@ -2,6 +2,9 @@ package frontend.analyse;
 
 import frontend.symbol.FuncTable;
 import frontend.symbol.SymTable;
+import frontend.syntax.expr.multi.*;
+import frontend.syntax.expr.unary.UnaryExp;
+import intermediate.block.BasicBlock;
 
 /**
  * 语义分析器：遍历语法树，维护符号表，进行错误处理，生成中间代码（略）
@@ -15,10 +18,44 @@ public class Analyzer {
     private final FuncTable funcTable = FuncTable.getInstance();
 
     /**
-     * 表达式分析
+     * 表达式分析, 通常只会生成计算类型的中间代码
      */
     public static class ExpAnalyse {
+        public static BasicBlock analyseCond(Cond cond) {
+            return null;
+        }
 
+        public static BasicBlock analyseLOrExp(LOrExp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseLAndExp(LAndExp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseEqExp(EqExp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseRelExp(RelExp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseExp(Exp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseAddExp(AddExp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseMulExp(MulExp exp) {
+            return null;
+        }
+
+        public static BasicBlock analyseUnaryExp(UnaryExp exp) {
+            return null;
+        }
     }
 
     /**

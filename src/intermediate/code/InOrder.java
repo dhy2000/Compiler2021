@@ -5,4 +5,6 @@ package intermediate.code;
  */
 public interface InOrder {
     IntermediateCode getNext();
+
+    void setNext(IntermediateCode code);
 }

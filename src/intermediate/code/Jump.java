@@ -3,7 +3,7 @@ package intermediate.code;
 /**
  * 无条件直接跳转
  */
-public class Jump extends IntermediateCode implements InOrder {
+public class Jump extends IntermediateCode {
 
     private final IntermediateCode target;
 
@@ -14,8 +14,7 @@ public class Jump extends IntermediateCode implements InOrder {
         this.target = target;
     }
 
-    @Override
-    public IntermediateCode getNext() {
+    public IntermediateCode getTarget() {
         return target;
     }
 
