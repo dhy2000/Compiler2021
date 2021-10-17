@@ -106,7 +106,7 @@ public class ExpUtil {
             ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
             return 0;
         }
-        SymTable.Item symbol = sym.getByName(name);
+        SymTable.Item symbol = sym.getItemByName(name);
         if (!symbol.isInitialized() || symbol.isModified()) {
             throw new ConstExpException(ident.lineNumber(), ident.getName());
         }

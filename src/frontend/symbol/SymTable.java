@@ -93,17 +93,32 @@ public class SymTable {
         }
     }
 
+    private final String field;
     private final SymTable parent;
 
     public SymTable() {
+        this.field = "@GLOBAL";
         this.parent = null;
     }
 
-    public SymTable(SymTable parent) {
+    public SymTable(SymTable parent, String field) {
         this.parent = parent;
+        this.field = field;
     }
 
     private final Map<String, Item> symbols = new HashMap<>();
+
+    public String getField() {
+        return field;
+    }
+
+    public boolean hasParent() {
+        return Objects.nonNull(parent);
+    }
+
+    public SymTable getParent() {
+        return parent;
+    }
 
     public void add(Item item) {
         symbols.put(item.getName(), item);
@@ -113,12 +128,22 @@ public class SymTable {
         return symbols.containsKey(name) || (Objects.nonNull(parent) && parent.contains(name));
     }
 
-    public Item getByName(String name) {
+    public Item getItemByName(String name) {
         Item item = symbols.get(name);
         if (Objects.isNull(item)) {
-            return Objects.nonNull(parent) ? parent.getByName(name) : null;
+            return Objects.nonNull(parent) ? parent.getItemByName(name) : null;
         }
         return item;
+    }
+
+    public String getFieldByName(String name) {
+        if (contains(name)) {
+            return field;
+        } else if (Objects.nonNull(parent)) {
+            return parent.getFieldByName(name);
+        } else {
+            return null;
+        }
     }
 
     public static SymTable getGlobal() {
