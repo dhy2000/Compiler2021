@@ -51,6 +51,6 @@ public class Store extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + src + " -> " + base + " " + offset;
+        return getName() + " " + src + " -> " + base + " " + offset + " ----> " + next.getLabel();
     }
 }

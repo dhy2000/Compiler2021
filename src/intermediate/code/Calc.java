@@ -73,6 +73,6 @@ public class Calc extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + src1 + " " + src2 + " -> " + dst;
+        return getName() + " " + src1 + " " + src2 + " -> " + dst + " ----> " + next.getLabel();
     }
 }

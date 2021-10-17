@@ -38,6 +38,6 @@ public class Input extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + dst;
+        return getName() + " " + dst + " ----> " + next.getLabel();
     }
 }

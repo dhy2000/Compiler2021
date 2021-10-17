@@ -56,6 +56,6 @@ public class Unary extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + src + " -> " + dst;
+        return getName() + " " + src + " -> " + dst + " ----> " + next.getLabel();
     }
 }

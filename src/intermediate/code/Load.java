@@ -52,6 +52,6 @@ public class Load extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + base + " " + offset + " -> " + dst;
+        return getName() + " " + base + " " + offset + " -> " + dst + " ----> " + next.getLabel();
     }
 }

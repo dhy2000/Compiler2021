@@ -47,6 +47,6 @@ public class Output extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + getFormat() + params.stream().map(Object::toString).reduce(" ", (s, s2) -> s + s2);
+        return getName() + " " + getFormat() + params.stream().map(Object::toString).reduce(" ", (s, s2) -> s + s2) + " ----> " + next.getLabel();
     }
 }

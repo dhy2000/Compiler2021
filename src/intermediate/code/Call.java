@@ -58,6 +58,6 @@ public class Call extends IntermediateCode implements InOrder {
 
     @Override
     public String toString() {
-        return getName() + " " + getCallee() + (hasDst() ? " -> " + dst : "");
+        return getName() + " " + getCallee() + (hasDst() ? " -> " + dst : "") + " then ----> " + next.getLabel();
     }
 }
