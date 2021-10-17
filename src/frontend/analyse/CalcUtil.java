@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 表达式工具类，支持计算常量表达式的值
+ * 常值表达式计算工具类
  */
-public class ExpUtil {
+public class CalcUtil {
 
     private final SymTable sym;
 
-    public ExpUtil(SymTable sym) {
+    public CalcUtil(SymTable sym) {
         this.sym = sym;
     }
 
