@@ -35,15 +35,33 @@ public abstract class ILinkNode {
         return Objects.nonNull(next);
     }
 
-    public static void remove(ILinkNode node) {
-        // TODO
+    public void remove() {
+        // prev.next = next
+        if (hasPrev()) {
+            getPrev().setNext(getNext());
+        }
+        // next.prev = prev
+        if (hasNext()) {
+            getNext().setPrev(getPrev());
+        }
     }
 
-    public static void insertAfter(ILinkNode node) {
-        // TODO
+    // usage: current.insertAfter(another)
+    public void insertAfter(ILinkNode node) {
+        node.setPrev(this);
+        node.setNext(getNext());
+        if (hasNext()) {
+            getNext().setPrev(node);
+        }
+        setNext(node);
     }
 
-    public static void insertBefore(ILinkNode node) {
-        // TODO
+    public void insertBefore(ILinkNode node) {
+        node.setNext(this);
+        node.setPrev(getPrev());
+        if (hasPrev()) {
+            getPrev().setNext(node);
+        }
+        setPrev(node);
     }
 }
