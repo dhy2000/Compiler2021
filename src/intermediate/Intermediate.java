@@ -1,6 +1,6 @@
 package intermediate;
 
-import intermediate.block.FunctionBlock;
+import intermediate.code.FunctionBlock;
 
 import java.util.Collections;
 import java.util.List;

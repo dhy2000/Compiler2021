@@ -45,4 +45,15 @@ public class BasicBlock extends ILinkNode {
         tail.setNext(this.tail);
         this.tail.setPrev(tail);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[BLOCK]" + getLabel() + ":\n");
+        ILinkNode node = getHead();
+        while (node.hasNext()) {
+            sb.append(node).append("\n");
+            node = node.getNext();
+        }
+        return sb.toString();
+    }
 }
