@@ -1,6 +1,7 @@
 package intermediate.code;
 
 import intermediate.operand.Operand;
+import intermediate.operand.Symbol;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,10 +12,18 @@ import java.util.List;
 public class Call extends ILinkNode {
     private final FunctionBlock function;
     private final List<Operand> params;
+    private final Symbol ret;
 
     public Call(FunctionBlock function, List<Operand> params) {
         this.function = function;
         this.params = Collections.unmodifiableList(params);
+        this.ret = null;
+    }
+
+    public Call(FunctionBlock function, List<Operand> params, Symbol ret) {
+        this.function = function;
+        this.params = Collections.unmodifiableList(params);
+        this.ret = null;
     }
 
     public FunctionBlock getFunction() {

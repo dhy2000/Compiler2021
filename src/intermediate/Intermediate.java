@@ -2,7 +2,7 @@ package intermediate;
 
 import intermediate.code.FunctionBlock;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,29 +15,44 @@ public class Intermediate {
     private final Map<String, String> globalStrings;
     private final Map<String, FunctionBlock> functions;
 
-    public Intermediate(Map<String, Integer> globalVariables,
-                        Map<String, List<Integer>> globalArrays,
-                        Map<String, String> globalStrings,
-                        Map<String, FunctionBlock> functions) {
-        this.globalArrays = Collections.unmodifiableMap(globalArrays);
-        this.globalVariables = Collections.unmodifiableMap(globalVariables);
-        this.globalStrings = Collections.unmodifiableMap(globalStrings);
-        this.functions = Collections.unmodifiableMap(functions);
+    public Intermediate() {
+        this.globalVariables = new HashMap<>();
+        this.globalArrays = new HashMap<>();
+        this.globalStrings = new HashMap<>();
+        this.functions = new HashMap<>();
     }
 
     public Map<String, Integer> getGlobalVariables() {
         return globalVariables;
     }
 
+    public void addGlobalVariable(String name, int value) {
+        globalVariables.put(name, value);
+    }
+
     public Map<String, List<Integer>> getGlobalArrays() {
         return globalArrays;
+    }
+
+    public void addGlobalArray(String name, List<Integer> values) {
+        globalArrays.put(name, values);
     }
 
     public Map<String, String> getGlobalStrings() {
         return globalStrings;
     }
 
+    private int stringCount = 0;
+    public void addGlobalString(String s) {
+        stringCount = stringCount + 1;
+        globalStrings.put("STR_" + stringCount, s);
+    }
+
     public Map<String, FunctionBlock> getFunctions() {
         return functions;
+    }
+
+    public void putFunction(FunctionBlock function) {
+        functions.put(function.getLabel(), function);
     }
 }
