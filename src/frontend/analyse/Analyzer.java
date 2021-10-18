@@ -1,12 +1,14 @@
 package frontend.analyse;
 
+import frontend.lexical.token.Token;
 import frontend.symbol.FuncTable;
 import frontend.symbol.SymTable;
+import frontend.syntax.Component;
 import frontend.syntax.decl.Decl;
 import frontend.syntax.decl.Def;
 import frontend.syntax.expr.multi.*;
-import frontend.syntax.expr.unary.PrimaryExp;
-import frontend.syntax.expr.unary.UnaryExp;
+import frontend.syntax.expr.unary.*;
+import frontend.syntax.expr.unary.Number;
 import frontend.syntax.func.FuncDef;
 import frontend.syntax.stmt.complex.Block;
 import frontend.syntax.stmt.complex.IfStmt;
@@ -14,9 +16,14 @@ import frontend.syntax.stmt.complex.WhileStmt;
 import frontend.syntax.stmt.simple.*;
 import intermediate.Intermediate;
 import intermediate.code.BasicBlock;
+import intermediate.code.BinaryOp;
+import intermediate.code.UnaryOp;
+import intermediate.operand.Immediate;
 import intermediate.operand.Operand;
 import intermediate.operand.Symbol;
 
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.Stack;
 
 /**
@@ -36,6 +43,7 @@ public class Analyzer {
     private final Stack<BasicBlock> blockStack = new Stack<>();
 
     private BasicBlock getCurrentBlock() {
+        assert !blockStack.empty();
         return blockStack.peek();
     }
 
@@ -50,43 +58,96 @@ public class Analyzer {
     /**
      * 表达式分析, 通常只会生成计算类型的中间代码
      */
-    public static Symbol analyseCond(Cond cond) {
-        return null;
+    private BinaryOp.Op tokenToBinaryOp(Token token) {
+        switch (token.getType()) {
+            case PLUS: return BinaryOp.Op.ADD;
+            case MINU: return BinaryOp.Op.SUB;
+            case MULT: return BinaryOp.Op.MUL;
+            case DIV: return BinaryOp.Op.DIV;
+            case MOD: return BinaryOp.Op.MOD;
+            case AND: return BinaryOp.Op.AND;
+            case OR: return BinaryOp.Op.OR;
+            case GEQ: return BinaryOp.Op.GE;
+            case GRE: return BinaryOp.Op.GT;
+            case LEQ: return BinaryOp.Op.LE;
+            case LSS: return BinaryOp.Op.LT;
+            case EQL: return BinaryOp.Op.EQ;
+            case NEQ: return BinaryOp.Op.NE;
+            default: return null;
+        }
     }
 
-    public static Symbol analyseLOrExp(LOrExp exp) {
-        return null;
+    private UnaryOp.Op tokenToUnaryOp(Token token) {
+        switch (token.getType()) {
+            case PLUS: return UnaryOp.Op.MOV;
+            case MINU: return UnaryOp.Op.NEG;
+            case NOT: return UnaryOp.Op.NOT;
+            default: return null;
+        }
     }
 
-    public static Symbol analyseLAndExp(LAndExp exp) {
-        return null;
+    public Operand analyseBinaryExp(MultiExp<?> exp) {
+        Component first = exp.getFirst();
+        Operand ret;
+        if (first instanceof MultiExp) {
+            ret = analyseBinaryExp((MultiExp<?>) first);
+        } else if (first instanceof UnaryExp) {
+            ret = analyseUnaryExp((UnaryExp) first);
+        } else {
+            throw new AssertionError("MultiExp<Component> is not MultiExp or UnaryExp");
+        }
+        Iterator<Token> iterOp = exp.iterOperator();
+        Iterator<?> iterSrc = exp.iterOperand();
+        while (iterOp.hasNext() && iterSrc.hasNext()) {
+            Token op = iterOp.next();
+            Object src = iterSrc.next();
+            Operand subResult;
+            if (src instanceof MultiExp) {
+                subResult = analyseBinaryExp((MultiExp<?>) src);
+            } else if (src instanceof UnaryExp) {
+                subResult = analyseUnaryExp((UnaryExp) src);
+            } else {
+                throw new AssertionError("MultiExp<Component> is not MultiExp or UnaryExp");
+            }
+            Symbol sym = Symbol.temporary();
+            BinaryOp ir = new BinaryOp(tokenToBinaryOp(op), ret, subResult, sym);
+            getCurrentBlock().append(ir);
+            ret = sym;
+        }
+        return ret;
     }
 
-    public static Symbol analyseEqExp(EqExp exp) {
-        return null;
+    public Operand analyseUnaryExp(UnaryExp exp) {
+        BaseUnaryExp base = exp.getBase();
+        Operand result = null;
+        if (base instanceof FunctionCall) {
+            // TODO: 查符号表, 确认参数，传递参数，参数不匹配错误
+        } else if (base instanceof PrimaryExp) {
+            result = analysePrimaryExp((PrimaryExp) base);
+        }
+        assert Objects.nonNull(result); // null means void function return
+        Iterator<Token> iterUnaryOp = exp.iterUnaryOp();
+        while (iterUnaryOp.hasNext()) {
+            Token op = iterUnaryOp.next();
+            Symbol tmp = Symbol.temporary();
+            UnaryOp ir = new UnaryOp(tokenToUnaryOp(op), result, tmp);
+            getCurrentBlock().append(ir);
+            result = tmp;
+        }
+        return result;
     }
 
-    public static Symbol analyseRelExp(RelExp exp) {
-        return null;
-    }
-
-    public static Symbol analyseExp(Exp exp) {
-        return null;
-    }
-
-    public static Symbol analyseAddExp(AddExp exp) {
-        return null;
-    }
-
-    public static Symbol analyseMulExp(MulExp exp) {
-        return null;
-    }
-
-    public static Operand analyseUnaryExp(UnaryExp exp) {
-        return null;
-    }
-
-    public static Operand analysePrimaryExp(PrimaryExp exp) {
+    public Operand analysePrimaryExp(PrimaryExp exp) {
+        BasePrimaryExp base = exp.getBase();
+        if (base instanceof SubExp) {
+            // TODO: 括号匹配错误
+        } else if (base instanceof LVal) {
+            // TODO: 符号表相关错误(变量未定义等)
+        } else if (base instanceof Number) {
+            return new Immediate(((Number) base).getValue().getValue());
+        } else {
+            throw new AssertionError("BasePrimaryExp type error!");
+        }
         return null;
     }
 
@@ -95,26 +156,26 @@ public class Analyzer {
      */
     /* ---- 简单语句 ---- */
     // 简单语句只会生成基本的中间代码（四元式条目），只需追加到当前的块中即可
-    public static void analyseAssignStmt(AssignStmt stmt) {}
+    public void analyseAssignStmt(AssignStmt stmt) {}
 
-    public static void analyseExpStmt(ExpStmt stmt) {}
+    public void analyseExpStmt(ExpStmt stmt) {}
 
-    public static void analyseInputStmt(InputStmt stmt) {}
+    public void analyseInputStmt(InputStmt stmt) {}
 
-    public static void analyseOutputStmt(OutputStmt stmt) {}
+    public void analyseOutputStmt(OutputStmt stmt) {}
 
-    public static void analyseReturnStmt(ReturnStmt stmt) {}
+    public void analyseReturnStmt(ReturnStmt stmt) {}
 
-    public static void analyseBreakStmt(BreakStmt stmt) {}
+    public void analyseBreakStmt(BreakStmt stmt) {}
 
-    public static void analyseContinueStmt(ContinueStmt stmt) {}
+    public void analyseContinueStmt(ContinueStmt stmt) {}
     /* ---- 复杂语句 ---- */
     // 这部分语句会产生新的基本块，以及更深嵌套的符号表
-    public static void analyseIfStmt(IfStmt stmt) {}
+    public void analyseIfStmt(IfStmt stmt) {}
 
-    public static void analyseWhileStmt(WhileStmt stmt) {}
+    public void analyseWhileStmt(WhileStmt stmt) {}
 
-    public static BasicBlock analyseBlock(Block stmt, String name) {
+    public BasicBlock analyseBlock(Block stmt, String name) {
         return null;
     }
 
@@ -122,13 +183,13 @@ public class Analyzer {
     /**
      * 变量声明定义
      */
-    public static void analyseDecl(Decl decl) {}
+    public void analyseDecl(Decl decl) {}
 
-    public static void analyseDef(Def def) {}
+    public void analyseDef(Def def) {}
 
 
     /**
      * 函数与编译单元
      */
-    public static void analyseFunc(FuncDef func) {}
+    public void analyseFunc(FuncDef func) {}
 }
