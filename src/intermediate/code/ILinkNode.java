@@ -35,5 +35,15 @@ public abstract class ILinkNode {
         return Objects.nonNull(next);
     }
 
+    public static void remove(ILinkNode node) {
+        // TODO
+    }
 
+    public static void insertAfter(ILinkNode node) {
+        // TODO
+    }
+
+    public static void insertBefore(ILinkNode node) {
+        // TODO
+    }
 }
