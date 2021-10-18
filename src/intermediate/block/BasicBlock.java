@@ -1,7 +1,7 @@
 package intermediate.block;
 
-import intermediate.code.InOrder;
-import intermediate.code.IntermediateCode;
+import intermediate.code.old.InOrder;
+import intermediate.code.old.IntermediateCode;
 
 /**
  * 连续执行的一块代码, 维护头部和尾部

@@ -1,4 +1,4 @@
-package intermediate.code;
+package intermediate.code.old;
 
 /**
  * 抽象的中间代码基类

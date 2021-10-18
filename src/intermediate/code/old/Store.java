@@ -1,4 +1,4 @@
-package intermediate.code;
+package intermediate.code.old;
 
 import intermediate.operand.Operand;
 import intermediate.operand.Symbol;

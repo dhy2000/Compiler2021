@@ -1,6 +1,6 @@
 package intermediate.block;
 
-import intermediate.code.IntermediateCode;
+import intermediate.code.old.IntermediateCode;
 
 import java.util.Objects;
 

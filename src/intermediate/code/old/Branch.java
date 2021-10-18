@@ -1,4 +1,4 @@
-package intermediate.code;
+package intermediate.code.old;
 
 /**
  * 含有两种去向的

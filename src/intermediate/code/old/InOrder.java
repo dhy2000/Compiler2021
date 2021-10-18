@@ -1,4 +1,4 @@
-package intermediate.code;
+package intermediate.code.old;
 
 /**
  * 中间代码的一种, 顺序执行的
