@@ -202,7 +202,7 @@ public class Analyzer {
                 }
             }
         } else if (base instanceof PrimaryExp) {
-            result = analysePrimaryExp((PrimaryExp) base);
+            result = analyseBasePrimaryExp(((PrimaryExp) base).getBase());
         }
         assert Objects.nonNull(result); // null means void function return
         Iterator<Token> iterUnaryOp = exp.iterUnaryOp();
@@ -218,11 +218,10 @@ public class Analyzer {
 
     /**
      * 分析基础一元表达式 (子表达式, 左值，字面量）
-     * @param exp 一元表达式
-     * @return 表达式结果对应的符号
+     * @param base 一元表达式
+     * @return 表达式结果对应的符号, 左值错误则返回立即数 0
      */
-    public Operand analysePrimaryExp(PrimaryExp exp) {
-        BasePrimaryExp base = exp.getBase();
+    public Operand analyseBasePrimaryExp(BasePrimaryExp base) {
         if (base instanceof SubExp) {
             SubExp sub = (SubExp) base;
             if (!((SubExp) base).hasRightParenthesis()) {
@@ -234,7 +233,7 @@ public class Analyzer {
             LVal val = (LVal) base;
             if (currentSymTable.contains(val.getName().getName(), true)) {
                 ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
-                return null;
+                return new Immediate(0);
             }
             // 缺中括号错误
             Iterator<LVal.Index> iterIndex = val.iterIndexes();
@@ -243,7 +242,7 @@ public class Analyzer {
                 LVal.Index index = iterIndex.next();
                 if (!index.hasRightBracket()) {
                     ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, index.getLeftBracket().lineNumber()));
-                    return null;
+                    return new Immediate(0);
                 }
                 indexes.add(analyseExp(index.getIndex()));
             }
@@ -278,19 +277,42 @@ public class Analyzer {
      */
     /* ---- 简单语句 ---- */
     // 简单语句只会生成基本的中间代码（四元式条目），只需追加到当前的块中即可
-    public void analyseAssignStmt(AssignStmt stmt) {
-        // 区分左边是数组还是变量
-        // MOV 指令
 
+    private Symbol checkLVal(LVal left) {
+        Operand ln = analyseBasePrimaryExp(left);
+        if (Objects.isNull(ln) || ln instanceof Intermediate) {
+            return null;
+        }
+        Symbol leftSym = (Symbol) ln;
+        if (leftSym.isConstant()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MODIFY_CONST, left.getName().lineNumber()));
+            return null;
+        }
+        return leftSym;
+    }
+
+    public void analyseAssignStmt(AssignStmt stmt) {
+        // 常量修改错误
+        LVal left = stmt.getLeftVal();
+        Exp right = stmt.getExp();
+        Symbol leftSym = checkLVal(left);
+        Operand rn = analyseExp(right);
+        if (Objects.isNull(rn)) {
+            throw new AssertionError("Assign void to LVal");
+        }
+        currentBlock().append(new UnaryOp(UnaryOp.Op.MOV, rn, leftSym));
     }
 
     public void analyseExpStmt(ExpStmt stmt) {
         // 这个最容易
+        analyseExp(stmt.getExp());
     }
 
     public void analyseInputStmt(InputStmt stmt) {
         LVal left = stmt.getLeftVal();
         // TODO: 检查符号表，检查变量类型
+        Symbol leftSym = checkLVal(left);
+        currentBlock().append(new Input(leftSym));
     }
 
     public void analyseOutputStmt(OutputStmt stmt) {
@@ -304,10 +326,12 @@ public class Analyzer {
 
     public void analyseBreakStmt(BreakStmt stmt) {
         // TODO: 就是一个跳转，跳到往上的循环的下一层
+        // TODO: 检查是否非循环块
     }
 
     public void analyseContinueStmt(ContinueStmt stmt) {
         // TODO: 也是一个跳转，跳到往上的循环的头
+        // TODO: 检查是否非循环块
     }
     /* ---- 复杂语句 ---- */
     // 这部分语句会产生新的基本块，以及更深嵌套的符号表
@@ -321,7 +345,7 @@ public class Analyzer {
         // TODO: 生成新的基本块
     }
 
-    public BasicBlock analyseBlock(Block stmt, String name) {
+    public BasicBlock analyseBlock(Block stmt, String name, BasicBlock.Type type) {
         // TODO: 一条一条语句去遍历就行
         return null;
     }
