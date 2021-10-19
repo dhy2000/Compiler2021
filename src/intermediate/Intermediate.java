@@ -11,9 +11,11 @@ import java.util.Map;
  */
 public class Intermediate {
     private final Map<String, Integer> globalVariables;
-    private final Map<String, List<Integer>> globalArrays;
-    private final Map<String, String> globalStrings;
+    private final Map<String, List<Integer>> globalArrays;  // 展平的数组初值
+    private final Map<String, String> globalStrings;        // FormatString
     private final Map<String, FunctionBlock> functions;
+
+    private FunctionBlock mainFunction;
 
     public Intermediate() {
         this.globalVariables = new HashMap<>();
@@ -54,5 +56,13 @@ public class Intermediate {
 
     public void putFunction(FunctionBlock function) {
         functions.put(function.getLabel(), function);
+    }
+
+    public void setMainFunction(FunctionBlock main) {
+        mainFunction = main;
+    }
+
+    public FunctionBlock getMainFunction() {
+        return mainFunction;
     }
 }

@@ -8,9 +8,18 @@ public class BasicBlock extends ILinkNode {
     private final String label;
     private final ILinkNode tail = new ILinkNode() {};
 
-    public BasicBlock(String label) {
+    public enum Type {
+        FUNC,   // 函数体
+        BRANCH, // 分支
+        LOOP,   // 循环
+        BASIC   // 普通的 {}
+    }
+
+    private final Type type;
+
+    public BasicBlock(String label, Type type) {
         this.label = label;
-        // prev is null
+        this.type = type;
     }
 
     public String getLabel() {
@@ -48,7 +57,7 @@ public class BasicBlock extends ILinkNode {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[BLOCK]" + getLabel() + ":\n");
+        StringBuilder sb = new StringBuilder("[BLOCK_" + type.name() + "]" + getLabel() + ":\n");
         ILinkNode node = getHead();
         while (node.hasNext()) {
             sb.append(node).append("\n");

@@ -15,6 +15,15 @@ public class SymTable {
 
     private final SymTable parent;
 
+    private SymTable() {
+        this.field = "GLOBAL";
+        this.parent = null;
+    }
+
+    public static SymTable global() {
+        return new SymTable();
+    }
+
     public SymTable(String field, SymTable parent) {
         this.field = field;
         this.parent = parent;

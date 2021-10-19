@@ -18,6 +18,7 @@ import intermediate.code.BasicBlock;
 import intermediate.code.BinaryOp;
 import intermediate.code.UnaryOp;
 import intermediate.operand.Operand;
+import intermediate.symbol.SymTable;
 
 import java.util.Stack;
 
@@ -29,46 +30,12 @@ import java.util.Stack;
  */
 public class Analyzer {
 
-//    private final SymTable globalSymTable = SymTable.getGlobal();
-//    private final FuncTable funcTable = FuncTable.getInstance();
+    private SymTable currentSymTable = SymTable.global();   // 栈式符号表
 
-    private final Intermediate intermediate = new Intermediate();
+    private final Intermediate intermediate = new Intermediate(); // 最终生成的中间代码
 
     private int blockCount = 0;
     private final Stack<BasicBlock> blockStack = new Stack<>();
-
-    private enum BlockType {
-        FUNC, IF, WHILE
-    }
-
-    private final Stack<BlockType> blockTypeStack = new Stack<>();
-//    private final Stack<SymTable> symbolStack = new Stack<>();
-
-    private BasicBlock getCurrentBlock() {
-        assert !blockStack.empty();
-        return blockStack.peek();
-    }
-
-    private void pushBlock(BasicBlock block) {
-        blockStack.push(block);
-    }
-
-    private BasicBlock popBlock() {
-        return blockStack.pop();
-    }
-
-//    private SymTable getCurrentSymTable() {
-//        assert !symbolStack.empty();
-//        return symbolStack.peek();
-//    }
-//
-//    private void pushSymTable(SymTable table) {
-//        symbolStack.push(table);
-//    }
-//
-//    private SymTable popSymTable() {
-//        return symbolStack.pop();
-//    }
 
     /**
      * 表达式分析, 通常只会生成计算类型的中间代码
