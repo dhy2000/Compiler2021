@@ -100,40 +100,41 @@ public class CalcUtil {
     }
 
     public int calcLVal(LVal lVal) throws ConstExpException {
-        Ident ident = lVal.getName();
-        String name = ident.getName();
-        if (!sym.contains(name)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
-            return 0;
-        }
-        SymTable.Item symbol = sym.getItemByName(name);
-        if (!symbol.isInitialized() || symbol.isModified()) {
-            throw new ConstExpException(ident.lineNumber(), ident.getName());
-        }
-        VarType symType = symbol.getType();
-        if (symType instanceof BasicType) {
-            return symbol.getInitValue();
-        } else { // Array
-            int dim = ((ArrayType) symType).getDimCount();
-            if (dim > 2) {
-                throw new AssertionError("More than 2 dim array");
-            }
-            ArrayList<Integer> arrayIndexes = new ArrayList<>();
-            Iterator<LVal.Index> lValIndexes = lVal.iterIndexes();
-            while (lValIndexes.hasNext()) {
-                LVal.Index index = lValIndexes.next();
-                arrayIndexes.add(calcExp(index.getIndex()));
-            }
-            int offsetBase = 1;
-            int offset = 0;
-            for (int i = arrayIndexes.size() - 1; i >= 0; i--) {
-                offset += arrayIndexes.get(i) * offsetBase;
-                if (i > 0) {
-                    offsetBase = ((ArrayType) symType).getSizeOfInner(i - 1);
-                }
-            }
-            return symbol.getInitArray().get(offset);
-        }
+//        Ident ident = lVal.getName();
+//        String name = ident.getName();
+//        if (!sym.contains(name)) {
+//            ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
+//            return 0;
+//        }
+//        SymTable.Item symbol = sym.getItemByName(name);
+//        if (!symbol.isInitialized() || symbol.isModified()) {
+//            throw new ConstExpException(ident.lineNumber(), ident.getName());
+//        }
+//        VarType symType = symbol.getType();
+//        if (symType instanceof BasicType) {
+//            return symbol.getInitValue();
+//        } else { // Array
+//            int dim = ((ArrayType) symType).getDimCount();
+//            if (dim > 2) {
+//                throw new AssertionError("More than 2 dim array");
+//            }
+//            ArrayList<Integer> arrayIndexes = new ArrayList<>();
+//            Iterator<LVal.Index> lValIndexes = lVal.iterIndexes();
+//            while (lValIndexes.hasNext()) {
+//                LVal.Index index = lValIndexes.next();
+//                arrayIndexes.add(calcExp(index.getIndex()));
+//            }
+//            int offsetBase = 1;
+//            int offset = 0;
+//            for (int i = arrayIndexes.size() - 1; i >= 0; i--) {
+//                offset += arrayIndexes.get(i) * offsetBase;
+//                if (i > 0) {
+//                    offsetBase = ((ArrayType) symType).getSizeOfInner(i - 1);
+//                }
+//            }
+//            return symbol.getInitArray().get(offset);
+//        }
+        return 0;
     }
 
     public int extractNumber(Number number) {

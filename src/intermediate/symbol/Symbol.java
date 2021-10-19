@@ -1,12 +1,14 @@
 package intermediate.symbol;
 
+import intermediate.operand.Operand;
+
 import java.util.Collections;
 import java.util.List;
 
 /**
- * 符号表中的符号
+ * 符号表中的符号(表项)
  */
-public class Symbol {
+public class Symbol implements Operand {
     private final String name;
     private final String field;
 
@@ -17,7 +19,7 @@ public class Symbol {
     }
 
     private final Type type;
-    private int offset; // Offset to $sp
+    private int offset = -1; // Offset to $sp, -1 表示暂时未分配栈上空间
 
     private final boolean constant;
     private final List<Integer> dimSize;
@@ -114,5 +116,13 @@ public class Symbol {
     @Override
     public String toString() {
         return name + "[sp+" + offset + "]:" + type;
+    }
+
+    // 临时变量暂时不具备栈上空间
+    // TODO: 临时变量是在这里分配还是在基本块里分配？
+    private static int tempCount = 0;
+    public static Symbol temporary(String field) {
+        tempCount = tempCount + 1;
+        return new Symbol("tmp_" + tempCount, field);
     }
 }
