@@ -1,6 +1,7 @@
 package intermediate.code;
 
-import intermediate.operand.Symbol;
+
+import intermediate.symbol.Symbol;
 
 /**
  * 变量的压栈出栈操作

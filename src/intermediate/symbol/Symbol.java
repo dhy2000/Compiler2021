@@ -79,6 +79,17 @@ public class Symbol implements Operand {
         this.initArray = Collections.emptyList();
     }
 
+    public Symbol(String name, String field, int nothing) {
+        this.name = name;
+        this.field = field;
+        this.type = Type.POINTER;
+        this.constant = false;
+        this.dimSize = Collections.emptyList();
+        this.initValue = null;
+        this.initArray = Collections.emptyList();
+    }
+
+
     public String getName() {
         return name;
     }
@@ -131,10 +142,14 @@ public class Symbol implements Operand {
     }
 
     // 临时变量暂时不具备栈上空间
-    // TODO: 临时变量是在这里分配还是在基本块里分配？
     private static int tempCount = 0;
-    public static Symbol temporary(String field) {
+    public static Symbol temporary(String field, Type type) {
+        assert type.equals(Type.INT) || type.equals(Type.POINTER);
         tempCount = tempCount + 1;
-        return new Symbol("tmp_" + tempCount, field);
+        if (type.equals(Type.POINTER)) {
+            return new Symbol("ptr_" + tempCount, field, 1);
+        } else {
+            return new Symbol("tmp_" + tempCount, field);
+        }
     }
 }

@@ -7,15 +7,15 @@ import java.util.Map;
  * 函数定义表
  */
 public class FuncTable {
-    private final Map<String, FuncDef> funcDefs = new HashMap<>();
+    private final Map<String, FuncMeta> funcDefs = new HashMap<>();
 
     public FuncTable() {}
 
-    public void addFunc(FuncDef func) {
+    public void addFunc(FuncMeta func) {
         funcDefs.putIfAbsent(func.getName(), func);
     }
 
-    public FuncDef get(String name) {
+    public FuncMeta get(String name) {
         return funcDefs.get(name);
     }
 

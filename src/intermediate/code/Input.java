@@ -1,6 +1,7 @@
 package intermediate.code;
 
-import intermediate.operand.Symbol;
+
+import intermediate.symbol.Symbol;
 
 public class Input extends ILinkNode {
     private final Symbol dst;

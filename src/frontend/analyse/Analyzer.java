@@ -1,26 +1,31 @@
 package frontend.analyse;
 
+import frontend.error.Error;
+import frontend.error.ErrorTable;
+import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
+import frontend.syntax.Component;
 import frontend.syntax.decl.Decl;
 import frontend.syntax.decl.Def;
+import frontend.syntax.expr.multi.Cond;
 import frontend.syntax.expr.multi.Exp;
 import frontend.syntax.expr.multi.MultiExp;
-import frontend.syntax.expr.unary.LVal;
-import frontend.syntax.expr.unary.PrimaryExp;
-import frontend.syntax.expr.unary.UnaryExp;
+import frontend.syntax.expr.unary.*;
+import frontend.syntax.expr.unary.Number;
 import frontend.syntax.func.FuncDef;
 import frontend.syntax.stmt.complex.Block;
 import frontend.syntax.stmt.complex.IfStmt;
 import frontend.syntax.stmt.complex.WhileStmt;
 import frontend.syntax.stmt.simple.*;
 import intermediate.Intermediate;
-import intermediate.code.BasicBlock;
-import intermediate.code.BinaryOp;
-import intermediate.code.UnaryOp;
+import intermediate.code.*;
+import intermediate.operand.Immediate;
 import intermediate.operand.Operand;
+import intermediate.symbol.FuncMeta;
 import intermediate.symbol.SymTable;
+import intermediate.symbol.Symbol;
 
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 语义分析器：遍历语法树，维护符号表，进行错误处理，生成中间代码（略）
@@ -36,6 +41,14 @@ public class Analyzer {
 
     private int blockCount = 0;
     private final Stack<BasicBlock> blockStack = new Stack<>();
+
+    private BasicBlock currentBlock() {
+        return blockStack.peek();
+    }
+
+    private String currentField() {
+        return currentSymTable.getField();
+    }
 
     /**
      * 表达式分析, 通常只会生成计算类型的中间代码
@@ -68,116 +81,196 @@ public class Analyzer {
         }
     }
 
+    public Operand analyseCond(Cond cond) {
+        return analyseBinaryExp(cond.getLOrExp());
+    }
+
     public Operand analyseExp(Exp exp) {
         return analyseBinaryExp(exp.getAddExp());
     }
 
+    private Operand analyseBinaryOrUnaryExp(Component item) {
+        if (item instanceof MultiExp) {
+            return analyseBinaryExp((MultiExp<?>) item);
+        } else if (item instanceof UnaryExp) {
+            return analyseUnaryExp((UnaryExp) item);
+        } else {
+            throw new AssertionError("Wrong Component");
+        }
+    }
+
+    /**
+     * 分析二元表达式，生成中间代码并返回作为表达式运算结果的符号
+     * @param exp 二元表达式根节点
+     * @return 作为该表达式运算结果的符号
+     */
     public Operand analyseBinaryExp(MultiExp<?> exp) {
-//        Component first = exp.getFirst();
-//        Operand ret;
-//        if (first instanceof MultiExp) {
-//            ret = analyseBinaryExp((MultiExp<?>) first);
-//        } else if (first instanceof UnaryExp) {
-//            ret = analyseUnaryExp((UnaryExp) first);
-//        } else {
-//            throw new AssertionError("MultiExp<Component> is not MultiExp or UnaryExp");
-//        }
-//        Iterator<Token> iterOp = exp.iterOperator();
-//        Iterator<?> iterSrc = exp.iterOperand();
-//        while (iterOp.hasNext() && iterSrc.hasNext()) {
-//            Token op = iterOp.next();
-//            Object src = iterSrc.next();
-//            Operand subResult;
-//            if (src instanceof MultiExp) {
-//                subResult = analyseBinaryExp((MultiExp<?>) src);
-//            } else if (src instanceof UnaryExp) {
-//                subResult = analyseUnaryExp((UnaryExp) src);
-//            } else {
-//                throw new AssertionError("MultiExp<Component> is not MultiExp or UnaryExp");
-//            }
-//            Symbol sym = Symbol.temporary();
-//            BinaryOp ir = new BinaryOp(tokenToBinaryOp(op), ret, subResult, sym);
-//            getCurrentBlock().append(ir);
-//            ret = sym;
-//        }
-//        return ret;
-        return null;
+        Component first = exp.getFirst();
+        Operand ret = analyseBinaryOrUnaryExp(first);
+        if (Objects.isNull(ret)) {
+            return null;
+        }
+        Iterator<Token> iterOp = exp.iterOperator();
+        Iterator<?> iterSrc = exp.iterOperand();
+        while (iterOp.hasNext() && iterSrc.hasNext()) {
+            Token op = iterOp.next();
+            Component src = (Component) iterSrc.next();
+            Operand subResult = analyseBinaryOrUnaryExp(src);
+            if (Objects.isNull(subResult)) {
+                return null;
+            }
+            Symbol temp = Symbol.temporary(currentField(), Symbol.Type.INT);
+            currentBlock().append(new BinaryOp(tokenToBinaryOp(op), ret, subResult, temp));
+            ret = temp;
+        }
+        return ret;
     }
 
+    /**
+     * 分析一元表达式, 生成中间代码并返回结果
+     * @param exp 一元表达式
+     * @return 作为表达式结果的符号, 如果是 void 函数，则返回 null
+     */
     public Operand analyseUnaryExp(UnaryExp exp) {
-//        BaseUnaryExp base = exp.getBase();
-//        Operand result = null;
-//        if (base instanceof FunctionCall) {
-//            // TODO: 查符号表, 确认参数，传递参数，参数不匹配错误
-//            // TODO: 如果调用了 void 函数，返回 null
-//        } else if (base instanceof PrimaryExp) {
-//            result = analysePrimaryExp((PrimaryExp) base);
-//        }
-//        assert Objects.nonNull(result); // null means void function return
-//        Iterator<Token> iterUnaryOp = exp.iterUnaryOp();
-//        while (iterUnaryOp.hasNext()) {
-//            Token op = iterUnaryOp.next();
-//            Symbol tmp = Symbol.temporary();
-//            UnaryOp ir = new UnaryOp(tokenToUnaryOp(op), result, tmp);
-//            getCurrentBlock().append(ir);
-//            result = tmp;
-//        }
-//        return result;
-        return null;
+        BaseUnaryExp base = exp.getBase();
+        Operand result = null;
+        if (base instanceof FunctionCall) {
+            // 查符号表, 确认参数，传递参数，参数不匹配错误
+            // 如果调用了 void 函数，返回 null
+            FunctionCall call = (FunctionCall) base;
+            Ident ident = call.getName();
+            String name = ident.getName();
+            if (!intermediate.getFunctions().containsKey(name)) {
+                ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, ident.lineNumber()));
+                return new Immediate(0);
+            }
+            FuncMeta func = intermediate.getFunctions().get(name);
+            // match arguments
+            List<Operand> params = new ArrayList<>();
+            FuncRParams rParams = call.getParams();
+            Iterator<Exp> iter = rParams.iterParams();
+            List<Symbol> args = func.getParams();
+            Iterator<Symbol> iterArgs = args.listIterator();
+            while (iter.hasNext() && iterArgs.hasNext()) {
+                Exp p = iter.next();
+                Operand r = analyseExp(p);
+                Symbol arg = iterArgs.next();
+                if (Objects.isNull(r)) {
+                    // returning void
+                    ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                    break;
+                } else if (r instanceof Immediate) {
+                    // Integer
+                    if (!arg.getType().equals(Symbol.Type.INT)) {
+                        ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                        break;
+                    } else {
+                        params.add(r);
+                    }
+                } else {
+                    assert r instanceof Symbol;
+                    if (((Symbol) r).getType().equals(arg.getType())) {
+                        params.add(r);
+                    } else {
+                        ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                        break;
+                    }
+                }
+            }
+            boolean f1 = iter.hasNext();
+            boolean f2 = iterArgs.hasNext();
+            boolean error = false;
+            if (f1 && f2) {
+                // MISMATCH TYPE
+                error = true;
+            } else if (f1 || f2) {
+                ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_NUM, ident.lineNumber()));
+                error = true;
+            }
+            if (func.getReturnType().equals(FuncMeta.ReturnType.VOID)) {
+                if (!error) {
+                    currentBlock().append(new Call(func, params));
+                }
+                return null;
+            } else {
+                if (!error) {
+                    Symbol r = Symbol.temporary(currentField(), Symbol.Type.INT);
+                    currentBlock().append(new Call(func, params, r));
+                    return r;
+                } else {
+                    return new Immediate(0);
+                }
+            }
+        } else if (base instanceof PrimaryExp) {
+            result = analysePrimaryExp((PrimaryExp) base);
+        }
+        assert Objects.nonNull(result); // null means void function return
+        Iterator<Token> iterUnaryOp = exp.iterUnaryOp();
+        while (iterUnaryOp.hasNext()) {
+            Token op = iterUnaryOp.next();
+            Symbol tmp = Symbol.temporary(currentField(), Symbol.Type.INT);
+            UnaryOp ir = new UnaryOp(tokenToUnaryOp(op), result, tmp);
+            currentBlock().append(ir);
+            result = tmp;
+        }
+        return result;
     }
 
+    /**
+     * 分析基础一元表达式 (子表达式, 左值，字面量）
+     * @param exp 一元表达式
+     * @return 表达式结果对应的符号
+     */
     public Operand analysePrimaryExp(PrimaryExp exp) {
-//        BasePrimaryExp base = exp.getBase();
-//        if (base instanceof SubExp) {
-//            SubExp sub = (SubExp) base;
-//            if (!((SubExp) base).hasRightParenthesis()) {
-//                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, sub.getLeftParenthesis().lineNumber()));
-//            }
-//            return analyseExp(sub.getExp());
-//        } else if (base instanceof LVal) {
-//            // TODO: 符号表相关错误(变量未定义等)
-//            LVal val = (LVal) base;
-//            if (getCurrentSymTable().contains(val.getName().getName())) {
-//                ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
-//                return new Immediate(0);
-//            }
-//            // TODO: 缺中括号错误
-//            Iterator<LVal.Index> iterIndex = val.iterIndexes();
-//            List<Operand> indexes = new ArrayList<>();
-//            while (iterIndex.hasNext()) {
-//                LVal.Index index = iterIndex.next();
-//                if (!index.hasRightBracket()) {
-//                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, index.getLeftBracket().lineNumber()));
-//                    return new Immediate(0);
-//                }
-//                indexes.add(analyseExp(index.getIndex()));
-//            }
-//            Operand offsetBase = new Immediate(1);
-//            Operand offset = new Immediate(0);
-//            for (int i = indexes.size() - 1; i >= 0; i--) {
-//                // offset += arrayIndexes[i] * baseOffset;
-//                Symbol prod = Symbol.temporary();
-//                getCurrentBlock().append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
-//                Symbol sum = Symbol.temporary();
-//                getCurrentBlock().append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
-//                offset = sum;
-//            }
-//            SymTable.Item item = getCurrentSymTable().getItemByName(val.getName().getName());
-//            Symbol symbol = item.getInterSymbol();
-//            if (symbol.getType().equals(Symbol.Type.INT)) {
-//                return symbol;
-//            } else {
-//                Symbol value = Symbol.temporary();
-//                getCurrentBlock().append(new ArrayOp(ArrayOp.Op.LOAD, symbol, offset, value));
-//                return value;
-//            }
-//
-//        } else if (base instanceof Number) {
-//            return new Immediate(((Number) base).getValue().getValue());
-//        } else {
-//            throw new AssertionError("BasePrimaryExp type error!");
-//        }
-        return null;
+        BasePrimaryExp base = exp.getBase();
+        if (base instanceof SubExp) {
+            SubExp sub = (SubExp) base;
+            if (!((SubExp) base).hasRightParenthesis()) {
+                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, sub.getLeftParenthesis().lineNumber()));
+            }
+            return analyseExp(sub.getExp());
+        } else if (base instanceof LVal) {
+            // 符号表相关错误(变量未定义等)
+            LVal val = (LVal) base;
+            if (currentSymTable.contains(val.getName().getName(), true)) {
+                ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
+                return null;
+            }
+            // 缺中括号错误
+            Iterator<LVal.Index> iterIndex = val.iterIndexes();
+            List<Operand> indexes = new ArrayList<>();
+            while (iterIndex.hasNext()) {
+                LVal.Index index = iterIndex.next();
+                if (!index.hasRightBracket()) {
+                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, index.getLeftBracket().lineNumber()));
+                    return null;
+                }
+                indexes.add(analyseExp(index.getIndex()));
+            }
+            Operand offsetBase = new Immediate(1);
+            Operand offset = new Immediate(0);
+            for (int i = indexes.size() - 1; i >= 0; i--) {
+                // offset += arrayIndexes[i] * baseOffset;
+                Symbol prod = Symbol.temporary(currentField(), Symbol.Type.INT);
+                currentBlock().append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
+                Symbol sum = Symbol.temporary(currentField(), Symbol.Type.INT);
+                currentBlock().append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
+                offset = sum;
+            }
+            Symbol symbol = currentSymTable.get(val.getName().getName(), true);
+            if (symbol.getType().equals(Symbol.Type.INT)) {
+                return symbol;
+            } else {
+                // ARRAY or POINTER
+                Symbol temp = Symbol.temporary(currentField(), Symbol.Type.POINTER);
+                currentBlock().append(new AddressOp(symbol, offset, temp));
+                return temp;
+            }
+        } else if (base instanceof Number) {
+            return new Immediate(((Number) base).getValue().getValue());
+        } else {
+            throw new AssertionError("BasePrimaryExp type error!");
+        }
     }
 
     /**
@@ -188,6 +281,7 @@ public class Analyzer {
     public void analyseAssignStmt(AssignStmt stmt) {
         // 区分左边是数组还是变量
         // MOV 指令
+
     }
 
     public void analyseExpStmt(ExpStmt stmt) {

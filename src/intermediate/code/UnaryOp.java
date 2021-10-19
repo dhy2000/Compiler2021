@@ -1,7 +1,7 @@
 package intermediate.code;
 
 import intermediate.operand.Operand;
-import intermediate.operand.Symbol;
+import intermediate.symbol.Symbol;
 
 /**
  * 一元运算

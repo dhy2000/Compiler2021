@@ -1,6 +1,6 @@
 package intermediate;
 
-import intermediate.code.FunctionBlock;
+import intermediate.symbol.FuncMeta;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +13,9 @@ public class Intermediate {
     private final Map<String, Integer> globalVariables;
     private final Map<String, List<Integer>> globalArrays;  // 展平的数组初值
     private final Map<String, String> globalStrings;        // FormatString
-    private final Map<String, FunctionBlock> functions;
+    private final Map<String, FuncMeta> functions;
 
-    private FunctionBlock mainFunction;
+    private FuncMeta mainFunction;
 
     public Intermediate() {
         this.globalVariables = new HashMap<>();
@@ -50,19 +50,19 @@ public class Intermediate {
         globalStrings.put("STR_" + stringCount, s);
     }
 
-    public Map<String, FunctionBlock> getFunctions() {
+    public Map<String, FuncMeta> getFunctions() {
         return functions;
     }
 
-    public void putFunction(FunctionBlock function) {
-        functions.put(function.getLabel(), function);
+    public void putFunction(FuncMeta function) {
+        functions.put(function.getName(), function);
     }
 
-    public void setMainFunction(FunctionBlock main) {
+    public void setMainFunction(FuncMeta main) {
         mainFunction = main;
     }
 
-    public FunctionBlock getMainFunction() {
+    public FuncMeta getMainFunction() {
         return mainFunction;
     }
 }
