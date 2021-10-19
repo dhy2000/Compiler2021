@@ -1,16 +1,19 @@
 package intermediate.operand;
 
+import java.util.Objects;
+
 /**
  * 中间代码中的符号
  */
 public class Symbol implements Operand {
     private final String name;
     private final String field;
-    // private final String version; // SSA
+
+    private final Integer length; // Only ARRAY
 
     public enum Type {
         INT,
-        ARRAY, // 到中间代码层面，数组只有一维了
+        ARRAY, // 到中间代码层面，数组只有一维了; 这里的 ARRAY 是个指针
     }
 
     private final Type type;
@@ -19,12 +22,14 @@ public class Symbol implements Operand {
         this.name = name;
         this.field = field;
         this.type = Type.INT;
+        this.length = null;
     }
 
-    public Symbol(String name, String field, Type type) {
+    public Symbol(String name, String field, Integer length) {
         this.name = name;
         this.field = field;
-        this.type = type;
+        this.type = Type.ARRAY;
+        this.length = length;
     }
 
     public Type getType() {
@@ -37,6 +42,14 @@ public class Symbol implements Operand {
 
     public String getField() {
         return field;
+    }
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public boolean hasLength() {
+        return Objects.nonNull(length);
     }
 
     @Override

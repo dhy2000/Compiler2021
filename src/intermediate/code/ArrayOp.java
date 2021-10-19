@@ -3,7 +3,7 @@ package intermediate.code;
 import intermediate.operand.Operand;
 import intermediate.operand.Symbol;
 
-public class ArrayOp {
+public class ArrayOp extends ILinkNode {
 
     public enum Op {
         LOAD,

@@ -3,6 +3,7 @@ package frontend.symbol;
 import frontend.symbol.type.ArrayType;
 import frontend.symbol.type.BasicType;
 import frontend.symbol.type.VarType;
+import intermediate.operand.Symbol;
 
 import java.util.*;
 
@@ -18,6 +19,8 @@ public class SymTable {
         private final VarType type;
         private final boolean constant;
         private boolean modified = false;
+
+        private Symbol interSymbol;
 
         private final Integer initValue;
         private final List<Integer> initArray;
@@ -44,6 +47,14 @@ public class SymTable {
             this.constant = constant;
             this.initValue = null;
             this.initArray = Collections.unmodifiableList(values);
+        }
+
+        public void setInterSymbol(Symbol interSymbol) {
+            this.interSymbol = interSymbol;
+        }
+
+        public Symbol getInterSymbol() {
+            return interSymbol;
         }
 
         public String getName() {
