@@ -1,8 +1,6 @@
 package frontend.analyse;
 
 import frontend.lexical.token.Token;
-import frontend.symbol.FuncTable;
-import frontend.symbol.SymTable;
 import frontend.syntax.decl.Decl;
 import frontend.syntax.decl.Def;
 import frontend.syntax.expr.multi.Exp;
@@ -31,8 +29,8 @@ import java.util.Stack;
  */
 public class Analyzer {
 
-    private final SymTable globalSymTable = SymTable.getGlobal();
-    private final FuncTable funcTable = FuncTable.getInstance();
+//    private final SymTable globalSymTable = SymTable.getGlobal();
+//    private final FuncTable funcTable = FuncTable.getInstance();
 
     private final Intermediate intermediate = new Intermediate();
 

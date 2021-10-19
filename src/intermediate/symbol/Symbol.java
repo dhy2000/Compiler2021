@@ -9,6 +9,8 @@ import java.util.List;
  * 符号表中的符号(表项)
  */
 public class Symbol implements Operand {
+    private static final int SIZEOF_INT = 4;
+
     private final String name;
     private final String field;
 
@@ -111,6 +113,16 @@ public class Symbol implements Operand {
 
     public List<Integer> getInitArray() {
         return initArray;
+    }
+
+    public int capacity() {
+        if (type.equals(Type.INT)) {
+            return SIZEOF_INT;
+        } else if (type.equals(Type.POINTER)) {
+            return SIZEOF_INT;
+        } else {
+            return SIZEOF_INT * dimSize.stream().reduce((i, i2) -> i * i2).orElse(1);
+        }
     }
 
     @Override

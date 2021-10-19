@@ -5,15 +5,13 @@ import frontend.error.Error;
 import frontend.error.ErrorTable;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
-import frontend.symbol.SymTable;
-import frontend.symbol.type.ArrayType;
-import frontend.symbol.type.BasicType;
-import frontend.symbol.type.VarType;
 import frontend.syntax.expr.multi.AddExp;
 import frontend.syntax.expr.multi.Exp;
 import frontend.syntax.expr.multi.MulExp;
 import frontend.syntax.expr.unary.*;
 import frontend.syntax.expr.unary.Number;
+import intermediate.symbol.SymTable;
+import intermediate.symbol.Symbol;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,10 +21,10 @@ import java.util.Iterator;
  */
 public class CalcUtil {
 
-    private final SymTable sym;
+    private final SymTable symTable;
 
-    public CalcUtil(SymTable sym) {
-        this.sym = sym;
+    public CalcUtil(SymTable symTable) {
+        this.symTable = symTable;
     }
 
     public int calcExp(Exp exp) throws ConstExpException {
@@ -100,41 +98,37 @@ public class CalcUtil {
     }
 
     public int calcLVal(LVal lVal) throws ConstExpException {
-//        Ident ident = lVal.getName();
-//        String name = ident.getName();
-//        if (!sym.contains(name)) {
-//            ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
-//            return 0;
-//        }
-//        SymTable.Item symbol = sym.getItemByName(name);
-//        if (!symbol.isInitialized() || symbol.isModified()) {
-//            throw new ConstExpException(ident.lineNumber(), ident.getName());
-//        }
-//        VarType symType = symbol.getType();
-//        if (symType instanceof BasicType) {
-//            return symbol.getInitValue();
-//        } else { // Array
-//            int dim = ((ArrayType) symType).getDimCount();
-//            if (dim > 2) {
-//                throw new AssertionError("More than 2 dim array");
-//            }
-//            ArrayList<Integer> arrayIndexes = new ArrayList<>();
-//            Iterator<LVal.Index> lValIndexes = lVal.iterIndexes();
-//            while (lValIndexes.hasNext()) {
-//                LVal.Index index = lValIndexes.next();
-//                arrayIndexes.add(calcExp(index.getIndex()));
-//            }
-//            int offsetBase = 1;
-//            int offset = 0;
-//            for (int i = arrayIndexes.size() - 1; i >= 0; i--) {
-//                offset += arrayIndexes.get(i) * offsetBase;
-//                if (i > 0) {
-//                    offsetBase = ((ArrayType) symType).getSizeOfInner(i - 1);
-//                }
-//            }
-//            return symbol.getInitArray().get(offset);
-//        }
-        return 0;
+        Ident ident = lVal.getName();
+        String name = ident.getName();
+        if (!symTable.contains(name, true)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
+            return 0;
+        }
+        Symbol symbol = symTable.get(name, true);
+        if (!symbol.isConstant()) {
+            throw new ConstExpException(ident.lineNumber(), ident.getName());
+        }
+
+        if (symbol.getType().equals(Symbol.Type.INT)) {
+            return symbol.getInitValue();
+        } else if (symbol.getType().equals(Symbol.Type.ARRAY)) {
+            ArrayList<Integer> indexes = new ArrayList<>();
+            Iterator<LVal.Index> iter = lVal.iterIndexes();
+            while (iter.hasNext()) {
+                indexes.add(calcExp(iter.next().getIndex()));
+            }
+            int base = 1;
+            int offset = 0;
+            for (int i = indexes.size() - 1; i >= 0; i--) {
+                offset += indexes.get(i) * base;
+                if (i > 0) {
+                    base = base * symbol.getDimSize().get(i);
+                }
+            }
+            return symbol.getInitArray().get(offset);
+        } else {
+            throw new ConstExpException(ident.lineNumber(), ident.getName());
+        }
     }
 
     public int extractNumber(Number number) {
