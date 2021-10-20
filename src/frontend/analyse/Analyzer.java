@@ -7,8 +7,7 @@ import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
 import frontend.syntax.CompUnit;
 import frontend.syntax.Component;
-import frontend.syntax.decl.Decl;
-import frontend.syntax.decl.Def;
+import frontend.syntax.decl.*;
 import frontend.syntax.expr.multi.Cond;
 import frontend.syntax.expr.multi.ConstExp;
 import frontend.syntax.expr.multi.Exp;
@@ -53,8 +52,10 @@ public class Analyzer {
     }
 
     private BasicBlock currentBlock;
-    private Stack<BasicBlock> loopBlocks;
-    private Stack<BasicBlock> loopFollows;
+    private final Stack<BasicBlock> loopBlocks = new Stack<>();
+    private final Stack<BasicBlock> loopFollows = new Stack<>();
+    private int stackSize = 0;
+
 
     private String currentField() {
         return currentSymTable.getField();
@@ -423,7 +424,7 @@ public class Analyzer {
 
     /* ---- 复杂语句 ---- */
     // 这部分语句会产生新的基本块，以及更深嵌套的符号表
-    public void analyseIfStmt(IfStmt stmt) {
+    public void analyseIfStmt(IfStmt stmt) throws ConstExpException {
         // 缺右括号
         if (!stmt.hasRightParenthesis()) {
             ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
@@ -451,7 +452,7 @@ public class Analyzer {
         currentBlock = follow;
     }
 
-    public void analyseWhileStmt(WhileStmt stmt) {
+    public void analyseWhileStmt(WhileStmt stmt) throws ConstExpException {
         // 缺右括号
         if (!stmt.hasRightParenthesis()) {
             ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
@@ -474,7 +475,7 @@ public class Analyzer {
         currentBlock = follow;
     }
 
-    public BasicBlock analyseBlock(Block stmt) {
+    public BasicBlock analyseBlock(Block stmt) throws ConstExpException {
         BasicBlock block = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
         currentBlock.append(new Jump(block));
         currentBlock = block;
@@ -498,7 +499,7 @@ public class Analyzer {
         return block;
     }
 
-    public void analyseStmt(Stmt stmt) {
+    public void analyseStmt(Stmt stmt) throws ConstExpException {
         // 缺分号
         if (stmt.isEmpty()) {
             return;
@@ -543,7 +544,7 @@ public class Analyzer {
     /**
      * 变量声明定义
      */
-    public void analyseDecl(Decl decl) {
+    public void analyseDecl(Decl decl) throws ConstExpException {
         // 检查分号
         if (!decl.hasSemicolon()) {
             ErrorTable.getInstance().add(new Error(Error.Type.MISSING_SEMICOLON, decl.getBType().lineNumber()));
@@ -557,11 +558,132 @@ public class Analyzer {
         }
     }
 
-    public void analyseDef(Def def) {
-        // TODO: 维护符号表，重定义错误
-
+    private List<Exp> initFlattenHelper(ArrInitVal init) {
+        InitVal first = init.getFirst();
+        List<Exp> inits = new ArrayList<>();
+        if (first instanceof ExpInitVal) {
+            inits.add(((ExpInitVal) first).getExp());
+        } else {
+            inits.addAll(initFlattenHelper((ArrInitVal) first));
+        }
+        Iterator<InitVal> iter = init.iterFollows();
+        while (iter.hasNext()) {
+            InitVal v = iter.next();
+            if (v instanceof ExpInitVal) {
+                inits.add(((ExpInitVal) v).getExp());
+            } else {
+                inits.addAll(initFlattenHelper((ArrInitVal) v));
+            }
+        }
+        return inits;
     }
 
+    public void analyseDef(Def def) throws ConstExpException {
+        // 维护符号表，重定义错误
+        Ident ident = def.getName();
+        String name = ident.getName();
+        List<Integer> arrayDims = new ArrayList<>();
+        boolean constant = def.isConst();
+        if (currentSymTable.contains(name, false)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
+            return;
+        }
+        if (!def.isArray()) {
+            if (def.isInitialized()) {
+                ExpInitVal init = (ExpInitVal) def.getInitVal();
+                if (init.isConst()) {
+                    int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
+                    Symbol sym = new Symbol(name, currentField(), constant, value);
+                    if (Objects.nonNull(currentFunc)) {
+                        sym.setOffset(stackSize);
+                        stackSize += sym.capacity();
+                    }
+                    currentSymTable.add(sym);
+                } else {
+                    if (Objects.isNull(currentFunc)) { // 没有在函数里，则必须能编译期算出
+                        int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
+                        Symbol sym = new Symbol(name, currentField(), constant, value);
+                        currentSymTable.add(sym);
+                    } else {    // 在函数里的非常量，可以运行时计算
+                        Symbol sym = new Symbol(name, currentField());
+                        sym.setOffset(stackSize);
+                        stackSize += sym.capacity();
+                        currentSymTable.add(sym);
+                        Operand val = analyseExp(init.getExp());
+                        Symbol temp = Symbol.temporary(currentField(), Symbol.Type.INT);
+                        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, val, temp));
+                    }
+                }
+            } else {
+                Symbol sym;
+                if (Objects.isNull(currentFunc)) {
+                    sym = new Symbol(name, currentField(), false, 0);
+                } else {
+                    sym = new Symbol(name, currentField());
+                    sym.setOffset(stackSize);
+                    stackSize += sym.capacity();
+                }
+                currentSymTable.add(sym);
+            }
+        } else {
+            // 加载一下维数和每个维度的长度
+            Iterator<Def.ArrDef> iter = def.iterArrDefs();
+            int totalSize = 1;
+            while (iter.hasNext()) {
+                Def.ArrDef ad = iter.next();
+                int value = new CalcUtil(currentSymTable).calcExp(ad.getArrLength());
+                totalSize *= value;
+                arrayDims.add(value);
+            }
+            if (def.isInitialized()) {
+                ArrInitVal init = (ArrInitVal) def.getInitVal();
+                List<Exp> initExps = initFlattenHelper(init);
+                if (init.isConst() || Objects.isNull(currentFunc)) { // 常量或者位于全局
+                    List<Integer> initValues = new ArrayList<>();
+                    for (Exp exp : initExps) {
+                        int value = new CalcUtil(currentSymTable).calcExp(exp);
+                        initValues.add(value);
+                    }
+                    Symbol sym = new Symbol(name, currentField(), arrayDims, constant, initValues);
+                    if (Objects.nonNull(currentFunc)) {
+                        sym.setOffset(stackSize);
+                        stackSize += sym.capacity();
+                    }
+                    currentSymTable.add(sym);
+                } else {
+                    // 运行时赋值
+                    Symbol sym = new Symbol(name, currentField(), arrayDims);
+                    sym.setOffset(stackSize);
+                    stackSize += sym.capacity();
+                    currentSymTable.add(sym);
+                    int offset = 0;
+                    for (Exp exp: initExps) {
+                        Operand op = analyseExp(exp);
+                        Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), 1);
+                        currentBlock.append(new AddressOp(sym, new Immediate(offset), ptr));
+                        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, op, ptr));
+                        offset++;
+                    }
+                }
+            } else {
+                Symbol sym;
+                if (Objects.isNull(currentFunc)) {
+                    List<Integer> initZeros = new ArrayList<>();
+                    for (int i = 0; i < totalSize; i++) {
+                        initZeros.add(0);
+                    }
+                    sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
+                } else {
+                    sym = new Symbol(name, currentField(), arrayDims);
+                    sym.setOffset(stackSize);
+                    stackSize += sym.capacity();
+                }
+                sym.setOffset(stackSize);
+                stackSize += sym.capacity();
+                currentSymTable.add(sym);
+            }
+        }
+    }
 
     /**
      * 函数与编译单元

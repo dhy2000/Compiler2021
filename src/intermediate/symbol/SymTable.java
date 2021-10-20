@@ -54,7 +54,7 @@ public class SymTable {
         if (symbols.containsKey(name)) {
             return true;
         } else {
-            if (hasParent() && recursive) {
+            if (Objects.nonNull(parent) && recursive) {
                 return parent.contains(name, true);
             }
             return false;
@@ -65,7 +65,7 @@ public class SymTable {
         Symbol symbol = symbols.get(name);
         if (Objects.nonNull(symbol)) {
             return symbol;
-        } else if (recursive && hasParent()) {
+        } else if (recursive && Objects.nonNull(parent)) {
             return parent.get(name, true);
         }
         return null;
