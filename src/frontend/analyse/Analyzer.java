@@ -4,6 +4,7 @@ import frontend.error.Error;
 import frontend.error.ErrorTable;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
+import frontend.syntax.CompUnit;
 import frontend.syntax.Component;
 import frontend.syntax.decl.Decl;
 import frontend.syntax.decl.Def;
@@ -434,5 +435,12 @@ public class Analyzer {
      */
     public void analyseFunc(FuncDef func) {
         // 维护函数符号表
+    }
+
+    /**
+     * 最终顶层编译单元
+     */
+    public void analyseCompUnit(CompUnit unit) {
+        // TODO
     }
 }
