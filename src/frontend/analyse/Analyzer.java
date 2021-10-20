@@ -728,7 +728,6 @@ public class Analyzer {
             }
         }
         // 处理函数体
-        // TODO: int 函数无 return 语句
         BasicBlock block = analyseBlock(func.getBody());
         BasicBlock body = new BasicBlock(name, BasicBlock.Type.FUNC);
         body.append(new Jump(block));
@@ -736,6 +735,21 @@ public class Analyzer {
         meta.loadBody(body);
         currentSymTable = currentSymTable.getParent();
         currentFunc = null;
+        Block funcBody = func.getBody();
+        Iterator<BlockItem> iterItem = funcBody.iterItems();
+        boolean returnFlag = false;
+        while (iterItem.hasNext()) {
+            BlockItem item = iterItem.next();
+            if (!iterItem.hasNext()) {
+                // last statement
+                if (item instanceof Stmt && ((Stmt) item).isSimple() && ((Stmt) item).getSimpleStmt() instanceof ReturnStmt) {
+                    returnFlag = true;
+                }
+            }
+        }
+        if (!(returnType.equals(FuncMeta.ReturnType.INT) && returnFlag)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RETURN, func.getBody().getRightBrace().lineNumber()));
+        }
     }
 
     /**
