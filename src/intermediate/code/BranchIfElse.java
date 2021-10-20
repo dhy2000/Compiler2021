@@ -5,7 +5,7 @@ import intermediate.operand.Operand;
 /**
  * 双分支
  */
-public class BranchIfElse {
+public class BranchIfElse extends ILinkNode {
     private final Operand condition;
     private final BasicBlock thenTarget;
     private final BasicBlock elseTarget;

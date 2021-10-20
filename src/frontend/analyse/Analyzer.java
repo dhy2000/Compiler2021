@@ -14,7 +14,9 @@ import frontend.syntax.expr.multi.MultiExp;
 import frontend.syntax.expr.unary.*;
 import frontend.syntax.expr.unary.Number;
 import frontend.syntax.func.FuncDef;
+import frontend.syntax.stmt.Stmt;
 import frontend.syntax.stmt.complex.Block;
+import frontend.syntax.stmt.complex.BlockItem;
 import frontend.syntax.stmt.complex.IfStmt;
 import frontend.syntax.stmt.complex.WhileStmt;
 import frontend.syntax.stmt.simple.*;
@@ -50,11 +52,8 @@ public class Analyzer {
     }
 
     private BasicBlock currentBlock;
-    private final Stack<BasicBlock> blockStack = new Stack<>(); // 子过程头部(非 BASIC 的块)
-
-    private BasicBlock currentBlock() {
-        return currentBlock;
-    }
+    private Stack<BasicBlock> loopBlocks;
+    private Stack<BasicBlock> loopFollows;
 
     private String currentField() {
         return currentSymTable.getField();
@@ -131,7 +130,7 @@ public class Analyzer {
                 return null;
             }
             Symbol temp = Symbol.temporary(currentField(), Symbol.Type.INT);
-            currentBlock().append(new BinaryOp(tokenToBinaryOp(op), ret, subResult, temp));
+            currentBlock.append(new BinaryOp(tokenToBinaryOp(op), ret, subResult, temp));
             ret = temp;
         }
         return ret;
@@ -200,13 +199,13 @@ public class Analyzer {
             }
             if (func.getReturnType().equals(FuncMeta.ReturnType.VOID)) {
                 if (!error) {
-                    currentBlock().append(new Call(func, params));
+                    currentBlock.append(new Call(func, params));
                 }
                 return null;
             } else {
                 if (!error) {
                     Symbol r = Symbol.temporary(currentField(), Symbol.Type.INT);
-                    currentBlock().append(new Call(func, params, r));
+                    currentBlock.append(new Call(func, params, r));
                     return r;
                 } else {
                     return new Immediate(0);
@@ -221,7 +220,7 @@ public class Analyzer {
             Token op = iterUnaryOp.next();
             Symbol tmp = Symbol.temporary(currentField(), Symbol.Type.INT);
             UnaryOp ir = new UnaryOp(tokenToUnaryOp(op), result, tmp);
-            currentBlock().append(ir);
+            currentBlock.append(ir);
             result = tmp;
         }
         return result;
@@ -262,9 +261,9 @@ public class Analyzer {
             for (int i = indexes.size() - 1; i >= 0; i--) {
                 // offset += arrayIndexes[i] * baseOffset;
                 Symbol prod = Symbol.temporary(currentField(), Symbol.Type.INT);
-                currentBlock().append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
+                currentBlock.append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
                 Symbol sum = Symbol.temporary(currentField(), Symbol.Type.INT);
-                currentBlock().append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
+                currentBlock.append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
                 offset = sum;
             }
             Symbol symbol = currentSymTable.get(val.getName().getName(), true);
@@ -273,7 +272,7 @@ public class Analyzer {
             } else {
                 // ARRAY or POINTER
                 Symbol temp = Symbol.temporary(currentField(), Symbol.Type.POINTER);
-                currentBlock().append(new AddressOp(symbol, offset, temp));
+                currentBlock.append(new AddressOp(symbol, offset, temp));
                 return temp;
             }
         } else if (base instanceof Number) {
@@ -311,7 +310,7 @@ public class Analyzer {
         if (Objects.isNull(rn)) {
             throw new AssertionError("Assign void to LVal");
         }
-        currentBlock().append(new UnaryOp(UnaryOp.Op.MOV, rn, leftSym));
+        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, rn, leftSym));
     }
 
     public void analyseExpStmt(ExpStmt stmt) {
@@ -323,7 +322,7 @@ public class Analyzer {
         LVal left = stmt.getLeftVal();
         // 检查符号表，检查变量类型
         Symbol leftSym = checkLVal(left);
-        currentBlock().append(new Input(leftSym));
+        currentBlock.append(new Input(leftSym));
     }
 
     /**
@@ -374,7 +373,7 @@ public class Analyzer {
             ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
             return;
         }
-        currentBlock().append(new Output(format, params));
+        currentBlock.append(new Output(format, params));
     }
 
     public void analyseReturnStmt(ReturnStmt stmt) {
@@ -385,7 +384,7 @@ public class Analyzer {
         if (currentFunc.getReturnType().equals(FuncMeta.ReturnType.INT)) {
             if (stmt.hasValue()) {
                 Operand value = analyseExp(stmt.getValue());
-                currentBlock().append(new Return(value));
+                currentBlock.append(new Return(value));
             } else {
                 // 有返回值的函数存在 return;
                 assert false;
@@ -394,57 +393,103 @@ public class Analyzer {
             if (stmt.hasValue()) {
                 ErrorTable.getInstance().add(new Error(Error.Type.RETURN_VALUE_VOID, stmt.getReturnTk().lineNumber()));
             } else {
-                currentBlock().append(new Return());
+                currentBlock.append(new Return());
             }
         }
     }
 
     public void analyseBreakStmt(BreakStmt stmt) {
-        // TODO: 就是一个跳转，跳到往上的循环的下一层
-        // TODO: 检查是否非循环块
-        for (int i = blockStack.size() - 1; i >= 0; i--) {
-            BasicBlock blk = blockStack.get(i);
-            if (blk.getType().equals(BasicBlock.Type.LOOP)) {
-                assert i > 0;
-                currentBlock().append(new Jump(blockStack.get(i - 1)));
-                return;
-            }
+        // 就是一个跳转，跳到往上的循环的下一层
+        // 检查是否非循环块
+        if (loopBlocks.empty()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getBreakTk().lineNumber()));
+            return;
         }
-        ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getBreakTk().lineNumber()));
+        BasicBlock follow = loopFollows.peek();
+        currentBlock.append(new Jump(follow));
     }
 
     public void analyseContinueStmt(ContinueStmt stmt) {
-        // TODO: 也是一个跳转，跳到往上的循环的头
-        // TODO: 检查是否非循环块
-        for (int i = blockStack.size() - 1; i >= 0; i--) {
-            BasicBlock blk = blockStack.get(i);
-            if (blk.getType().equals(BasicBlock.Type.LOOP)) {
-                currentBlock().append(new Jump(blk));
-                return;
-            }
+        // 也是一个跳转，跳到往上的循环的头
+        // 检查是否非循环块
+        if (loopBlocks.empty()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getContinueTk().lineNumber()));
+            return;
         }
-        ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getContinueTk().lineNumber()));
+        BasicBlock loop = loopBlocks.peek();
+        currentBlock.append(new Jump(loop));
     }
 
     /* ---- 复杂语句 ---- */
     // 这部分语句会产生新的基本块，以及更深嵌套的符号表
     public void analyseIfStmt(IfStmt stmt) {
-        // TODO: 缺右括号
-        // TODO: 生成新的基本块
+        // 缺右括号
+        if (!stmt.hasRightParenthesis()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
+        }
+        // 生成新的基本块
         Operand cond = analyseCond(stmt.getCondition()); // TODO: 短路求值
-        BasicBlock follow = new BasicBlock("B_" + blockCount, BasicBlock.Type.BASIC);
-        BasicBlock then = new BasicBlock("IF_" + blockCount, BasicBlock.Type.BRANCH);
-
+        BasicBlock current = currentBlock;
+        BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
+        BasicBlock then = new BasicBlock("IF_" + newBlockCount(), BasicBlock.Type.BRANCH);
+        if (stmt.hasElse()) {
+            BasicBlock elseBlk = new BasicBlock("IF_" + newBlockCount(), BasicBlock.Type.BRANCH);
+            current.append(new BranchIfElse(cond, then, elseBlk));
+            currentBlock = then;
+            analyseStmt(stmt.getThenStmt());
+            then.append(new Jump(follow));
+            currentBlock = elseBlk;
+            analyseStmt(stmt.getElseStmt());
+            elseBlk.append(new Jump(follow));
+        } else {
+            current.append(new BranchIfElse(cond, then, follow));
+            currentBlock = then;
+            analyseStmt(stmt.getThenStmt());
+            then.append(new Jump(follow));
+        }
+        currentBlock = follow;
     }
 
-    public void analyseWhileStmt(WhileStmt stmt, BasicBlock follow) {
-        // TODO: 缺右括号
-        // TODO: 生成新的基本块
+    public void analyseWhileStmt(WhileStmt stmt) {
+        // 缺右括号
+        if (!stmt.hasRightParenthesis()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
+        }
+        // 生成新的基本块
+        BasicBlock current = currentBlock;
+        BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
+        BasicBlock body = new BasicBlock("BODY_" + newBlockCount(), BasicBlock.Type.BASIC);
+        BasicBlock loop = new BasicBlock("WHILE_" + newBlockCount(), BasicBlock.Type.LOOP);
+        current.append(new Jump(loop));
+        loopBlocks.push(loop);
+        loopFollows.push(follow);
+        currentBlock = loop;
+        Operand cond = analyseCond(stmt.getCondition()); // TODO: 短路求值
+        loop.append(new BranchIfElse(cond, body, follow));
+        currentBlock = body;
+        analyseStmt(stmt.getStmt());
+        loopFollows.pop();
+        loopBlocks.pop();
+        currentBlock = follow;
     }
 
-    public BasicBlock analyseBlock(Block stmt, String name, BasicBlock.Type type) {
-        // TODO: 一条一条语句去遍历就行
-        return null;
+    public void analyseBlock(Block stmt) {
+        // 一条一条语句去遍历就行
+        Iterator<BlockItem> items = stmt.iterItems();
+        while (items.hasNext()) {
+            BlockItem item = items.next();
+            if (item instanceof Stmt) {
+                analyseStmt((Stmt) item);
+            } else if (item instanceof Decl) {
+                analyseDecl((Decl) item);
+            } else {
+                throw new AssertionError("BlockItem wrong type!");
+            }
+        }
+    }
+
+    public void analyseStmt(Stmt stmt) {
+
     }
 
     /**
