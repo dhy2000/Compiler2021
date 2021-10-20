@@ -7,7 +7,7 @@ public class Compiler {
         // load arguments
         try {
             if (args.length > 0) { Config.loadArgs(args); }
-            else { Config.loadArgs(new String[]{"-S", "-i", "testfile.txt", "-o", "output.txt"}); }
+            else { Config.loadArgs(new String[]{"-E", "-i", "testfile.txt", "-o", "error.txt"}); }
             SysY sysy = new SysY(Config.getSource());
         } catch (Exception e) {
             e.printStackTrace();

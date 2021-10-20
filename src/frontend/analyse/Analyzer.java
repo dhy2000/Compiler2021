@@ -165,45 +165,51 @@ public class Analyzer {
             // match arguments
             List<Operand> params = new ArrayList<>();
             FuncRParams rParams = call.getParams();
+            Exp firstExp = rParams.getFirst();
+            Operand firstParam = analyseExp(firstExp);
+            params.add(firstParam);
             Iterator<Exp> iter = rParams.iterParams();
             List<Symbol> args = func.getParams();
-            Iterator<Symbol> iterArgs = args.listIterator();
-            while (iter.hasNext() && iterArgs.hasNext()) {
+            while (iter.hasNext()) {
                 Exp p = iter.next();
                 Operand r = analyseExp(p);
-                Symbol arg = iterArgs.next();
-                if (Objects.isNull(r)) {
-                    // returning void
-                    ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
-                    break;
-                } else if (r instanceof Immediate) {
-                    // Integer
-                    if (!arg.getType().equals(Symbol.Type.INT)) {
+                params.add(r);
+            }
+
+            boolean error = false;
+            if (params.size() != args.size()) {
+                ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_NUM, ident.lineNumber()));
+                error = true;
+            } else {
+                Iterator<Operand> iterParam = params.listIterator();
+                Iterator<Symbol> iterArg = args.listIterator();
+                while (iterParam.hasNext() && iterArg.hasNext()) {
+                    Operand param = iterParam.next();
+                    Symbol arg = iterArg.next();
+                    if (Objects.isNull(param)) {
                         ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                        error = true;
                         break;
-                    } else {
-                        params.add(r);
                     }
-                } else {
-                    assert r instanceof Symbol;
-                    if (((Symbol) r).getType().equals(arg.getType())) {
-                        params.add(r);
-                    } else {
-                        ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
-                        break;
+                    else if (param instanceof Immediate) {
+                        if (!arg.getType().equals(Symbol.Type.INT)) {
+                            ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                            error = true;
+                            break;
+                        }
+                    }
+                    else {
+                        assert param instanceof Symbol;
+                        if (!((Symbol) param).getType().equals(arg.getType())) {
+                            ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                            error = true;
+                            break;
+                        }
                     }
                 }
             }
-            boolean f1 = iter.hasNext();
-            boolean f2 = iterArgs.hasNext();
-            boolean error = false;
-            if (f1 && f2) {
-                // MISMATCH TYPE
-                error = true;
-            } else if (f1 || f2) {
-                ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_NUM, ident.lineNumber()));
-                error = true;
-            }
+            // check argument match
+
             if (func.getReturnType().equals(FuncMeta.ReturnType.VOID)) {
                 if (!error) {
                     currentBlock.append(new Call(func, params));
@@ -721,6 +727,7 @@ public class Analyzer {
         FuncMeta.ReturnType returnType = func.getType().getType().getType().equals(Token.Type.VOIDTK) ? FuncMeta.ReturnType.VOID : FuncMeta.ReturnType.INT;
         String name = func.getName().getName();
         FuncMeta meta = new FuncMeta(name, returnType, currentSymTable);
+        intermediate.putFunction(meta);
         currentFunc = meta;
         // 遍历形参表
         if (func.hasFParams()) {
@@ -755,7 +762,7 @@ public class Analyzer {
                 }
             }
         }
-        if (!(returnType.equals(FuncMeta.ReturnType.INT) && returnFlag)) {
+        if (!(returnFlag || returnType.equals(FuncMeta.ReturnType.VOID))) {
             ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RETURN, func.getBody().getRightBrace().lineNumber()));
         }
     }
@@ -776,6 +783,7 @@ public class Analyzer {
         }
         FuncMeta mainMeta = new FuncMeta("main", FuncMeta.ReturnType.INT, currentSymTable);
         currentFunc = mainMeta;
+        intermediate.putFunction(mainMeta);
         MainFuncDef main = unit.getMainFunc();
         BasicBlock block = analyseBlock(main.getBody());
         BasicBlock body = new BasicBlock("main", BasicBlock.Type.FUNC);
