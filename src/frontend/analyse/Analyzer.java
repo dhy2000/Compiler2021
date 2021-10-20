@@ -43,10 +43,17 @@ public class Analyzer {
     private FuncMeta currentFunc = null;
 
     private int blockCount = 0;
-    private final Stack<BasicBlock> blockStack = new Stack<>();
+
+    private int newBlockCount() {
+        blockCount += 1;
+        return blockCount;
+    }
+
+    private BasicBlock currentBlock;
+    private final Stack<BasicBlock> blockStack = new Stack<>(); // 子过程头部(非 BASIC 的块)
 
     private BasicBlock currentBlock() {
-        return blockStack.peek();
+        return currentBlock;
     }
 
     private String currentField() {
@@ -421,9 +428,13 @@ public class Analyzer {
 
     /* ---- 复杂语句 ---- */
     // 这部分语句会产生新的基本块，以及更深嵌套的符号表
-    public void analyseIfStmt(IfStmt stmt, BasicBlock follow) {
+    public void analyseIfStmt(IfStmt stmt) {
         // TODO: 缺右括号
         // TODO: 生成新的基本块
+        Operand cond = analyseCond(stmt.getCondition()); // TODO: 短路求值
+        BasicBlock follow = new BasicBlock("B_" + blockCount, BasicBlock.Type.BASIC);
+        BasicBlock then = new BasicBlock("IF_" + blockCount, BasicBlock.Type.BRANCH);
+
     }
 
     public void analyseWhileStmt(WhileStmt stmt, BasicBlock follow) {
