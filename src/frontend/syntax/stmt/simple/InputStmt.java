@@ -60,4 +60,9 @@ public class InputStmt implements SplStmt {
             rightParenthesis.output(ps);
         }
     }
+
+    @Override
+    public int lineNumber() {
+        return getIntTk.lineNumber();
+    }
 }

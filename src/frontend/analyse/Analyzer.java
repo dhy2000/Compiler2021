@@ -1,5 +1,6 @@
 package frontend.analyse;
 
+import exception.ConstExpException;
 import frontend.error.Error;
 import frontend.error.ErrorTable;
 import frontend.lexical.token.Ident;
@@ -9,16 +10,16 @@ import frontend.syntax.Component;
 import frontend.syntax.decl.Decl;
 import frontend.syntax.decl.Def;
 import frontend.syntax.expr.multi.Cond;
+import frontend.syntax.expr.multi.ConstExp;
 import frontend.syntax.expr.multi.Exp;
 import frontend.syntax.expr.multi.MultiExp;
 import frontend.syntax.expr.unary.*;
 import frontend.syntax.expr.unary.Number;
 import frontend.syntax.func.FuncDef;
+import frontend.syntax.func.FuncFParam;
+import frontend.syntax.func.FuncFParams;
 import frontend.syntax.stmt.Stmt;
-import frontend.syntax.stmt.complex.Block;
-import frontend.syntax.stmt.complex.BlockItem;
-import frontend.syntax.stmt.complex.IfStmt;
-import frontend.syntax.stmt.complex.WhileStmt;
+import frontend.syntax.stmt.complex.*;
 import frontend.syntax.stmt.simple.*;
 import intermediate.Intermediate;
 import intermediate.code.*;
@@ -473,7 +474,12 @@ public class Analyzer {
         currentBlock = follow;
     }
 
-    public void analyseBlock(Block stmt) {
+    public BasicBlock analyseBlock(Block stmt) {
+        BasicBlock block = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
+        currentBlock.append(new Jump(block));
+        currentBlock = block;
+        BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
+        currentSymTable = new SymTable(block.getLabel(), currentSymTable);  // symbol push stack
         // 一条一条语句去遍历就行
         Iterator<BlockItem> items = stmt.iterItems();
         while (items.hasNext()) {
@@ -486,29 +492,126 @@ public class Analyzer {
                 throw new AssertionError("BlockItem wrong type!");
             }
         }
+        currentBlock.append(new Jump(follow));
+        currentBlock = follow;
+        currentSymTable = currentSymTable.getParent();  // symbol pop stack
+        return block;
     }
 
     public void analyseStmt(Stmt stmt) {
-
+        // 缺分号
+        if (stmt.isEmpty()) {
+            return;
+        }
+        if (stmt.isSimple()) {
+            // check semi
+            if (!stmt.hasSemicolon()) {
+                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_SEMICOLON, stmt.getSimpleStmt().lineNumber()));
+            }
+            SplStmt simple = stmt.getSimpleStmt();
+            if (simple instanceof AssignStmt) {
+                analyseAssignStmt((AssignStmt) simple);
+            } else if (simple instanceof BreakStmt) {
+                analyseBreakStmt((BreakStmt) simple);
+            } else if (simple instanceof ContinueStmt) {
+                analyseContinueStmt((ContinueStmt) simple);
+            } else if (simple instanceof ExpStmt) {
+                analyseExpStmt((ExpStmt) simple);
+            } else if (simple instanceof InputStmt) {
+                analyseInputStmt((InputStmt) simple);
+            } else if (simple instanceof OutputStmt) {
+                analyseOutputStmt((OutputStmt) simple);
+            } else if (simple instanceof ReturnStmt) {
+                analyseReturnStmt((ReturnStmt) simple);
+            } else {
+                throw new AssertionError("SplStmt wrong type!");
+            }
+        } else {
+            CplStmt complex = stmt.getComplexStmt();
+            if (complex instanceof IfStmt) {
+                analyseIfStmt((IfStmt) complex);
+            } else if (complex instanceof WhileStmt) {
+                analyseWhileStmt((WhileStmt) complex);
+            } else if (complex instanceof Block) {
+                analyseBlock((Block) complex);
+            } else {
+                throw new AssertionError("CplStmt wrong type!");
+            }
+        }
     }
 
     /**
      * 变量声明定义
      */
     public void analyseDecl(Decl decl) {
-        // TODO: 这部分好像没啥东西，主要是看是不是常量
+        // 检查分号
+        if (!decl.hasSemicolon()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_SEMICOLON, decl.getBType().lineNumber()));
+        }
+        Def first = decl.getFirst();
+        analyseDef(first);
+        Iterator<Def> iter = decl.iterFollows();
+        while (iter.hasNext()) {
+            Def def = iter.next();
+            analyseDef(def);
+        }
     }
 
     public void analyseDef(Def def) {
         // TODO: 维护符号表，重定义错误
+
     }
 
 
     /**
      * 函数与编译单元
      */
-    public void analyseFunc(FuncDef func) {
+
+    private void funcFParamHelper(FuncFParam param, FuncMeta meta) throws ConstExpException {
+        String argName = param.getName().getName();
+        Symbol arg;
+        if (!param.isArray()) {
+            arg = new Symbol(param.getName().getName(), meta.getParamTable().getField());
+        } else {
+            List<Integer> dimSizes = new ArrayList<>();
+            dimSizes.add(0); // first dim is ignored
+            Iterator<FuncFParam.ArrayDim> iter = param.iterFollowDims();
+            while (iter.hasNext()) {
+                FuncFParam.ArrayDim dim = iter.next();
+                ConstExp len = dim.getLength();
+                int length = new CalcUtil(currentSymTable).calcExp(len);
+                dimSizes.add(length);
+            }
+            arg = new Symbol(param.getName().getName(), meta.getParamTable().getField(), dimSizes, 1);
+        }
+        meta.addParam(arg);
+    }
+
+    public void analyseFunc(FuncDef func) throws ConstExpException {
         // 维护函数符号表
+        FuncMeta.ReturnType returnType = func.getType().getType().getType().equals(Token.Type.VOIDTK) ? FuncMeta.ReturnType.VOID : FuncMeta.ReturnType.INT;
+        String name = func.getName().getName();
+        FuncMeta meta = new FuncMeta(name, returnType, currentSymTable);
+        currentFunc = meta;
+        // 遍历形参表
+        if (func.hasFParams()) {
+            FuncFParams fParams = func.getFParams();
+            FuncFParam first = fParams.getFirst();
+            funcFParamHelper(first, meta);
+            Iterator<FuncFParam> iter = fParams.iterFollows();
+            while (iter.hasNext()) {
+                FuncFParam param = iter.next();
+                funcFParamHelper(param, meta);
+            }
+        }
+        // 处理函数体
+        BasicBlock block = analyseBlock(func.getBody());
+        BasicBlock body = new BasicBlock(name, BasicBlock.Type.FUNC);
+        body.append(new Jump(block));
+        currentBlock = block;
+        meta.loadBody(body);
+        currentSymTable = currentSymTable.getParent();
+        currentFunc = null;
     }
 
     /**

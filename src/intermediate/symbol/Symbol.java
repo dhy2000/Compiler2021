@@ -24,7 +24,7 @@ public class Symbol implements Operand {
     private int offset = -1; // Offset to $sp, -1 表示暂时未分配栈上空间
 
     private final boolean constant;
-    private final List<Integer> dimSize;
+    private final List<Integer> dimSize;    // 如果是指针则第一维没用
 
     private final Integer initValue;        // 整数变量的初值
     private final List<Integer> initArray;  // 数组的初值（展平了的）

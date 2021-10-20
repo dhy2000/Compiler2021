@@ -7,4 +7,5 @@ import frontend.syntax.Component;
  * 输出自己时不输出名字，因为完整的 Stmt 需要分号
  */
 public interface SplStmt extends Component {
+    public int lineNumber();
 }

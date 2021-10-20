@@ -23,7 +23,7 @@ public class Decl implements BlockItem, Constable {
         assert (Objects.isNull(constTk)) || constTk.getType().equals(Token.Type.CONSTTK);
         assert bType.getType().equals(Token.Type.INTTK);
         assert separators.size() == follows.size();
-        assert semicolon.getType().equals(Token.Type.SEMICN);
+        assert Objects.isNull(semicolon) || semicolon.getType().equals(Token.Type.SEMICN);
         this.constTk = constTk;
         this.bType = bType;
         this.first = first;
@@ -35,7 +35,7 @@ public class Decl implements BlockItem, Constable {
     public Decl(Token bType, Def first, List<Token> separators, List<Def> follows, Token semicolon) {
         assert bType.getType().equals(Token.Type.INTTK);
         assert separators.size() == follows.size();
-        assert semicolon.getType().equals(Token.Type.SEMICN);
+        assert Objects.isNull(semicolon) || semicolon.getType().equals(Token.Type.SEMICN);
         this.constTk = null;
         this.bType = bType;
         this.first = first;
@@ -46,7 +46,7 @@ public class Decl implements BlockItem, Constable {
 
     public Decl(Token bType, Def first, Token semicolon) {
         assert bType.getType().equals(Token.Type.INTTK);
-        assert semicolon.getType().equals(Token.Type.SEMICN);
+        assert Objects.isNull(semicolon) || semicolon.getType().equals(Token.Type.SEMICN);
         this.constTk = null;
         this.bType = bType;
         this.first = first;
@@ -76,6 +76,10 @@ public class Decl implements BlockItem, Constable {
         return semicolon;
     }
 
+    public boolean hasSemicolon() {
+        return Objects.nonNull(semicolon);
+    }
+
     @Override
     public boolean isConst() {
         return Objects.nonNull(constTk);
@@ -97,7 +101,9 @@ public class Decl implements BlockItem, Constable {
             separator.output(ps);
             followDef.output(ps);
         }
-        semicolon.output(ps);
+        if (Objects.nonNull(semicolon)) {
+            semicolon.output(ps);
+        }
         if (isConst()) {
             ps.println("<ConstDecl>");
         } else {

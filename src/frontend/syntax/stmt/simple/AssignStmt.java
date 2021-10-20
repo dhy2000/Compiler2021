@@ -36,4 +36,9 @@ public class AssignStmt implements SplStmt {
         assignTk.output(ps);
         exp.output(ps);
     }
+
+    @Override
+    public int lineNumber() {
+        return leftVal.getName().lineNumber();
+    }
 }

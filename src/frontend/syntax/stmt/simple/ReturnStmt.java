@@ -42,4 +42,9 @@ public class ReturnStmt implements SplStmt {
             value.output(ps);
         }
     }
+
+    @Override
+    public int lineNumber() {
+        return returnTk.lineNumber();
+    }
 }

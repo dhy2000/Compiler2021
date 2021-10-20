@@ -21,4 +21,9 @@ public class BreakStmt implements SplStmt {
     public void output(PrintStream ps) {
         breakTk.output(ps);
     }
+
+    @Override
+    public int lineNumber() {
+        return breakTk.lineNumber();
+    }
 }

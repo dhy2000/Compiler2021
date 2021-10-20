@@ -18,7 +18,7 @@ public class Stmt implements BlockItem {
 
     // Empty Statement
     public Stmt(Token semicolon) {
-        assert Objects.isNull(semicolon) || semicolon.getType().equals(Token.Type.SEMICN);
+        assert semicolon.getType().equals(Token.Type.SEMICN);
         this.simpleStmt = null;
         this.complexStmt = null;
         this.semicolon = semicolon;

@@ -21,4 +21,9 @@ public class ContinueStmt implements SplStmt {
     public void output(PrintStream ps) {
         continueTk.output(ps);
     }
+
+    @Override
+    public int lineNumber() {
+        return continueTk.lineNumber();
+    }
 }

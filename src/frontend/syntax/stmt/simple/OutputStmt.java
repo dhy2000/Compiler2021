@@ -81,4 +81,9 @@ public class OutputStmt implements SplStmt {
             rightParenthesis.output(ps);
         }
     }
+
+    @Override
+    public int lineNumber() {
+        return printfTk.lineNumber();
+    }
 }
