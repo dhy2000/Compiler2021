@@ -39,6 +39,8 @@ public class Analyzer {
 
     private final Intermediate intermediate = new Intermediate(); // 最终生成的中间代码
 
+    private FuncMeta currentFunc = null;
+
     private int blockCount = 0;
     private final Stack<BasicBlock> blockStack = new Stack<>();
 
@@ -105,6 +107,7 @@ public class Analyzer {
      * @return 作为该表达式运算结果的符号
      */
     public Operand analyseBinaryExp(MultiExp<?> exp) {
+        // TODO: 逻辑运算的短路求值
         Component first = exp.getFirst();
         Operand ret = analyseBinaryOrUnaryExp(first);
         if (Objects.isNull(ret)) {
@@ -310,18 +313,82 @@ public class Analyzer {
 
     public void analyseInputStmt(InputStmt stmt) {
         LVal left = stmt.getLeftVal();
-        // TODO: 检查符号表，检查变量类型
+        // 检查符号表，检查变量类型
         Symbol leftSym = checkLVal(left);
         currentBlock().append(new Input(leftSym));
     }
 
+    /**
+     * 对格式字符串进行检查
+     * @param format 格式字符串
+     * @return -1 if 格式字符串格式错误，>= 0 if 格式字符串合法，返回 "%d" 的个数
+     */
+    private int checkFormatString(String format) {
+        int l = format.length();
+        int count = 0;
+        for (int i = 0; i < l; i++) {
+            char c = format.charAt(i);
+            if (c != 32 && c != 33 && !(c >= 40 && c <= 126)) {
+                if (c == '%') {
+                    if (i < l - 1 && format.charAt(i + 1) == 'd') {
+                        count = count + 1;
+                        continue;
+                    } else {
+                        return -1;
+                    }
+                }
+                return -1;
+            }
+            if (c == 92 && (i >= l - 1 || format.charAt(i + 1) != 'n')) {
+                return -1;
+            }
+        }
+        return count;
+    }
+
     public void analyseOutputStmt(OutputStmt stmt) {
-        // TODO: 检查 FormatString, 检查参数和格式符的个数(以及类型)
-        // TODO: 生成输出语句
+        // 检查 FormatString, 检查参数和格式符的个数(以及类型)
+        // 生成输出语句
+        String format = stmt.getFormatString().getInner();
+        int count = checkFormatString(format);
+        if (count < 0) {
+            ErrorTable.getInstance().add(new Error(Error.Type.ILLEGAL_CHAR, stmt.getFormatString().lineNumber()));
+            return;
+        }
+        List<Operand> params = new ArrayList<>();
+        Iterator<Exp> iter = stmt.iterParameters();
+        while (iter.hasNext()) {
+            Exp exp = iter.next();
+            Operand param = analyseExp(exp);
+            params.add(param);
+        }
+        if (params.size() != count) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
+            return;
+        }
+        currentBlock().append(new Output(format, params));
     }
 
     public void analyseReturnStmt(ReturnStmt stmt) {
-        // TODO: return 语句类型和当前函数的类型是不是匹配
+        // return 语句类型和当前函数的类型是不是匹配
+        if (Objects.isNull(currentFunc)) {
+            throw new AssertionError("Return in no function!");
+        }
+        if (currentFunc.getReturnType().equals(FuncMeta.ReturnType.INT)) {
+            if (stmt.hasValue()) {
+                Operand value = analyseExp(stmt.getValue());
+                currentBlock().append(new Return(value));
+            } else {
+                // 有返回值的函数存在 return;
+                assert false;
+            }
+        } else {
+            if (stmt.hasValue()) {
+                ErrorTable.getInstance().add(new Error(Error.Type.RETURN_VALUE_VOID, stmt.getReturnTk().lineNumber()));
+            } else {
+                currentBlock().append(new Return());
+            }
+        }
     }
 
     public void analyseBreakStmt(BreakStmt stmt) {
