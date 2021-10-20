@@ -17,6 +17,7 @@ import frontend.syntax.expr.unary.Number;
 import frontend.syntax.func.FuncDef;
 import frontend.syntax.func.FuncFParam;
 import frontend.syntax.func.FuncFParams;
+import frontend.syntax.func.MainFuncDef;
 import frontend.syntax.stmt.Stmt;
 import frontend.syntax.stmt.complex.*;
 import frontend.syntax.stmt.simple.*;
@@ -727,6 +728,7 @@ public class Analyzer {
             }
         }
         // 处理函数体
+        // TODO: int 函数无 return 语句
         BasicBlock block = analyseBlock(func.getBody());
         BasicBlock body = new BasicBlock(name, BasicBlock.Type.FUNC);
         body.append(new Jump(block));
@@ -739,7 +741,25 @@ public class Analyzer {
     /**
      * 最终顶层编译单元
      */
-    public void analyseCompUnit(CompUnit unit) {
-        // TODO
+    public void analyseCompUnit(CompUnit unit) throws ConstExpException {
+        Iterator<Decl> iterVars = unit.iterGlobalVars();
+        while (iterVars.hasNext()) {
+            Decl decl = iterVars.next();
+            analyseDecl(decl);
+        }
+        Iterator<FuncDef> iterFunc = unit.iterFunctions();
+        while (iterFunc.hasNext()) {
+            FuncDef fun = iterFunc.next();
+            analyseFunc(fun);
+        }
+        FuncMeta mainMeta = new FuncMeta("main", FuncMeta.ReturnType.INT, currentSymTable);
+        MainFuncDef main = unit.getMainFunc();
+        BasicBlock block = analyseBlock(main.getBody());
+        BasicBlock body = new BasicBlock("main", BasicBlock.Type.FUNC);
+        body.append(new Jump(block));
+        currentBlock = block;
+        mainMeta.loadBody(body);
+        currentSymTable = currentSymTable.getParent();
+        currentFunc = null;
     }
 }
