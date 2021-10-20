@@ -11,6 +11,7 @@ public class Compiler {
             SysY sysy = new SysY(Config.getSource());
         } catch (Exception e) {
             e.printStackTrace();
+            throw new AssertionError(e);
         }
     }
 }

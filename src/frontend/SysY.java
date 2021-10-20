@@ -44,6 +44,7 @@ public class SysY {
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
+            throw new AssertionError(e);
         }
     }
 
