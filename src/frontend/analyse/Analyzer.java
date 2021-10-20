@@ -43,6 +43,10 @@ public class Analyzer {
 
     private final Intermediate intermediate = new Intermediate(); // 最终生成的中间代码
 
+    public Intermediate getIntermediate() {
+        return intermediate;
+    }
+
     private FuncMeta currentFunc = null;
 
     private int blockCount = 0;
@@ -244,7 +248,7 @@ public class Analyzer {
         } else if (base instanceof LVal) {
             // 符号表相关错误(变量未定义等)
             LVal val = (LVal) base;
-            if (currentSymTable.contains(val.getName().getName(), true)) {
+            if (!currentSymTable.contains(val.getName().getName(), true)) {
                 ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
                 return new Immediate(0);
             }
@@ -478,7 +482,9 @@ public class Analyzer {
 
     public BasicBlock analyseBlock(Block stmt) throws ConstExpException {
         BasicBlock block = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
-        currentBlock.append(new Jump(block));
+        if (Objects.nonNull(currentBlock)) {
+            currentBlock.append(new Jump(block));
+        }
         currentBlock = block;
         BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
         currentSymTable = new SymTable(block.getLabel(), currentSymTable);  // symbol push stack
@@ -728,12 +734,14 @@ public class Analyzer {
             }
         }
         // 处理函数体
+        currentSymTable = meta.getParamTable();
         BasicBlock block = analyseBlock(func.getBody());
         BasicBlock body = new BasicBlock(name, BasicBlock.Type.FUNC);
         body.append(new Jump(block));
         currentBlock = block;
         meta.loadBody(body);
         currentSymTable = currentSymTable.getParent();
+
         currentFunc = null;
         Block funcBody = func.getBody();
         Iterator<BlockItem> iterItem = funcBody.iterItems();
@@ -767,6 +775,7 @@ public class Analyzer {
             analyseFunc(fun);
         }
         FuncMeta mainMeta = new FuncMeta("main", FuncMeta.ReturnType.INT, currentSymTable);
+        currentFunc = mainMeta;
         MainFuncDef main = unit.getMainFunc();
         BasicBlock block = analyseBlock(main.getBody());
         BasicBlock body = new BasicBlock("main", BasicBlock.Type.FUNC);
