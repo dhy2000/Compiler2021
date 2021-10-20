@@ -30,6 +30,10 @@ public class BasicBlock extends ILinkNode {
         return getNext();
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public void setHead(ILinkNode node) {
         setNext(node);
         ILinkNode tail = node;

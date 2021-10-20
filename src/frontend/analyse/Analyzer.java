@@ -395,12 +395,30 @@ public class Analyzer {
     public void analyseBreakStmt(BreakStmt stmt) {
         // TODO: 就是一个跳转，跳到往上的循环的下一层
         // TODO: 检查是否非循环块
+        for (int i = blockStack.size() - 1; i >= 0; i--) {
+            BasicBlock blk = blockStack.get(i);
+            if (blk.getType().equals(BasicBlock.Type.LOOP)) {
+                assert i > 0;
+                currentBlock().append(new Jump(blockStack.get(i - 1)));
+                return;
+            }
+        }
+        ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getBreakTk().lineNumber()));
     }
 
     public void analyseContinueStmt(ContinueStmt stmt) {
         // TODO: 也是一个跳转，跳到往上的循环的头
         // TODO: 检查是否非循环块
+        for (int i = blockStack.size() - 1; i >= 0; i--) {
+            BasicBlock blk = blockStack.get(i);
+            if (blk.getType().equals(BasicBlock.Type.LOOP)) {
+                currentBlock().append(new Jump(blk));
+                return;
+            }
+        }
+        ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getContinueTk().lineNumber()));
     }
+
     /* ---- 复杂语句 ---- */
     // 这部分语句会产生新的基本块，以及更深嵌套的符号表
     public void analyseIfStmt(IfStmt stmt, BasicBlock follow) {
