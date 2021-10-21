@@ -655,6 +655,11 @@ public class CodeGenerator {
             ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
             return;
         }
+        // 和函数名相同也算重复定义
+        if (intermediate.getFunctions().containsKey(name)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
+            return;
+        }
         if (!def.isArray()) {
             if (def.isInitialized()) {
                 ExpInitVal init = (ExpInitVal) def.getInitVal();
@@ -772,6 +777,11 @@ public class CodeGenerator {
     private void funcFParamHelper(FuncFParam param, FuncMeta meta) throws ConstExpException {
         String argName = param.getName().getName();
         Symbol arg;
+        // 形参不能重名
+        if (meta.getParamTable().contains(argName, false)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, param.getName().lineNumber()));
+            return;
+        }
         if (!param.isArray()) {
             arg = new Symbol(param.getName().getName(), meta.getParamTable().getField());
         } else {
@@ -806,6 +816,14 @@ public class CodeGenerator {
         // 维护函数符号表
         FuncMeta.ReturnType returnType = func.getType().getType().getType().equals(Token.Type.VOIDTK) ? FuncMeta.ReturnType.VOID : FuncMeta.ReturnType.INT;
         String name = func.getName().getName();
+        if (intermediate.getFunctions().containsKey(name)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
+            return;
+        }
+        if (currentSymTable.contains(name, false)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
+            return;
+        }
         FuncMeta meta = new FuncMeta(name, returnType, currentSymTable);
         intermediate.putFunction(meta);
         currentFunc = meta;
