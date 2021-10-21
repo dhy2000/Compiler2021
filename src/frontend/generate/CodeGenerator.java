@@ -717,7 +717,7 @@ public class CodeGenerator {
                     int offset = 0;
                     for (Exp exp: initExps) {
                         Operand op = analyseExp(exp);
-                        Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), 1);
+                        Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), false);
                         currentBlock.append(new AddressOffset(sym, new Immediate(offset), ptr));
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, op, ptr));
                         offset++;
@@ -761,7 +761,7 @@ public class CodeGenerator {
                 int length = new CalcUtil(currentSymTable).calcExp(len);
                 dimSizes.add(length);
             }
-            arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, 1);
+            arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, false);
         }
         meta.addParam(arg);
     }

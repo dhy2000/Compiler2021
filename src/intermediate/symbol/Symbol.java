@@ -92,22 +92,22 @@ public class Symbol implements Operand {
         this.dimBase = suffixProduct(dimSize, false);
     }
 
-    public Symbol(String name, String field, List<Integer> dimSize, int nothing) {
+    public Symbol(String name, String field, List<Integer> dimSize, boolean constant) {
         this.name = name;
         this.field = field;
         this.type = Type.POINTER;
-        this.constant = false;
+        this.constant = constant;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initValue = null;
         this.initArray = Collections.emptyList();
         this.dimBase = suffixProduct(dimSize, true);
     }
 
-    public Symbol(String name, String field, int nothing) {
+    public Symbol(String name, String field, boolean constant) {
         this.name = name;
         this.field = field;
         this.type = Type.POINTER;
-        this.constant = false;
+        this.constant = constant;
         this.dimSize = Collections.emptyList();
         this.initValue = null;
         this.initArray = Collections.emptyList();
@@ -199,7 +199,7 @@ public class Symbol implements Operand {
             reducedDimSize.add(dimSize.get(i));
         }
         tempCount = tempCount + 1;
-        return new Symbol("ptr_" + tempCount, field, reducedDimSize, 1);
+        return new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
     }
 
     public Symbol subPointer(int depth) {
@@ -209,7 +209,7 @@ public class Symbol implements Operand {
             reducedDimSize.add(dimSize.get(i));
         }
         tempCount = tempCount + 1;
-        return new Symbol("ptr_" + tempCount, field, reducedDimSize, 1);
+        return new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class Symbol implements Operand {
         assert type.equals(Type.INT) || type.equals(Type.POINTER);
         tempCount = tempCount + 1;
         if (type.equals(Type.POINTER)) {
-            return new Symbol("ptr_" + tempCount, field, 1);
+            return new Symbol("ptr_" + tempCount, field, false);
         } else {
             return new Symbol("tmp_" + tempCount, field);
         }
