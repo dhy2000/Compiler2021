@@ -230,7 +230,7 @@ public class CodeGenerator {
                 }
             }
         } else if (base instanceof PrimaryExp) {
-            result = analyseBasePrimaryExp(((PrimaryExp) base).getBase());
+            result = analyseBasePrimaryExp(((PrimaryExp) base).getBase(), false);
         }
         assert Objects.nonNull(result); // null means void function return
         Iterator<Token> iterUnaryOp = exp.iterUnaryOp();
@@ -247,9 +247,10 @@ public class CodeGenerator {
     /**
      * 分析基础一元表达式 (子表达式, 左值，字面量）
      * @param base 一元表达式
+     * @param left 待分析的一元表达式是否为真正即将被赋值的左值
      * @return 表达式结果对应的符号, 左值错误则返回立即数 0
      */
-    public Operand analyseBasePrimaryExp(BasePrimaryExp base) {
+    public Operand analyseBasePrimaryExp(BasePrimaryExp base, boolean left) {
         if (base instanceof SubExp) {
             SubExp sub = (SubExp) base;
             if (!((SubExp) base).hasRightParenthesis()) {
@@ -263,10 +264,14 @@ public class CodeGenerator {
                 ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
                 return new Immediate(0);
             }
+            Symbol symbol = currentSymTable.get(val.getName().getName(), true);
             // 缺中括号错误
             Iterator<LVal.Index> iterIndex = val.iterIndexes();
             List<Operand> indexes = new ArrayList<>();
             while (iterIndex.hasNext()) {
+                if (symbol.getType().equals(Symbol.Type.INT)) {
+                    throw new AssertionError("int symbol has index");
+                }
                 LVal.Index index = iterIndex.next();
                 if (!index.hasRightBracket()) {
                     ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, index.getLeftBracket().lineNumber()));
@@ -274,24 +279,46 @@ public class CodeGenerator {
                 }
                 indexes.add(analyseExp(index.getIndex()));
             }
-            Operand offsetBase = new Immediate(1);
+            if ((!indexes.isEmpty() && symbol.getType().equals(Symbol.Type.INT))
+                    || ( symbol.getType().equals(Symbol.Type.ARRAY) && indexes.size() > symbol.getDimCount())
+                    || (symbol.getType().equals(Symbol.Type.POINTER) && indexes.size() > symbol.getDimCount() + 1)) {
+                throw new AssertionError("Array indexes more than dimension!");
+            }
             Operand offset = new Immediate(0);
             for (int i = indexes.size() - 1; i >= 0; i--) {
                 // offset += arrayIndexes[i] * baseOffset;
                 Symbol prod = Symbol.temporary(currentField(), Symbol.Type.INT);
+                Operand offsetBase = new Immediate(symbol.getBaseOfDim(i)); // TODO: difference between array and pointer
                 currentBlock.append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
                 Symbol sum = Symbol.temporary(currentField(), Symbol.Type.INT);
                 currentBlock.append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
                 offset = sum;
             }
-            Symbol symbol = currentSymTable.get(val.getName().getName(), true);
             if (symbol.getType().equals(Symbol.Type.INT)) {
                 return symbol;
+            } else if (symbol.getType().equals(Symbol.Type.ARRAY)) {
+                // ARRAY
+                int depth = indexes.size();
+                Symbol ptr = symbol.toPointer().subPointer(depth);
+                currentBlock.append(new AddressOffset(symbol, offset, ptr));
+                if (left || depth < symbol.getDimCount()) {
+                    return ptr;
+                } else {
+                    Symbol value = Symbol.temporary(currentField(), Symbol.Type.INT);
+                    currentBlock.append(new PointerOp(PointerOp.Op.LOAD, ptr, value));
+                    return value;
+                }
             } else {
-                // ARRAY or POINTER
-                Symbol temp = Symbol.temporary(currentField(), Symbol.Type.POINTER);
-                currentBlock.append(new AddressOffset(symbol, offset, temp));
-                return temp;
+                // POINTER
+                int depth = indexes.size();
+                Symbol ptr = symbol.subPointer(depth);
+                if (left || depth + 1 < symbol.getDimCount()) {
+                    return ptr;
+                } else {
+                    Symbol value = Symbol.temporary(currentField(), Symbol.Type.INT);
+                    currentBlock.append(new PointerOp(PointerOp.Op.LOAD, ptr, value));
+                    return value;
+                }
             }
         } else if (base instanceof Number) {
             return new Immediate(((Number) base).getValue().getValue());
@@ -307,8 +334,8 @@ public class CodeGenerator {
     // 简单语句只会生成基本的中间代码（四元式条目），只需追加到当前的块中即可
 
     private Symbol checkLVal(LVal left) {
-        Operand ln = analyseBasePrimaryExp(left);
-        if (Objects.isNull(ln) || ln instanceof Intermediate) {
+        Operand ln = analyseBasePrimaryExp(left, true);
+        if (Objects.isNull(ln) || ln instanceof Immediate) {
             return null;
         }
         if (!(ln instanceof Symbol)) {
@@ -331,7 +358,15 @@ public class CodeGenerator {
         if (Objects.isNull(rn)) {
             throw new AssertionError("Assign void to LVal");
         }
-        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, rn, leftSym));
+        if (Objects.isNull(leftSym)) {
+            return;
+        }
+        assert !leftSym.getType().equals(Symbol.Type.ARRAY);
+        if (leftSym.getType().equals(Symbol.Type.POINTER)) {
+            currentBlock.append(new PointerOp(PointerOp.Op.STORE, leftSym, rn));
+        } else {
+            currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, rn, leftSym));
+        }
     }
 
     public void analyseExpStmt(ExpStmt stmt) {
@@ -449,7 +484,7 @@ public class CodeGenerator {
             ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
         }
         // 生成新的基本块
-        Operand cond = analyseCond(stmt.getCondition()); // TODO: 短路求值
+        Operand cond = analyseCond(stmt.getCondition());
         BasicBlock current = currentBlock;
         BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
         BasicBlock then = new BasicBlock("IF_" + newBlockCount(), BasicBlock.Type.BRANCH);
@@ -485,7 +520,7 @@ public class CodeGenerator {
         loopBlocks.push(loop);
         loopFollows.push(follow);
         currentBlock = loop;
-        Operand cond = analyseCond(stmt.getCondition()); // TODO: 短路求值
+        Operand cond = analyseCond(stmt.getCondition());
         loop.append(new BranchIfElse(cond, body, follow));
         currentBlock = body;
         analyseStmt(stmt.getStmt());
@@ -532,7 +567,7 @@ public class CodeGenerator {
             }
             SplStmt simple = stmt.getSimpleStmt();
             if (simple instanceof AssignStmt) {
-                analyseAssignStmt((AssignStmt) simple); // TODO: fix bug
+                analyseAssignStmt((AssignStmt) simple);
             } else if (simple instanceof BreakStmt) {
                 analyseBreakStmt((BreakStmt) simple);
             } else if (simple instanceof ContinueStmt) {
@@ -711,7 +746,6 @@ public class CodeGenerator {
     /**
      * 函数与编译单元
      */
-
     private void funcFParamHelper(FuncFParam param, FuncMeta meta) throws ConstExpException {
         String argName = param.getName().getName();
         Symbol arg;

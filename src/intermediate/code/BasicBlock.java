@@ -1,5 +1,7 @@
 package intermediate.code;
 
+import java.util.Objects;
+
 /**
  * 基本块, 连续执行的若干条中间指令。
  * 该节点是基本块的头部，有一个标签来标识。
@@ -63,7 +65,7 @@ public class BasicBlock extends ILinkNode {
     public String toString() {
         StringBuilder sb = new StringBuilder("[BLOCK_" + type.name() + "]" + getLabel() + ":\n");
         ILinkNode node = getHead();
-        while (node.hasNext()) {
+        while (Objects.nonNull(node)) {
             sb.append(node).append("\n");
             node = node.getNext();
         }

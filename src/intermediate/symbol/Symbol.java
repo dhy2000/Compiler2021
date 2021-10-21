@@ -32,19 +32,17 @@ public class Symbol implements Operand {
     private final Integer initValue;        // 整数变量的初值
     private final List<Integer> initArray;  // 数组的初值（展平了的）
 
-    private static List<Integer> suffixProduct(List<Integer> list, boolean order) {
+    private static List<Integer> suffixProduct(List<Integer> list, boolean pointer) {
         List<Integer> suffix = new ArrayList<>();
         int prod = 1;
         List<Integer> revInput = new ArrayList<>(list);
         Collections.reverse(revInput);
         for (int num : revInput) {
-            if (order) {    // array
-                suffix.add(prod);
-                prod *= num;
-            } else {        // pointer
-                prod *= num;
-                suffix.add(prod);
-            }
+            suffix.add(prod);
+            prod *= num;
+        }
+        if (pointer) {
+            suffix.add(prod);
         }
         Collections.reverse(suffix);
         return Collections.unmodifiableList(suffix);
@@ -80,7 +78,7 @@ public class Symbol implements Operand {
         this.initValue = null;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initArray = Collections.emptyList();
-        this.dimBase = suffixProduct(dimSize, true);
+        this.dimBase = suffixProduct(dimSize, false);
     }
 
     public Symbol(String name, String field, List<Integer> dimSize, boolean constant, List<Integer> init) {
@@ -91,7 +89,7 @@ public class Symbol implements Operand {
         this.initValue = null;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initArray = Collections.unmodifiableList(init);
-        this.dimBase = suffixProduct(dimSize, true);
+        this.dimBase = suffixProduct(dimSize, false);
     }
 
     public Symbol(String name, String field, List<Integer> dimSize, int nothing) {
@@ -102,7 +100,7 @@ public class Symbol implements Operand {
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initValue = null;
         this.initArray = Collections.emptyList();
-        this.dimBase = suffixProduct(dimSize, false);
+        this.dimBase = suffixProduct(dimSize, true);
     }
 
     public Symbol(String name, String field, int nothing) {
@@ -113,7 +111,7 @@ public class Symbol implements Operand {
         this.dimSize = Collections.emptyList();
         this.initValue = null;
         this.initArray = Collections.emptyList();
-        this.dimBase = Collections.emptyList();
+        this.dimBase = suffixProduct(dimSize, true);
     }
 
 
@@ -153,6 +151,10 @@ public class Symbol implements Operand {
         return constant;
     }
 
+    public int getDimCount() {
+        return dimSize.size();
+    }
+
     public List<Integer> getDimSize() {
         return dimSize;
     }
@@ -188,6 +190,26 @@ public class Symbol implements Operand {
         } else {
             return SIZEOF_INT * dimSize.stream().reduce((i, i2) -> i * i2).orElse(1);
         }
+    }
+
+    public Symbol toPointer() {
+        assert type.equals(Type.ARRAY);
+        ArrayList<Integer> reducedDimSize = new ArrayList<>();
+        for (int i = 1; i < dimSize.size(); i++) {
+            reducedDimSize.add(dimSize.get(i));
+        }
+        tempCount = tempCount + 1;
+        return new Symbol("ptr_" + tempCount, field, reducedDimSize, 1);
+    }
+
+    public Symbol subPointer(int depth) {
+        assert type.equals(Type.POINTER);
+        ArrayList<Integer> reducedDimSize = new ArrayList<>();
+        for (int i = depth; i < dimSize.size(); i++) {
+            reducedDimSize.add(dimSize.get(i));
+        }
+        tempCount = tempCount + 1;
+        return new Symbol("ptr_" + tempCount, field, reducedDimSize, 1);
     }
 
     @Override
