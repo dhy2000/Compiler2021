@@ -57,7 +57,7 @@ public class DeclParser {
                 semi = next;
                 break;
             } else if (!next.getType().equals(Token.Type.COMMA)) {
-                throw new UnexpectedTokenException(next.lineNumber(), syntax, next, Token.Type.COMMA);
+                break; // missing semicolon
             }
             Ident nextIdent = (Ident) ParserUtil.getSpecifiedToken(Token.Type.IDENFR, syntax, iterator, maxLineNum);
             Def def = parseDef(constant, nextIdent);

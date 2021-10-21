@@ -42,11 +42,10 @@ public class SysY {
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
-            if (e instanceof UnexpectedTokenException) {    //  testfile 5, 8, maybe missing ';' or ']' or ')'
-                UnexpectedTokenException ue = (UnexpectedTokenException) e;
-                if (ue.hasExpected() && ue.getExpected().equals(Token.Type.RBRACK)) { // testfile 5 missing ']'
-                    throw new AssertionError(e);
-                }
+            if (e instanceof UnexpectedTokenException) {    //  testfile 5, 8
+                // testfile 5 missing ']', testfile 8 ','
+                // IDENFR, LBRACE, INTTK, LPARENT, STRCON, COMMA
+                throw new AssertionError(e);
             }
             // throw new AssertionError(e);
         } catch (Exception e) {
