@@ -574,20 +574,22 @@ public class Analyzer {
     }
 
     private List<Exp> initFlattenHelper(ArrInitVal init) {
-        InitVal first = init.getFirst();
         List<Exp> inits = new ArrayList<>();
-        if (first instanceof ExpInitVal) {
-            inits.add(((ExpInitVal) first).getExp());
-        } else {
-            inits.addAll(initFlattenHelper((ArrInitVal) first));
-        }
-        Iterator<InitVal> iter = init.iterFollows();
-        while (iter.hasNext()) {
-            InitVal v = iter.next();
-            if (v instanceof ExpInitVal) {
-                inits.add(((ExpInitVal) v).getExp());
+        if (init.hasFirst()) {
+            InitVal first = init.getFirst();
+            if (first instanceof ExpInitVal) {
+                inits.add(((ExpInitVal) first).getExp());
             } else {
-                inits.addAll(initFlattenHelper((ArrInitVal) v));
+                inits.addAll(initFlattenHelper((ArrInitVal) first));
+            }
+            Iterator<InitVal> iter = init.iterFollows();
+            while (iter.hasNext()) {
+                InitVal v = iter.next();
+                if (v instanceof ExpInitVal) {
+                    inits.add(((ExpInitVal) v).getExp());
+                } else {
+                    inits.addAll(initFlattenHelper((ArrInitVal) v));
+                }
             }
         }
         return inits;

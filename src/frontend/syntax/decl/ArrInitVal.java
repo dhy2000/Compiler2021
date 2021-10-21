@@ -78,6 +78,10 @@ public class ArrInitVal implements InitVal {
         return Objects.nonNull(first) && !separators.isEmpty() && !follows.isEmpty();
     }
 
+    public boolean hasFirst() {
+        return Objects.nonNull(first);
+    }
+
     public InitVal getFirst() {
         return first;
     }
