@@ -723,6 +723,10 @@ public class Analyzer {
     }
 
     public void analyseFunc(FuncDef func) throws ConstExpException {
+        // 缺右括号
+        if (!func.hasRightParenthesis()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, func.getName().lineNumber()));
+        }
         // 维护函数符号表
         FuncMeta.ReturnType returnType = func.getType().getType().getType().equals(Token.Type.VOIDTK) ? FuncMeta.ReturnType.VOID : FuncMeta.ReturnType.INT;
         String name = func.getName().getName();
@@ -785,6 +789,9 @@ public class Analyzer {
         currentFunc = mainMeta;
         intermediate.putFunction(mainMeta);
         MainFuncDef main = unit.getMainFunc();
+        if (!main.hasRightParenthesis()) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, main.getMainTk().lineNumber()));
+        }
         BasicBlock block = analyseBlock(main.getBody());
         BasicBlock body = new BasicBlock("main", BasicBlock.Type.FUNC);
         body.append(new Jump(block));

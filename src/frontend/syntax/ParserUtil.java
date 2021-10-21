@@ -11,7 +11,7 @@ public class ParserUtil {
     public static Token getSpecifiedToken(Token.Type type, String syntaxName,
                                           Iterator<Token> iterator, int maxLineNum)
             throws UnexpectedTokenException, UnexpectedEofException {
-        // TODO: Missing right parenthesis or bracket processing
+        // Missing right parenthesis or bracket processing
         if (!iterator.hasNext()) {
             throw new UnexpectedEofException(maxLineNum, syntaxName);
         }

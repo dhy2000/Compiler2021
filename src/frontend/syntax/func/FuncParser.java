@@ -40,7 +40,7 @@ public class FuncParser {
         } else {
             iterator.previous();
             FuncFParams fParams = parseFuncFParams();
-            rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, "<FuncDef>", iterator, maxLineNum);
+            rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, "<FuncDef>", iterator, maxLineNum);
             Token leftBrace = ParserUtil.getSpecifiedToken(Token.Type.LBRACE, "<Block>", iterator, maxLineNum);
             Block body = new StmtParser(iterator, maxLineNum).parseBlock(leftBrace);
             return new FuncDef(funcType, ident, leftParenthesis, rightParenthesis, fParams, body);
@@ -49,7 +49,7 @@ public class FuncParser {
 
     // <MainFuncDef>   := 'int' 'main' '(' ')' <Block>
     public MainFuncDef parseMainFuncDef(Token intTk, Token mainTk, Token leftParenthesis) throws UnexpectedTokenException, UnexpectedEofException {
-        Token rightParenthesis = ParserUtil.getSpecifiedToken(Token.Type.RPARENT, "<MainFuncDef>", iterator, maxLineNum);
+        Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, "<MainFuncDef>", iterator, maxLineNum);
         Token leftBrace = ParserUtil.getSpecifiedToken(Token.Type.LBRACE, "<Block>", iterator, maxLineNum);
         Block body = new StmtParser(iterator, maxLineNum).parseBlock(leftBrace);
         return new MainFuncDef(intTk, mainTk, leftParenthesis, rightParenthesis, body);

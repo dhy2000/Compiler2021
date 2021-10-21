@@ -18,7 +18,7 @@ public class MainFuncDef implements Component {
         assert intTk.getType().equals(Token.Type.INTTK);
         assert mainTk.getType().equals(Token.Type.MAINTK);
         assert leftParenthesis.getType().equals(Token.Type.LPARENT);
-        assert rightParenthesis.getType().equals(Token.Type.RPARENT);
+        assert Objects.isNull(rightParenthesis) || rightParenthesis.getType().equals(Token.Type.RPARENT);
         this.intTk = intTk;
         this.mainTk = mainTk;
         this.leftParenthesis = leftParenthesis;

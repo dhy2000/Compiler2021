@@ -41,6 +41,7 @@ public class SysY {
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
+            throw new AssertionError(e);
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
