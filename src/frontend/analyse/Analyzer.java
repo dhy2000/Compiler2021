@@ -311,6 +311,9 @@ public class Analyzer {
         if (Objects.isNull(ln) || ln instanceof Intermediate) {
             return null;
         }
+        if (!(ln instanceof Symbol)) {
+            return null; // due to undefined symbol error
+        }
         Symbol leftSym = (Symbol) ln;
         if (leftSym.isConstant()) {
             ErrorTable.getInstance().add(new Error(Error.Type.MODIFY_CONST, left.getName().lineNumber()));

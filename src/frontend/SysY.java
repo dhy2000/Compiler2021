@@ -45,9 +45,6 @@ public class SysY {
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
-//            if (e instanceof NullPointerException) {
-//                throw new AssertionError(e);
-//            }
             throw new AssertionError(e);
         }
     }
