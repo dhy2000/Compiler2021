@@ -45,7 +45,10 @@ public class SysY {
             if (e instanceof UnexpectedTokenException) {    //  testfile 5, 8
                 // testfile 5 missing ']', testfile 8 ','
                 // IDENFR, LBRACE, INTTK, LPARENT, STRCON, COMMA
-                throw new AssertionError(e);
+                UnexpectedTokenException ue = (UnexpectedTokenException) e;
+                if (ue.hasExpected()) {
+                    throw new AssertionError(e);
+                }
             }
             // throw new AssertionError(e);
         } catch (Exception e) {
