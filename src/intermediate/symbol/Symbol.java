@@ -21,7 +21,8 @@ public class Symbol implements Operand {
     }
 
     private final Type type;
-    private int offset = -1; // Offset to $sp, -1 表示暂时未分配栈上空间
+    private boolean local; // 是否为局部变量，如果是则基地址为当前运行栈栈底；如果否则基地址为全局空间头部
+    private int address = -1; // 相对基地址的位移
 
     private final boolean constant;
     private final List<Integer> dimSize;    // 如果是指针则第一维没用
@@ -98,16 +99,24 @@ public class Symbol implements Operand {
         return field;
     }
 
+    public boolean isLocal() {
+        return local;
+    }
+
+    public void setLocal(boolean local) {
+        this.local = local;
+    }
+
     public Type getType() {
         return type;
     }
 
-    public int getOffset() {
-        return offset;
+    public int getAddress() {
+        return address;
     }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
+    public void setAddress(int address) {
+        this.address = address;
     }
 
     public boolean isConstant() {
@@ -138,7 +147,7 @@ public class Symbol implements Operand {
 
     @Override
     public String toString() {
-        return name + "[sp+" + offset + "]:" + type;
+        return name + "[sp+" + address + "]:" + type;
     }
 
     // 临时变量暂时不具备栈上空间
