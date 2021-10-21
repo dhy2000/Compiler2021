@@ -206,7 +206,6 @@ public class CodeGenerator {
                     }
                     else {
                         assert param instanceof Symbol;
-                        // TODO: POINTER as INT
                         if (!((Symbol) param).getType().equals(arg.getType())) {
                             ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                             error = true;
@@ -698,6 +697,9 @@ public class CodeGenerator {
             int totalSize = 1;
             while (iter.hasNext()) {
                 Def.ArrDef ad = iter.next();
+                if (!ad.hasRightBracket()) {
+                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, ident.lineNumber()));
+                }
                 int value = new CalcUtil(currentSymTable).calcExp(ad.getArrLength());
                 totalSize *= value;
                 arrayDims.add(value);
@@ -767,9 +769,16 @@ public class CodeGenerator {
         } else {
             List<Integer> dimSizes = new ArrayList<>();
             // first dim is ignored because Array-FParam is Pointer
+            FuncFParam.FirstDim first = param.getFirstDim();
+            if (!first.hasRightBracket()) {
+                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, first.getLeftBracket().lineNumber()));
+            }
             Iterator<FuncFParam.ArrayDim> iter = param.iterFollowDims();
             while (iter.hasNext()) {
                 FuncFParam.ArrayDim dim = iter.next();
+                if (!dim.hasRightBracket()) {
+                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, dim.getLeftBracket().lineNumber()));
+                }
                 ConstExp len = dim.getLength();
                 int length = new CalcUtil(currentSymTable).calcExp(len);
                 dimSizes.add(length);
