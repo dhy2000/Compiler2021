@@ -290,7 +290,7 @@ public class Analyzer {
             } else {
                 // ARRAY or POINTER
                 Symbol temp = Symbol.temporary(currentField(), Symbol.Type.POINTER);
-                currentBlock.append(new AddressOp(symbol, offset, temp));
+                currentBlock.append(new AddressOffset(symbol, offset, temp));
                 return temp;
             }
         } else if (base instanceof Number) {
@@ -683,7 +683,7 @@ public class Analyzer {
                     for (Exp exp: initExps) {
                         Operand op = analyseExp(exp);
                         Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), 1);
-                        currentBlock.append(new AddressOp(sym, new Immediate(offset), ptr));
+                        currentBlock.append(new AddressOffset(sym, new Immediate(offset), ptr));
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, op, ptr));
                         offset++;
                     }

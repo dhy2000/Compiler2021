@@ -6,12 +6,14 @@ import intermediate.symbol.Symbol;
 /**
  * 寻址操作
  */
-public class AddressOp extends ILinkNode {
+public class AddressOffset extends ILinkNode {
     private final Symbol base; // pointer or array
     private final Operand offset;
     private final Symbol target; // pointer
 
-    public AddressOp(Symbol base, Operand offset, Symbol target) {
+    public AddressOffset(Symbol base, Operand offset, Symbol target) {
+        assert base.getType().equals(Symbol.Type.POINTER) || base.getType().equals(Symbol.Type.ARRAY);
+        assert target.getType().equals(Symbol.Type.POINTER);
         this.base = base;
         this.offset = offset;
         this.target = target;
@@ -31,6 +33,6 @@ public class AddressOp extends ILinkNode {
 
     @Override
     public String toString() {
-        return "ADDRESS " + base + ", " + offset + ", " + target;
+        return "OFFSET " + base + ", " + offset + ", " + target;
     }
 }
