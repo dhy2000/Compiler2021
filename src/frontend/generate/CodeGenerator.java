@@ -804,17 +804,21 @@ public class CodeGenerator {
             }
         }
         // 处理函数体
+        funcBodyHelper(func.getBody(), meta);
+    }
+
+    private void funcBodyHelper(Block funcBody, FuncMeta meta) throws ConstExpException {
         currentSymTable = meta.getParamTable();
         stackSize = meta.getParamTable().capacity();
-        BasicBlock block = analyseBlock(func.getBody());
-        BasicBlock body = new BasicBlock(name, BasicBlock.Type.FUNC);
+        BasicBlock block = analyseBlock(funcBody);
+        BasicBlock body = new BasicBlock(meta.getName(), BasicBlock.Type.FUNC);
         body.append(new Jump(block));
         currentBlock = block;
         meta.loadBody(body);
         currentSymTable = currentSymTable.getParent();
 
         currentFunc = null;
-        Block funcBody = func.getBody();
+        // Block funcBody = def.getBody();
         Iterator<BlockItem> iterItem = funcBody.iterItems();
         boolean returnFlag = false;
         while (iterItem.hasNext()) {
@@ -826,8 +830,8 @@ public class CodeGenerator {
                 }
             }
         }
-        if (!(returnFlag || returnType.equals(FuncMeta.ReturnType.VOID))) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RETURN, func.getBody().getRightBrace().lineNumber()));
+        if (!(returnFlag || meta.getReturnType().equals(FuncMeta.ReturnType.VOID))) {
+            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RETURN, funcBody.getRightBrace().lineNumber()));
         }
     }
 
@@ -849,15 +853,6 @@ public class CodeGenerator {
         currentFunc = mainMeta;
         intermediate.putFunction(mainMeta);
         MainFuncDef main = unit.getMainFunc();
-        if (!main.hasRightParenthesis()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, main.getMainTk().lineNumber()));
-        }
-        BasicBlock block = analyseBlock(main.getBody());
-        BasicBlock body = new BasicBlock("main", BasicBlock.Type.FUNC);
-        body.append(new Jump(block));
-        currentBlock = block;
-        mainMeta.loadBody(body);
-        currentSymTable = currentSymTable.getParent();
-        currentFunc = null;
+        funcBodyHelper(main.getBody(), mainMeta);
     }
 }
