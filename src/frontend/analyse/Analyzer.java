@@ -157,6 +157,9 @@ public class Analyzer {
             FunctionCall call = (FunctionCall) base;
             Ident ident = call.getName();
             String name = ident.getName();
+            if (!call.hasRightParenthesis()) {
+                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, ident.lineNumber()));
+            }
             if (!intermediate.getFunctions().containsKey(name)) {
                 ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, ident.lineNumber()));
                 return new Immediate(0);
@@ -167,7 +170,7 @@ public class Analyzer {
             List<Symbol> args = func.getParams();
             if (call.hasParams()) {
                 FuncRParams rParams = call.getParams();
-                Exp firstExp = rParams.getFirst(); // TODO: fix NullPointerException
+                Exp firstExp = rParams.getFirst();
                 Operand firstParam = analyseExp(firstExp);
                 params.add(firstParam);
                 Iterator<Exp> iter = rParams.iterParams();

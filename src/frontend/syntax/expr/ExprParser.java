@@ -86,6 +86,16 @@ public class ExprParser {
         Token next = iterator.next();
         if (Token.Type.RPARENT.equals(next.getType())) {
             return new FunctionCall(ident, leftParenthesis, next);
+        } else {
+            if (!(next.getType().equals(Token.Type.IDENFR)
+                    || next.getType().equals(Token.Type.LPARENT)
+                    || next.getType().equals(Token.Type.INTCON)
+                    || next.getType().equals(Token.Type.PLUS)
+                    || next.getType().equals(Token.Type.MINU)
+                    || next.getType().equals(Token.Type.NOT))) {
+                iterator.previous();
+                return new FunctionCall(ident, leftParenthesis, null);
+            }
         }
         iterator.previous();    // undo get token
         FuncRParams rParams = parseFuncRParams(parseExp());
