@@ -40,12 +40,9 @@ public class SysY {
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
-            // testfile 5 missing ']', testfile 8 COMMA in <Decl>
-            // IDENFR, LBRACE, INTTK, LPARENT, STRCON, COMMA
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
-            throw new AssertionError(e);
         }
     }
 
