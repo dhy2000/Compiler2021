@@ -11,7 +11,7 @@ public class SymTable {
 
     private final String field; // 作用域
     private final Map<String, Symbol> symbols = new HashMap<>();
-    private int capacity;
+    private int capacity = 0;
 
     private final SymTable parent;
 

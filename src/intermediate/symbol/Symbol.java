@@ -136,7 +136,7 @@ public class Symbol implements Operand {
     }
 
     public boolean hasAddress() {
-        return address > 0;
+        return address >= 0;
     }
 
     public int getAddress() {
@@ -199,7 +199,9 @@ public class Symbol implements Operand {
             reducedDimSize.add(dimSize.get(i));
         }
         tempCount = tempCount + 1;
-        return new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
+        Symbol sym = new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
+        sym.setLocal(true);
+        return sym;
     }
 
     public Symbol subPointer(int depth) {
@@ -209,7 +211,9 @@ public class Symbol implements Operand {
             reducedDimSize.add(dimSize.get(i));
         }
         tempCount = tempCount + 1;
-        return new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
+        Symbol sym = new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
+        sym.setLocal(true);
+        return sym;
     }
 
     @Override
@@ -223,10 +227,13 @@ public class Symbol implements Operand {
     public static Symbol temporary(String field, Type type) {
         assert type.equals(Type.INT) || type.equals(Type.POINTER);
         tempCount = tempCount + 1;
+        Symbol sym;
         if (type.equals(Type.POINTER)) {
-            return new Symbol("ptr_" + tempCount, field, false);
+            sym = new Symbol("ptr_" + tempCount, field, false);
         } else {
-            return new Symbol("tmp_" + tempCount, field);
+            sym = new Symbol("tmp_" + tempCount, field);
         }
+        sym.setLocal(true);
+        return sym;
     }
 }

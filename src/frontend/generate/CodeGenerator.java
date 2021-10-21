@@ -36,6 +36,8 @@ import java.util.*;
  * 和语法分析类似的类递归下降结构
  *
  * 这里把每部分的分析器合到了一个大类中，因为要维护一个统一的栈（符号作用域）
+ *
+ * TODO: 全局变量分配地址，参数的地址表示
  */
 public class CodeGenerator {
 
@@ -288,7 +290,7 @@ public class CodeGenerator {
             for (int i = indexes.size() - 1; i >= 0; i--) {
                 // offset += arrayIndexes[i] * baseOffset;
                 Symbol prod = Symbol.temporary(currentField(), Symbol.Type.INT);
-                Operand offsetBase = new Immediate(symbol.getBaseOfDim(i)); // TODO: difference between array and pointer
+                Operand offsetBase = new Immediate(symbol.getBaseOfDim(i));
                 currentBlock.append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
                 Symbol sum = Symbol.temporary(currentField(), Symbol.Type.INT);
                 currentBlock.append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
@@ -654,17 +656,22 @@ public class CodeGenerator {
                     Symbol sym = new Symbol(name, currentField(), constant, value);
                     if (Objects.nonNull(currentFunc)) {
                         sym.setAddress(stackSize);
+                        sym.setLocal(true);
                         stackSize += sym.capacity();
+                    } else {
+                        sym.setAddress(currentSymTable.capacity());
                     }
                     currentSymTable.add(sym);
                 } else {
                     if (Objects.isNull(currentFunc)) { // 没有在函数里，则必须能编译期算出
                         int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
                         Symbol sym = new Symbol(name, currentField(), constant, value);
+                        sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
                     } else {    // 在函数里的非常量，可以运行时计算
                         Symbol sym = new Symbol(name, currentField());
                         sym.setAddress(stackSize);
+                        sym.setLocal(true);
                         stackSize += sym.capacity();
                         currentSymTable.add(sym);
                         Operand val = analyseExp(init.getExp());
@@ -676,9 +683,11 @@ public class CodeGenerator {
                 Symbol sym;
                 if (Objects.isNull(currentFunc)) {
                     sym = new Symbol(name, currentField(), false, 0);
+                    sym.setAddress(currentSymTable.capacity());
                 } else {
                     sym = new Symbol(name, currentField());
                     sym.setAddress(stackSize);
+                    sym.setLocal(true);
                     stackSize += sym.capacity();
                 }
                 currentSymTable.add(sym);
@@ -705,13 +714,17 @@ public class CodeGenerator {
                     Symbol sym = new Symbol(name, currentField(), arrayDims, constant, initValues);
                     if (Objects.nonNull(currentFunc)) {
                         sym.setAddress(stackSize);
+                        sym.setLocal(true);
                         stackSize += sym.capacity();
+                    } else {
+                        sym.setAddress(currentSymTable.capacity());
                     }
                     currentSymTable.add(sym);
                 } else {
                     // 运行时赋值
                     Symbol sym = new Symbol(name, currentField(), arrayDims);
                     sym.setAddress(stackSize);
+                    sym.setLocal(true);
                     stackSize += sym.capacity();
                     currentSymTable.add(sym);
                     int offset = 0;
@@ -731,13 +744,13 @@ public class CodeGenerator {
                         initZeros.add(0);
                     }
                     sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
+                    sym.setAddress(currentSymTable.capacity());
                 } else {
                     sym = new Symbol(name, currentField(), arrayDims);
                     sym.setAddress(stackSize);
+                    sym.setLocal(true);
                     stackSize += sym.capacity();
                 }
-                sym.setAddress(stackSize);
-                stackSize += sym.capacity();
                 currentSymTable.add(sym);
             }
         }
@@ -763,6 +776,8 @@ public class CodeGenerator {
             }
             arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, false);
         }
+        arg.setAddress(meta.getParamTable().capacity());
+        arg.setLocal(true);
         meta.addParam(arg);
     }
 
@@ -790,6 +805,7 @@ public class CodeGenerator {
         }
         // 处理函数体
         currentSymTable = meta.getParamTable();
+        stackSize = meta.getParamTable().capacity();
         BasicBlock block = analyseBlock(func.getBody());
         BasicBlock body = new BasicBlock(name, BasicBlock.Type.FUNC);
         body.append(new Jump(block));
