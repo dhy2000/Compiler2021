@@ -1,4 +1,4 @@
-package frontend.analyse;
+package frontend.generate;
 
 import exception.ConstExpException;
 import frontend.error.Error;

@@ -2,7 +2,7 @@ package frontend;
 
 import config.Config;
 import exception.FrontendException;
-import frontend.analyse.Analyzer;
+import frontend.generate.CodeGenerator;
 import frontend.error.ErrorTable;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
@@ -32,8 +32,8 @@ public class SysY {
                 compUnit.output(Config.getTarget());
             }
             // generate intermediate code
-            Analyzer analyzer = new Analyzer();
-            analyzer.analyseCompUnit(compUnit);
+            CodeGenerator codeGenerator = new CodeGenerator();
+            codeGenerator.analyseCompUnit(compUnit);
             if (Config.hasOperationOutput(Config.Operation.ERROR)) {
                 ErrorTable.getInstance().forEach(error -> Config.getTarget().println(error.getLineNum() + " " + error.getErrorTag()));
             }

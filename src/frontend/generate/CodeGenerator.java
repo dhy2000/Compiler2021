@@ -1,4 +1,4 @@
-package frontend.analyse;
+package frontend.generate;
 
 import exception.ConstExpException;
 import frontend.error.Error;
@@ -32,12 +32,12 @@ import intermediate.symbol.Symbol;
 import java.util.*;
 
 /**
- * 语义分析器：遍历语法树，维护符号表，进行错误处理，生成中间代码（略）
+ * 语义分析器：遍历语法树，维护符号表，进行错误处理，生成中间代码
  * 和语法分析类似的类递归下降结构
  *
  * 这里把每部分的分析器合到了一个大类中，因为要维护一个统一的栈（符号作用域）
  */
-public class Analyzer {
+public class CodeGenerator {
 
     private SymTable currentSymTable = SymTable.global();   // 栈式符号表
 
@@ -719,7 +719,7 @@ public class Analyzer {
             arg = new Symbol(param.getName().getName(), meta.getParamTable().getField());
         } else {
             List<Integer> dimSizes = new ArrayList<>();
-            dimSizes.add(0); // first dim is ignored
+            // first dim is ignored because Array-FParam is Pointer
             Iterator<FuncFParam.ArrayDim> iter = param.iterFollowDims();
             while (iter.hasNext()) {
                 FuncFParam.ArrayDim dim = iter.next();
@@ -727,7 +727,7 @@ public class Analyzer {
                 int length = new CalcUtil(currentSymTable).calcExp(len);
                 dimSizes.add(length);
             }
-            arg = new Symbol(param.getName().getName(), meta.getParamTable().getField(), dimSizes, 1);
+            arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, 1);
         }
         meta.addParam(arg);
     }
