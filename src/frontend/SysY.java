@@ -1,8 +1,7 @@
 package frontend;
 
 import config.Config;
-import exception.FrontendException;
-import exception.UnexpectedTokenException;
+import exception.*;
 import frontend.analyse.Analyzer;
 import frontend.error.ErrorTable;
 import frontend.lexical.TokenList;
@@ -42,15 +41,15 @@ public class SysY {
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
-            if (e instanceof UnexpectedTokenException) {    //  testfile 5, 8
-                // testfile 5 missing ']', testfile 8 ','
-                // IDENFR, LBRACE, INTTK, LPARENT, STRCON, COMMA
-                UnexpectedTokenException ue = (UnexpectedTokenException) e;
-                if (ue.hasExpected()) {
+            // testfile 5 missing ']', testfile 8 COMMA in <Decl>
+            // IDENFR, LBRACE, INTTK, LPARENT, STRCON, COMMA
+            if (e instanceof UnexpectedEofException) {
+                StackTraceElement[] trace = e.getStackTrace();
+                String cause = (trace[0].getClassName()); // ParserUtil, expr.ExprParser, decl.DeclParser, stmt.StmtParser
+                if (cause.startsWith("frontend.syntax.decl.DeclParser")) {
                     throw new AssertionError(e);
                 }
             }
-            // throw new AssertionError(e);
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
