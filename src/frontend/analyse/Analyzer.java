@@ -164,18 +164,19 @@ public class Analyzer {
             FuncMeta func = intermediate.getFunctions().get(name);
             // match arguments
             List<Operand> params = new ArrayList<>();
-            FuncRParams rParams = call.getParams();
-            Exp firstExp = rParams.getFirst();
-            Operand firstParam = analyseExp(firstExp);
-            params.add(firstParam);
-            Iterator<Exp> iter = rParams.iterParams();
             List<Symbol> args = func.getParams();
-            while (iter.hasNext()) {
-                Exp p = iter.next();
-                Operand r = analyseExp(p);
-                params.add(r);
+            if (call.hasParams()) {
+                FuncRParams rParams = call.getParams();
+                Exp firstExp = rParams.getFirst(); // TODO: fix NullPointerException
+                Operand firstParam = analyseExp(firstExp);
+                params.add(firstParam);
+                Iterator<Exp> iter = rParams.iterParams();
+                while (iter.hasNext()) {
+                    Exp p = iter.next();
+                    Operand r = analyseExp(p);
+                    params.add(r);
+                }
             }
-
             boolean error = false;
             if (params.size() != args.size()) {
                 ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_NUM, ident.lineNumber()));
@@ -200,6 +201,7 @@ public class Analyzer {
                     }
                     else {
                         assert param instanceof Symbol;
+                        // TODO: POINTER as INT
                         if (!((Symbol) param).getType().equals(arg.getType())) {
                             ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                             error = true;
@@ -608,7 +610,7 @@ public class Analyzer {
                     int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
                     Symbol sym = new Symbol(name, currentField(), constant, value);
                     if (Objects.nonNull(currentFunc)) {
-                        sym.setOffset(stackSize);
+                        sym.setAddress(stackSize);
                         stackSize += sym.capacity();
                     }
                     currentSymTable.add(sym);
@@ -619,7 +621,7 @@ public class Analyzer {
                         currentSymTable.add(sym);
                     } else {    // 在函数里的非常量，可以运行时计算
                         Symbol sym = new Symbol(name, currentField());
-                        sym.setOffset(stackSize);
+                        sym.setAddress(stackSize);
                         stackSize += sym.capacity();
                         currentSymTable.add(sym);
                         Operand val = analyseExp(init.getExp());
@@ -633,7 +635,7 @@ public class Analyzer {
                     sym = new Symbol(name, currentField(), false, 0);
                 } else {
                     sym = new Symbol(name, currentField());
-                    sym.setOffset(stackSize);
+                    sym.setAddress(stackSize);
                     stackSize += sym.capacity();
                 }
                 currentSymTable.add(sym);
@@ -659,14 +661,14 @@ public class Analyzer {
                     }
                     Symbol sym = new Symbol(name, currentField(), arrayDims, constant, initValues);
                     if (Objects.nonNull(currentFunc)) {
-                        sym.setOffset(stackSize);
+                        sym.setAddress(stackSize);
                         stackSize += sym.capacity();
                     }
                     currentSymTable.add(sym);
                 } else {
                     // 运行时赋值
                     Symbol sym = new Symbol(name, currentField(), arrayDims);
-                    sym.setOffset(stackSize);
+                    sym.setAddress(stackSize);
                     stackSize += sym.capacity();
                     currentSymTable.add(sym);
                     int offset = 0;
@@ -688,10 +690,10 @@ public class Analyzer {
                     sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
                 } else {
                     sym = new Symbol(name, currentField(), arrayDims);
-                    sym.setOffset(stackSize);
+                    sym.setAddress(stackSize);
                     stackSize += sym.capacity();
                 }
-                sym.setOffset(stackSize);
+                sym.setAddress(stackSize);
                 stackSize += sym.capacity();
                 currentSymTable.add(sym);
             }
