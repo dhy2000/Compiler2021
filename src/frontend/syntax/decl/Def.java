@@ -110,7 +110,7 @@ public class Def implements Component, Constable {
         }
 
         public boolean hasRightBracket() {
-            return Objects.isNull(rightBracket);
+            return Objects.nonNull(rightBracket);
         }
 
         public ConstExp getArrLength() {
