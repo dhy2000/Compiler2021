@@ -529,7 +529,7 @@ public class Analyzer {
             }
             SplStmt simple = stmt.getSimpleStmt();
             if (simple instanceof AssignStmt) {
-                analyseAssignStmt((AssignStmt) simple);
+                analyseAssignStmt((AssignStmt) simple); // TODO: fix bug
             } else if (simple instanceof BreakStmt) {
                 analyseBreakStmt((BreakStmt) simple);
             } else if (simple instanceof ContinueStmt) {

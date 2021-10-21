@@ -1,12 +1,11 @@
 package frontend;
 
 import config.Config;
-import exception.*;
+import exception.FrontendException;
 import frontend.analyse.Analyzer;
 import frontend.error.ErrorTable;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
-import frontend.lexical.token.Token;
 import frontend.syntax.CompUnit;
 import frontend.syntax.CompUnitParser;
 import input.Source;
@@ -43,20 +42,13 @@ public class SysY {
             source.printAll(Config.getTarget());
             // testfile 5 missing ']', testfile 8 COMMA in <Decl>
             // IDENFR, LBRACE, INTTK, LPARENT, STRCON, COMMA
-            if (e instanceof UnexpectedEofException) {
-                StackTraceElement[] trace = e.getStackTrace();
-                String cause = (trace[0].getClassName()); // ParserUtil, expr.ExprParser, decl.DeclParser, stmt.StmtParser
-                if (cause.startsWith("frontend.syntax.decl.DeclParser")) {
-                    throw new AssertionError(e);
-                }
-            }
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
 //            if (e instanceof NullPointerException) {
 //                throw new AssertionError(e);
 //            }
-            // throw new AssertionError(e);
+            throw new AssertionError(e);
         }
     }
 
