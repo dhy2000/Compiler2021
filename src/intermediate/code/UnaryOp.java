@@ -8,9 +8,9 @@ import intermediate.symbol.Symbol;
  */
 public class UnaryOp extends ILinkNode {
     public enum Op {
-        MOV,
-        NEG,
-        NOT
+        MOV,    // INT to INT
+        NEG,    // INT to INT
+        NOT     // INT to INT
     }
 
     private final Op op;

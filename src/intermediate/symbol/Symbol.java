@@ -2,6 +2,7 @@ package intermediate.symbol;
 
 import intermediate.operand.Operand;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class Symbol implements Operand {
 
     public enum Type {
         INT,
-        ARRAY,      // 数组（定义的）
-        POINTER,    // 数组的首地址(函数参数), 在符号表中第一维的长度随意
+        ARRAY,      // 数组
+        POINTER,    // 作为函数参数或者数组寻址后的临时变量，**比数组少一维**！
     }
 
     private final Type type;
@@ -25,10 +26,29 @@ public class Symbol implements Operand {
     private int address = -1; // 相对基地址的位移
 
     private final boolean constant;
-    private final List<Integer> dimSize;    // 如果是指针则第一维没用
+    private final List<Integer> dimSize;    // 每一维的长度，如果是指针则少一维
+    private final List<Integer> dimBase;    // dimSize 的后缀积
 
     private final Integer initValue;        // 整数变量的初值
     private final List<Integer> initArray;  // 数组的初值（展平了的）
+
+    private static List<Integer> suffixProduct(List<Integer> list, boolean order) {
+        List<Integer> suffix = new ArrayList<>();
+        int prod = 1;
+        List<Integer> revInput = new ArrayList<>(list);
+        Collections.reverse(revInput);
+        for (int num : revInput) {
+            if (order) {    // array
+                suffix.add(prod);
+                prod *= num;
+            } else {        // pointer
+                prod *= num;
+                suffix.add(prod);
+            }
+        }
+        Collections.reverse(suffix);
+        return Collections.unmodifiableList(suffix);
+    }
 
     public Symbol(String name, String field) {
         this.name = name;
@@ -38,6 +58,7 @@ public class Symbol implements Operand {
         this.dimSize = Collections.emptyList();
         this.initValue = null;
         this.initArray = Collections.emptyList();
+        this.dimBase = Collections.emptyList();
     }
 
     public Symbol(String name, String field, boolean constant, int init) {
@@ -48,6 +69,7 @@ public class Symbol implements Operand {
         this.initValue = init;
         this.dimSize = Collections.emptyList();
         this.initArray = Collections.emptyList();
+        this.dimBase = Collections.emptyList();
     }
 
     public Symbol(String name, String field, List<Integer> dimSize) {
@@ -58,6 +80,7 @@ public class Symbol implements Operand {
         this.initValue = null;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initArray = Collections.emptyList();
+        this.dimBase = suffixProduct(dimSize, true);
     }
 
     public Symbol(String name, String field, List<Integer> dimSize, boolean constant, List<Integer> init) {
@@ -68,6 +91,7 @@ public class Symbol implements Operand {
         this.initValue = null;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initArray = Collections.unmodifiableList(init);
+        this.dimBase = suffixProduct(dimSize, true);
     }
 
     public Symbol(String name, String field, List<Integer> dimSize, int nothing) {
@@ -78,6 +102,7 @@ public class Symbol implements Operand {
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initValue = null;
         this.initArray = Collections.emptyList();
+        this.dimBase = suffixProduct(dimSize, false);
     }
 
     public Symbol(String name, String field, int nothing) {
@@ -88,6 +113,7 @@ public class Symbol implements Operand {
         this.dimSize = Collections.emptyList();
         this.initValue = null;
         this.initArray = Collections.emptyList();
+        this.dimBase = Collections.emptyList();
     }
 
 
@@ -111,6 +137,10 @@ public class Symbol implements Operand {
         return type;
     }
 
+    public boolean hasAddress() {
+        return address > 0;
+    }
+
     public int getAddress() {
         return address;
     }
@@ -125,6 +155,21 @@ public class Symbol implements Operand {
 
     public List<Integer> getDimSize() {
         return dimSize;
+    }
+
+    public int getSizeOfDim(int dim) {
+        assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
+        return dimSize.get(dim);
+    }
+
+    public int getBaseOfDim(int dim) {
+        assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
+        return dimBase.get(dim);
+    }
+
+    public int getBase() {
+        assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
+        return dimBase.isEmpty() ? 1 : dimBase.iterator().next();
     }
 
     public Integer getInitValue() {
@@ -147,7 +192,8 @@ public class Symbol implements Operand {
 
     @Override
     public String toString() {
-        return name + "[sp+" + address + "]:" + type;
+        String address = !hasAddress() ? "(tmp)" : ("@[" + (isLocal() ? "sp+" + getAddress() : "data+" + getAddress()) + "]");
+        return name + address + ":" + type;
     }
 
     // 临时变量暂时不具备栈上空间
