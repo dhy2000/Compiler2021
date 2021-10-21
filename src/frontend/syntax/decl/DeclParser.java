@@ -57,15 +57,13 @@ public class DeclParser {
                 semi = next;
                 break;
             } else if (!next.getType().equals(Token.Type.COMMA)) {
+                iterator.previous();
                 break; // missing semicolon
             }
             Ident nextIdent = (Ident) ParserUtil.getSpecifiedToken(Token.Type.IDENFR, syntax, iterator, maxLineNum);
             Def def = parseDef(constant, nextIdent);
             commas.add(next);
             followDefs.add(def);
-        }
-        if (Objects.isNull(semi)) {
-            throw new UnexpectedEofException(maxLineNum, syntax);
         }
         if (constant) {
             return new Decl(constTk, bType, firstDef, commas, followDefs, semi);
