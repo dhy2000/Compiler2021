@@ -86,7 +86,7 @@ public class FuncParser {
             iterator.previous();
             return new FuncFParam(bType, ident);
         }
-        Token rightBracket = ParserUtil.getSpecifiedToken(Token.Type.RBRACK, syntax, iterator, maxLineNum);
+        Token rightBracket = ParserUtil.getNullableToken(Token.Type.RBRACK, syntax, iterator, maxLineNum);
         if (!iterator.hasNext()) {
             return new FuncFParam(bType, ident, leftBracket, rightBracket);
         }
@@ -106,7 +106,7 @@ public class FuncParser {
     // <ArrayDim>   := '[' <ConstExp> ']'
     public FuncFParam.ArrayDim parseArrayDim(Token leftBracket) throws UnexpectedTokenException, UnexpectedEofException {
         ConstExp constExp = new ExprParser(iterator, maxLineNum).parseConstExp();
-        Token rightBracket = ParserUtil.getSpecifiedToken(Token.Type.RBRACK, "<FuncFParam>", iterator, maxLineNum);
+        Token rightBracket = ParserUtil.getNullableToken(Token.Type.RBRACK, "<FuncFParam>", iterator, maxLineNum);
         return new FuncFParam.ArrayDim(leftBracket, rightBracket, constExp);
     }
 }

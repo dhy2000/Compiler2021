@@ -2,14 +2,15 @@ package frontend;
 
 import config.Config;
 import exception.FrontendException;
+import exception.UnexpectedTokenException;
 import frontend.analyse.Analyzer;
 import frontend.error.ErrorTable;
-import input.Source;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
+import frontend.lexical.token.Token;
 import frontend.syntax.CompUnit;
 import frontend.syntax.CompUnitParser;
-import intermediate.Intermediate;
+import input.Source;
 
 import java.io.InputStream;
 
@@ -41,11 +42,20 @@ public class SysY {
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
-            throw new AssertionError(e);
+            if (e instanceof UnexpectedTokenException) {    //  testfile 5, 8, maybe missing ';' or ']' or ')'
+                UnexpectedTokenException ue = (UnexpectedTokenException) e;
+                if (ue.hasExpected() && ue.getExpected().equals(Token.Type.RBRACK)) { // testfile 5 missing ']'
+                    throw new AssertionError(e);
+                }
+            }
+            // throw new AssertionError(e);
         } catch (Exception e) {
             Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
-            throw new AssertionError(e);
+//            if (e instanceof NullPointerException) {
+//                throw new AssertionError(e);
+//            }
+            // throw new AssertionError(e);
         }
     }
 

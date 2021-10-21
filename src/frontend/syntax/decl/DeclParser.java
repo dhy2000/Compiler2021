@@ -77,7 +77,7 @@ public class DeclParser {
     // <ArrDef>        := '[' <ConstExp> ']'
     public Def.ArrDef parseArrDef(Token leftBracket) throws UnexpectedTokenException, UnexpectedEofException {
         ConstExp constExp = new ExprParser(iterator, maxLineNum).parseConstExp();
-        Token rightBracket = ParserUtil.getSpecifiedToken(Token.Type.RBRACK, "<ArrDef>", iterator, maxLineNum);
+        Token rightBracket = ParserUtil.getNullableToken(Token.Type.RBRACK, "<ArrDef>", iterator, maxLineNum);
         return new Def.ArrDef(leftBracket, rightBracket, constExp);
     }
 
