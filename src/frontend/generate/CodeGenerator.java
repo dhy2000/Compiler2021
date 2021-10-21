@@ -312,7 +312,7 @@ public class CodeGenerator {
                 // POINTER
                 int depth = indexes.size();
                 Symbol ptr = symbol.subPointer(depth);
-                if (left || depth + 1 < symbol.getDimCount()) {
+                if (left || depth <= symbol.getDimCount()) {
                     return ptr;
                 } else {
                     Symbol value = Symbol.temporary(currentField(), Symbol.Type.INT);
