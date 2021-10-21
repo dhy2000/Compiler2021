@@ -52,6 +52,7 @@ public class CodeGenerator {
     private FuncMeta currentFunc = null;
 
     private int blockCount = 0;
+    private int blockDepth = 0;
 
     private int newBlockCount() {
         blockCount += 1;
@@ -535,6 +536,7 @@ public class CodeGenerator {
         if (Objects.nonNull(currentBlock)) {
             currentBlock.append(new Jump(block));
         }
+        blockDepth++;
         currentBlock = block;
         BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
         currentSymTable = new SymTable(block.getLabel(), currentSymTable);  // symbol push stack
@@ -553,6 +555,7 @@ public class CodeGenerator {
         currentBlock.append(new Jump(follow));
         currentBlock = follow;
         currentSymTable = currentSymTable.getParent();  // symbol pop stack
+        blockDepth--;
         return block;
     }
 
@@ -644,6 +647,11 @@ public class CodeGenerator {
         List<Integer> arrayDims = new ArrayList<>();
         boolean constant = def.isConst();
         if (currentSymTable.contains(name, false)) {
+            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
+            return;
+        }
+        // fix: 位于函数的顶层并且和形参相同也算重定义
+        if (blockDepth == 1 && Objects.nonNull(currentFunc) && currentFunc.getParamTable().contains(name, false)) {
             ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
             return;
         }
