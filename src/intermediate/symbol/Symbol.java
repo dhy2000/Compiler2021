@@ -10,7 +10,7 @@ import java.util.List;
  * 符号表中的符号(表项)
  */
 public class Symbol implements Operand {
-    private static final int SIZEOF_INT = 4;
+    public static final int SIZEOF_INT = 4;
 
     private final String name;
     private final String field;
@@ -218,7 +218,7 @@ public class Symbol implements Operand {
 
     @Override
     public String toString() {
-        String address = !hasAddress() ? "(tmp)" : ("@[" + (isLocal() ? "sp+" + getAddress() : "data+" + getAddress()) + "]");
+        String address = !hasAddress() ? "(tmp)" : ("@[" + (isLocal() ? "sp-" + getAddress() : "data+" + getAddress()) + "]");
         return name + address + ":" + type;
     }
 
