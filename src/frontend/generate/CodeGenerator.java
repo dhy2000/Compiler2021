@@ -431,8 +431,7 @@ public class CodeGenerator {
             ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
             return;
         }
-        String label = intermediate.addGlobalString(format); // TODO: use label instead of local string
-        currentBlock.append(new Output(label, params));
+        currentBlock.append(new PrintFormat(format, params));
     }
 
     public void analyseReturnStmt(ReturnStmt stmt) {
