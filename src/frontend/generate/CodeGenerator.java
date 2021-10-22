@@ -490,9 +490,9 @@ public class CodeGenerator {
         Operand cond = analyseCond(stmt.getCondition());
         BasicBlock current = currentBlock;
         BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
-        BasicBlock then = new BasicBlock("IF_" + newBlockCount(), BasicBlock.Type.BRANCH);
+        BasicBlock then = new BasicBlock("IF_THEN_" + newBlockCount(), BasicBlock.Type.BRANCH);
         if (stmt.hasElse()) {
-            BasicBlock elseBlk = new BasicBlock("IF_" + newBlockCount(), BasicBlock.Type.BRANCH);
+            BasicBlock elseBlk = new BasicBlock("IF_ELSE_" + newBlockCount(), BasicBlock.Type.BRANCH);
             current.append(new BranchIfElse(cond, then, elseBlk));
             currentBlock = then;
             analyseStmt(stmt.getThenStmt());
@@ -508,6 +508,7 @@ public class CodeGenerator {
         currentBlock = follow;
     }
 
+    // TODO: There are some bugs!
     public void analyseWhileStmt(WhileStmt stmt) throws ConstExpException {
         // 缺右括号
         if (!stmt.hasRightParenthesis()) {
@@ -516,7 +517,7 @@ public class CodeGenerator {
         // 生成新的基本块
         BasicBlock current = currentBlock;
         BasicBlock follow = new BasicBlock("B_" + newBlockCount(), BasicBlock.Type.BASIC);
-        BasicBlock body = new BasicBlock("BODY_" + newBlockCount(), BasicBlock.Type.BASIC);
+        BasicBlock body = new BasicBlock("LOOP_" + newBlockCount(), BasicBlock.Type.BASIC);
         BasicBlock loop = new BasicBlock("WHILE_" + newBlockCount(), BasicBlock.Type.LOOP);
         current.append(new Jump(loop));
         loopBlocks.push(loop);
@@ -528,7 +529,7 @@ public class CodeGenerator {
         analyseStmt(stmt.getStmt());
         loopFollows.pop();
         loopBlocks.pop();
-        currentBlock.append(new Jump(follow));
+        currentBlock.append(new Jump(loop));
         currentBlock = follow;
     }
 
