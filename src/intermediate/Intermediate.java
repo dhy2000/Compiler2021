@@ -73,20 +73,20 @@ public class Intermediate {
 
     public void output(PrintStream ps) {
         // global variables
-        ps.println(" ====== IR ====== ");
-        ps.println(" = Global Variables = ");
+        ps.println("======= IR =======");
+        ps.println("\n== Global Variables ==");
         for (Map.Entry<String, Integer> entry : globalVariables.entrySet()) {
             ps.printf("%s: %d\n", entry.getKey(), entry.getValue());
         }
-        ps.println((" = Global Arrays = "));
+        ps.println(("\n== Global Arrays =="));
         for (Map.Entry<String, List<Integer>> entry : globalArrays.entrySet()) {
             ps.printf("%s: [%s]\n", entry.getKey(), entry.getValue().stream().map(Object::toString).reduce((s, s2) -> s + ", " + s2).orElse(""));
         }
-        ps.println(" = Global Strings = ");
+        ps.println("\n== Global Strings ==");
         for (Map.Entry<String, String> entry : globalStrings.entrySet()) {
             ps.printf("%s: \"%s\"\n", entry.getKey(), entry.getValue());
         }
-        ps.println(" = Text = ");
+        ps.println("\n== Text ==\n");
         HashSet<BasicBlock> visited = new HashSet<>();
         Queue<BasicBlock> queue = new LinkedList<>(); // BFS
 
