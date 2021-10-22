@@ -675,7 +675,7 @@ public class CodeGenerator {
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, new Immediate(value), sym));
                     } else {
                         sym.setAddress(currentSymTable.capacity());
-                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue());
+                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                     }
                     currentSymTable.add(sym);
                 } else {
@@ -684,7 +684,7 @@ public class CodeGenerator {
                         Symbol sym = new Symbol(name, currentField(), constant, value);
                         sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
-                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue());
+                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                     } else {    // 在函数里的非常量，可以运行时计算
                         Symbol sym = new Symbol(name, currentField());
                         sym.setAddress(stackSize);
@@ -700,7 +700,7 @@ public class CodeGenerator {
                 if (Objects.isNull(currentFunc)) {
                     sym = new Symbol(name, currentField(), false, 0);
                     sym.setAddress(currentSymTable.capacity());
-                    intermediate.addGlobalVariable(sym.getName(), sym.getInitValue());
+                    intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                 } else {
                     sym = new Symbol(name, currentField());
                     sym.setAddress(stackSize);
@@ -738,7 +738,7 @@ public class CodeGenerator {
                         stackSize += sym.capacity();
                     } else {
                         sym.setAddress(currentSymTable.capacity());
-                        intermediate.addGlobalArray(sym.getName(), sym.getInitArray());
+                        intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
                     }
                     currentSymTable.add(sym);
                 } else {
@@ -766,7 +766,7 @@ public class CodeGenerator {
                     }
                     sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
                     sym.setAddress(currentSymTable.capacity());
-                    intermediate.addGlobalArray(sym.getName(), sym.getInitArray());
+                    intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
                 } else {
                     sym = new Symbol(name, currentField(), arrayDims);
                     sym.setAddress(stackSize);

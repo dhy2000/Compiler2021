@@ -8,11 +8,13 @@ import intermediate.symbol.FuncMeta;
 
 import java.io.PrintStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 中间代码的总体类，包括各个函数的入口以及全局变量
  */
 public class Intermediate {
+    private final Map<String, Integer> globalAddress;   // 这里的地址单位是字节（和 Mars 相同）
     private final Map<String, Integer> globalVariables;
     private final Map<String, List<Integer>> globalArrays;  // 展平的数组初值
     private final Map<String, String> globalStrings;        // FormatString
@@ -21,17 +23,23 @@ public class Intermediate {
     private FuncMeta mainFunction;
 
     public Intermediate() {
+        this.globalAddress = new HashMap<>();
         this.globalVariables = new HashMap<>();
         this.globalArrays = new HashMap<>();
         this.globalStrings = new HashMap<>();
         this.functions = new HashMap<>();
     }
 
+    public Map<String, Integer> getGlobalAddress() {
+        return globalAddress;
+    }
+
     public Map<String, Integer> getGlobalVariables() {
         return globalVariables;
     }
 
-    public void addGlobalVariable(String name, int value) {
+    public void addGlobalVariable(String name, int value, int address) {
+        globalAddress.put(name, address);
         globalVariables.put(name, value);
     }
 
@@ -39,7 +47,8 @@ public class Intermediate {
         return globalArrays;
     }
 
-    public void addGlobalArray(String name, List<Integer> values) {
+    public void addGlobalArray(String name, List<Integer> values, int address) {
+        globalAddress.put(name, address);
         globalArrays.put(name, values);
     }
 
@@ -79,12 +88,17 @@ public class Intermediate {
         // global variables
         ps.println("======= IR =======");
         ps.println("\n== Global Variables ==");
-        for (Map.Entry<String, Integer> entry : globalVariables.entrySet()) {
+        for (Map.Entry<String, Integer> entry : globalVariables.entrySet().stream()
+                .sorted(Comparator.comparingInt(stringIntegerEntry ->
+                        globalAddress.get(stringIntegerEntry.getKey()))).collect(Collectors.toList())) {
             ps.printf("%s: %d\n", entry.getKey(), entry.getValue());
         }
         ps.println(("\n== Global Arrays =="));
-        for (Map.Entry<String, List<Integer>> entry : globalArrays.entrySet()) {
-            ps.printf("%s: [%s]\n", entry.getKey(), entry.getValue().stream().map(Object::toString).reduce((s, s2) -> s + ", " + s2).orElse(""));
+        for (Map.Entry<String, List<Integer>> entry : globalArrays.entrySet().stream()
+                .sorted(Comparator.comparingInt(stringListEntry ->
+                        globalAddress.get(stringListEntry.getKey()))).collect(Collectors.toList())) {
+            ps.printf("%s: [%s]\n", entry.getKey(), entry.getValue().stream()
+                    .map(Object::toString).reduce((s, s2) -> s + ", " + s2).orElse(""));
         }
         ps.println("\n== Global Strings ==");
         for (Map.Entry<String, String> entry : globalStrings.entrySet()) {

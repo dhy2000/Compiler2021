@@ -34,7 +34,7 @@ public class Symbol implements Operand {
 
     private static List<Integer> suffixProduct(List<Integer> list, boolean pointer) {
         List<Integer> suffix = new ArrayList<>();
-        int prod = 1;
+        int prod = SIZEOF_INT;
         List<Integer> revInput = new ArrayList<>(list);
         Collections.reverse(revInput);
         for (int num : revInput) {
@@ -171,7 +171,7 @@ public class Symbol implements Operand {
 
     public int getBase() {
         assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
-        return dimBase.isEmpty() ? 1 : dimBase.iterator().next();
+        return dimBase.isEmpty() ? SIZEOF_INT : dimBase.iterator().next();
     }
 
     public Integer getInitValue() {
