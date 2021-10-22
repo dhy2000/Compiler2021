@@ -1,6 +1,7 @@
 import config.Config;
 import frontend.SysY;
 import intermediate.Intermediate;
+import intermediate.MidRunner;
 import intermediate.optimize.PrintfTrans;
 
 public class Compiler {
@@ -15,6 +16,10 @@ public class Compiler {
             new PrintfTrans().optimize(ir);
             if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
                 ir.output(Config.getTarget());
+            }
+            if (Config.hasOperationOutput(Config.Operation.VIRTUAL_MACHINE)) {
+                MidRunner vm = new MidRunner(ir);
+                vm.run();
             }
         } catch (Exception e) {
             e.printStackTrace();

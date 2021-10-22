@@ -36,6 +36,14 @@ public class Call extends ILinkNode {
         return params;
     }
 
+    public boolean hasRet() {
+        return Objects.nonNull(ret);
+    }
+
+    public Symbol getRet() {
+        return ret;
+    }
+
     @Override
     public String toString() {
         return "CALL " + function.getName() + ", ["

@@ -35,7 +35,7 @@ public class MidRunner {
     // Function Calls
     private int currentStackSize; // 当前层已经用掉的栈的大小
     private int retValue; // 返回值, 对应 $v0 寄存器
-    private Stack<ILinkNode> retProgram = new Stack<>(); // 返回地址, 对应 $ra 寄存器，指向 Call 指令
+    private Stack<Call> retProgram = new Stack<>(); // 返回地址, 对应 $ra 寄存器，指向 Call 指令
     private Stack<Integer> stack = new Stack<>(); // 维护每一层用的栈的大小, 遇 Call 压栈，遇 RETURN 弹栈
 
     // Temporary Variable
@@ -211,8 +211,12 @@ public class MidRunner {
         // Step 2: restore stack
         currentStackSize = stack.pop();
         // Step 3: restore context
-        currentProgram = retProgram.pop();
-        currentProgram = currentProgram.getNext();
+        Call call = retProgram.pop();
+        // Step 4: return value
+        if (call.hasRet()) {
+            writeToSymbol(call.getRet(), retValue);
+        }
+        currentProgram = call.getNext();
     }
 
     private void runAddressOffset(AddressOffset code) {
@@ -253,13 +257,13 @@ public class MidRunner {
     private void runBranchOrJump(ILinkNode code) {
         assert code instanceof Jump || code instanceof BranchIfElse;
         if (code instanceof Jump) {
-            currentProgram = ((Jump) code).getTarget();
+            currentProgram = ((Jump) code).getTarget().getHead();
         } else {
             int cond = readOperand(((BranchIfElse) code).getCondition());
             if (cond != 0) {
-                currentProgram = ((BranchIfElse) code).getThenTarget();
+                currentProgram = ((BranchIfElse) code).getThenTarget().getHead();
             } else {
-                currentProgram = ((BranchIfElse) code).getElseTarget();
+                currentProgram = ((BranchIfElse) code).getElseTarget().getHead();
             }
         }
     }

@@ -897,5 +897,6 @@ public class CodeGenerator {
         intermediate.putFunction(mainMeta);
         MainFuncDef main = unit.getMainFunc();
         funcBodyHelper(main.getBody(), mainMeta);
+        intermediate.setMainFunction(mainMeta);
     }
 }
