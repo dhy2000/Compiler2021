@@ -496,15 +496,13 @@ public class CodeGenerator {
             current.append(new BranchIfElse(cond, then, elseBlk));
             currentBlock = then;
             analyseStmt(stmt.getThenStmt());
-            then.append(new Jump(follow));
+            currentBlock.append(new Jump(follow));
             currentBlock = elseBlk;
             analyseStmt(stmt.getElseStmt());
-            elseBlk.append(new Jump(follow));
         } else {
             current.append(new BranchIfElse(cond, then, follow));
             currentBlock = then;
             analyseStmt(stmt.getThenStmt());
-            then.append(new Jump(follow));
         }
         currentBlock.append(new Jump(follow));
         currentBlock = follow;

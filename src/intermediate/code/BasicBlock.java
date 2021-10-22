@@ -20,6 +20,9 @@ public class BasicBlock extends ILinkNode {
     private final Type type;
 
     public BasicBlock(String label, Type type) {
+        if (label.equals("B_78")) {
+            System.out.println("DEBUG!!");
+        }
         this.label = label;
         this.type = type;
         this.setNext(tail);
