@@ -55,6 +55,7 @@ public class BasicBlock extends ILinkNode {
     public void append(ILinkNode follow) {
         ILinkNode last = tail.getPrev();
         last.setNext(follow);
+        follow.setPrev(last);
         ILinkNode tail = follow;
         while (tail.hasNext()) {
             tail = tail.getNext();

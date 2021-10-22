@@ -1,5 +1,7 @@
 import config.Config;
 import frontend.SysY;
+import intermediate.Intermediate;
+import intermediate.optimize.PrintfTrans;
 
 public class Compiler {
 
@@ -9,6 +11,11 @@ public class Compiler {
             if (args.length > 0) { Config.loadArgs(args); }
             else { Config.loadArgs(new String[]{"-E", "-i", "testfile.txt", "-o", "error.txt"}); }
             SysY sysy = new SysY(Config.getSource());
+            Intermediate ir = sysy.getIntermediate();
+            new PrintfTrans().optimize(ir);
+            if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
+                ir.output(Config.getTarget());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new AssertionError(e);

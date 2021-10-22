@@ -2,6 +2,7 @@ package intermediate.code;
 
 import intermediate.operand.Operand;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class PrintFormat extends ILinkNode {
 
     public PrintFormat(String format, List<Operand> params) {
         this.format = format;
-        this.params = Collections.unmodifiableList(params);
+        this.params = Collections.unmodifiableList(new ArrayList<>(params));
     }
 
     public String getFormat() {

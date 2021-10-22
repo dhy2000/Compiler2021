@@ -71,6 +71,10 @@ public class Intermediate {
         return mainFunction;
     }
 
+    /**
+     * 输出中间代码，同时该方法也是一个遍历中间代码的模板
+     * @param ps 指定输出流
+     */
     public void output(PrintStream ps) {
         // global variables
         ps.println("======= IR =======");

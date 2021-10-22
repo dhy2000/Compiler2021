@@ -17,6 +17,7 @@ public class SysY {
 
     private TokenList tokens;
     private CompUnit compUnit;
+    private Intermediate intermediate;
 
     public SysY(InputStream src) {
         // read source Code
@@ -41,10 +42,7 @@ public class SysY {
             if (!ErrorTable.getInstance().isEmpty()) {
                 return;
             }
-            Intermediate ir = codeGenerator.getIntermediate();
-            if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
-                ir.output(Config.getTarget());
-            }
+            intermediate = codeGenerator.getIntermediate();
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());
             source.printAll(Config.getTarget());
@@ -60,5 +58,9 @@ public class SysY {
 
     public CompUnit getCompUnit() {
         return compUnit;
+    }
+
+    public Intermediate getIntermediate() {
+        return intermediate;
     }
 }
