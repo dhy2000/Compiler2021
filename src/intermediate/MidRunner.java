@@ -210,6 +210,7 @@ public class MidRunner {
         }
         // Step 2: restore stack
         currentStackSize = stack.pop();
+        stackPointer += currentStackSize;
         // Step 3: restore context
         Call call = retProgram.pop();
         // Step 4: return value
@@ -276,7 +277,7 @@ public class MidRunner {
         instrCount++;
 
         if (ENABLE_DEBUG) {
-            debug.printf("%d: %s\n", instrCount, currentProgram);
+            debug.printf("%5d[sp=0x%08x]: %s\n", instrCount, stackPointer, currentProgram);
         }
 
         if (currentProgram instanceof BinaryOp) {
