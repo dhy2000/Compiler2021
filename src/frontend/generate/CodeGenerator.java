@@ -854,10 +854,10 @@ public class CodeGenerator {
         BasicBlock block = analyseBlock(funcBody);
         BasicBlock body = new BasicBlock(meta.getName(), BasicBlock.Type.FUNC);
         body.append(new Jump(block));
+        currentBlock.append(new Return());
         currentBlock = block;
         meta.loadBody(body);
         currentSymTable = currentSymTable.getParent();
-
         currentFunc = null;
         // Block funcBody = def.getBody();
         Iterator<BlockItem> iterItem = funcBody.iterItems();
