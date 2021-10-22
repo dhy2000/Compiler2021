@@ -506,6 +506,7 @@ public class CodeGenerator {
             analyseStmt(stmt.getThenStmt());
             then.append(new Jump(follow));
         }
+        currentBlock.append(new Jump(follow));
         currentBlock = follow;
     }
 
@@ -529,6 +530,7 @@ public class CodeGenerator {
         analyseStmt(stmt.getStmt());
         loopFollows.pop();
         loopBlocks.pop();
+        currentBlock.append(new Jump(follow));
         currentBlock = follow;
     }
 
