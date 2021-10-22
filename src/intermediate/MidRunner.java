@@ -1,10 +1,10 @@
 package intermediate;
 
 import config.Config;
-import intermediate.code.BinaryOp;
-import intermediate.code.ILinkNode;
+import intermediate.code.*;
 import intermediate.operand.Immediate;
 import intermediate.operand.Operand;
+import intermediate.symbol.FuncMeta;
 import intermediate.symbol.Symbol;
 
 import java.io.PrintStream;
@@ -28,9 +28,15 @@ public class MidRunner {
     private ILinkNode currentProgram;
 
     // Memory Model
-    private static final int STACK_TOP = 500000;
+    private static final int MEMORY_TOP = 500000;
     private final ArrayList<Integer> memory;
-    private int stackPointer = STACK_TOP;
+    private int stackPointer = MEMORY_TOP;
+
+    // Function Calls
+    private int currentStackSize; // 当前层已经用掉的栈的大小
+    private int retValue; // 返回值, 对应 $v0 寄存器
+    private Stack<ILinkNode> retProgram = new Stack<>(); // 返回地址, 对应 $ra 寄存器，指向 Call 指令
+    private Stack<Integer> stack = new Stack<>(); // 维护每一层用的栈的大小, 遇 Call 压栈，遇 RETURN 弹栈
 
     // Temporary Variable
     private final Map<String, Integer> tempVariables = new HashMap<>();
@@ -46,9 +52,9 @@ public class MidRunner {
     public MidRunner(Intermediate ir) {
         this.intermediate = ir;
         currentProgram = ir.getMainFunction().getBody().getHead();
-        memory = new ArrayList<>(STACK_TOP);
+        memory = new ArrayList<>(MEMORY_TOP);
         Random random = new Random();
-        for (int i = 0; i < STACK_TOP; i++) {
+        for (int i = 0; i < MEMORY_TOP; i++) {
             memory.add(random.nextInt());
         }
         for (Map.Entry<String, Integer> entry : ir.getGlobalVariables().entrySet()) {
@@ -76,12 +82,23 @@ public class MidRunner {
         return Objects.nonNull(currentProgram);
     }
 
+    private int getSymbolAddress(Symbol sym) {
+        assert sym.hasAddress();
+        if (sym.isLocal()) {
+            currentStackSize = Math.max(currentStackSize, sym.getAddress());
+            return stackPointer - sym.getAddress();
+        } else {
+            return sym.getAddress();
+        }
+    }
+
     private int readOperand(Operand src) {
         if (src instanceof Immediate) {
             return ((Immediate) src).getValue();
         } else if (src instanceof Symbol) {
             if (((Symbol) src).hasAddress()) {
                 if (((Symbol) src).isLocal()) {
+                    currentStackSize = Math.max(currentStackSize, ((Symbol) src).getAddress());
                     return loadMemoryWord(stackPointer - ((Symbol) src).getAddress());
                 } else {
                     return loadMemoryWord(((Symbol) src).getAddress());
@@ -98,6 +115,7 @@ public class MidRunner {
         if (symbol.hasAddress()) {
             int address;
             if (symbol.isLocal()) {
+                currentStackSize = Math.max(currentStackSize, symbol.getAddress());
                 address = stackPointer - symbol.getAddress();
             } else {
                 address = symbol.getAddress();
@@ -132,6 +150,120 @@ public class MidRunner {
         writeToSymbol(code.getDst(), result);
     }
 
+    private void runUnaryOp(UnaryOp code) {
+        UnaryOp.Op op = code.getOp();
+        int src = readOperand(code.getSrc());
+        int result;
+        switch (op) {
+            case MOV: result = src; break;
+            case NEG: result = -src; break;
+            case NOT: result = (src != 0) ? 0 : 1; break;
+            default: throw new AssertionError("Bad UnaryOp");
+        }
+        writeToSymbol(code.getDst(), result);
+    }
+
+    private void runIO(ILinkNode code) {
+        assert code instanceof PrintFormat || code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
+        if (code instanceof Input) {
+            Symbol symbol = ((Input) code).getDst();
+            int value = input.nextInt();
+            writeToSymbol(symbol, value);
+        } else if (code instanceof PrintInt) {
+            int value = readOperand(((PrintInt) code).getValue());
+            output.print(value);
+        } else if (code instanceof PrintStr) {
+            String content = intermediate.getGlobalStrings().get(((PrintStr) code).getLabel());
+            output.print(content.replaceAll("\\\\n", "\n"));
+        } else {
+            throw new AssertionError("Bad IO Code");
+        }
+    }
+
+    private void runCall(Call code) {
+        // Step 1: store stack
+        stack.push(currentStackSize);
+        stackPointer -= currentStackSize;
+        // Step 2: store return address
+        retProgram.push(code);
+        // Step 3: load params
+        int len = code.getParams().size();
+        FuncMeta meta = code.getFunction();
+        assert len == meta.getParams().size();
+        for (int i = 0; i < len; i++) {
+            int value = readOperand(code.getParams().get(i));
+            writeToSymbol(meta.getParams().get(i), value);
+        }
+        // Step 4: jump program counter
+        currentProgram = meta.getBody().getHead();
+    }
+
+    private void runReturn(Return code) {
+        // Step 1: set Return Value if it has
+        if (code.hasValue()) {
+            retValue = readOperand(code.getValue());
+        }
+        if (stack.isEmpty() || retProgram.isEmpty()) {
+            // Terminate! Main Function Return!
+            currentProgram = null;
+            return;
+        }
+        // Step 2: restore stack
+        currentStackSize = stack.pop();
+        // Step 3: restore context
+        currentProgram = retProgram.pop();
+        currentProgram = currentProgram.getNext();
+    }
+
+    private void runAddressOffset(AddressOffset code) {
+        Symbol base = code.getBase();
+        int offset = readOperand(code.getOffset());
+        Symbol target = code.getTarget();
+        assert target.getType().equals(Symbol.Type.POINTER);
+        assert (base.getType().equals(Symbol.Type.ARRAY) && base.hasAddress()) || (base.getType().equals(Symbol.Type.POINTER));
+        if (base.getType().equals(Symbol.Type.ARRAY)) {
+            assert base.hasAddress();
+            int address = base.getAddress();
+            writeToSymbol(target, address + offset);
+        } else {
+            int address = readOperand(base);
+            writeToSymbol(target, address + offset);
+        }
+    }
+
+    private void runPointerOp(PointerOp code) {
+        PointerOp.Op op = code.getOp();
+        int address = readOperand(code.getAddress());
+        int value;
+        switch (op) {
+            case LOAD:
+                value = loadMemoryWord(address);
+                Symbol dst = code.getDst();
+                writeToSymbol(dst, value);
+                break;
+            case STORE:
+                value = readOperand(code.getSrc());
+                storeMemoryWord(address, value);
+                break;
+            default:
+                throw new AssertionError("Bad PointerOp");
+        }
+    }
+
+    private void runBranchOrJump(ILinkNode code) {
+        assert code instanceof Jump || code instanceof BranchIfElse;
+        if (code instanceof Jump) {
+            currentProgram = ((Jump) code).getTarget();
+        } else {
+            int cond = readOperand(((BranchIfElse) code).getCondition());
+            if (cond != 0) {
+                currentProgram = ((BranchIfElse) code).getThenTarget();
+            } else {
+                currentProgram = ((BranchIfElse) code).getElseTarget();
+            }
+        }
+    }
+
     /**
      * 执行一步
      */
@@ -143,8 +275,30 @@ public class MidRunner {
             debug.printf("%d: %s\n", instrCount, currentProgram);
         }
 
-
-
+        if (currentProgram instanceof BinaryOp) {
+            runBinaryOp((BinaryOp) currentProgram);
+            currentProgram = currentProgram.getNext();
+        } else if (currentProgram instanceof UnaryOp) {
+            runUnaryOp((UnaryOp) currentProgram);
+            currentProgram = currentProgram.getNext();
+        } else if (currentProgram instanceof Input || currentProgram instanceof PrintInt || currentProgram instanceof PrintStr) {
+            runIO(currentProgram);
+            currentProgram = currentProgram.getNext();
+        } else if (currentProgram instanceof Call) {
+            runCall((Call) currentProgram);
+        } else if (currentProgram instanceof Return) {
+            runReturn((Return) currentProgram);
+        } else if (currentProgram instanceof AddressOffset) {
+            runAddressOffset((AddressOffset) currentProgram);
+            currentProgram = currentProgram.getNext();
+        } else if (currentProgram instanceof PointerOp) {
+            runPointerOp((PointerOp) currentProgram);
+            currentProgram = currentProgram.getNext();
+        } else if (currentProgram instanceof Jump || currentProgram instanceof BranchIfElse) {
+            runBranchOrJump(currentProgram);
+        } else {
+            throw new AssertionError("Bad Mid Code!");
+        }
     }
 
     /**
