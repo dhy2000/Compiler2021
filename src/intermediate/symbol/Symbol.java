@@ -218,7 +218,8 @@ public class Symbol implements Operand {
 
     @Override
     public String toString() {
-        String address = !hasAddress() ? "(tmp)" : ("@[" + (isLocal() ? "sp-" + getAddress() : "data+" + getAddress()) + "]");
+        // String address = !hasAddress() ? "(tmp)" : ("@[" + (isLocal() ? "sp-" + getAddress() : "data+" + getAddress()) + "]");
+        String address = !hasAddress() ? "(tmp)" : String.format(isLocal() ? "@[sp-0x%x]" : "@[data+0x%x]", getAddress());
         return name + address + ":" + type;
     }
 

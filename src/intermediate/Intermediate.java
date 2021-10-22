@@ -91,13 +91,13 @@ public class Intermediate {
         for (Map.Entry<String, Integer> entry : globalVariables.entrySet().stream()
                 .sorted(Comparator.comparingInt(stringIntegerEntry ->
                         globalAddress.get(stringIntegerEntry.getKey()))).collect(Collectors.toList())) {
-            ps.printf("%s[%d]: %d\n", entry.getKey(), globalAddress.get(entry.getKey()), entry.getValue());
+            ps.printf("%s[0x%x]: %d\n", entry.getKey(), globalAddress.get(entry.getKey()), entry.getValue());
         }
         ps.println(("\n== Global Arrays =="));
         for (Map.Entry<String, List<Integer>> entry : globalArrays.entrySet().stream()
                 .sorted(Comparator.comparingInt(stringListEntry ->
                         globalAddress.get(stringListEntry.getKey()))).collect(Collectors.toList())) {
-            ps.printf("%s[%d]: [%s]\n", entry.getKey(), globalAddress.get(entry.getKey()), entry.getValue().stream()
+            ps.printf("%s[0x%x]: [%s]\n", entry.getKey(), globalAddress.get(entry.getKey()), entry.getValue().stream()
                     .map(Object::toString).reduce((s, s2) -> s + ", " + s2).orElse(""));
         }
         ps.println("\n== Global Strings ==");
