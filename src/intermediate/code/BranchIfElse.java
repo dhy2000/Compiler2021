@@ -30,6 +30,6 @@ public class BranchIfElse extends ILinkNode {
 
     @Override
     public String toString() {
-        return "IF_ELSE " + condition + " ? " + thenTarget + " : " + elseTarget;
+        return "BR " + condition + " ? " + thenTarget + " : " + elseTarget;
     }
 }

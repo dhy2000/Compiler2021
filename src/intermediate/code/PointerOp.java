@@ -52,6 +52,6 @@ public class PointerOp extends ILinkNode {
 
     @Override
     public String toString() {
-        return "PTR." + op.name() + " " + address + ", " + (op.equals(Op.LOAD) ? getDst() : getSrc());
+        return op.name() + " " + address + ", " + (op.equals(Op.LOAD) ? getDst() : getSrc());
     }
 }

@@ -37,6 +37,6 @@ public class UnaryOp extends ILinkNode {
 
     @Override
     public String toString() {
-        return "UNARY." + op.name() + " " + src + ", " + dst;
+        return op.name() + " " + src + ", " + dst;
     }
 }

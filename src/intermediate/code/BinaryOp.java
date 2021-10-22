@@ -53,6 +53,6 @@ public class BinaryOp extends ILinkNode {
 
     @Override
     public String toString() {
-        return "BINARY." + op.name() + " " + src1 + ", " + src2 + ", " + dst;
+        return op.name() + " " + src1 + ", " + src2 + ", " + dst;
     }
 }
