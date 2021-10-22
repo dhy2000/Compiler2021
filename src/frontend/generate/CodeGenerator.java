@@ -431,7 +431,8 @@ public class CodeGenerator {
             ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
             return;
         }
-        currentBlock.append(new Output(format, params));
+        String label = intermediate.addGlobalString(format); // TODO: use label instead of local string
+        currentBlock.append(new Output(label, params));
     }
 
     public void analyseReturnStmt(ReturnStmt stmt) {
@@ -670,8 +671,10 @@ public class CodeGenerator {
                         sym.setAddress(stackSize);
                         sym.setLocal(true);
                         stackSize += sym.capacity();
+                        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, new Immediate(value), sym));
                     } else {
                         sym.setAddress(currentSymTable.capacity());
+                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue());
                     }
                     currentSymTable.add(sym);
                 } else {
@@ -680,6 +683,7 @@ public class CodeGenerator {
                         Symbol sym = new Symbol(name, currentField(), constant, value);
                         sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
+                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue());
                     } else {    // 在函数里的非常量，可以运行时计算
                         Symbol sym = new Symbol(name, currentField());
                         sym.setAddress(stackSize);
@@ -687,8 +691,7 @@ public class CodeGenerator {
                         stackSize += sym.capacity();
                         currentSymTable.add(sym);
                         Operand val = analyseExp(init.getExp());
-                        Symbol temp = Symbol.temporary(currentField(), Symbol.Type.INT);
-                        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, val, temp));
+                        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, val, sym));
                     }
                 }
             } else {
@@ -696,6 +699,7 @@ public class CodeGenerator {
                 if (Objects.isNull(currentFunc)) {
                     sym = new Symbol(name, currentField(), false, 0);
                     sym.setAddress(currentSymTable.capacity());
+                    intermediate.addGlobalVariable(sym.getName(), sym.getInitValue());
                 } else {
                     sym = new Symbol(name, currentField());
                     sym.setAddress(stackSize);
@@ -733,6 +737,7 @@ public class CodeGenerator {
                         stackSize += sym.capacity();
                     } else {
                         sym.setAddress(currentSymTable.capacity());
+                        intermediate.addGlobalArray(sym.getName(), sym.getInitArray());
                     }
                     currentSymTable.add(sym);
                 } else {
@@ -760,6 +765,7 @@ public class CodeGenerator {
                     }
                     sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
                     sym.setAddress(currentSymTable.capacity());
+                    intermediate.addGlobalArray(sym.getName(), sym.getInitArray());
                 } else {
                     sym = new Symbol(name, currentField(), arrayDims);
                     sym.setAddress(stackSize);

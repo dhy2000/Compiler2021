@@ -29,4 +29,8 @@ public class ErrorTable implements Iterable<Error> {
     public void add(Error e) {
         errors.add(e);
     }
+
+    public boolean isEmpty() {
+        return errors.isEmpty();
+    }
 }

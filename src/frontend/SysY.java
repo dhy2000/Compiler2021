@@ -9,6 +9,7 @@ import frontend.lexical.Tokenizer;
 import frontend.syntax.CompUnit;
 import frontend.syntax.CompUnitParser;
 import input.Source;
+import intermediate.Intermediate;
 
 import java.io.InputStream;
 
@@ -36,6 +37,13 @@ public class SysY {
             codeGenerator.analyseCompUnit(compUnit);
             if (Config.hasOperationOutput(Config.Operation.ERROR)) {
                 ErrorTable.getInstance().forEach(error -> Config.getTarget().println(error.getLineNum() + " " + error.getErrorTag()));
+            }
+            if (!ErrorTable.getInstance().isEmpty()) {
+                return;
+            }
+            Intermediate ir = codeGenerator.getIntermediate();
+            if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
+                ir.output(Config.getTarget());
             }
         } catch (FrontendException e) {
             Config.getTarget().println(e.getMessage());

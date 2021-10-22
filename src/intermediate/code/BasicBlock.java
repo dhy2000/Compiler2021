@@ -22,6 +22,8 @@ public class BasicBlock extends ILinkNode {
     public BasicBlock(String label, Type type) {
         this.label = label;
         this.type = type;
+        this.setNext(tail);
+        this.tail.setPrev(this);
     }
 
     public String getLabel() {
@@ -51,8 +53,8 @@ public class BasicBlock extends ILinkNode {
     }
 
     public void append(ILinkNode follow) {
-        tail.setNext(follow);
-        follow.setPrev(tail);
+        ILinkNode last = tail.getPrev();
+        last.setNext(follow);
         ILinkNode tail = follow;
         while (tail.hasNext()) {
             tail = tail.getNext();
@@ -63,12 +65,13 @@ public class BasicBlock extends ILinkNode {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[BLOCK_" + type.name() + "]" + getLabel() + ":\n");
-        ILinkNode node = getHead();
-        while (Objects.nonNull(node)) {
-            sb.append(node).append("\n");
-            node = node.getNext();
-        }
-        return sb.toString();
+//        StringBuilder sb = new StringBuilder("[BLOCK_" + type.name() + "]" + getLabel() + ":\n");
+//        ILinkNode node = getHead();
+//        while (Objects.nonNull(node) && node.hasNext()) {
+//            sb.append(node).append("\n");
+//            node = node.getNext();
+//        }
+//        return sb.toString();
+        return getLabel();
     }
 }
