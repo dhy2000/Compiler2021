@@ -810,9 +810,9 @@ public class CodeGenerator {
             }
             arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, false);
         }
+        meta.addParam(arg);
         arg.setAddress(meta.getParamTable().capacity());
         arg.setLocal(true);
-        meta.addParam(arg);
     }
 
     public void analyseFunc(FuncDef func) throws ConstExpException {
