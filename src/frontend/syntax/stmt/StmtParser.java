@@ -65,14 +65,18 @@ public class StmtParser {
         if (!iterator.hasNext()) {
             throw new UnexpectedEofException(returnTk.lineNumber(), syntax);
         }
-        Token semi = iterator.next();
-        if (semi.getType().equals(Token.Type.SEMICN)) {
-            iterator.previous();
-            return new ReturnStmt(returnTk);
-        } else {
-            iterator.previous();
+        Token follow = iterator.next();
+        iterator.previous();
+        if (follow.getType().equals(Token.Type.IDENFR)
+                || follow.getType().equals(Token.Type.INTCON)
+                || follow.getType().equals(Token.Type.LPARENT)
+                || follow.getType().equals(Token.Type.PLUS)
+                || follow.getType().equals(Token.Type.MINU)
+                || follow.getType().equals(Token.Type.NOT)) {
             Exp exp = new ExprParser(iterator, maxLineNum).parseExp();
             return new ReturnStmt(returnTk, exp);
+        } else {
+            return new ReturnStmt(returnTk);
         }
     }
 
