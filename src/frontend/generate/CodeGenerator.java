@@ -314,6 +314,7 @@ public class CodeGenerator {
                 // POINTER
                 int depth = indexes.size();
                 Symbol ptr = symbol.subPointer(depth);
+                currentBlock.append(new AddressOffset(symbol, offset, ptr));
                 if (left || depth <= symbol.getDimCount()) {
                     return ptr;
                 } else {
