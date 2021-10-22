@@ -669,9 +669,9 @@ public class CodeGenerator {
                     int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
                     Symbol sym = new Symbol(name, currentField(), constant, value);
                     if (Objects.nonNull(currentFunc)) {
+                        stackSize += sym.capacity();
                         sym.setAddress(stackSize);
                         sym.setLocal(true);
-                        stackSize += sym.capacity();
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, new Immediate(value), sym));
                     } else {
                         sym.setAddress(currentSymTable.capacity());
@@ -687,9 +687,9 @@ public class CodeGenerator {
                         intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                     } else {    // 在函数里的非常量，可以运行时计算
                         Symbol sym = new Symbol(name, currentField());
+                        stackSize += sym.capacity();
                         sym.setAddress(stackSize);
                         sym.setLocal(true);
-                        stackSize += sym.capacity();
                         currentSymTable.add(sym);
                         Operand val = analyseExp(init.getExp());
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, val, sym));
@@ -703,9 +703,9 @@ public class CodeGenerator {
                     intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                 } else {
                     sym = new Symbol(name, currentField());
+                    stackSize += sym.capacity();
                     sym.setAddress(stackSize);
                     sym.setLocal(true);
-                    stackSize += sym.capacity();
                 }
                 currentSymTable.add(sym);
             }
@@ -733,9 +733,9 @@ public class CodeGenerator {
                     }
                     Symbol sym = new Symbol(name, currentField(), arrayDims, constant, initValues);
                     if (Objects.nonNull(currentFunc)) {
+                        stackSize += sym.capacity();
                         sym.setAddress(stackSize);
                         sym.setLocal(true);
-                        stackSize += sym.capacity();
                     } else {
                         sym.setAddress(currentSymTable.capacity());
                         intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
@@ -744,9 +744,9 @@ public class CodeGenerator {
                 } else {
                     // 运行时赋值
                     Symbol sym = new Symbol(name, currentField(), arrayDims);
+                    stackSize += sym.capacity();
                     sym.setAddress(stackSize);
                     sym.setLocal(true);
-                    stackSize += sym.capacity();
                     currentSymTable.add(sym);
                     int offset = 0;
                     for (Exp exp: initExps) {
@@ -769,9 +769,9 @@ public class CodeGenerator {
                     intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
                 } else {
                     sym = new Symbol(name, currentField(), arrayDims);
+                    stackSize += sym.capacity();
                     sym.setAddress(stackSize);
                     sym.setLocal(true);
-                    stackSize += sym.capacity();
                 }
                 currentSymTable.add(sym);
             }
