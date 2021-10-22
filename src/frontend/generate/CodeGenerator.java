@@ -226,7 +226,7 @@ public class CodeGenerator {
                 if (!error) {
                     Symbol r = Symbol.temporary(currentField(), Symbol.Type.INT);
                     currentBlock.append(new Call(func, params, r));
-                    return r;
+                    result = r;
                 } else {
                     return new Immediate(0);
                 }
