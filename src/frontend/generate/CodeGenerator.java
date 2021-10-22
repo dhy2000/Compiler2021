@@ -855,7 +855,7 @@ public class CodeGenerator {
         BasicBlock body = new BasicBlock(meta.getName(), BasicBlock.Type.FUNC);
         body.append(new Jump(block));
         currentBlock.append(new Return());
-        currentBlock = block;
+        currentBlock = null;
         meta.loadBody(body);
         currentSymTable = currentSymTable.getParent();
         currentFunc = null;
