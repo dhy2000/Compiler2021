@@ -21,14 +21,14 @@ public class MidRunner {
     private final PrintStream output = Config.getTarget();
     private final PrintStream debug = System.err;
 
-    private static final int INSTRUCTION_LIMIT = 1000000;
+    private static final int INSTRUCTION_LIMIT = 100000000;
     private int instrCount = 0;
 
     // Program Counter
     private ILinkNode currentProgram;
 
     // Memory Model
-    private static final int MEMORY_TOP = 500000;
+    private static final int MEMORY_TOP = 50000000;
     private final ArrayList<Integer> memory;
     private int stackPointer = MEMORY_TOP;
 
@@ -174,7 +174,13 @@ public class MidRunner {
         if (code instanceof Input) {
             Symbol symbol = ((Input) code).getDst();
             int value = input.nextInt();
-            writeToSymbol(symbol, value);
+            if (symbol.getType().equals(Symbol.Type.INT)) {
+                writeToSymbol(symbol, value);
+            } else {
+                assert symbol.getType().equals(Symbol.Type.POINTER);
+                int address = readOperand(symbol);
+                storeMemoryWord(address, value);
+            }
         } else if (code instanceof PrintInt) {
             int value = readOperand(((PrintInt) code).getValue());
             output.print(value);
