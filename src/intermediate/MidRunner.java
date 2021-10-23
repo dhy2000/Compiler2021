@@ -203,7 +203,6 @@ public class MidRunner {
         assert len == meta.getParams().size();
         for (int i = 0; i < len; i++) {
             int value = readOperand(code.getParams().get(i));
-            // writeToSymbol(meta.getParams().get(i), value);
             Symbol arg = meta.getParams().get(i);
             int address = (stackPointer - currentStackSize) - arg.getAddress();
             storeMemoryWord(address, value);
