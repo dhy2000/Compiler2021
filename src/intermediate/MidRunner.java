@@ -35,8 +35,8 @@ public class MidRunner {
     // Function Calls
     private int currentStackSize; // 当前层已经用掉的栈的大小
     private int retValue; // 返回值, 对应 $v0 寄存器
-    private Stack<Call> retProgram = new Stack<>(); // 返回地址, 对应 $ra 寄存器，指向 Call 指令
-    private Stack<Integer> stack = new Stack<>(); // 维护每一层用的栈的大小, 遇 Call 压栈，遇 RETURN 弹栈
+    private final Stack<Call> retProgram = new Stack<>(); // 返回地址, 对应 $ra 寄存器，指向 Call 指令
+    private final Stack<Integer> stack = new Stack<>(); // 维护每一层用的栈的大小, 遇 Call 压栈，遇 RETURN 弹栈
 
     // Temporary Variable
     private final Map<String, Integer> tempVariables = new HashMap<>();
