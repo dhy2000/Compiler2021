@@ -234,7 +234,7 @@ public class MidRunner {
         assert (base.getType().equals(Symbol.Type.ARRAY) && base.hasAddress()) || (base.getType().equals(Symbol.Type.POINTER));
         if (base.getType().equals(Symbol.Type.ARRAY)) {
             assert base.hasAddress();
-            int address = base.getAddress();
+            int address = getSymbolAddress(base);
             writeToSymbol(target, address + offset);
         } else {
             int address = readOperand(base);

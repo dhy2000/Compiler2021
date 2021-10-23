@@ -508,7 +508,6 @@ public class CodeGenerator {
         currentBlock = follow;
     }
 
-    // TODO: There are some bugs!
     public void analyseWhileStmt(WhileStmt stmt) throws ConstExpException {
         // 缺右括号
         if (!stmt.hasRightParenthesis()) {
@@ -752,8 +751,8 @@ public class CodeGenerator {
                     for (Exp exp: initExps) {
                         Operand op = analyseExp(exp);
                         Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), false);
-                        currentBlock.append(new AddressOffset(sym, new Immediate(offset), ptr));
-                        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, op, ptr));
+                        currentBlock.append(new AddressOffset(sym, new Immediate(offset * Symbol.SIZEOF_INT), ptr));
+                        currentBlock.append(new PointerOp(PointerOp.Op.STORE, ptr, op));
                         offset++;
                     }
                 }
