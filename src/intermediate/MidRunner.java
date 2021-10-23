@@ -47,7 +47,7 @@ public class MidRunner {
 
     private void storeMemoryWord(int address, int value) {
         if (ENABLE_DEBUG) {
-            debug.printf("%5d@: *%08x <= %d\n", instrCount, address, value);
+            debug.printf("%8d@: *%08x <= %d\n", instrCount, address, value);
         }
         memory.set(address / 4, value);
     }
@@ -116,7 +116,7 @@ public class MidRunner {
 
     private void writeToSymbol(Symbol symbol, int value) {
         if (ENABLE_DEBUG) {
-            debug.printf("%5d@: $[%s] <= %d\n", instrCount, symbol, value);
+            debug.printf("%8d@: $[%s] <= %d\n", instrCount, symbol, value);
         }
         if (symbol.hasAddress()) {
             int address;
@@ -292,7 +292,7 @@ public class MidRunner {
         instrCount++;
 
         if (ENABLE_DEBUG) {
-            debug.printf("%5d[sp=0x%08x]: %s\n", instrCount, stackPointer, currentProgram);
+            debug.printf("%8d[sp=0x%08x]: %s\n", instrCount, stackPointer, currentProgram);
         }
 
         if (currentProgram instanceof BinaryOp) {
