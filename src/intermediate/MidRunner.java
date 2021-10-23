@@ -195,7 +195,6 @@ public class MidRunner {
     private void runCall(Call code) {
         // Step 1: store stack
         stack.push(currentStackSize);
-        stackPointer -= currentStackSize;
         // Step 2: store return address
         retProgram.push(code);
         // Step 3: load params
@@ -204,9 +203,14 @@ public class MidRunner {
         assert len == meta.getParams().size();
         for (int i = 0; i < len; i++) {
             int value = readOperand(code.getParams().get(i));
-            writeToSymbol(meta.getParams().get(i), value);
+            // writeToSymbol(meta.getParams().get(i), value);
+            Symbol arg = meta.getParams().get(i);
+            int address = (stackPointer - currentStackSize) - arg.getAddress();
+            storeMemoryWord(address, value);
         }
-        // Step 4: jump program counter
+        // Step 4: move stack pointer and jump program counter
+        stackPointer -= currentStackSize;
+        currentStackSize = meta.getParamTable().capacity();
         currentProgram = meta.getBody().getHead();
     }
 

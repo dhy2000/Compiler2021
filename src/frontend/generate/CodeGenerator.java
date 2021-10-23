@@ -735,6 +735,14 @@ public class CodeGenerator {
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
                         sym.setLocal(true);
+                        // 初始化
+                        int offset = 0;
+                        for (int val : initValues) {
+                            Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), false);
+                            currentBlock.append(new AddressOffset(sym, new Immediate(offset * Symbol.SIZEOF_INT), ptr));
+                            currentBlock.append(new PointerOp(PointerOp.Op.STORE, ptr, new Immediate(val)));
+                            offset++;
+                        }
                     } else {
                         sym.setAddress(currentSymTable.capacity());
                         intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
