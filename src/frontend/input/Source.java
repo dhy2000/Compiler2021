@@ -1,4 +1,4 @@
-package input;
+package frontend.input;
 
 import java.io.InputStream;
 import java.io.PrintStream;

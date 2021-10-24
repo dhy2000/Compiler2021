@@ -1,7 +1,7 @@
 package frontend.lexical;
 
 import exception.UnrecognizedTokenException;
-import input.Source;
+import frontend.input.Source;
 import frontend.lexical.token.Token;
 
 import java.util.Objects;

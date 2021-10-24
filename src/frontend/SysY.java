@@ -8,7 +8,7 @@ import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
 import frontend.syntax.CompUnit;
 import frontend.syntax.CompUnitParser;
-import input.Source;
+import frontend.input.Source;
 import intermediate.Intermediate;
 
 import java.io.InputStream;

@@ -76,7 +76,7 @@ public class Config {
             }
             if (args[i].equals("-i")) {
                 if (hasInputFile) {
-                    System.err.println("Warning: only 1 input file supported.");
+                    System.err.println("Warning: only 1 frontend.input file supported.");
                     continue;
                 }
                 if (i + 1 < args.length) {
