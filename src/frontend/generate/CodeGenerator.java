@@ -8,10 +8,7 @@ import frontend.lexical.token.Token;
 import frontend.syntax.CompUnit;
 import frontend.syntax.Component;
 import frontend.syntax.decl.*;
-import frontend.syntax.expr.multi.Cond;
-import frontend.syntax.expr.multi.ConstExp;
-import frontend.syntax.expr.multi.Exp;
-import frontend.syntax.expr.multi.MultiExp;
+import frontend.syntax.expr.multi.*;
 import frontend.syntax.expr.unary.*;
 import frontend.syntax.expr.unary.Number;
 import frontend.syntax.func.FuncDef;
@@ -102,7 +99,66 @@ public class CodeGenerator {
 
     public Operand analyseCond(Cond cond) {
         // TODO: 逻辑运算的短路求值, 单独处理 LAndExp 和 LOrExp
-        return analyseBinaryExp(cond.getLOrExp());
+        return analyseLOrExp(cond.getLOrExp());
+    }
+
+    // 短路求值! 前一项如果为 True 就不用算后面的项了
+    public Operand analyseLOrExp(LOrExp exp) {
+        BasicBlock orFollow = new BasicBlock("COND_OR_" + newBlockCount(), BasicBlock.Type.BASIC);
+        LAndExp first = exp.getFirst();
+        Symbol or = Symbol.temporary(currentField(), Symbol.Type.INT); // or result
+        Operand and = analyseLAndExp(first);
+        if (Objects.isNull(and)) {
+            return null;
+        }
+        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, and, or));
+        BasicBlock next = new BasicBlock("OR_AND_" + newBlockCount(), BasicBlock.Type.BASIC);
+        currentBlock.append(new BranchIfElse(or, orFollow, next));
+        currentBlock = next;
+        Iterator<LAndExp> iter = exp.iterOperand();
+        while (iter.hasNext()) {
+            LAndExp andExp = iter.next();
+            and = analyseLAndExp(andExp);
+            if (Objects.isNull(and)) {
+                return null;
+            }
+            currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, and, or));
+            next = new BasicBlock("OR_AND_" + newBlockCount(), BasicBlock.Type.BASIC);
+            currentBlock.append(new BranchIfElse(or, orFollow, next));
+            currentBlock = next;
+        }
+        currentBlock.append(new Jump(orFollow));
+        currentBlock = orFollow;
+        return or;
+    }
+
+    public Operand analyseLAndExp(LAndExp exp) {
+        BasicBlock andFollow = new BasicBlock("COND_AND_" + newBlockCount(), BasicBlock.Type.BASIC);
+        EqExp first = exp.getFirst();
+        Symbol and = Symbol.temporary(currentField(), Symbol.Type.INT); // and result
+        Operand item = analyseBinaryExp(first);
+        if (Objects.isNull(item)) {
+            return null;
+        }
+        currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, item, and));
+        BasicBlock next = new BasicBlock("AND_ITEM_" + newBlockCount(), BasicBlock.Type.BASIC);
+        currentBlock.append(new BranchIfElse(and, next, andFollow));
+        currentBlock = next;
+        Iterator<EqExp> iter = exp.iterOperand();
+        while (iter.hasNext()) {
+            EqExp eqExp = iter.next();
+            item = analyseBinaryExp(eqExp);
+            if (Objects.isNull(item)) {
+                return null;
+            }
+            currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, item, and));
+            next = new BasicBlock("AND_ITEM_" + newBlockCount(), BasicBlock.Type.BASIC);
+            currentBlock.append(new BranchIfElse(and, next, andFollow));
+            currentBlock = next;
+        }
+        currentBlock.append(new Jump(andFollow));
+        currentBlock = andFollow;
+        return and;
     }
 
     public Operand analyseExp(Exp exp) {
@@ -523,7 +579,7 @@ public class CodeGenerator {
         loopFollows.push(follow);
         currentBlock = loop;
         Operand cond = analyseCond(stmt.getCondition());
-        loop.append(new BranchIfElse(cond, body, follow));
+        currentBlock.append(new BranchIfElse(cond, body, follow));
         currentBlock = body;
         analyseStmt(stmt.getStmt());
         loopFollows.pop();
