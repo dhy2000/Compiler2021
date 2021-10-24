@@ -656,11 +656,7 @@ public class CodeGenerator {
             ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
             return;
         }
-        // 和函数名相同也算重复定义
-        if (intermediate.getFunctions().containsKey(name)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
-            return;
-        }
+        // (?): 和函数名相同不算重复定义
         if (!def.isArray()) {
             if (def.isInitialized()) {
                 ExpInitVal init = (ExpInitVal) def.getInitVal();
