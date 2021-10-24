@@ -101,6 +101,7 @@ public class CodeGenerator {
     }
 
     public Operand analyseCond(Cond cond) {
+        // TODO: 逻辑运算的短路求值, 单独处理 LAndExp 和 LOrExp
         return analyseBinaryExp(cond.getLOrExp());
     }
 
@@ -124,7 +125,6 @@ public class CodeGenerator {
      * @return 作为该表达式运算结果的符号
      */
     public Operand analyseBinaryExp(MultiExp<?> exp) {
-        // TODO: 逻辑运算的短路求值
         Component first = exp.getFirst();
         Operand ret = analyseBinaryOrUnaryExp(first);
         if (Objects.isNull(ret)) {
