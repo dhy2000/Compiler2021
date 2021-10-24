@@ -36,10 +36,12 @@ public class MidRunner {
     private int currentStackSize; // 当前层已经用掉的栈的大小
     private int retValue; // 返回值, 对应 $v0 寄存器
     private final Stack<Call> retProgram = new Stack<>(); // 返回地址, 对应 $ra 寄存器，指向 Call 指令
-    private final Stack<Integer> stack = new Stack<>(); // 维护每一层用的栈的大小, 遇 Call 压栈，遇 RETURN 弹栈
+    private final Stack<Integer> stackSizeStack = new Stack<>(); // 维护每一层用的栈的大小, 遇 Call 压栈，遇 RETURN 弹栈
 
     // Temporary Variable
-    private final Map<String, Integer> tempVariables = new HashMap<>();
+    // Attention: Should protect temporary variables when recursion occurred!
+    private Map<String, Integer> tempVariables;
+    private final Stack<Map<String, Integer>> tempVariableStack = new Stack<>();
 
     private int loadMemoryWord(int address) {
         return memory.get(address / 4);
@@ -55,9 +57,12 @@ public class MidRunner {
     public MidRunner(Intermediate ir) {
         this.intermediate = ir;
         currentProgram = ir.getMainFunction().getBody().getHead();
-        memory = new ArrayList<>(MEMORY_TOP);
+        currentStackSize = 0;
+        tempVariables = new HashMap<>();
+        final int wordCount = MEMORY_TOP / 4;
+        memory = new ArrayList<>(wordCount);
         Random random = new Random();
-        for (int i = 0; i < MEMORY_TOP; i++) {
+        for (int i = 0; i < wordCount; i++) {
             memory.add(random.nextInt());
         }
         for (Map.Entry<String, Integer> entry : ir.getGlobalVariables().entrySet()) {
@@ -193,10 +198,10 @@ public class MidRunner {
     }
 
     private void runCall(Call code) {
-        // Step 1: store stack
-        stack.push(currentStackSize);
-        // Step 2: store return address
+        // Step 1: store stackSize, return Address, Temporary Variables
+        stackSizeStack.push(currentStackSize);
         retProgram.push(code);
+        tempVariableStack.push(tempVariables);
         // Step 3: load params
         int len = code.getParams().size();
         FuncMeta meta = code.getFunction();
@@ -208,6 +213,7 @@ public class MidRunner {
             storeMemoryWord(address, value);
         }
         // Step 4: move stack pointer and jump program counter
+        tempVariables = new HashMap<>(); // sub-process temp variables
         stackPointer -= currentStackSize;
         currentStackSize = meta.getParamTable().capacity();
         currentProgram = meta.getBody().getHead();
@@ -218,16 +224,17 @@ public class MidRunner {
         if (code.hasValue()) {
             retValue = readOperand(code.getValue());
         }
-        if (stack.isEmpty() || retProgram.isEmpty()) {
+        if (stackSizeStack.isEmpty() || retProgram.isEmpty()) {
             // Terminate! Main Function Return!
             currentProgram = null;
             return;
         }
         // Step 2: restore stack
-        currentStackSize = stack.pop();
+        currentStackSize = stackSizeStack.pop();
         stackPointer += currentStackSize;
         // Step 3: restore context
         Call call = retProgram.pop();
+        tempVariables = tempVariableStack.pop();
         // Step 4: return value
         if (call.hasRet()) {
             writeToSymbol(call.getRet(), retValue);
