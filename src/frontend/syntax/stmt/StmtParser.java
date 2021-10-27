@@ -150,7 +150,7 @@ public class StmtParser {
             }
             Token next = iterator.next();
             if (next.getType().equals(Token.Type.ASSIGN)) {
-                // assign or frontend.input
+                // assign or input
                 if (!iterator.hasNext()) {
                     throw new UnexpectedEofException(maxLineNum, syntax);
                 }
