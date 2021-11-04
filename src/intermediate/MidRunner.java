@@ -14,7 +14,7 @@ import java.util.*;
  * 执行中间代码（虚拟机）
  */
 public class MidRunner {
-    private static final boolean ENABLE_DEBUG = true;
+    private static final boolean ENABLE_DEBUG = false;
 
     private final Intermediate intermediate;
     private final Scanner input = new Scanner(System.in);

@@ -12,7 +12,7 @@ public class Compiler {
         // load arguments
         try {
             if (args.length > 0) { Config.loadArgs(args); }
-            else { Config.loadArgs(new String[]{"-E", "-i", "testfile.txt", "-o", "error.txt"}); }
+            else { Config.loadArgs(new String[]{"-V", "-i", "testfile.txt", "-o", "pcoderesult.txt"}); }
             SysY sysy = new SysY(Config.getSource());
             Intermediate ir = sysy.getIntermediate();
             if (Objects.isNull(ir)) {
