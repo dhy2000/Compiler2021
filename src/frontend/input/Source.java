@@ -1,10 +1,8 @@
 package frontend.input;
 
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +17,15 @@ public class Source {
      * @param input 输入流 (构造完成后自动关闭)
      */
     public Source(InputStream input) {
-        Scanner cin = new Scanner(input);
-        while (cin.hasNext()) {
-            lines.add(cin.nextLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(input));
+        try {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            throw new AssertionError(e);
         }
-        cin.close();
     }
 
     public void appendLine(String line) {

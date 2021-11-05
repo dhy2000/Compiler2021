@@ -340,6 +340,7 @@ public class MidRunner {
                 debug.println("Count of instructions out of limit, maybe TLE happen.");
             }
         }
+        input.close();
     }
 
 }
