@@ -7,6 +7,9 @@ import intermediate.operand.Operand;
 import intermediate.symbol.FuncMeta;
 import intermediate.symbol.Symbol;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.*;
 
@@ -17,7 +20,8 @@ public class MidRunner {
     private static final boolean ENABLE_DEBUG = false;
 
     private final Intermediate intermediate;
-    private final Scanner input = new Scanner(System.in);
+//    private final Scanner input = new Scanner(System.in);
+    private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private final PrintStream output = Config.getTarget();
     private final PrintStream debug = System.err;
 
@@ -174,11 +178,35 @@ public class MidRunner {
         writeToSymbol(code.getDst(), result);
     }
 
+    private int nextInt(BufferedReader input) {
+        try {
+            int c = input.read();
+            int value = 0;
+            boolean negative = false;
+            while (c != -1 && !(c >= 48 && c <= 57)) {
+                if (c == 45) {  // '-'
+                    negative = true;
+                }
+                c = input.read();
+            }
+            if (c == -1) {
+                return -1;
+            }
+            while ((c >= 48 && c <= 57)) {
+                value = value * 10 + (c - 48);
+                c = input.read();
+            }
+            return negative ? -value : value;
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
     private void runIO(ILinkNode code) {
         assert code instanceof PrintFormat || code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
         if (code instanceof Input) {
             Symbol symbol = ((Input) code).getDst();
-            int value = input.nextInt();
+            int value = nextInt(input);
             if (symbol.getType().equals(Symbol.Type.INT)) {
                 writeToSymbol(symbol, value);
             } else {
@@ -340,7 +368,11 @@ public class MidRunner {
                 debug.println("Count of instructions out of limit, maybe TLE happen.");
             }
         }
-        input.close();
+        try {
+            input.close();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 
 }
