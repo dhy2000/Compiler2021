@@ -32,7 +32,7 @@ public class MidRunner {
     private ILinkNode currentProgram;
 
     // Memory Model
-    private static final int MEMORY_TOP = 50000000;
+    private static final int MEMORY_TOP = 500000;
     private final ArrayList<Integer> memory;
     private int stackPointer = MEMORY_TOP;
 
@@ -65,9 +65,9 @@ public class MidRunner {
         tempVariables = new HashMap<>();
         final int wordCount = MEMORY_TOP / 4;
         memory = new ArrayList<>(wordCount);
-        Random random = new Random();
+        // Random random = new Random();
         for (int i = 0; i < wordCount; i++) {
-            memory.add(random.nextInt());
+            memory.add(0);
         }
         for (Map.Entry<String, Integer> entry : ir.getGlobalVariables().entrySet()) {
             String name = entry.getKey();
