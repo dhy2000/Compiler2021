@@ -11,7 +11,7 @@ public abstract class MipsInstruction extends ILinkNode {
 
     public MipsInstruction() {}
 
-    private String label = "";
+    private String label = "";  // 指令自己的标签(不是跳转指令的目标!)
     private String comment = "";
 
     public boolean hasLabel() {
@@ -43,6 +43,10 @@ public abstract class MipsInstruction extends ILinkNode {
     public abstract void execute(RegisterFile rf, Memory mem); // 指令执行对寄存器和内存的行为
 
     public abstract boolean isJump(RegisterFile rf); // 执行当前指令后是否跳转到 Label
+
+    public String getJumpTarget() {
+        return "";
+    }
 
     @Override
     public String toString() {

@@ -1,0 +1,46 @@
+package backend.instruction;
+
+import backend.hardware.Memory;
+import backend.hardware.RegisterFile;
+
+public class LoadWord extends MipsInstruction {
+
+    private final int regBase;
+    private final int offset;
+    private final int regDst;
+
+    public LoadWord(int regBase, int offset, int regDst) {
+        this.regBase = regBase;
+        this.offset = offset;
+        this.regDst = regDst;
+    }
+
+    public int getRegBase() {
+        return regBase;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public int getRegDst() {
+        return regDst;
+    }
+
+    @Override
+    public String instrToString() {
+        return String.format("lw $%s, %d($%s)", RegisterFile.getRegisterName(regDst), offset, RegisterFile.getRegisterName(regBase));
+    }
+
+    @Override
+    public void execute(RegisterFile rf, Memory mem) {
+        int base = rf.read(regBase);
+        int address = base + offset;
+        rf.write(regDst, mem.loadWord(address));
+    }
+
+    @Override
+    public boolean isJump(RegisterFile rf) {
+        return false;
+    }
+}
