@@ -4,16 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RegisterFile {
     private static final boolean ENABLE_TRACE = true;
 
     private static final int REGISTER_NUMBER = 32;
 
+    private static final int TEXT_START = 0x00400000;
+
     private static final int GLOBAL_POINTER_INIT = 0x10008000;
     private static final int STACK_POINTER_INIT = 0x7fffeffc;
 
     private final List<Integer> registers = new ArrayList<>(REGISTER_NUMBER);
+
+    private final AtomicInteger programCounter = new AtomicInteger(TEXT_START);
+    private final AtomicInteger hi = new AtomicInteger(0);
+    private final AtomicInteger lo = new AtomicInteger(0);
 
     private static final List<String> names = Collections.unmodifiableList(Arrays.asList(
             "zero", "at", "v0", "v1", "a0", "a1", "a2", "a3",
@@ -85,4 +92,31 @@ public class RegisterFile {
         registers.set(id, value);
     }
 
+    public int getProgramCounter() {
+        return programCounter.get();
+    }
+
+    public int addProgramCounter(int value) {
+        return programCounter.addAndGet(value);
+    }
+
+    public void setProgramCounter(int value) {
+        programCounter.set(value);
+    }
+
+    public int getHi() {
+        return hi.get();
+    }
+
+    public int getLo() {
+        return lo.get();
+    }
+
+    public void setHi(int value) {
+        hi.set(value);
+    }
+
+    public void setLo(int value) {
+        lo.set(value);
+    }
 }

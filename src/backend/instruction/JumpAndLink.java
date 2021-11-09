@@ -5,22 +5,31 @@ import backend.hardware.RegisterFile;
 
 public class JumpAndLink extends MipsInstruction {
 
-    public JumpAndLink(String label) {
-        setLabel(label);
+    private final String target;
+
+    public JumpAndLink(String target) {
+        assert !target.isEmpty();
+        this.target = target;
     }
 
     @Override
     public String instrToString() {
-        return null;
+        return "jal " + target;
     }
 
     @Override
     public void execute(RegisterFile rf, Memory mem) {
-
+        int pc = rf.getProgramCounter();
+        rf.write(RegisterFile.Register.RA, pc + 4);
     }
 
     @Override
     public boolean isJump(RegisterFile rf) {
-        return false;
+        return true;
+    }
+
+    @Override
+    public String getJumpTarget() {
+        return target;
     }
 }

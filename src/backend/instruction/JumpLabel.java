@@ -5,8 +5,11 @@ import backend.hardware.RegisterFile;
 
 public class JumpLabel extends MipsInstruction {
 
-    public JumpLabel(String label) {
-        setLabel(label);
+    private final String target;
+
+    public JumpLabel(String target) {
+        assert !target.isEmpty();
+        this.target = target;
     }
 
     @Override
@@ -22,5 +25,10 @@ public class JumpLabel extends MipsInstruction {
     @Override
     public boolean isJump(RegisterFile rf) {
         return true;
+    }
+
+    @Override
+    public String getJumpTarget() {
+        return target;
     }
 }
