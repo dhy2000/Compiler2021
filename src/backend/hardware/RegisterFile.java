@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RegisterFile {
-    private static final boolean ENABLE_TRACE = true;
+    private static final boolean ENABLE_TRACE = false;
 
-    private static final int REGISTER_NUMBER = 32;
+    public static final int REGISTER_NUMBER = 32;
 
-    private static final int TEXT_START = 0x00400000;
+    public static final int TEXT_START = 0x00400000;
 
-    private static final int GLOBAL_POINTER_INIT = 0x10008000;
-    private static final int STACK_POINTER_INIT = 0x7fffeffc;
+    public static final int GLOBAL_POINTER_INIT = 0x10008000;
+    public static final int STACK_POINTER_INIT = 0x7fffeffc;
 
     private final List<Integer> registers = new ArrayList<>(REGISTER_NUMBER);
 
