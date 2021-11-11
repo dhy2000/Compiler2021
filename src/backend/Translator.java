@@ -137,7 +137,11 @@ public class Translator {
     private int allocRegister(Symbol symbol, boolean load) {
         if (registerMap.isAllocated(symbol)) {
             registerMap.refresh(symbol);
-            return registerMap.getRegisterOfSymbol(symbol);
+            int register = registerMap.getRegisterOfSymbol(symbol);
+            if (!symbol.hasAddress()) {
+                consumeUseTempVariable(symbol);
+            }
+            return register;
         }
         if (!registerMap.hasFreeRegister()) {
             // 寄存器池已满，需要置换掉一个寄存器
@@ -243,7 +247,7 @@ public class Translator {
             } else {
                 // 立即数, 寄存器
                 assert code.getSrc2() instanceof Symbol;
-                consumeUseTempVariable((Symbol) code.getSrc2());
+                // consumeUseTempVariable((Symbol) code.getSrc2());
                 regSrc1 = RegisterFile.Register.V1;
                 mips.append(new LoadImmediate(regSrc1, ((Immediate) code.getSrc1()).getValue()));
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
@@ -253,7 +257,7 @@ public class Translator {
         } else {
             assert code.getSrc1() instanceof Symbol;
             if (code.getSrc2() instanceof Immediate) {
-                consumeUseTempVariable((Symbol) code.getSrc1());
+                // consumeUseTempVariable((Symbol) code.getSrc1());
                 // 寄存器, 立即数 (I 型指令)
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
                 int regDst = allocRegister(code.getDst(), false);
@@ -310,7 +314,7 @@ public class Translator {
             } else {
                 // 寄存器, 寄存器 (R 型指令)
                 assert code.getSrc2() instanceof Symbol;
-                consumeUseTempVariable((Symbol) code.getSrc1());
+                // consumeUseTempVariable((Symbol) code.getSrc1());
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
                 int regDst = allocRegister(code.getDst(), false);
