@@ -392,7 +392,11 @@ public class Translator {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, 5));
             mips.append(new Syscall());
             int regDst = allocRegister(((Input) code).getDst(), false);
-            mips.append(new Move(regDst, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
+            if (((Input) code).getDst().getType().equals(Symbol.Type.POINTER)) {
+                mips.append(new StoreWord(regDst, 0, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
+            } else {
+                mips.append(new Move(regDst, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
+            }
         } else if (code instanceof PrintInt) {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, 1));
             if (((PrintInt) code).getValue() instanceof Immediate) {
