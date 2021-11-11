@@ -14,7 +14,7 @@ public class Compiler {
         // load arguments
         try {
             if (args.length > 0) { Config.loadArgs(args); }
-            else { Config.loadArgs(new String[]{"-V", "-i", "testfile.txt", "-o", "pcoderesult.txt"}); }
+            else { Config.loadArgs(new String[]{"-O", "-i", "testfile.txt", "-o", "mips.txt"}); }
             SysY sysy = new SysY(Config.getSource());
             Intermediate ir = sysy.getIntermediate();
             if (Objects.isNull(ir)) {
