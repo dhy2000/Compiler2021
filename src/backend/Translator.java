@@ -451,7 +451,7 @@ public class Translator {
     }
 
     private void translateReturn(Return code) {
-        // 返回值 $v0 赋值, 生成 jr 指令
+        // 寄存器写回, 返回值 $v0 赋值, 生成 jr 指令
         if (currentFunc.isMain()) {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, 10)); // Exit
             mips.append(new Syscall());
@@ -468,6 +468,7 @@ public class Translator {
                 mips.append(new Move(RegisterFile.Register.V0, regSrc), registerCommentOne(regSrc, (Symbol) value));
             }
         }
+        clearRegister(true);
         mips.append(new JumpRegister(RegisterFile.Register.RA));
     }
 
