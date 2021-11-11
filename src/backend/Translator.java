@@ -1,11 +1,14 @@
 package backend;
 
 import backend.hardware.Memory;
+import backend.hardware.RegisterFile;
+import backend.instruction.*;
 import intermediate.Intermediate;
 import intermediate.code.*;
+import intermediate.operand.Immediate;
+import intermediate.operand.Operand;
 import intermediate.symbol.FuncMeta;
 import intermediate.symbol.Symbol;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
 
 import java.util.*;
 
@@ -49,9 +52,45 @@ public class Translator {
     // 记录当前基本块中临时变量的 def-use 情况
     private final Map<Symbol, Integer> tempDefUse = new HashMap<>(); // key: 临时变量的 Symbol, value: 临时变量在当前基本块中还剩余几次被使用
 
+    // 记录临时变量的使用: 如果某条中间指令的
+    private void recordUseTempVariable(Operand operand) {
+        if (operand instanceof Symbol && !((Symbol) operand).hasAddress()) {
+            Symbol tempSymbol = (Symbol) operand;
+            tempDefUse.merge(tempSymbol, 1, Integer::sum);
+        }
+    }
+
     // 处理在当前基本块中临时变量的使用次数
     private void processTempVariableUses(BasicBlock block) {
-        // TODO
+        ILinkNode code = block.getHead();
+        while (code.hasNext()) {
+            if (code instanceof BinaryOp) {
+                recordUseTempVariable(((BinaryOp) code).getSrc1());
+                recordUseTempVariable(((BinaryOp) code).getSrc2());
+            } else if (code instanceof UnaryOp) {
+                recordUseTempVariable(((UnaryOp) code).getSrc());
+            } else if (code instanceof PrintInt) {
+                recordUseTempVariable(((PrintInt) code).getValue());
+            } else if (code instanceof Call) {
+                List<Operand> params = ((Call) code).getParams();
+                params.forEach(this::recordUseTempVariable);
+            } else if (code instanceof Return) {
+                if (((Return) code).hasValue()) {
+                    recordUseTempVariable(((Return) code).getValue());
+                }
+            } else if (code instanceof AddressOffset) {
+                recordUseTempVariable(((AddressOffset) code).getBase());
+                recordUseTempVariable(((AddressOffset) code).getOffset());
+            } else if (code instanceof PointerOp) {
+                if (((PointerOp) code).getOp().equals(PointerOp.Op.LOAD)) {
+                    recordUseTempVariable(((PointerOp) code).getDst());
+                }
+                recordUseTempVariable(((PointerOp) code).getAddress());
+            } else if (code instanceof BranchIfElse) {
+                recordUseTempVariable(((BranchIfElse) code).getCondition());
+            }
+            code = code.getNext();
+        }
     }
 
     private void consumeUseTempVariable(Symbol symbol) {
@@ -72,23 +111,203 @@ public class Translator {
     private void assignAddressForTemp(Symbol symbol) {
         currentStackSize += Symbol.SIZEOF_INT;
         symbol.setAddress(currentStackSize);
+        symbol.setLocal(true);
     }
 
-    // 为变量分配寄存器
-    private int allocRegister(Symbol symbol) {
-        return 0;
+    private void recycleRegisterOfVar(int register, Symbol var) {
+        if (!var.hasAddress()) {
+            // 对临时变量，为其分配地址
+            assignAddressForTemp(var);
+        }
+        assert var.hasAddress();
+        // 将变量存回内存
+        if (var.isLocal()) {
+            mips.append(new StoreWord(RegisterFile.Register.SP, -var.getAddress(), register));
+        } else {
+            mips.append(new StoreWord(RegisterFile.Register.GP, var.getAddress(), register));
+        }
+    }
+
+    // 为变量分配寄存器(如已经分配过寄存器则返回该变量所在的寄存器
+    // load: 是否要从内存中读取变量的值(对于源操作数应为 true, 目标操作数应为 false)
+    private int allocRegister(Symbol symbol, boolean load) {
+        if (registerMap.isAllocated(symbol)) {
+            registerMap.refresh(symbol);
+            return registerMap.getRegisterOfSymbol(symbol);
+        }
+        if (!registerMap.hasFreeRegister()) {
+            // 寄存器池已满，需要置换掉一个寄存器
+            int register = registerMap.registerToReplace();
+            Symbol var = registerMap.dealloc(register);
+            // 将该变量存储进内存
+            recycleRegisterOfVar(register, var);
+            assert registerMap.hasFreeRegister();
+        }
+        int register = registerMap.allocRegister(symbol);
+        if (load && symbol.hasAddress()) {
+            if (symbol.isLocal()) {
+                mips.append(new LoadWord(RegisterFile.Register.SP, -symbol.getAddress(), register));
+            } else {
+                mips.append(new LoadWord(RegisterFile.Register.GP, symbol.getAddress(), register));
+            }
+        }
+        return register;
     }
 
     // 跳转前，清除寄存器分配, 所有寄存器中的变量均写回栈
     private void clearRegister() {
-        // TODO
+        Map<Integer, Symbol> regState = registerMap.getState();
+        for (Map.Entry<Integer, Symbol> entry : regState.entrySet()) {
+            int register = entry.getKey();
+            Symbol var = entry.getValue();
+            recycleRegisterOfVar(register, var);
+        }
+        registerMap.clear();
     }
 
+    private void binaryOpHelper(int regSrc1, int regSrc2, int regDst, BinaryOp.Op op) {
+        switch (op) {
+            case ADD: mips.append(new Addu(regSrc1, regSrc2, regDst)); break;
+            case SUB: mips.append(new Subu(regSrc1, regSrc2, regDst)); break;
+            case AND: mips.append(new And(regSrc1, regSrc2, regDst)); break;
+            case OR: mips.append(new Or(regSrc1, regSrc2, regDst)); break;
+            case MUL:
+                mips.append(new Multiply(regSrc1, regSrc2));
+                mips.append(new MoveFromLo(regDst));
+                break;
+            case DIV:
+                mips.append(new Divide(regSrc1, regSrc2));
+                mips.append(new MoveFromLo(regDst));
+                break;
+            case MOD:
+                mips.append(new Divide(regSrc1, regSrc2));
+                mips.append(new MoveFromHi(regDst));
+                break;
+            case GE:
+                mips.append(new SetGreaterEqual(regSrc1, regSrc2, regDst));
+                break;
+            case GT:
+                mips.append(new SetGreaterThan(regSrc1, regSrc2, regDst));
+                break;
+            case LE:
+                mips.append(new SetLessEqual(regSrc1, regSrc2, regDst));
+                break;
+            case LT:
+                mips.append(new SetLessThan(regSrc1, regSrc2, regDst));
+                break;
+            case EQ:
+                mips.append(new SetEqual(regSrc1, regSrc2, regDst));
+                break;
+            case NE:
+                mips.append(new SetNotEqual(regSrc1, regSrc2, regDst));
+                break;
+            default: throw new AssertionError("Bad BinaryOp");
+        }
+    }
 
     private void translateBinaryOp(BinaryOp code) {
         // 需要为操作数符号分配寄存器, 还需要考虑操作数是变量还是立即数来选取指令
         // 如果是双立即数就直接算出结果，存给临时变量
         // 操作数变量和目标变量必须都已经分配上寄存器再进行计算
+        int regSrc1, regSrc2;
+        if (code.getSrc1() instanceof Immediate) {
+            if (code.getSrc2() instanceof Immediate) {
+                // 双立即数, 直接算出结果
+                int src1 = ((Immediate) code.getSrc1()).getValue();
+                int src2 = ((Immediate) code.getSrc2()).getValue();
+                int result;
+                switch (code.getOp()) {
+                    case ADD: result = src1 + src2; break;
+                    case SUB: result = src1 - src2; break;
+                    case AND: result = ((src1 != 0) && (src2 != 0)) ? 1 : 0; break;
+                    case OR: result = ((src1 != 0) || (src2 != 0)) ? 1 : 0; break;
+                    case MUL: result = src1 * src2; break;
+                    case DIV: result = src1 / src2; break;
+                    case MOD: result = src1 % src2; break;
+                    case GE: result = (src1 >= src2) ? 1 : 0; break;
+                    case GT: result = (src1 > src2) ? 1 : 0; break;
+                    case LE: result = (src1 <= src2) ? 1 : 0; break;
+                    case LT: result = (src1 < src2) ? 1 : 0; break;
+                    case EQ: result = (src1 == src2) ? 1 : 0; break;
+                    case NE: result = (src1 != src2) ? 1 : 0; break;
+                    default: throw new AssertionError("Bad BinaryOp");
+                }
+                int register = allocRegister(code.getDst(), false);
+                mips.append(new LoadImmediate(register, result));
+            } else {
+                // 立即数, 寄存器
+                assert code.getSrc2() instanceof Symbol;
+                regSrc1 = RegisterFile.Register.V1;
+                mips.append(new LoadImmediate(regSrc1, ((Immediate) code.getSrc1()).getValue()));
+                regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
+                int regDst = allocRegister(code.getDst(), false);
+                binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp());
+            }
+        } else {
+            assert code.getSrc1() instanceof Symbol;
+            if (code.getSrc2() instanceof Immediate) {
+                // 寄存器, 立即数 (I 型指令)
+                regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
+                int regDst = allocRegister(code.getDst(), false);
+                int immediate = ((Immediate) code.getSrc2()).getValue();
+                switch (code.getOp()) {
+                    case ADD: mips.append(new Addiu(regSrc1, immediate, regDst)); break;
+                    case SUB: mips.append(new Addiu(regSrc1, -immediate, regDst)); break;
+                    case AND: mips.append(new Andi(regSrc1, immediate, regDst)); break;
+                    case OR: mips.append(new Ori(regSrc1, immediate, regDst)); break;
+                    case MUL:
+                        regSrc2 = RegisterFile.Register.V1;
+                        mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
+                        mips.append(new Multiply(regSrc1, regSrc2));
+                        mips.append(new MoveFromLo(regDst));
+                        break;
+                    case DIV:
+                        regSrc2 = RegisterFile.Register.V1;
+                        mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
+                        mips.append(new Divide(regSrc1, regSrc2));
+                        mips.append(new MoveFromLo(regDst));
+                        break;
+                    case MOD:
+                        regSrc2 = RegisterFile.Register.V1;
+                        mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
+                        mips.append(new Divide(regSrc1, regSrc2));
+                        mips.append(new MoveFromHi(regDst));
+                        break;
+                    case GE:
+                        mips.append(new SetGreaterEqualImmediate(regSrc1, immediate, regDst));
+                        break;
+                    case GT:
+                        mips.append(new SetGreaterThanImmediate(regSrc1, immediate, regDst));
+                        break;
+                    case LE:
+                        mips.append(new SetLessEqualImmediate(regSrc1, immediate, regDst));
+                        break;
+                    case LT:
+                        if (Short.MIN_VALUE <= immediate && immediate <= Short.MAX_VALUE) {
+                            mips.append(new SetLessThanImmediate(regSrc1, immediate, regDst));
+                        } else {
+                            regSrc2 = RegisterFile.Register.V1;
+                            mips.append(new LoadImmediate(regSrc2, immediate));
+                            mips.append(new SetLessThan(regSrc1, regSrc2, regDst));
+                        }
+                        break;
+                    case EQ:
+                        mips.append(new SetEqualImmediate(regSrc1, immediate, regDst));
+                        break;
+                    case NE:
+                        mips.append(new SetNotEqualImmediate(regSrc1, immediate, regDst));
+                        break;
+                    default: throw new AssertionError("Bad BinaryOp");
+                }
+            } else {
+                // 寄存器, 寄存器 (R 型指令)
+                assert code.getSrc1() instanceof Symbol && code.getSrc2() instanceof Symbol;
+                regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
+                regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
+                int regDst = allocRegister(code.getDst(), false);
+                binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp());
+            }
+        }
     }
 
     private void translateUnaryOp(UnaryOp code) {
@@ -131,7 +350,7 @@ public class Translator {
     private final Queue<BasicBlock> queueBlock = new LinkedList<>();
 
     public void translateBasicBlock(BasicBlock block) {
-
+        processTempVariableUses(block);
     }
 
     // 从函数头部开始, 将基本块中的中间代码翻译成 MIPS 目标代码

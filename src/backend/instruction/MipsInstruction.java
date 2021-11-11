@@ -60,4 +60,23 @@ public abstract class MipsInstruction extends ILinkNode {
         }
         return sb.toString();
     }
+
+    public static MipsInstruction nop() {
+        return new MipsInstruction() {
+            @Override
+            public String instrToString() {
+                return "nop";
+            }
+
+            @Override
+            public void execute(RegisterFile rf, Memory mem) {
+
+            }
+
+            @Override
+            public boolean isJump(RegisterFile rf) {
+                return false;
+            }
+        };
+    }
 }

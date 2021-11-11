@@ -7,6 +7,7 @@ import backend.instruction.MipsInstruction;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 存储所有目标代码的容器
@@ -28,38 +29,11 @@ public class Mips {
     // 初始内存布局（在 .data 中用伪指令填入）
     private final Memory initMem = new Memory();
 
-    private final MipsInstruction entry = new MipsInstruction() {
-        @Override
-        public String instrToString() {
-            return "nop";
-        }
+    // 即将插入标签
+    private String label = null;
 
-        @Override
-        public void execute(RegisterFile rf, Memory mem) {
-
-        }
-
-        @Override
-        public boolean isJump(RegisterFile rf) {
-            return false;
-        }
-    };
-    private final MipsInstruction tail = new MipsInstruction() {
-        @Override
-        public String instrToString() {
-            return "nop";
-        }
-
-        @Override
-        public void execute(RegisterFile rf, Memory mem) {
-
-        }
-
-        @Override
-        public boolean isJump(RegisterFile rf) {
-            return false;
-        }
-    };
+    private final MipsInstruction entry = MipsInstruction.nop();
+    private final MipsInstruction tail = MipsInstruction.nop();
 
     public Mips() {
         tail.setPrev(entry);
@@ -93,6 +67,10 @@ public class Mips {
     }
 
     public void append(MipsInstruction follow) {
+        if (Objects.nonNull(label)) {
+            follow.setLabel(label);
+            label = null;
+        }
         MipsInstruction last = (MipsInstruction) tail.getPrev();
         last.setNext(follow);
         follow.setPrev(last);
@@ -102,6 +80,10 @@ public class Mips {
         }
         tail.setNext(this.tail);
         this.tail.setPrev(tail);
+    }
+
+    public void setLabel(String label) { // 下一条插入的指令将带有标签, 用该方法定义基本块头部
+        this.label = label;
     }
 
     public void output(PrintStream ps) {
