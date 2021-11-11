@@ -362,9 +362,9 @@ public class Translator {
     }
 
     private void translateUnaryOp(UnaryOp code) {
-        int regDst = allocRegister(code.getDst(), false);
         if (code.getSrc() instanceof Immediate) {
             int immediate = ((Immediate) code.getSrc()).getValue();
+            int regDst = allocRegister(code.getDst(), false);
             String comment = registerCommentOne(regDst, code.getDst());
             switch (code.getOp()) {
                 case MOV: mips.append(new LoadImmediate(regDst, immediate), comment); break;
@@ -375,6 +375,7 @@ public class Translator {
         } else {
             assert code.getSrc() instanceof Symbol;
             int regSrc = allocRegister((Symbol) code.getSrc(), true);
+            int regDst = allocRegister(code.getDst(), false);
             consumeUseTempVariable((Symbol) code.getSrc());
             String comment = registerCommentTwo(regDst, code.getDst(), regSrc, (Symbol) code.getSrc());
             switch (code.getOp()) {
