@@ -12,6 +12,7 @@ public class FuncMeta {
     private final List<Symbol> params = new ArrayList<>();
     private BasicBlock body;
     private int stackSize = 0; // 所有局部变量所占的空间(如临时变量需要分配空间必须在所有局部变量之后)
+    private final boolean main;
 
     public enum ReturnType {
         INT,
@@ -25,6 +26,18 @@ public class FuncMeta {
         this.name = name;
         this.paramTable = new SymTable(name, global);
         this.type = type;
+        this.main = false;
+    }
+
+    public FuncMeta(SymTable global) {
+        this.name = "main";
+        this.paramTable = new SymTable(this.name, global);
+        this.type = ReturnType.INT;
+        this.main = true;
+    }
+
+    public boolean isMain() {
+        return main;
     }
 
     public ReturnType getReturnType() {

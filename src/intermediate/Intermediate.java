@@ -139,6 +139,6 @@ public class Intermediate {
         for (FuncMeta func : functions.values()) {
             outputFuncHelper(ps, func, visited, queue);
         }
-        outputFuncHelper(ps, mainFunction, visited, queue);
+        // outputFuncHelper(ps, mainFunction, visited, queue);
     }
 }

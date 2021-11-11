@@ -379,15 +379,15 @@ public class Translator {
         List<Operand> params = code.getParams();
         int offset = 0;
         for (Operand param : params) {
+            offset += Symbol.SIZEOF_INT;
             if (param instanceof Immediate) {
                 mips.append(new LoadImmediate(RegisterFile.Register.V0, ((Immediate) param).getValue()));
-                mips.append(new StoreWord(RegisterFile.Register.A0, offset, RegisterFile.Register.V0));
+                mips.append(new StoreWord(RegisterFile.Register.A0, -offset, RegisterFile.Register.V0));
             } else {
                 assert param instanceof Symbol;
                 int reg = allocRegister((Symbol) param, true);
-                mips.append(new StoreWord(RegisterFile.Register.A0, offset, reg));
+                mips.append(new StoreWord(RegisterFile.Register.A0, -offset, reg));
             }
-            offset += Symbol.SIZEOF_INT;
         }
         // 移动 $sp
         mips.append(new Move(RegisterFile.Register.SP, RegisterFile.Register.A0));
@@ -405,7 +405,7 @@ public class Translator {
 
     private void translateReturn(Return code) {
         // 返回值 $v0 赋值, 生成 jr 指令
-        if (isMain) {
+        if (currentFunc.isMain()) {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, 10)); // Exit
             mips.append(new Syscall());
             return;
@@ -512,7 +512,6 @@ public class Translator {
 
     // 记录当前正在翻译的函数
     private FuncMeta currentFunc = null;
-    private boolean isMain = false;
     private int currentStackSize = 0; // 当前正在翻译的函数已经用掉的栈的大小（局部变量+临时变量）
 
     // BFS 基本块
@@ -570,8 +569,7 @@ public class Translator {
         for (FuncMeta meta : ir.getFunctions().values()) {
             translateFunction(meta);
         }
-        isMain = true;
-        translateFunction(ir.getMainFunction());
+//        translateFunction(ir.getMainFunction());
         return mips;
     }
 }
