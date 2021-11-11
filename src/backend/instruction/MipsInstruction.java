@@ -65,7 +65,7 @@ public abstract class MipsInstruction extends ILinkNode {
         return new MipsInstruction() {
             @Override
             public String instrToString() {
-                return "nop";
+                return "";
             }
 
             @Override

@@ -135,9 +135,9 @@ public class Translator {
         // 将变量存回内存
         String comment = String.format("recycle %s from $%s", var, RegisterFile.getRegisterName(register));
         if (var.isLocal()) {
-            mips.append(new StoreWord(RegisterFile.Register.SP, -var.getAddress(), register));
+            mips.append(new StoreWord(RegisterFile.Register.SP, -var.getAddress(), register), comment);
         } else {
-            mips.append(new StoreWord(RegisterFile.Register.GP, var.getAddress(), register));
+            mips.append(new StoreWord(RegisterFile.Register.GP, var.getAddress(), register), comment);
         }
     }
 
@@ -146,11 +146,7 @@ public class Translator {
     private int allocRegister(Symbol symbol, boolean load) {
         if (registerMap.isAllocated(symbol)) {
             registerMap.refresh(symbol);
-            int register = registerMap.getRegisterOfSymbol(symbol);
-            if (!symbol.hasAddress()) {
-                consumeUseTempVariable(symbol);
-            }
-            return register;
+            return registerMap.getRegisterOfSymbol(symbol);
         }
         if (!registerMap.hasFreeRegister()) {
             // 寄存器池已满，需要置换掉一个寄存器
@@ -272,19 +268,19 @@ public class Translator {
             } else {
                 // 立即数, 寄存器
                 assert code.getSrc2() instanceof Symbol;
-                // consumeUseTempVariable((Symbol) code.getSrc2());
                 regSrc1 = RegisterFile.Register.V1;
                 mips.append(new LoadImmediate(regSrc1, ((Immediate) code.getSrc1()).getValue()));
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
+                consumeUseTempVariable((Symbol) code.getSrc2());
                 int regDst = allocRegister(code.getDst(), false);
                 binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp(), null, (Symbol) code.getSrc2(), code.getDst());
             }
         } else {
             assert code.getSrc1() instanceof Symbol;
             if (code.getSrc2() instanceof Immediate) {
-                // consumeUseTempVariable((Symbol) code.getSrc1());
                 // 寄存器, 立即数 (I 型指令)
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
+                consumeUseTempVariable((Symbol) code.getSrc1());
                 int regDst = allocRegister(code.getDst(), false);
                 int immediate = ((Immediate) code.getSrc2()).getValue();
                 switch (code.getOp()) {
@@ -357,6 +353,8 @@ public class Translator {
                 // consumeUseTempVariable((Symbol) code.getSrc1());
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
+                consumeUseTempVariable((Symbol) code.getSrc1());
+                consumeUseTempVariable((Symbol) code.getSrc2());
                 int regDst = allocRegister(code.getDst(), false);
                 binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp(), (Symbol) code.getSrc1(), (Symbol) code.getSrc2(), code.getDst());
             }
@@ -377,6 +375,7 @@ public class Translator {
         } else {
             assert code.getSrc() instanceof Symbol;
             int regSrc = allocRegister((Symbol) code.getSrc(), true);
+            consumeUseTempVariable((Symbol) code.getSrc());
             String comment = registerCommentTwo(regDst, code.getDst(), regSrc, (Symbol) code.getSrc());
             switch (code.getOp()) {
                 case MOV: mips.append(new Move(regDst, regSrc), comment); break;
@@ -401,6 +400,7 @@ public class Translator {
             } else {
                 assert ((PrintInt) code).getValue() instanceof Symbol;
                 int regSrc = allocRegister((Symbol) ((PrintInt) code).getValue(), true);
+                consumeUseTempVariable((Symbol) ((PrintInt) code).getValue());
                 mips.append(new Move(RegisterFile.Register.A0, regSrc), registerCommentOne(regSrc, (Symbol) ((PrintInt) code).getValue()));
             }
             mips.append(new Syscall());
@@ -432,6 +432,7 @@ public class Translator {
             } else {
                 assert param instanceof Symbol;
                 int reg = allocRegister((Symbol) param, true);
+                consumeUseTempVariable((Symbol) param);
                 mips.append(new StoreWord(RegisterFile.Register.A0, -offset, reg), registerCommentOne(reg, (Symbol) param));
             }
         }
@@ -463,6 +464,7 @@ public class Translator {
             } else {
                 assert value instanceof Symbol;
                 int regSrc = allocRegister((Symbol) value, true);
+                consumeUseTempVariable((Symbol) value);
                 mips.append(new Move(RegisterFile.Register.V0, regSrc), registerCommentOne(regSrc, (Symbol) value));
             }
         }
@@ -488,6 +490,7 @@ public class Translator {
                 // 数组 + 寄存器
                 assert offset instanceof Symbol;
                 int regSrc = allocRegister((Symbol) offset, true);
+                consumeUseTempVariable((Symbol) offset);
                 String commentTwo = registerCommentTwo(regPtr, pointer, regSrc, (Symbol) offset);
                 if (base.isLocal()) {
                     mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress(), regPtr), commentOne);
@@ -500,6 +503,7 @@ public class Translator {
             if (offset instanceof Immediate) {
                 // 指针 + 立即数
                 int regSrc = allocRegister(base, true);
+                consumeUseTempVariable(base);
                 String commentTwo = registerCommentTwo(regPtr, pointer, regSrc, base);
                 mips.append(new Addiu(regSrc, ((Immediate) offset).getValue(), regPtr), commentTwo);
             } else {
@@ -507,6 +511,8 @@ public class Translator {
                 int regSrc1 = allocRegister(base, true);
                 assert offset instanceof Symbol;
                 int regSrc2 = allocRegister((Symbol) offset, true);
+                consumeUseTempVariable(base);
+                consumeUseTempVariable((Symbol) offset);
                 String commentThree = registerCommentThree(regPtr, pointer, regSrc1, base, regSrc2, (Symbol) offset);
                 mips.append(new Addu(regSrc1, regSrc2, regPtr), commentThree);
             }
@@ -516,6 +522,7 @@ public class Translator {
     private void translatePointerOp(PointerOp code) {
         int regBase = allocRegister(code.getAddress(), true);
         if (code.getOp().equals(PointerOp.Op.LOAD)) {
+            consumeUseTempVariable(code.getAddress());
             int regDst = allocRegister(code.getDst(), false);
             String comment = registerCommentTwo(regBase, code.getAddress(), regDst, code.getDst());
             mips.append(new LoadWord(regBase, 0, regDst), comment);
@@ -524,6 +531,7 @@ public class Translator {
             Operand src = code.getSrc();
             int regSrc;
             if (src instanceof Immediate) {
+                consumeUseTempVariable(code.getAddress());
                 regSrc = RegisterFile.Register.V0;
                 mips.append(new LoadImmediate(regSrc, ((Immediate) src).getValue()));
                 String comment = registerCommentOne(regBase, code.getAddress());
@@ -531,6 +539,8 @@ public class Translator {
             } else {
                 assert src instanceof Symbol;
                 regSrc = allocRegister((Symbol) src, true);
+                consumeUseTempVariable(code.getAddress());
+                consumeUseTempVariable((Symbol) src);
                 String comment = registerCommentTwo(regBase, code.getAddress(), regSrc, (Symbol) src);
                 mips.append(new StoreWord(regBase, 0, regSrc), comment);
             }
@@ -578,6 +588,7 @@ public class Translator {
         mips.setLabel(block.getLabel());
         ILinkNode code = block.getHead();
         while (code.hasNext()) {
+            mips.append(MipsInstruction.nop(), code.toString());
             if (code instanceof BinaryOp) {
                 translateBinaryOp((BinaryOp) code);
             } else if (code instanceof UnaryOp) {
