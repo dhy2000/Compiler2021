@@ -51,7 +51,7 @@ public class Translator {
 
     // 处理在当前基本块中临时变量的使用次数
     private void processTempVariableUses(BasicBlock block) {
-
+        // TODO
     }
 
     private void consumeUseTempVariable(Symbol symbol) {
@@ -79,6 +79,11 @@ public class Translator {
         return 0;
     }
 
+    // 跳转前，清除寄存器分配, 所有寄存器中的变量均写回栈
+    private void clearRegister() {
+        // TODO
+    }
+
 
     private void translateBinaryOp(BinaryOp code) {
         // 需要为操作数符号分配寄存器, 还需要考虑操作数是变量还是立即数来选取指令
@@ -96,11 +101,11 @@ public class Translator {
     }
 
     private void translateCall(Call code) {
-
+        // TODO: 保存现场 (寄存器强制写回, 下压 sp，保存返回地址 $ra), 生成跳转指令 (jal), 恢复现场 (上弹 sp，恢复返回地址 $ra)，返回值 $v0 赋给相应寄存器
     }
 
     private void translateReturn(Return code) {
-
+        // TODO: 返回值 $v0 赋值, 生成 jr 指令
     }
 
     private void translateAddressOffset(AddressOffset code) {
@@ -113,7 +118,7 @@ public class Translator {
 
     private void translateBranchOrJump(ILinkNode code) {
         assert code instanceof Jump || code instanceof BranchIfElse;
-
+        // TODO: 跳转前需要强制写回所有寄存器
     }
 
     // 记录当前正在翻译的函数
