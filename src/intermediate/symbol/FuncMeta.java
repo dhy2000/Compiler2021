@@ -11,6 +11,7 @@ public class FuncMeta {
     private final SymTable paramTable;
     private final List<Symbol> params = new ArrayList<>();
     private BasicBlock body;
+    private int stackSize = 0; // 所有局部变量所占的空间(如临时变量需要分配空间必须在所有局部变量之后)
 
     public enum ReturnType {
         INT,
@@ -53,5 +54,13 @@ public class FuncMeta {
 
     public BasicBlock getBody() {
         return body;
+    }
+
+    public void updateStackSize(int size) {
+        stackSize = Math.max(stackSize, size);
+    }
+
+    public int getStackSize() {
+        return stackSize;
     }
 }

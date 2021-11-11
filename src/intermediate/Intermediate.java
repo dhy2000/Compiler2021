@@ -109,6 +109,7 @@ public class Intermediate {
         Queue<BasicBlock> queue = new LinkedList<>(); // BFS
 
         for (FuncMeta func : functions.values()) {
+            ps.printf("# Function %s: stack size = 0x%x\n", func.getName(), func.getStackSize());
             queue.offer(func.getBody());
             while (!queue.isEmpty()) {
                 BasicBlock front = queue.poll();

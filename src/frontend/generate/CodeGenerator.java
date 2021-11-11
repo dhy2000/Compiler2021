@@ -33,8 +33,6 @@ import java.util.*;
  * 和语法分析类似的类递归下降结构
  *
  * 这里把每部分的分析器合到了一个大类中，因为要维护一个统一的栈（符号作用域）
- *
- * TODO: 全局变量分配地址，参数的地址表示
  */
 public class CodeGenerator {
 
@@ -98,7 +96,6 @@ public class CodeGenerator {
     }
 
     public Operand analyseCond(Cond cond) {
-        // TODO: 逻辑运算的短路求值, 单独处理 LAndExp 和 LOrExp
         return analyseLOrExp(cond.getLOrExp());
     }
 
@@ -722,6 +719,7 @@ public class CodeGenerator {
                     if (Objects.nonNull(currentFunc)) {
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
+                        currentFunc.updateStackSize(stackSize);
                         sym.setLocal(true);
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, new Immediate(value), sym));
                     } else {
@@ -740,6 +738,7 @@ public class CodeGenerator {
                         Symbol sym = new Symbol(name, currentField());
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
+                        currentFunc.updateStackSize(stackSize);
                         sym.setLocal(true);
                         currentSymTable.add(sym);
                         Operand val = analyseExp(init.getExp());
@@ -756,6 +755,7 @@ public class CodeGenerator {
                     sym = new Symbol(name, currentField());
                     stackSize += sym.capacity();
                     sym.setAddress(stackSize);
+                    currentFunc.updateStackSize(stackSize);
                     sym.setLocal(true);
                 }
                 currentSymTable.add(sym);
@@ -786,6 +786,7 @@ public class CodeGenerator {
                     if (Objects.nonNull(currentFunc)) {
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
+                        currentFunc.updateStackSize(stackSize);
                         sym.setLocal(true);
                         // 初始化
                         int offset = 0;
@@ -805,6 +806,7 @@ public class CodeGenerator {
                     Symbol sym = new Symbol(name, currentField(), arrayDims);
                     stackSize += sym.capacity();
                     sym.setAddress(stackSize);
+                    currentFunc.updateStackSize(stackSize);
                     sym.setLocal(true);
                     currentSymTable.add(sym);
                     int offset = 0;
@@ -830,6 +832,7 @@ public class CodeGenerator {
                     sym = new Symbol(name, currentField(), arrayDims);
                     stackSize += sym.capacity();
                     sym.setAddress(stackSize);
+                    currentFunc.updateStackSize(stackSize);
                     sym.setLocal(true);
                 }
                 currentSymTable.add(sym);
