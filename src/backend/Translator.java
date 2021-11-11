@@ -83,8 +83,8 @@ public class Translator {
                 recordUseTempVariable(((AddressOffset) code).getBase());
                 recordUseTempVariable(((AddressOffset) code).getOffset());
             } else if (code instanceof PointerOp) {
-                if (((PointerOp) code).getOp().equals(PointerOp.Op.LOAD)) {
-                    recordUseTempVariable(((PointerOp) code).getDst());
+                if (((PointerOp) code).getOp().equals(PointerOp.Op.STORE)) {
+                    recordUseTempVariable(((PointerOp) code).getSrc());
                 }
                 recordUseTempVariable(((PointerOp) code).getAddress());
             } else if (code instanceof BranchIfElse) {
@@ -97,6 +97,9 @@ public class Translator {
     private void consumeUseTempVariable(Symbol symbol) {
         if (symbol.hasAddress()) {
             return;
+        }
+        if (!tempDefUse.containsKey(symbol)) {
+            System.err.println(symbol);
         }
         assert tempDefUse.containsKey(symbol);
         int count = tempDefUse.get(symbol);
