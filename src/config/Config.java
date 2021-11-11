@@ -22,7 +22,8 @@ public class Config {
         ERROR("E"),
         INTERMEDIATE("I"),
         VIRTUAL_MACHINE("V"),
-        OBJECT("O")
+        OBJECT("O"),
+        RUN_OBJECT("R"),
         ;
 
         private final String tag;

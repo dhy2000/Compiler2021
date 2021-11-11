@@ -2,6 +2,7 @@ package backend;
 
 import backend.hardware.Memory;
 import intermediate.Intermediate;
+import intermediate.symbol.FuncMeta;
 import intermediate.symbol.Symbol;
 
 import java.util.List;
@@ -42,5 +43,18 @@ public class Translator {
         }
     }
 
+    public void translateFunction(FuncMeta meta, boolean main) {
 
+    }
+
+    public Mips toMips() {
+        loadStringConstant();
+        loadGlobals();
+        for (FuncMeta meta : ir.getFunctions().values()) {
+            translateFunction(meta, false);
+        }
+
+        translateFunction(ir.getMainFunction(), true);
+        return mips;
+    }
 }

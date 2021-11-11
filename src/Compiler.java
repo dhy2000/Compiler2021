@@ -1,3 +1,5 @@
+import backend.Mips;
+import backend.Translator;
 import config.Config;
 import frontend.SysY;
 import intermediate.Intermediate;
@@ -25,6 +27,10 @@ public class Compiler {
             if (Config.hasOperationOutput(Config.Operation.VIRTUAL_MACHINE)) {
                 MidRunner vm = new MidRunner(ir);
                 vm.run();
+            }
+            if (Config.hasOperationOutput(Config.Operation.OBJECT)) {
+                Mips mips = new Translator(ir).toMips();
+                mips.output(Config.getTarget());
             }
         } catch (Exception e) {
             e.printStackTrace();
