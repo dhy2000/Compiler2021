@@ -478,10 +478,11 @@ public class Translator {
         if (base.getType().equals(Symbol.Type.ARRAY)) {
             if (offset instanceof Immediate) {
                 // 数组 + 立即数
+                String commentArray = "global " + base;
                 if (base.isLocal()) {
-                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress() + ((Immediate) offset).getValue(), regPtr), commentOne);
+                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress() + ((Immediate) offset).getValue(), regPtr), commentOne + "; " + commentArray);
                 } else {
-                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress() + ((Immediate) offset).getValue(), regPtr), commentOne);
+                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress() + ((Immediate) offset).getValue(), regPtr), commentOne + "; " + commentArray);
                 }
             } else {
                 // 数组 + 寄存器
