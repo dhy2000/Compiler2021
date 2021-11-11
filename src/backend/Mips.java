@@ -83,6 +83,11 @@ public class Mips {
         this.tail.setPrev(tail);
     }
 
+    public void append(MipsInstruction follow, String comment) {
+        follow.setComment(comment);
+        append(follow);
+    }
+
     public void setLabel(String label) { // 下一条插入的指令将带有标签, 用该方法定义基本块头部
         this.label = label;
     }

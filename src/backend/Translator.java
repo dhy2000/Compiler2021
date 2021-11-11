@@ -70,6 +70,11 @@ public class Translator {
                 recordUseTempVariable(((BinaryOp) code).getSrc2());
             } else if (code instanceof UnaryOp) {
                 recordUseTempVariable(((UnaryOp) code).getSrc());
+            } else if (code instanceof Input) {
+                // store input into pointer
+                if (((Input) code).getDst().getType().equals(Symbol.Type.POINTER)) {
+                    recordUseTempVariable(((Input) code).getDst());
+                }
             } else if (code instanceof PrintInt) {
                 recordUseTempVariable(((PrintInt) code).getValue());
             } else if (code instanceof Call) {
@@ -128,6 +133,7 @@ public class Translator {
         }
         assert var.hasAddress();
         // 将变量存回内存
+        String comment = String.format("recycle %s from $%s", var, RegisterFile.getRegisterName(register));
         if (var.isLocal()) {
             mips.append(new StoreWord(RegisterFile.Register.SP, -var.getAddress(), register));
         } else {
@@ -156,13 +162,29 @@ public class Translator {
         }
         int register = registerMap.allocRegister(symbol);
         if (load && symbol.hasAddress()) {
+            String comment = String.format("load %s", symbol);
             if (symbol.isLocal()) {
-                mips.append(new LoadWord(RegisterFile.Register.SP, -symbol.getAddress(), register));
+                mips.append(new LoadWord(RegisterFile.Register.SP, -symbol.getAddress(), register), comment);
             } else {
-                mips.append(new LoadWord(RegisterFile.Register.GP, symbol.getAddress(), register));
+                mips.append(new LoadWord(RegisterFile.Register.GP, symbol.getAddress(), register), comment);
             }
         }
         return register;
+    }
+
+    private String registerCommentOne(int regDst, Symbol dst) {
+        return String.format("$%s --> %s", RegisterFile.getRegisterName(regDst), dst);
+    }
+
+    private String registerCommentTwo(int regDst, Symbol dst, int regSrc, Symbol src) {
+        return String.format("$%s --> %s, $%s --> %s", RegisterFile.getRegisterName(regDst), dst, RegisterFile.getRegisterName(regSrc), src);
+    }
+
+    private String registerCommentThree(int regDst, Symbol dst, int regSrc1, Symbol src1, int regSrc2, Symbol src2) {
+        return String.format("$%s --> %s, $%s --> %s, $%s --> %s",
+                RegisterFile.getRegisterName(regDst), dst,
+                RegisterFile.getRegisterName(regSrc1), src1,
+                RegisterFile.getRegisterName(regSrc2), src2);
     }
 
     // 跳转前，清除寄存器分配, 所有寄存器中的变量均写回栈
@@ -178,41 +200,41 @@ public class Translator {
         registerMap.clear();
     }
 
-    private void binaryOpHelper(int regSrc1, int regSrc2, int regDst, BinaryOp.Op op) {
+    private void binaryOpHelper(int regSrc1, int regSrc2, int regDst, BinaryOp.Op op, Symbol src1, Symbol src2, Symbol dst) {
         switch (op) {
-            case ADD: mips.append(new Addu(regSrc1, regSrc2, regDst)); break;
-            case SUB: mips.append(new Subu(regSrc1, regSrc2, regDst)); break;
-            case AND: mips.append(new And(regSrc1, regSrc2, regDst)); break;
-            case OR: mips.append(new Or(regSrc1, regSrc2, regDst)); break;
+            case ADD: mips.append(new Addu(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
+            case SUB: mips.append(new Subu(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
+            case AND: mips.append(new And(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
+            case OR: mips.append(new Or(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
             case MUL:
                 mips.append(new Multiply(regSrc1, regSrc2));
-                mips.append(new MoveFromLo(regDst));
+                mips.append(new MoveFromLo(regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case DIV:
                 mips.append(new Divide(regSrc1, regSrc2));
-                mips.append(new MoveFromLo(regDst));
+                mips.append(new MoveFromLo(regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case MOD:
                 mips.append(new Divide(regSrc1, regSrc2));
-                mips.append(new MoveFromHi(regDst));
+                mips.append(new MoveFromHi(regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case GE:
-                mips.append(new SetGreaterEqual(regSrc1, regSrc2, regDst));
+                mips.append(new SetGreaterEqual(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case GT:
-                mips.append(new SetGreaterThan(regSrc1, regSrc2, regDst));
+                mips.append(new SetGreaterThan(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case LE:
-                mips.append(new SetLessEqual(regSrc1, regSrc2, regDst));
+                mips.append(new SetLessEqual(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case LT:
-                mips.append(new SetLessThan(regSrc1, regSrc2, regDst));
+                mips.append(new SetLessThan(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case EQ:
-                mips.append(new SetEqual(regSrc1, regSrc2, regDst));
+                mips.append(new SetEqual(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             case NE:
-                mips.append(new SetNotEqual(regSrc1, regSrc2, regDst));
+                mips.append(new SetNotEqual(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
             default: throw new AssertionError("Bad BinaryOp");
         }
@@ -246,7 +268,7 @@ public class Translator {
                     default: throw new AssertionError("Bad BinaryOp");
                 }
                 int register = allocRegister(code.getDst(), false);
-                mips.append(new LoadImmediate(register, result));
+                mips.append(new LoadImmediate(register, result), registerCommentOne(register, code.getDst()));
             } else {
                 // 立即数, 寄存器
                 assert code.getSrc2() instanceof Symbol;
@@ -255,7 +277,7 @@ public class Translator {
                 mips.append(new LoadImmediate(regSrc1, ((Immediate) code.getSrc1()).getValue()));
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
                 int regDst = allocRegister(code.getDst(), false);
-                binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp());
+                binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp(), null, (Symbol) code.getSrc2(), code.getDst());
             }
         } else {
             assert code.getSrc1() instanceof Symbol;
@@ -266,51 +288,66 @@ public class Translator {
                 int regDst = allocRegister(code.getDst(), false);
                 int immediate = ((Immediate) code.getSrc2()).getValue();
                 switch (code.getOp()) {
-                    case ADD: mips.append(new Addiu(regSrc1, immediate, regDst)); break;
-                    case SUB: mips.append(new Addiu(regSrc1, -immediate, regDst)); break;
-                    case AND: mips.append(new Andi(regSrc1, immediate, regDst)); break;
-                    case OR: mips.append(new Ori(regSrc1, immediate, regDst)); break;
+                    case ADD: mips.append(new Addiu(regSrc1, immediate, regDst),
+                            registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
+                    break;
+                    case SUB: mips.append(new Addiu(regSrc1, -immediate, regDst),
+                            registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1())); break;
+                    case AND: mips.append(new Andi(regSrc1, immediate, regDst),
+                            registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1())); break;
+                    case OR: mips.append(new Ori(regSrc1, immediate, regDst),
+                            registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1())); break;
                     case MUL:
                         regSrc2 = RegisterFile.Register.V1;
                         mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
                         mips.append(new Multiply(regSrc1, regSrc2));
-                        mips.append(new MoveFromLo(regDst));
+                        mips.append(new MoveFromLo(regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case DIV:
                         regSrc2 = RegisterFile.Register.V1;
                         mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
                         mips.append(new Divide(regSrc1, regSrc2));
-                        mips.append(new MoveFromLo(regDst));
+                        mips.append(new MoveFromLo(regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case MOD:
                         regSrc2 = RegisterFile.Register.V1;
                         mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
                         mips.append(new Divide(regSrc1, regSrc2));
-                        mips.append(new MoveFromHi(regDst));
+                        mips.append(new MoveFromHi(regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case GE:
-                        mips.append(new SetGreaterEqualImmediate(regSrc1, immediate, regDst));
+                        mips.append(new SetGreaterEqualImmediate(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case GT:
-                        mips.append(new SetGreaterThanImmediate(regSrc1, immediate, regDst));
+                        mips.append(new SetGreaterThanImmediate(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case LE:
-                        mips.append(new SetLessEqualImmediate(regSrc1, immediate, regDst));
+                        mips.append(new SetLessEqualImmediate(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case LT:
                         if (Short.MIN_VALUE <= immediate && immediate <= Short.MAX_VALUE) {
-                            mips.append(new SetLessThanImmediate(regSrc1, immediate, regDst));
+                            mips.append(new SetLessThanImmediate(regSrc1, immediate, regDst),
+                                    registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         } else {
                             regSrc2 = RegisterFile.Register.V1;
                             mips.append(new LoadImmediate(regSrc2, immediate));
-                            mips.append(new SetLessThan(regSrc1, regSrc2, regDst));
+                            mips.append(new SetLessThan(regSrc1, regSrc2, regDst),
+                                    registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         }
                         break;
                     case EQ:
-                        mips.append(new SetEqualImmediate(regSrc1, immediate, regDst));
+                        mips.append(new SetEqualImmediate(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     case NE:
-                        mips.append(new SetNotEqualImmediate(regSrc1, immediate, regDst));
+                        mips.append(new SetNotEqualImmediate(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     default: throw new AssertionError("Bad BinaryOp");
                 }
@@ -321,7 +358,7 @@ public class Translator {
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
                 int regDst = allocRegister(code.getDst(), false);
-                binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp());
+                binaryOpHelper(regSrc1, regSrc2, regDst, code.getOp(), (Symbol) code.getSrc1(), (Symbol) code.getSrc2(), code.getDst());
             }
         }
     }
@@ -330,19 +367,21 @@ public class Translator {
         int regDst = allocRegister(code.getDst(), false);
         if (code.getSrc() instanceof Immediate) {
             int immediate = ((Immediate) code.getSrc()).getValue();
+            String comment = registerCommentOne(regDst, code.getDst());
             switch (code.getOp()) {
-                case MOV: mips.append(new LoadImmediate(regDst, immediate)); break;
-                case NEG: mips.append(new LoadImmediate(regDst, -immediate)); break;
-                case NOT: mips.append(new LoadImmediate(regDst, immediate != 0 ? 0 : 1)); break;
+                case MOV: mips.append(new LoadImmediate(regDst, immediate), comment); break;
+                case NEG: mips.append(new LoadImmediate(regDst, -immediate), comment); break;
+                case NOT: mips.append(new LoadImmediate(regDst, immediate != 0 ? 0 : 1), comment); break;
                 default: throw new AssertionError("Bad UnaryOp");
             }
         } else {
             assert code.getSrc() instanceof Symbol;
             int regSrc = allocRegister((Symbol) code.getSrc(), true);
+            String comment = registerCommentTwo(regDst, code.getDst(), regSrc, (Symbol) code.getSrc());
             switch (code.getOp()) {
-                case MOV: mips.append(new Move(regDst, regSrc)); break;
-                case NEG: mips.append(new Subu(RegisterFile.Register.ZERO, regSrc, regDst)); break;
-                case NOT: mips.append(new SetEqual(regSrc, RegisterFile.Register.ZERO, regDst)); break;
+                case MOV: mips.append(new Move(regDst, regSrc), comment); break;
+                case NEG: mips.append(new Subu(RegisterFile.Register.ZERO, regSrc, regDst), comment); break;
+                case NOT: mips.append(new SetEqual(regSrc, RegisterFile.Register.ZERO, regDst), comment); break;
                 default: throw new AssertionError("Bad UnaryOp");
             }
         }
@@ -354,7 +393,7 @@ public class Translator {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, 5));
             mips.append(new Syscall());
             int regDst = allocRegister(((Input) code).getDst(), false);
-            mips.append(new Move(regDst, RegisterFile.Register.V0));
+            mips.append(new Move(regDst, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
         } else if (code instanceof PrintInt) {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, 1));
             if (((PrintInt) code).getValue() instanceof Immediate) {
@@ -362,7 +401,7 @@ public class Translator {
             } else {
                 assert ((PrintInt) code).getValue() instanceof Symbol;
                 int regSrc = allocRegister((Symbol) ((PrintInt) code).getValue(), true);
-                mips.append(new Move(RegisterFile.Register.A0, regSrc));
+                mips.append(new Move(RegisterFile.Register.A0, regSrc), registerCommentOne(regSrc, (Symbol) ((PrintInt) code).getValue()));
             }
             mips.append(new Syscall());
         } else {
@@ -381,7 +420,7 @@ public class Translator {
         // 保存 ra
         mips.append(new StoreWord(RegisterFile.Register.SP, 0, RegisterFile.Register.RA));
         // 计算子函数栈基地址
-        mips.append(new Addiu(RegisterFile.Register.SP, -currentStackSize, RegisterFile.Register.A0)); // A0 = 子函数的 sp
+        mips.append(new Addiu(RegisterFile.Register.SP, -currentStackSize - Symbol.SIZEOF_INT, RegisterFile.Register.A0)); // A0 = 子函数的 sp
         // 传递参数
         List<Operand> params = code.getParams();
         int offset = 0;
@@ -393,7 +432,7 @@ public class Translator {
             } else {
                 assert param instanceof Symbol;
                 int reg = allocRegister((Symbol) param, true);
-                mips.append(new StoreWord(RegisterFile.Register.A0, -offset, reg));
+                mips.append(new StoreWord(RegisterFile.Register.A0, -offset, reg), registerCommentOne(reg, (Symbol) param));
             }
         }
         // 移动 $sp
@@ -402,11 +441,11 @@ public class Translator {
         // 生成跳转指令
         mips.append(new JumpAndLink(code.getFunction().getName()));
         // 恢复现场
-        mips.append(new Addiu(RegisterFile.Register.SP, currentStackSize, RegisterFile.Register.SP));
+        mips.append(new Addiu(RegisterFile.Register.SP, currentStackSize + Symbol.SIZEOF_INT, RegisterFile.Register.SP));
         mips.append(new LoadWord(RegisterFile.Register.SP, 0, RegisterFile.Register.RA)); // 恢复返回地址 $ra
         if (code.hasRet()) {
             int regRet = allocRegister(code.getRet(), false);
-            mips.append(new Move(regRet, RegisterFile.Register.V0));
+            mips.append(new Move(regRet, RegisterFile.Register.V0), registerCommentOne(regRet, code.getRet()));
         }
     }
 
@@ -424,7 +463,7 @@ public class Translator {
             } else {
                 assert value instanceof Symbol;
                 int regSrc = allocRegister((Symbol) value, true);
-                mips.append(new Move(RegisterFile.Register.V0, regSrc));
+                mips.append(new Move(RegisterFile.Register.V0, regSrc), registerCommentOne(regSrc, (Symbol) value));
             }
         }
         mips.append(new JumpRegister(RegisterFile.Register.RA));
@@ -435,36 +474,40 @@ public class Translator {
         Operand offset = code.getOffset();
         Symbol pointer = code.getTarget();
         int regPtr = allocRegister(pointer, true);
+        String commentOne = registerCommentOne(regPtr, pointer);
         if (base.getType().equals(Symbol.Type.ARRAY)) {
             if (offset instanceof Immediate) {
                 // 数组 + 立即数
                 if (base.isLocal()) {
-                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress() + ((Immediate) offset).getValue(), regPtr));
+                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress() + ((Immediate) offset).getValue(), regPtr), commentOne);
                 } else {
-                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress() + ((Immediate) offset).getValue(), regPtr));
+                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress() + ((Immediate) offset).getValue(), regPtr), commentOne);
                 }
             } else {
                 // 数组 + 寄存器
                 assert offset instanceof Symbol;
                 int regSrc = allocRegister((Symbol) offset, true);
+                String commentTwo = registerCommentTwo(regPtr, pointer, regSrc, (Symbol) offset);
                 if (base.isLocal()) {
-                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress(), regPtr));
+                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress(), regPtr), commentOne);
                 } else {
-                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress(), regPtr));
+                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress(), regPtr), commentOne);
                 }
-                mips.append(new Addu(regPtr, regSrc, regPtr));
+                mips.append(new Addu(regPtr, regSrc, regPtr), commentTwo);
             }
         } else {
             if (offset instanceof Immediate) {
                 // 指针 + 立即数
                 int regSrc = allocRegister(base, true);
-                mips.append(new Addiu(regSrc, ((Immediate) offset).getValue(), regPtr));
+                String commentTwo = registerCommentTwo(regPtr, pointer, regSrc, base);
+                mips.append(new Addiu(regSrc, ((Immediate) offset).getValue(), regPtr), commentTwo);
             } else {
                 // 指针 + 寄存器
                 int regSrc1 = allocRegister(base, true);
                 assert offset instanceof Symbol;
                 int regSrc2 = allocRegister((Symbol) offset, true);
-                mips.append(new Addu(regSrc1, regSrc2, regPtr));
+                String commentThree = registerCommentThree(regPtr, pointer, regSrc1, base, regSrc2, (Symbol) offset);
+                mips.append(new Addu(regSrc1, regSrc2, regPtr), commentThree);
             }
         }
     }
@@ -473,7 +516,8 @@ public class Translator {
         int regBase = allocRegister(code.getAddress(), true);
         if (code.getOp().equals(PointerOp.Op.LOAD)) {
             int regDst = allocRegister(code.getDst(), false);
-            mips.append(new LoadWord(regBase, 0, regDst));
+            String comment = registerCommentTwo(regBase, code.getAddress(), regDst, code.getDst());
+            mips.append(new LoadWord(regBase, 0, regDst), comment);
         } else {
             assert code.getOp().equals(PointerOp.Op.STORE);
             Operand src = code.getSrc();
@@ -481,11 +525,14 @@ public class Translator {
             if (src instanceof Immediate) {
                 regSrc = RegisterFile.Register.V0;
                 mips.append(new LoadImmediate(regSrc, ((Immediate) src).getValue()));
+                String comment = registerCommentOne(regBase, code.getAddress());
+                mips.append(new StoreWord(regBase, 0, regSrc), comment);
             } else {
                 assert src instanceof Symbol;
                 regSrc = allocRegister((Symbol) src, true);
+                String comment = registerCommentTwo(regBase, code.getAddress(), regSrc, (Symbol) src);
+                mips.append(new StoreWord(regBase, 0, regSrc), comment);
             }
-            mips.append(new StoreWord(regBase, 0, regSrc));
         }
     }
 
