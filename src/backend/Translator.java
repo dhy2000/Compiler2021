@@ -2,11 +2,11 @@ package backend;
 
 import backend.hardware.Memory;
 import intermediate.Intermediate;
+import intermediate.code.*;
 import intermediate.symbol.FuncMeta;
 import intermediate.symbol.Symbol;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 中间代码翻译到 MIPS
@@ -43,18 +43,76 @@ public class Translator {
         }
     }
 
-    public void translateFunction(FuncMeta meta, boolean main) {
+    /* ------ 代码翻译 ------ */
+    private void translateBinaryOp(BinaryOp code) {
 
+    }
+
+    private void translateUnaryOp(UnaryOp code) {
+
+    }
+
+    private void translateIO(ILinkNode code) {
+        assert code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
+
+    }
+
+    private void translateCall(Call code) {
+
+    }
+
+    private void translateReturn(Return code) {
+
+    }
+
+    private void translateAddressOffset(AddressOffset code) {
+
+    }
+
+    private void translatePointerOp(PointerOp code) {
+
+    }
+
+    private void translateBranchOrJump(ILinkNode code) {
+        assert code instanceof Jump || code instanceof BranchIfElse;
+
+    }
+
+    // 记录当前正在翻译的函数
+    private FuncMeta currentFunc = null;
+    private boolean isMain = false;
+
+    // BFS 基本块
+    private final HashSet<BasicBlock> visitedBlock = new HashSet<>();
+    private final Queue<BasicBlock> queueBlock = new LinkedList<>();
+
+    public void translateBasicBlock(BasicBlock block) {
+
+    }
+
+    // 从函数头部开始, 将基本块中的中间代码翻译成 MIPS 目标代码
+    public void translateFunction(FuncMeta meta) {
+        currentFunc = meta;
+        BasicBlock head = meta.getBody();
+        queueBlock.offer(head);
+        while (!queueBlock.isEmpty()) {
+            BasicBlock block = queueBlock.poll();
+            if (visitedBlock.contains(block)) {
+                continue;
+            }
+            visitedBlock.add(block);
+            translateBasicBlock(block);
+        }
     }
 
     public Mips toMips() {
         loadStringConstant();
         loadGlobals();
         for (FuncMeta meta : ir.getFunctions().values()) {
-            translateFunction(meta, false);
+            translateFunction(meta);
         }
-
-        translateFunction(ir.getMainFunction(), true);
+        isMain = true;
+        translateFunction(ir.getMainFunction());
         return mips;
     }
 }
