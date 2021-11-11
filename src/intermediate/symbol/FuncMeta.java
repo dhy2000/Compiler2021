@@ -59,6 +59,7 @@ public class FuncMeta {
     public void addParam(Symbol param) {
         paramTable.add(param);
         params.add(param);
+        updateStackSize(paramTable.capacity());
     }
 
     public void loadBody(BasicBlock body) {
