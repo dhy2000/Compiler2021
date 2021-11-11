@@ -44,6 +44,7 @@ public class Mips {
     public void addStringConstant(String label, String content) {
         stringConstant.put(label, content);
         stringConstantAddress.put(label, stringConstantSize);
+        initMem.putString(STRING_START_ADDRESS + stringConstantSize, content);
         // Replace escapes (e.g. LF)!
         String replaceEscape = content.replace("\\n", "X");
         stringConstantSize += replaceEscape.length() + 1; // terminate char '\0'
@@ -96,7 +97,7 @@ public class Mips {
         // Global Variables
         ps.printf(".data 0x%x # Global\n", DATA_START_ADDRESS);
         ps.print(".word ");
-        int lastAddress = 0;
+        int lastAddress = -4;
         for (int address : initMem.modifiedAddresses()) {
             assert address > lastAddress && address % 4 == 0;
             if (address - lastAddress > 4) {

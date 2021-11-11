@@ -62,6 +62,7 @@ public class Translator {
 
     // 处理在当前基本块中临时变量的使用次数
     private void processTempVariableUses(BasicBlock block) {
+        tempDefUse.clear();
         ILinkNode code = block.getHead();
         while (code.hasNext()) {
             if (code instanceof BinaryOp) {
@@ -94,6 +95,9 @@ public class Translator {
     }
 
     private void consumeUseTempVariable(Symbol symbol) {
+        if (symbol.hasAddress()) {
+            return;
+        }
         assert tempDefUse.containsKey(symbol);
         int count = tempDefUse.get(symbol);
         if (count == 1) {
@@ -155,12 +159,14 @@ public class Translator {
     }
 
     // 跳转前，清除寄存器分配, 所有寄存器中的变量均写回栈
-    private void clearRegister() {
-        Map<Integer, Symbol> regState = registerMap.getState();
-        for (Map.Entry<Integer, Symbol> entry : regState.entrySet()) {
-            int register = entry.getKey();
-            Symbol var = entry.getValue();
-            recycleRegisterOfVar(register, var);
+    private void clearRegister(boolean writeBack) {
+        if (writeBack) {
+            Map<Integer, Symbol> regState = registerMap.getState();
+            for (Map.Entry<Integer, Symbol> entry : regState.entrySet()) {
+                int register = entry.getKey();
+                Symbol var = entry.getValue();
+                recycleRegisterOfVar(register, var);
+            }
         }
         registerMap.clear();
     }
@@ -237,6 +243,7 @@ public class Translator {
             } else {
                 // 立即数, 寄存器
                 assert code.getSrc2() instanceof Symbol;
+                consumeUseTempVariable((Symbol) code.getSrc2());
                 regSrc1 = RegisterFile.Register.V1;
                 mips.append(new LoadImmediate(regSrc1, ((Immediate) code.getSrc1()).getValue()));
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
@@ -246,6 +253,7 @@ public class Translator {
         } else {
             assert code.getSrc1() instanceof Symbol;
             if (code.getSrc2() instanceof Immediate) {
+                consumeUseTempVariable((Symbol) code.getSrc1());
                 // 寄存器, 立即数 (I 型指令)
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
                 int regDst = allocRegister(code.getDst(), false);
@@ -301,7 +309,8 @@ public class Translator {
                 }
             } else {
                 // 寄存器, 寄存器 (R 型指令)
-                assert code.getSrc1() instanceof Symbol && code.getSrc2() instanceof Symbol;
+                assert code.getSrc2() instanceof Symbol;
+                consumeUseTempVariable((Symbol) code.getSrc1());
                 regSrc1 = allocRegister((Symbol) code.getSrc1(), true);
                 regSrc2 = allocRegister((Symbol) code.getSrc2(), true);
                 int regDst = allocRegister(code.getDst(), false);
@@ -311,33 +320,194 @@ public class Translator {
     }
 
     private void translateUnaryOp(UnaryOp code) {
-
+        int regDst = allocRegister(code.getDst(), false);
+        if (code.getSrc() instanceof Immediate) {
+            int immediate = ((Immediate) code.getSrc()).getValue();
+            switch (code.getOp()) {
+                case MOV: mips.append(new LoadImmediate(regDst, immediate)); break;
+                case NEG: mips.append(new LoadImmediate(regDst, -immediate)); break;
+                case NOT: mips.append(new LoadImmediate(regDst, immediate != 0 ? 0 : 1)); break;
+                default: throw new AssertionError("Bad UnaryOp");
+            }
+        } else {
+            assert code.getSrc() instanceof Symbol;
+            int regSrc = allocRegister((Symbol) code.getSrc(), true);
+            switch (code.getOp()) {
+                case MOV: mips.append(new Move(regDst, regSrc)); break;
+                case NEG: mips.append(new Subu(RegisterFile.Register.ZERO, regSrc, regDst)); break;
+                case NOT: mips.append(new SetEqual(regSrc, RegisterFile.Register.ZERO, regDst)); break;
+                default: throw new AssertionError("Bad UnaryOp");
+            }
+        }
     }
 
     private void translateIO(ILinkNode code) {
         assert code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
-
+        if (code instanceof Input) {
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, 5));
+            mips.append(new Syscall());
+            int regDst = allocRegister(((Input) code).getDst(), false);
+            mips.append(new Move(regDst, RegisterFile.Register.V0));
+        } else if (code instanceof PrintInt) {
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, 1));
+            if (((PrintInt) code).getValue() instanceof Immediate) {
+                mips.append(new LoadImmediate(RegisterFile.Register.A0, ((Immediate) ((PrintInt) code).getValue()).getValue()));
+            } else {
+                assert ((PrintInt) code).getValue() instanceof Symbol;
+                int regSrc = allocRegister((Symbol) ((PrintInt) code).getValue(), true);
+                mips.append(new Move(RegisterFile.Register.A0, regSrc));
+            }
+            mips.append(new Syscall());
+        } else {
+            String label = ((PrintStr) code).getLabel();
+            int address = mips.getStringAddress(label);
+            mips.append(new LoadImmediate(RegisterFile.Register.A0, Mips.STRING_START_ADDRESS + address));
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, 4));
+            mips.append(new Syscall());
+        }
     }
 
     private void translateCall(Call code) {
-        // TODO: 保存现场 (寄存器强制写回, 下压 sp，保存返回地址 $ra), 生成跳转指令 (jal), 恢复现场 (上弹 sp，恢复返回地址 $ra)，返回值 $v0 赋给相应寄存器
+        // 保存现场 (寄存器强制写回, 下压 sp，保存返回地址 $ra), 传递参数, 生成跳转指令 (jal)
+        // 恢复现场 (上弹 sp，恢复返回地址 $ra)，返回值 $v0 赋给相应寄存器
+        clearRegister(true);
+        // 保存 ra
+        mips.append(new StoreWord(RegisterFile.Register.SP, 0, RegisterFile.Register.RA));
+        // 计算子函数栈基地址
+        mips.append(new Addiu(RegisterFile.Register.SP, -currentStackSize, RegisterFile.Register.A0)); // A0 = 子函数的 sp
+        // 传递参数
+        List<Operand> params = code.getParams();
+        int offset = 0;
+        for (Operand param : params) {
+            if (param instanceof Immediate) {
+                mips.append(new LoadImmediate(RegisterFile.Register.V0, ((Immediate) param).getValue()));
+                mips.append(new StoreWord(RegisterFile.Register.A0, offset, RegisterFile.Register.V0));
+            } else {
+                assert param instanceof Symbol;
+                int reg = allocRegister((Symbol) param, true);
+                mips.append(new StoreWord(RegisterFile.Register.A0, offset, reg));
+            }
+            offset += Symbol.SIZEOF_INT;
+        }
+        // 移动 $sp
+        mips.append(new Move(RegisterFile.Register.SP, RegisterFile.Register.A0));
+        clearRegister(false);
+        // 生成跳转指令
+        mips.append(new JumpAndLink(code.getFunction().getName()));
+        // 恢复现场
+        mips.append(new Addiu(RegisterFile.Register.SP, currentStackSize, RegisterFile.Register.SP));
+        mips.append(new LoadWord(RegisterFile.Register.SP, 0, RegisterFile.Register.RA)); // 恢复返回地址 $ra
+        if (code.hasRet()) {
+            int regRet = allocRegister(code.getRet(), false);
+            mips.append(new Move(regRet, RegisterFile.Register.V0));
+        }
     }
 
     private void translateReturn(Return code) {
-        // TODO: 返回值 $v0 赋值, 生成 jr 指令
+        // 返回值 $v0 赋值, 生成 jr 指令
+        if (isMain) {
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, 10)); // Exit
+            mips.append(new Syscall());
+            return;
+        }
+        if (code.hasValue()) {
+            Operand value = code.getValue();
+            if (value instanceof Immediate) {
+                mips.append(new LoadImmediate(RegisterFile.Register.V0, ((Immediate) value).getValue()));
+            } else {
+                assert value instanceof Symbol;
+                int regSrc = allocRegister((Symbol) value, true);
+                mips.append(new Move(RegisterFile.Register.V0, regSrc));
+            }
+        }
+        mips.append(new JumpRegister(RegisterFile.Register.RA));
     }
 
     private void translateAddressOffset(AddressOffset code) {
-
+        Symbol base = code.getBase();
+        Operand offset = code.getOffset();
+        Symbol pointer = code.getTarget();
+        int regPtr = allocRegister(pointer, true);
+        if (base.getType().equals(Symbol.Type.ARRAY)) {
+            if (offset instanceof Immediate) {
+                // 数组 + 立即数
+                if (base.isLocal()) {
+                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress() + ((Immediate) offset).getValue(), regPtr));
+                } else {
+                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress() + ((Immediate) offset).getValue(), regPtr));
+                }
+            } else {
+                // 数组 + 寄存器
+                assert offset instanceof Symbol;
+                int regSrc = allocRegister((Symbol) offset, true);
+                if (base.isLocal()) {
+                    mips.append(new Addiu(RegisterFile.Register.SP, -base.getAddress(), regPtr));
+                } else {
+                    mips.append(new Addiu(RegisterFile.Register.GP, base.getAddress(), regPtr));
+                }
+                mips.append(new Addu(regPtr, regSrc, regPtr));
+            }
+        } else {
+            if (offset instanceof Immediate) {
+                // 指针 + 立即数
+                int regSrc = allocRegister(base, true);
+                mips.append(new Addiu(regSrc, ((Immediate) offset).getValue(), regPtr));
+            } else {
+                // 指针 + 寄存器
+                int regSrc1 = allocRegister(base, true);
+                assert offset instanceof Symbol;
+                int regSrc2 = allocRegister((Symbol) offset, true);
+                mips.append(new Addu(regSrc1, regSrc2, regPtr));
+            }
+        }
     }
 
     private void translatePointerOp(PointerOp code) {
-
+        int regBase = allocRegister(code.getAddress(), true);
+        if (code.getOp().equals(PointerOp.Op.LOAD)) {
+            int regDst = allocRegister(code.getDst(), false);
+            mips.append(new LoadWord(regBase, 0, regDst));
+        } else {
+            assert code.getOp().equals(PointerOp.Op.STORE);
+            Operand src = code.getSrc();
+            int regSrc;
+            if (src instanceof Immediate) {
+                regSrc = RegisterFile.Register.V0;
+                mips.append(new LoadImmediate(regSrc, ((Immediate) src).getValue()));
+            } else {
+                assert src instanceof Symbol;
+                regSrc = allocRegister((Symbol) src, true);
+            }
+            mips.append(new StoreWord(regBase, 0, regSrc));
+        }
     }
 
     private void translateBranchOrJump(ILinkNode code) {
         assert code instanceof Jump || code instanceof BranchIfElse;
-        // TODO: 跳转前需要强制写回所有寄存器
+        clearRegister(true);
+        // Use $v0 to load condition
+        if (code instanceof BranchIfElse) {
+            Operand cond = ((BranchIfElse) code).getCondition();
+            int regSrc = RegisterFile.Register.V0;
+            if (cond instanceof Immediate) {
+                mips.append(new LoadImmediate(regSrc, ((Immediate) cond).getValue()));
+            } else {
+                assert cond instanceof Symbol;
+                Symbol symbol = (Symbol) cond;
+                if (symbol.isLocal()) {
+                    mips.append(new LoadWord(RegisterFile.Register.SP, -symbol.getAddress(), regSrc));
+                } else {
+                    mips.append(new LoadWord(RegisterFile.Register.GP, symbol.getAddress(), regSrc));
+                }
+            }
+            mips.append(new BranchNotEqual(regSrc, RegisterFile.Register.ZERO, ((BranchIfElse) code).getThenTarget().getLabel()));
+            mips.append(new JumpLabel(((BranchIfElse) code).getElseTarget().getLabel()));
+            queueBlock.offer(((BranchIfElse) code).getElseTarget());
+            queueBlock.offer(((BranchIfElse) code).getThenTarget());
+        } else {
+            mips.append(new JumpLabel(((Jump) code).getTarget().getLabel()));
+            queueBlock.offer(((Jump) code).getTarget());
+        }
     }
 
     // 记录当前正在翻译的函数
@@ -351,6 +521,30 @@ public class Translator {
 
     public void translateBasicBlock(BasicBlock block) {
         processTempVariableUses(block);
+        mips.setLabel(block.getLabel());
+        ILinkNode code = block.getHead();
+        while (code.hasNext()) {
+            if (code instanceof BinaryOp) {
+                translateBinaryOp((BinaryOp) code);
+            } else if (code instanceof UnaryOp) {
+                translateUnaryOp((UnaryOp) code);
+            } else if (code instanceof Input || code instanceof PrintInt || code instanceof PrintStr) {
+                translateIO(code);
+            } else if (code instanceof Call) {
+                translateCall((Call) code);
+            } else if (code instanceof Return) {
+                translateReturn((Return) code);
+            } else if (code instanceof AddressOffset) {
+                translateAddressOffset((AddressOffset) code);
+            } else if (code instanceof PointerOp) {
+                translatePointerOp((PointerOp) code);
+            } else if (code instanceof Jump || code instanceof BranchIfElse) {
+                translateBranchOrJump(code);
+            } else {
+                throw new AssertionError("Bad Mid Code!");
+            }
+            code = code.getNext();
+        }
     }
 
     // 从函数头部开始, 将基本块中的中间代码翻译成 MIPS 目标代码
@@ -372,6 +566,7 @@ public class Translator {
     public Mips toMips() {
         loadStringConstant();
         loadGlobals();
+        mips.append(new JumpLabel("main"));
         for (FuncMeta meta : ir.getFunctions().values()) {
             translateFunction(meta);
         }

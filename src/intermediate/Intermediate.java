@@ -80,6 +80,34 @@ public class Intermediate {
         return mainFunction;
     }
 
+    private void outputFuncHelper(PrintStream ps, FuncMeta func, HashSet<BasicBlock> visited, Queue<BasicBlock> queue) {
+        ps.printf("# Function %s: stack size = 0x%x\n", func.getName(), func.getStackSize());
+        queue.offer(func.getBody());
+        while (!queue.isEmpty()) {
+            BasicBlock front = queue.poll();
+            if (visited.contains(front)) {
+                continue;
+            }
+            visited.add(front);
+            ps.println(front.getLabel() + ":");
+            ILinkNode node = front.getHead();
+            while (Objects.nonNull(node) && node.hasNext()) {
+                if (node instanceof Jump) {
+                    BasicBlock target = ((Jump) node).getTarget();
+                    queue.offer(target);
+                } else if (node instanceof BranchIfElse) {
+                    BasicBlock then = ((BranchIfElse) node).getThenTarget();
+                    queue.offer(then);
+                    BasicBlock elseBlk = ((BranchIfElse) node).getElseTarget();
+                    queue.offer(elseBlk);
+                }
+                ps.println("    " + node);
+                node = node.getNext();
+            }
+            ps.println();
+        }
+    }
+
     /**
      * 输出中间代码，同时该方法也是一个遍历中间代码的模板
      * @param ps 指定输出流
@@ -109,31 +137,8 @@ public class Intermediate {
         Queue<BasicBlock> queue = new LinkedList<>(); // BFS
 
         for (FuncMeta func : functions.values()) {
-            ps.printf("# Function %s: stack size = 0x%x\n", func.getName(), func.getStackSize());
-            queue.offer(func.getBody());
-            while (!queue.isEmpty()) {
-                BasicBlock front = queue.poll();
-                if (visited.contains(front)) {
-                    continue;
-                }
-                visited.add(front);
-                ps.println(front.getLabel() + ":");
-                ILinkNode node = front.getHead();
-                while (Objects.nonNull(node) && node.hasNext()) {
-                    if (node instanceof Jump) {
-                        BasicBlock target = ((Jump) node).getTarget();
-                        queue.offer(target);
-                    } else if (node instanceof BranchIfElse) {
-                        BasicBlock then = ((BranchIfElse) node).getThenTarget();
-                        queue.offer(then);
-                        BasicBlock elseBlk = ((BranchIfElse) node).getElseTarget();
-                        queue.offer(elseBlk);
-                    }
-                    ps.println("    " + node);
-                    node = node.getNext();
-                }
-                ps.println();
-            }
+            outputFuncHelper(ps, func, visited, queue);
         }
+        outputFuncHelper(ps, mainFunction, visited, queue);
     }
 }

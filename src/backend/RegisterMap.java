@@ -10,9 +10,9 @@ import java.util.*;
  */
 public class RegisterMap {
 
-    // 可用来自由分配的寄存器：从 a0($4) 到 t9($25); v0($2) 作为函数返回值, v1($3) 可用来存储一个立即数
+    // 可用来自由分配的寄存器：从 a1($5) 到 t9($25); v0($2) 作为函数返回值, v1($3) 可用来存储一个立即数, a0($4) 用于系统调用
     private static final Collection<Integer> allocatableRegisters = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-            4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
+            5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
     )));
 
     // 当前未使用(可自由分配)的寄存器

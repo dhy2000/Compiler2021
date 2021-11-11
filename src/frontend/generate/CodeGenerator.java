@@ -955,7 +955,7 @@ public class CodeGenerator {
         }
         FuncMeta mainMeta = new FuncMeta("main", FuncMeta.ReturnType.INT, currentSymTable);
         currentFunc = mainMeta;
-        intermediate.putFunction(mainMeta);
+        // intermediate.putFunction(mainMeta);
         MainFuncDef main = unit.getMainFunc();
         funcBodyHelper(main.getBody(), mainMeta);
         intermediate.setMainFunction(mainMeta);

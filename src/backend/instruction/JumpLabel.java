@@ -14,7 +14,7 @@ public class JumpLabel extends MipsInstruction {
 
     @Override
     public String instrToString() {
-        return "j " + getLabel();
+        return "j " + getJumpTarget();
     }
 
     @Override
