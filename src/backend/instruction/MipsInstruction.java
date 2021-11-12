@@ -12,7 +12,8 @@ public abstract class MipsInstruction extends ILinkNode {
     public MipsInstruction() {}
 
     private String label = "";  // 指令自己的标签(不是跳转指令的目标!)
-    private String comment = "";
+    private String comment = ""; // 位于当前指令后面
+    private String description = ""; // 位于当前指令前面
 
     public boolean hasLabel() {
         return !label.isEmpty();
@@ -20,6 +21,10 @@ public abstract class MipsInstruction extends ILinkNode {
 
     public boolean hasComment() {
         return !comment.isEmpty();
+    }
+
+    public boolean hasDescription() {
+        return !description.isEmpty();
     }
 
     public String getLabel() {
@@ -38,6 +43,14 @@ public abstract class MipsInstruction extends ILinkNode {
         this.comment = comment;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public abstract String instrToString();
 
     public abstract void execute(RegisterFile rf, Memory mem); // 指令执行对寄存器和内存的行为
@@ -52,7 +65,10 @@ public abstract class MipsInstruction extends ILinkNode {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (hasLabel()) {
-            sb.append(getLabel()).append(": ");
+            sb.append(getLabel()).append(":\n");
+        }
+        if (hasDescription()) {
+            sb.append("# ").append(getDescription()).append("\n");
         }
         sb.append(instrToString());
         if (hasComment()) {

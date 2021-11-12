@@ -31,6 +31,7 @@ public class Mips {
 
     // 即将插入标签
     private String label = null;
+    private String description = ""; // 即将插入的指令的说明
 
     private final MipsInstruction entry = MipsInstruction.nop();
     private final MipsInstruction tail = MipsInstruction.nop();
@@ -72,6 +73,10 @@ public class Mips {
             follow.setLabel(label);
             label = null;
         }
+        if (!description.isEmpty()) {
+            follow.setDescription(description);
+            description = "";
+        }
         MipsInstruction last = (MipsInstruction) tail.getPrev();
         last.setNext(follow);
         follow.setPrev(last);
@@ -90,6 +95,10 @@ public class Mips {
 
     public void setLabel(String label) { // 下一条插入的指令将带有标签, 用该方法定义基本块头部
         this.label = label;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void output(PrintStream ps) {

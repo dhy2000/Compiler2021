@@ -158,7 +158,7 @@ public class Translator {
         }
         int register = registerMap.allocRegister(symbol);
         if (load && symbol.hasAddress()) {
-            String comment = String.format("load %s", symbol);
+            String comment = String.format("assign $%s to %s", RegisterFile.getRegisterName(register), symbol);
             if (symbol.isLocal()) {
                 mips.append(new LoadWord(RegisterFile.Register.SP, -symbol.getAddress(), register), comment);
             } else {
@@ -594,7 +594,7 @@ public class Translator {
         mips.setLabel(block.getLabel());
         ILinkNode code = block.getHead();
         while (code.hasNext()) {
-            mips.append(MipsInstruction.nop(), code.toString());
+            mips.setDescription(code.toString());
             if (code instanceof BinaryOp) {
                 translateBinaryOp((BinaryOp) code);
             } else if (code instanceof UnaryOp) {
