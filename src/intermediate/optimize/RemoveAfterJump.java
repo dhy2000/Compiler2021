@@ -1,10 +1,7 @@
 package intermediate.optimize;
 
 import intermediate.Intermediate;
-import intermediate.code.BasicBlock;
-import intermediate.code.BranchIfElse;
-import intermediate.code.ILinkNode;
-import intermediate.code.Jump;
+import intermediate.code.*;
 import intermediate.symbol.FuncMeta;
 
 import java.util.HashSet;
@@ -46,6 +43,11 @@ public class RemoveAfterJump implements MidOptimizer {
                         queue.offer(((BranchIfElse) node).getThenTarget());
                         queue.offer(((BranchIfElse) node).getElseTarget());
                         // 删掉跳转后的任何语句
+                        while (node.getNext().hasNext()) {
+                            ILinkNode follow = node.getNext();
+                            follow.remove();
+                        }
+                    } else if (node instanceof Return) {
                         while (node.getNext().hasNext()) {
                             ILinkNode follow = node.getNext();
                             follow.remove();

@@ -4,6 +4,7 @@ import config.Config;
 import frontend.SysY;
 import intermediate.Intermediate;
 import intermediate.MidRunner;
+import intermediate.optimize.MergeBlock;
 import intermediate.optimize.PrintfTrans;
 import intermediate.optimize.RemoveAfterJump;
 
@@ -23,6 +24,7 @@ public class Compiler {
             }
             new PrintfTrans().optimize(ir);
             new RemoveAfterJump().optimize(ir);
+            new MergeBlock().optimize(ir);
             if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
                 ir.output(Config.getTarget());
             }
