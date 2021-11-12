@@ -915,7 +915,7 @@ public class Visitor {
         currentSymTable = meta.getParamTable();
         stackSize = meta.getParamTable().capacity();
         BasicBlock block = analyseBlock(funcBody);
-        BasicBlock body = new BasicBlock(meta.getName(), BasicBlock.Type.FUNC);
+        BasicBlock body = new BasicBlock(meta.getLabelName(), BasicBlock.Type.FUNC);
         body.append(new Jump(block));
         currentBlock.append(new Return());
         currentBlock = null;

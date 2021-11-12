@@ -46,7 +46,7 @@ public class Call extends ILinkNode {
 
     @Override
     public String toString() {
-        return "CALL " + function.getName() + ", ["
+        return "CALL " + function.getLabelName() + ", ["
                 + params.stream().map(Object::toString).reduce((s, s2) -> s + ", " + s2).orElse("") + "]"
                 + (Objects.nonNull(ret) ? " -> " + ret : "");
     }

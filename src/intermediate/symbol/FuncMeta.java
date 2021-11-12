@@ -44,8 +44,12 @@ public class FuncMeta {
         return type;
     }
 
-    public String getName() {
+    public String getName() { // 返回原始的函数名，用于符号表
         return name;
+    }
+
+    public String getLabelName() { // 返回加前缀的函数名，用于生成跳转标签
+        return "FUNC_" + name; // 生成标签名时加上前缀，防止函数名与自动生成的标签重名
     }
 
     public SymTable getParamTable() {

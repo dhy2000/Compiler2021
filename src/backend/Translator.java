@@ -445,7 +445,7 @@ public class Translator {
         mips.append(new Move(RegisterFile.Register.SP, RegisterFile.Register.A0));
         clearRegister(false);
         // 生成跳转指令
-        mips.append(new JumpAndLink(code.getFunction().getName()));
+        mips.append(new JumpAndLink(code.getFunction().getLabelName()));
         // 恢复现场
         mips.append(new Addiu(RegisterFile.Register.SP, currentStackSize + Symbol.SIZEOF_INT, RegisterFile.Register.SP));
         mips.append(new LoadWord(RegisterFile.Register.SP, 0, RegisterFile.Register.RA)); // 恢复返回地址 $ra
@@ -638,11 +638,10 @@ public class Translator {
     public Mips toMips() {
         loadStringConstant();
         loadGlobals();
-        mips.append(new JumpLabel("main"));
+        mips.append(new JumpLabel(ir.getMainFunction().getLabelName()));
         for (FuncMeta meta : ir.getFunctions().values()) {
             translateFunction(meta);
         }
-//        translateFunction(ir.getMainFunction());
         return mips;
     }
 }
