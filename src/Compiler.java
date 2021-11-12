@@ -1,5 +1,6 @@
 import backend.Mips;
 import backend.Translator;
+import backend.optimize.JumpFollow;
 import config.Config;
 import frontend.SysY;
 import intermediate.Intermediate;
@@ -22,9 +23,13 @@ public class Compiler {
             if (Objects.isNull(ir)) {
                 return;
             }
-            new PrintfTrans().optimize(ir);
+            new PrintfTrans().optimize(ir); // NECESSARY! This is not an optimizer.
+
+            /* ------ MidCode Optimize Begin ------ */
             new RemoveAfterJump().optimize(ir);
             new MergeBlock().optimize(ir);
+            /* ------ MidCode Optimize End ------ */
+
             if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
                 ir.output(Config.getTarget());
             }
@@ -34,6 +39,11 @@ public class Compiler {
             }
             if (Config.hasOperationOutput(Config.Operation.OBJECT)) {
                 Mips mips = new Translator(ir).toMips();
+
+                /* ------ Mips Optimize Begin ------ */
+                new JumpFollow().optimize(mips);
+                /* ------ Mips Optimize End ------ */
+
                 mips.output(Config.getTarget());
             }
         } catch (Exception e) {
