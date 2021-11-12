@@ -5,6 +5,7 @@ import frontend.SysY;
 import intermediate.Intermediate;
 import intermediate.MidRunner;
 import intermediate.optimize.PrintfTrans;
+import intermediate.optimize.RemoveAfterJump;
 
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ public class Compiler {
                 return;
             }
             new PrintfTrans().optimize(ir);
+            new RemoveAfterJump().optimize(ir);
             if (Config.hasOperationOutput(Config.Operation.INTERMEDIATE)) {
                 ir.output(Config.getTarget());
             }
