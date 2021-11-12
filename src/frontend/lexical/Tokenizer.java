@@ -1,6 +1,6 @@
 package frontend.lexical;
 
-import exception.UnrecognizedTokenException;
+import exception.UndefinedTokenException;
 import frontend.input.Source;
 import frontend.lexical.token.Token;
 
@@ -10,7 +10,7 @@ public class Tokenizer {
     private Tokenizer() {}
 
     public static TokenList tokenize(Source source)
-            throws UnrecognizedTokenException {
+            throws UndefinedTokenException {
         TokenList ts = new TokenList();
 
         while (!source.reachedEndOfFile()) {
@@ -43,7 +43,7 @@ public class Tokenizer {
                 }
             }
             if (!source.reachedEndOfFile() && !matchToken) {
-                throw new UnrecognizedTokenException(source.getLineIndex(),
+                throw new UndefinedTokenException(source.getLineIndex(),
                         source.getCurrentLine());
             }
         }

@@ -1,7 +1,7 @@
 package frontend.syntax.func;
 
-import exception.UnexpectedEofException;
-import exception.UnexpectedTokenException;
+import exception.EofException;
+import exception.WrongTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
@@ -30,7 +30,7 @@ public class FuncParser {
     }
 
     // <FuncDef>       := <FuncType> Ident '(' [<FuncFParams> ] ')' <Block>
-    public FuncDef parseFuncDef(Token funcType, Ident ident, Token leftParenthesis) throws UnexpectedEofException, UnexpectedTokenException {
+    public FuncDef parseFuncDef(Token funcType, Ident ident, Token leftParenthesis) throws EofException, WrongTokenException {
         ParserUtil.detectEof("<FuncDef>", iterator, maxLineNum);
         Token rightParenthesis = iterator.next();
         if (rightParenthesis.getType().equals(Token.Type.RPARENT)) {
@@ -48,7 +48,7 @@ public class FuncParser {
     }
 
     // <MainFuncDef>   := 'int' 'main' '(' ')' <Block>
-    public MainFuncDef parseMainFuncDef(Token intTk, Token mainTk, Token leftParenthesis) throws UnexpectedTokenException, UnexpectedEofException {
+    public MainFuncDef parseMainFuncDef(Token intTk, Token mainTk, Token leftParenthesis) throws WrongTokenException, EofException {
         Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, "<MainFuncDef>", iterator, maxLineNum);
         Token leftBrace = ParserUtil.getSpecifiedToken(Token.Type.LBRACE, "<Block>", iterator, maxLineNum);
         Block body = new StmtParser(iterator, maxLineNum).parseBlock(leftBrace);
@@ -56,7 +56,7 @@ public class FuncParser {
     }
 
     // <FuncFParams>   := <FuncFParam> { ',' <FuncFParam> }
-    public FuncFParams parseFuncFParams() throws UnexpectedTokenException, UnexpectedEofException {
+    public FuncFParams parseFuncFParams() throws WrongTokenException, EofException {
         FuncFParam first = parseFuncFParam();
         List<Token> commas = new LinkedList<>();
         List<FuncFParam> followParam = new LinkedList<>();
@@ -74,7 +74,7 @@ public class FuncParser {
     }
 
     // <FuncFParam>    := <BType> Ident [ '[' ']' { '[' <ConstExp> ']' } ]
-    public FuncFParam parseFuncFParam() throws UnexpectedTokenException, UnexpectedEofException {
+    public FuncFParam parseFuncFParam() throws WrongTokenException, EofException {
         final String syntax = "<FuncFParam>";
         Token bType = ParserUtil.getSpecifiedToken(Token.Type.INTTK, syntax, iterator, maxLineNum);
         Ident ident = (Ident) ParserUtil.getSpecifiedToken(Token.Type.IDENFR, syntax, iterator, maxLineNum);
@@ -104,7 +104,7 @@ public class FuncParser {
     }
 
     // <ArrayDim>   := '[' <ConstExp> ']'
-    public FuncFParam.ArrayDim parseArrayDim(Token leftBracket) throws UnexpectedTokenException, UnexpectedEofException {
+    public FuncFParam.ArrayDim parseArrayDim(Token leftBracket) throws WrongTokenException, EofException {
         ConstExp constExp = new ExprParser(iterator, maxLineNum).parseConstExp();
         Token rightBracket = ParserUtil.getNullableToken(Token.Type.RBRACK, "<FuncFParam>", iterator, maxLineNum);
         return new FuncFParam.ArrayDim(leftBracket, rightBracket, constExp);

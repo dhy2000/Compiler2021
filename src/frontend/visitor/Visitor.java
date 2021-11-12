@@ -1,4 +1,4 @@
-package frontend.generate;
+package frontend.visitor;
 
 import exception.ConstExpException;
 import frontend.error.Error;
@@ -34,7 +34,7 @@ import java.util.*;
  *
  * 这里把每部分的分析器合到了一个大类中，因为要维护一个统一的栈（符号作用域）
  */
-public class CodeGenerator {
+public class Visitor {
 
     private SymTable currentSymTable = SymTable.global();   // 栈式符号表
 

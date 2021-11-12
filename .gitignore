@@ -7,9 +7,12 @@
 /out/
 
 # Test files
-testfile/
+/testfile/
 testfile.txt
 output.txt
+input.txt
+pcoderesult.txt
+mips.txt
 
 # Archives
 *.zip

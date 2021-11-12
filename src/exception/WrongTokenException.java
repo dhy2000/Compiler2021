@@ -4,20 +4,20 @@ import frontend.lexical.token.Token;
 
 import java.util.Objects;
 
-public class UnexpectedTokenException extends FrontendException {
+public class WrongTokenException extends FrontendException {
 
     private final String syntax;
     private final Token.Type expected;
     private final Token got;
 
-    public UnexpectedTokenException(int line, String syntaxName, Token got, Token.Type expected) {
+    public WrongTokenException(int line, String syntaxName, Token got, Token.Type expected) {
         super("Unexpected Token", line, syntaxName + " got " + got.getContent() + " but expected " + expected.name());
         this.syntax = syntaxName;
         this.got = got;
         this.expected = expected;
     }
 
-    public UnexpectedTokenException(int line, String syntaxName, Token got) {
+    public WrongTokenException(int line, String syntaxName, Token got) {
         super("Unexpected Token", line, syntaxName + " got unexpected token " + got.getContent());
         this.syntax = syntaxName;
         this.got = got;

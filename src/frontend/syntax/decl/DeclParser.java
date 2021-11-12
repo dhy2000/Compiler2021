@@ -1,7 +1,7 @@
 package frontend.syntax.decl;
 
-import exception.UnexpectedEofException;
-import exception.UnexpectedTokenException;
+import exception.EofException;
+import exception.WrongTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
@@ -27,7 +27,7 @@ public class DeclParser {
     }
 
     // <Decl>          := ['const'] <BType> <Def> { ',' <Def> } ';'
-    public Decl parseDecl(Token first, Token second) throws UnexpectedTokenException, UnexpectedEofException {
+    public Decl parseDecl(Token first, Token second) throws WrongTokenException, EofException {
         Token constTk = null;
         boolean constant = false;
         Token bType;
@@ -44,7 +44,7 @@ public class DeclParser {
             bType = first;
             ident = (Ident) second;
         } else {
-            throw new UnexpectedTokenException(first.lineNumber(), "<Decl>", first);
+            throw new WrongTokenException(first.lineNumber(), "<Decl>", first);
         }
 
         Def firstDef = parseDef(constant, ident);
@@ -73,14 +73,14 @@ public class DeclParser {
     }
 
     // <ArrDef>        := '[' <ConstExp> ']'
-    public Def.ArrDef parseArrDef(Token leftBracket) throws UnexpectedTokenException, UnexpectedEofException {
+    public Def.ArrDef parseArrDef(Token leftBracket) throws WrongTokenException, EofException {
         ConstExp constExp = new ExprParser(iterator, maxLineNum).parseConstExp();
         Token rightBracket = ParserUtil.getNullableToken(Token.Type.RBRACK, "<ArrDef>", iterator, maxLineNum);
         return new Def.ArrDef(leftBracket, rightBracket, constExp);
     }
 
     // <Def>           := Ident { <ArrayDef> } [ '=' <InitVal> ]
-    public Def parseDef(boolean constant, Ident ident) throws UnexpectedTokenException, UnexpectedEofException {
+    public Def parseDef(boolean constant, Ident ident) throws WrongTokenException, EofException {
         List<Def.ArrDef> arrDefs = new LinkedList<>();
         // arrayDefs
         while (iterator.hasNext()) {
@@ -104,7 +104,7 @@ public class DeclParser {
     }
 
     // <ExpInitVal>    := <Exp>
-    public ExpInitVal parseExpInitVal(boolean constant) throws UnexpectedTokenException, UnexpectedEofException {
+    public ExpInitVal parseExpInitVal(boolean constant) throws WrongTokenException, EofException {
         if (constant) {
             ConstExp constExp = new ExprParser(iterator, maxLineNum).parseConstExp();
             return new ExpInitVal(true, constExp);
@@ -115,9 +115,9 @@ public class DeclParser {
     }
 
     // <ArrInitVal>    := '{' [ <InitVal> { ',' <InitVal> } ] '}'
-    public ArrInitVal parseArrInitVal(boolean constant, Token leftBrace) throws UnexpectedTokenException, UnexpectedEofException {
+    public ArrInitVal parseArrInitVal(boolean constant, Token leftBrace) throws WrongTokenException, EofException {
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, "<ArrInitVal>");
+            throw new EofException(maxLineNum, "<ArrInitVal>");
         }
         Token rightBrace = iterator.next();
         if (rightBrace.getType().equals(Token.Type.RBRACE)) {
@@ -136,16 +136,16 @@ public class DeclParser {
                 commas.add(next);
                 followVal.add(parseInitVal(constant));
             } else {
-                throw new UnexpectedTokenException(next.lineNumber(), "<ArrInitVal>", next);
+                throw new WrongTokenException(next.lineNumber(), "<ArrInitVal>", next);
             }
         }
         return new ArrInitVal(constant, leftBrace, rightBrace, firstVal, commas, followVal);
     }
 
     // <InitVal>       := <ExpInitVal> | <ArrInitVal>
-    public InitVal parseInitVal(boolean constant) throws UnexpectedEofException, UnexpectedTokenException {
+    public InitVal parseInitVal(boolean constant) throws EofException, WrongTokenException {
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, "<InitVal>");
+            throw new EofException(maxLineNum, "<InitVal>");
         }
         Token next = iterator.next();
         if (next.getType().equals(Token.Type.LBRACE)) {

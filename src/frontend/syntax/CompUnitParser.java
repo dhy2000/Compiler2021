@@ -1,8 +1,8 @@
 package frontend.syntax;
 
 import exception.NoMainFuncException;
-import exception.UnexpectedEofException;
-import exception.UnexpectedTokenException;
+import exception.EofException;
+import exception.WrongTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.Token;
@@ -32,13 +32,13 @@ public class CompUnitParser {
         this.maxLineNum = maxLineNum;
     }
 
-    private Token getNextToken() throws UnexpectedEofException {    // extract duplicated code
+    private Token getNextToken() throws EofException {    // extract duplicated code
         ParserUtil.detectEof("<CompUnit>", iterator, maxLineNum);
         return iterator.next();
     }
 
     // <CompUnit>      := { <Decl> } { <FuncDef> } <MainFuncDef>
-    public CompUnit parseCompUnit() throws UnexpectedTokenException, UnexpectedEofException, NoMainFuncException {
+    public CompUnit parseCompUnit() throws WrongTokenException, EofException, NoMainFuncException {
         final String syntax = "<CompUnit>";
         Token first = getNextToken();
         Token second = getNextToken();
@@ -78,13 +78,13 @@ public class CompUnitParser {
                 break;
             } else {
                 if (!first.getType().equals(Token.Type.INTTK) && !first.getType().equals(Token.Type.VOIDTK)) {
-                    throw new UnexpectedTokenException(first.lineNumber(), "<FuncDef>", first);
+                    throw new WrongTokenException(first.lineNumber(), "<FuncDef>", first);
                 }
                 if (!second.getType().equals(Token.Type.IDENFR)) {
-                    throw new UnexpectedTokenException(second.lineNumber(), "<FuncDef>", second, Token.Type.IDENFR);
+                    throw new WrongTokenException(second.lineNumber(), "<FuncDef>", second, Token.Type.IDENFR);
                 }
                 if (!third.getType().equals(Token.Type.LPARENT)) {
-                    throw new UnexpectedTokenException(third.lineNumber(), "<FuncDef>", third, Token.Type.LPARENT);
+                    throw new WrongTokenException(third.lineNumber(), "<FuncDef>", third, Token.Type.LPARENT);
                 }
                 functions.add(new FuncParser(iterator, maxLineNum).parseFuncDef(first, (Ident) second, third));
             }

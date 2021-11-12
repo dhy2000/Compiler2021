@@ -1,7 +1,7 @@
 package frontend.syntax.expr;
 
-import exception.UnexpectedEofException;
-import exception.UnexpectedTokenException;
+import exception.EofException;
+import exception.WrongTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.Ident;
 import frontend.lexical.token.IntConst;
@@ -34,7 +34,7 @@ public class ExprParser {
     }
 
     // <LVal>           := Ident { '[' <Exp> ']' }
-    public LVal parseLVal(Ident ident) throws UnexpectedTokenException, UnexpectedEofException {
+    public LVal parseLVal(Ident ident) throws WrongTokenException, EofException {
         final String syntax = "<LVal>";
         List<LVal.Index> indexes = new LinkedList<>();
         while (iterator.hasNext()) {
@@ -51,7 +51,7 @@ public class ExprParser {
     }
 
     // <SubExp>         := '(' <Exp> ')'
-    public SubExp parseSubExp(Token leftParenthesis) throws UnexpectedTokenException, UnexpectedEofException {
+    public SubExp parseSubExp(Token leftParenthesis) throws WrongTokenException, EofException {
         final String syntax = "<SubExp>";
         Exp exp = parseExp();
         Token right = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
@@ -64,24 +64,24 @@ public class ExprParser {
     }
 
     // <PrimaryExp>     := <SubExp> | <LVal> | <Number> // Look forward: '(' :: <SubExp>, <Ident> :: <LVal>, <IntConst> :: <Number>
-    public PrimaryExp parsePrimaryExp(Token first) throws UnexpectedTokenException, UnexpectedEofException {
+    public PrimaryExp parsePrimaryExp(Token first) throws WrongTokenException, EofException {
         final String syntax = "<PrimaryExp>";
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, syntax);
+            throw new EofException(maxLineNum, syntax);
         }
         switch (first.getType()) {
             case IDENFR: return new PrimaryExp(parseLVal((Ident) first));
             case INTCON: return new PrimaryExp(parseNumber((IntConst) first));
             case LPARENT: return new PrimaryExp(parseSubExp(first));
-            default: throw new UnexpectedTokenException(first.lineNumber(), syntax, first);
+            default: throw new WrongTokenException(first.lineNumber(), syntax, first);
         }
     }
 
     // <FunctionCall>   := <Ident> '(' [ <FuncRParams> ] ')' // Look forward for <FuncRParams>
-    private FunctionCall parseFunctionCall(Ident ident, Token leftParenthesis) throws UnexpectedTokenException, UnexpectedEofException {
+    private FunctionCall parseFunctionCall(Ident ident, Token leftParenthesis) throws WrongTokenException, EofException {
         final String syntax = "<UnaryExp>";
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, syntax);
+            throw new EofException(maxLineNum, syntax);
         }
         Token next = iterator.next();
         if (Token.Type.RPARENT.equals(next.getType())) {
@@ -104,7 +104,7 @@ public class ExprParser {
     }
 
     // <FuncRParams>    := <Exp> { ',', <Exp> } // List<Exp>
-    public FuncRParams parseFuncRParams(Exp first) throws UnexpectedTokenException, UnexpectedEofException {
+    public FuncRParams parseFuncRParams(Exp first) throws WrongTokenException, EofException {
         final String syntax = "<FuncRParams>";
         List<Exp> params = new LinkedList<>();
         List<Token> commas = new LinkedList<>();
@@ -115,7 +115,7 @@ public class ExprParser {
                 break;
             }
             if (!iterator.hasNext()) {
-                throw new UnexpectedEofException(maxLineNum, syntax);
+                throw new EofException(maxLineNum, syntax);
             }
             Exp exp = parseExp();
             params.add(exp);
@@ -125,16 +125,16 @@ public class ExprParser {
     }
 
     // <BaseUnaryExp>   := <PrimaryExp> | <FunctionCall> // Look forward: Ident '(' :: <FunctionCall>, Ident :: <LVal>, '(' :: <SubExp>, IntConst :: <Number>
-    private BaseUnaryExp parseBaseUnaryExp() throws UnexpectedTokenException, UnexpectedEofException {
+    private BaseUnaryExp parseBaseUnaryExp() throws WrongTokenException, EofException {
         final String syntax = "<UnaryExp>";
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, syntax);
+            throw new EofException(maxLineNum, syntax);
         }
         Token next = iterator.next();
         if (Token.Type.IDENFR.equals(next.getType())) {
             // need one more forward
             if (!iterator.hasNext()) {
-                throw new UnexpectedEofException(maxLineNum, syntax);
+                throw new EofException(maxLineNum, syntax);
             }
             Token two = iterator.next();
             if (Token.Type.LPARENT.equals(two.getType())) {
@@ -147,7 +147,7 @@ public class ExprParser {
     }
 
     // <UnaryExp>       := { <UnaryOp> } <BaseUnaryExp>
-    public UnaryExp parseUnaryExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public UnaryExp parseUnaryExp() throws WrongTokenException, EofException {
         final String syntax = "<UnaryExp>";
         List<Token> unaryOps = new LinkedList<>();
         while (iterator.hasNext()) {
@@ -164,7 +164,7 @@ public class ExprParser {
     }
 
     // <MulExp>         := <UnaryExp> { ('*' | '/' | '%') <UnaryExp> }
-    public MulExp parseMulExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public MulExp parseMulExp() throws WrongTokenException, EofException {
         final String syntax = "<MulExp>";
         UnaryExp first = parseUnaryExp();
         List<Token> operators = new LinkedList<>();
@@ -185,7 +185,7 @@ public class ExprParser {
     }
 
     // <AddExp>         := <MulExp> { ('+' | '-') <MulExp> }
-    public AddExp parseAddExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public AddExp parseAddExp() throws WrongTokenException, EofException {
         final String syntax = "<AddExp>";
         MulExp first = parseMulExp();
         List<Token> operators = new LinkedList<>();
@@ -205,7 +205,7 @@ public class ExprParser {
     }
 
     // <RelExp>         := <AddExp> { ('<' | '>' | '<=' | '>=') <AddExp> }
-    public RelExp parseRelExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public RelExp parseRelExp() throws WrongTokenException, EofException {
         final String syntax = "<RelExp>";
         AddExp first = parseAddExp();
         List<Token> operators = new LinkedList<>();
@@ -226,7 +226,7 @@ public class ExprParser {
     }
 
     // <EqExp>          := <RelExp> { ('==' | '!=') <RelExp> }
-    public EqExp parseEqExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public EqExp parseEqExp() throws WrongTokenException, EofException {
         final String syntax = "<EqExp>";
         RelExp first = parseRelExp();
         List<Token> operators = new LinkedList<>();
@@ -246,7 +246,7 @@ public class ExprParser {
     }
 
     // <LAndExp>        := <EqExp> { '&&' <EqExp> }
-    public LAndExp parseLAndExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public LAndExp parseLAndExp() throws WrongTokenException, EofException {
         final String syntax = "<LAndExp>";
         EqExp first = parseEqExp();
         List<Token> operators = new LinkedList<>();
@@ -266,7 +266,7 @@ public class ExprParser {
     }
 
     // <LOrExp>         := <LAndExp> { '||' <LAndExp> }
-    public LOrExp parseLOrExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public LOrExp parseLOrExp() throws WrongTokenException, EofException {
         final String syntax = "<LOrExp>";
         LAndExp first = parseLAndExp();
         List<Token> operators = new LinkedList<>();
@@ -286,17 +286,17 @@ public class ExprParser {
     }
 
     // <Exp>            := <AddExp>
-    public Exp parseExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public Exp parseExp() throws WrongTokenException, EofException {
         return new Exp(parseAddExp());
     }
 
     // <Cond>           := <LOrExp>
-    public Cond parseCond() throws UnexpectedTokenException, UnexpectedEofException {
+    public Cond parseCond() throws WrongTokenException, EofException {
         return new Cond(parseLOrExp());
     }
 
     // <ConstExp>       := <AddExp>
-    public ConstExp parseConstExp() throws UnexpectedTokenException, UnexpectedEofException {
+    public ConstExp parseConstExp() throws WrongTokenException, EofException {
         return new ConstExp(parseAddExp());
     }
 }

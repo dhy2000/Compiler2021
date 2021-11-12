@@ -1,7 +1,7 @@
 package frontend.syntax.stmt;
 
-import exception.UnexpectedEofException;
-import exception.UnexpectedTokenException;
+import exception.EofException;
+import exception.WrongTokenException;
 import frontend.lexical.TokenList;
 import frontend.lexical.token.FormatString;
 import frontend.lexical.token.Token;
@@ -36,7 +36,7 @@ public class StmtParser {
     }
 
     // <AssignStmt>     := <LVal> '=' <Exp>
-    public AssignStmt parseAssignStmt(LVal target, Token assignTk) throws UnexpectedTokenException, UnexpectedEofException {
+    public AssignStmt parseAssignStmt(LVal target, Token assignTk) throws WrongTokenException, EofException {
         Exp exp = new ExprParser(iterator, maxLineNum).parseExp();
         return new AssignStmt(target, assignTk, exp);
     }
@@ -59,11 +59,11 @@ public class StmtParser {
     }
 
     // <ReturnStmt>    := 'return' [<Exp>]
-    public ReturnStmt parseReturnStmt(Token returnTk) throws UnexpectedTokenException, UnexpectedEofException {
+    public ReturnStmt parseReturnStmt(Token returnTk) throws WrongTokenException, EofException {
         final String syntax = "<ReturnStmt>";
         // forward 1 whether is ';'
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(returnTk.lineNumber(), syntax);
+            throw new EofException(returnTk.lineNumber(), syntax);
         }
         Token follow = iterator.next();
         iterator.previous();
@@ -81,7 +81,7 @@ public class StmtParser {
     }
 
     // <InputStmt>     := <LVal> '=' 'getint' '(' ')'
-    public InputStmt parseInputStmt(LVal target, Token assignTk, Token getIntTk) throws UnexpectedTokenException, UnexpectedEofException {
+    public InputStmt parseInputStmt(LVal target, Token assignTk, Token getIntTk) throws WrongTokenException, EofException {
         final String syntax = "<InputStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Token rightParenthesis = ParserUtil.getNullableToken(Token.Type.RPARENT, syntax, iterator, maxLineNum);
@@ -89,7 +89,7 @@ public class StmtParser {
     }
 
     // <OutputStmt>    := 'printf' '(' FormatString { ',' <Exp> } ')'
-    public OutputStmt parseOutputStmt(Token printfTk) throws UnexpectedTokenException, UnexpectedEofException {
+    public OutputStmt parseOutputStmt(Token printfTk) throws WrongTokenException, EofException {
         final String syntax = "<OutputStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Token formatString = ParserUtil.getSpecifiedToken(Token.Type.STRCON, syntax, iterator, maxLineNum);
@@ -127,7 +127,7 @@ public class StmtParser {
     }
 
     // <SplStmt>      := <AssignStmt> | <ExpStmt> | <BreakStmt> | <ContinueStmt> | <ReturnStmt> | <InputStmt> | <OutputStmt>
-    public SplStmt parseSimpleStmt(Token first) throws UnexpectedTokenException, UnexpectedEofException {
+    public SplStmt parseSimpleStmt(Token first) throws WrongTokenException, EofException {
         final String syntax = "<SplStmt>";
         switch (first.getType()) {
             case BREAKTK: return parseBreakStmt(first);
@@ -146,13 +146,13 @@ public class StmtParser {
         if (Objects.nonNull(target)) {
             // is lVal
             if (!iterator.hasNext()) {
-                throw new UnexpectedEofException(maxLineNum, syntax);
+                throw new EofException(maxLineNum, syntax);
             }
             Token next = iterator.next();
             if (next.getType().equals(Token.Type.ASSIGN)) {
                 // assign or input
                 if (!iterator.hasNext()) {
-                    throw new UnexpectedEofException(maxLineNum, syntax);
+                    throw new EofException(maxLineNum, syntax);
                 }
                 Token twice = iterator.next();
                 if (twice.getType().equals(Token.Type.GETINTTK)) {
@@ -170,7 +170,7 @@ public class StmtParser {
     }
 
     // <IfStmt>        := 'if' '(' <Cond> ')' <Stmt> [ 'else' <Stmt> ]
-    public IfStmt parseIfStmt(Token ifTk) throws UnexpectedTokenException, UnexpectedEofException {
+    public IfStmt parseIfStmt(Token ifTk) throws WrongTokenException, EofException {
         assert ifTk.getType().equals(Token.Type.IFTK);
         final String syntax = "<IfStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
@@ -188,7 +188,7 @@ public class StmtParser {
     }
 
     // <WhileStmt>     := 'while' '(' <Cond> ')' <Stmt>
-    public WhileStmt parseWhileStmt(Token whileTk) throws UnexpectedTokenException, UnexpectedEofException {
+    public WhileStmt parseWhileStmt(Token whileTk) throws WrongTokenException, EofException {
         final String syntax = "<WhileStmt>";
         Token leftParenthesis = ParserUtil.getSpecifiedToken(Token.Type.LPARENT, syntax, iterator, maxLineNum);
         Cond cond = new ExprParser(iterator, maxLineNum).parseCond();
@@ -198,19 +198,19 @@ public class StmtParser {
     }
 
     // <CplStmt>       := <BranchStmt> | <LoopStmt> | <Block>
-    public CplStmt parseComplexStmt(Token first) throws UnexpectedTokenException, UnexpectedEofException {
+    public CplStmt parseComplexStmt(Token first) throws WrongTokenException, EofException {
         switch (first.getType()) {
             case IFTK: return parseIfStmt(first);
             case WHILETK: return parseWhileStmt(first);
             case LBRACE: return parseBlock(first);
         }
-        throw new UnexpectedTokenException(first.lineNumber(), "<CplStmt>", first);
+        throw new WrongTokenException(first.lineNumber(), "<CplStmt>", first);
     }
 
     // <BlockItem>     := <Decl> | <Stmt>
-    public BlockItem parseBlockItem() throws UnexpectedEofException, UnexpectedTokenException {
+    public BlockItem parseBlockItem() throws EofException, WrongTokenException {
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, "<BlockItem>");
+            throw new EofException(maxLineNum, "<BlockItem>");
         }
         Token next = iterator.next();
         if (next.getType().equals(Token.Type.INTTK)) {
@@ -226,7 +226,7 @@ public class StmtParser {
     }
 
     // <Block>         := '{' { <BlockItem> } '}'
-    public Block parseBlock(Token leftBrace) throws UnexpectedTokenException, UnexpectedEofException {
+    public Block parseBlock(Token leftBrace) throws WrongTokenException, EofException {
         List<BlockItem> blockItems = new LinkedList<>();
         while (iterator.hasNext()) {
             Token end = iterator.next();
@@ -237,14 +237,14 @@ public class StmtParser {
             BlockItem item = parseBlockItem();
             blockItems.add(item);
         }
-        throw new UnexpectedEofException(maxLineNum, "<Block>");
+        throw new EofException(maxLineNum, "<Block>");
     }
 
     // <Stmt>          := ';' | <SplStmt> ';' | <CplStmt>
-    public Stmt parseStmt() throws UnexpectedEofException, UnexpectedTokenException {
+    public Stmt parseStmt() throws EofException, WrongTokenException {
         final String syntax = "<Stmt>";
         if (!iterator.hasNext()) {
-            throw new UnexpectedEofException(maxLineNum, syntax);
+            throw new EofException(maxLineNum, syntax);
         }
         Token first = iterator.next();
         if (first.getType().equals(Token.Type.SEMICN)) {
