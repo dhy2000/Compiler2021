@@ -1,4 +1,5 @@
 import backend.Mips;
+import backend.Simulator;
 import backend.Translator;
 import backend.optimize.JumpFollow;
 import config.Config;
@@ -44,7 +45,12 @@ public class Compiler {
                 new JumpFollow().optimize(mips);
                 /* ------ Mips Optimize End ------ */
 
-                mips.output(Config.getTarget());
+                if (Config.hasOperationOutput(Config.Operation.RUN_OBJECT)) {
+                    Simulator sim = new Simulator(mips);
+                    sim.runAll(false);
+                } else {
+                    mips.output(Config.getTarget());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

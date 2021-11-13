@@ -48,6 +48,10 @@ public class Memory {
         stringConst.put(address, string);
     }
 
+    public List<Integer> storedStringAddresses() {
+        return Collections.unmodifiableList(stringConst.keySet().stream().sorted(Integer::compare).collect(Collectors.toList()));
+    }
+
     public List<Integer> modifiedAddresses() {
         return Collections.unmodifiableList(memory.keySet().stream().sorted(Integer::compare).collect(Collectors.toList()));
     }

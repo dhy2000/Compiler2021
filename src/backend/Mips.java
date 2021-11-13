@@ -23,9 +23,6 @@ public class Mips {
     private final Map<String, Integer> stringConstantAddress = new HashMap<>();
     private int stringConstantSize = 0;
 
-    // 标签对应的指令(变量不体现标签名, 目标代码中所有的标签仅为跳转服务)
-    private final Map<String, MipsInstruction> labelToInstruction = new HashMap<>();
-
     // 初始内存布局（在 .data 中用伪指令填入）
     private final Memory initMem = new Memory();
 
