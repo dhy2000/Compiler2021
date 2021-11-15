@@ -3,7 +3,10 @@ package utility;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class ReadInteger {
+public class ReaderUtil {
+
+    private ReaderUtil() {}
+
     public static int readInt(BufferedReader input) {
         try {
             int c = input.read();

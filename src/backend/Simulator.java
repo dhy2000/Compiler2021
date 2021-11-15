@@ -6,7 +6,7 @@ import backend.instruction.JumpRegister;
 import backend.instruction.MipsInstruction;
 import backend.instruction.Syscall;
 import config.Config;
-import utility.ReadInteger;
+import utility.ReaderUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,7 +79,7 @@ public class Simulator {
                         break;
                     case Syscall.READ_INTEGER:
                         if (!stopAtInput) {
-                            readInt = ReadInteger.readInt(input);
+                            readInt = ReaderUtil.readInt(input);
                             rf.write(RegisterFile.Register.V0, readInt);
                         } else {
                             running = false;

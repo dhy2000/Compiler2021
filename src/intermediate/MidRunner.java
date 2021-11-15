@@ -6,7 +6,7 @@ import intermediate.operand.Immediate;
 import intermediate.operand.Operand;
 import intermediate.symbol.FuncMeta;
 import intermediate.symbol.Symbol;
-import utility.ReadInteger;
+import utility.ReaderUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -183,7 +183,7 @@ public class MidRunner {
         assert code instanceof PrintFormat || code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
         if (code instanceof Input) {
             Symbol symbol = ((Input) code).getDst();
-            int value = ReadInteger.readInt(input);
+            int value = ReaderUtil.readInt(input);
             if (symbol.getType().equals(Symbol.Type.INT)) {
                 writeToSymbol(symbol, value);
             } else {
