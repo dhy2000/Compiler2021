@@ -1,0 +1,22 @@
+# Your Configuration (May have private content)
+cg_config.json
+
+# Files you may submit
+*.zip
+*.rar
+*.jar
+*.c
+*.cpp
+*.java
+*.py
+*.txt
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.pdf
+
+# Judge Result
+*.html
