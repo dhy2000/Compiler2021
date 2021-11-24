@@ -1,5 +1,6 @@
 # Your Configuration (May have private content)
-cg_config.json
+*.json
+!cg_config_sample.json
 
 # Files you may submit
 *.zip

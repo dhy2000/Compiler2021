@@ -65,12 +65,24 @@ def loadcfg(cfg: dict):
         sys.exit(0)
 
 def readfile():
-    if len(sys.argv) < 2:
-        print("Please specify the file to submit.", file=sys.stderr)
-        print("Usage: python -u cg_submit.py file.zip")
-        sys.exit(0)
+    global CONFIG_NAME
     global submit_file
-    submit_file = sys.argv[1]
+    config_flag, file_flag = False, False
+    # TODO: add -c parameter to load config file
+    arg_index = 1
+    while arg_index < len(sys.argv):
+        if sys.argv[arg_index] == '-c' and not config_flag:
+            CONFIG_NAME = sys.argv[arg_index + 1]
+            config_flag = True
+            arg_index += 1
+        elif not file_flag:
+            submit_file = sys.argv[arg_index]
+            file_flag = True
+        arg_index += 1
+    if not file_flag:
+        print("Please specify the file to submit.", file=sys.stderr)
+        print("Usage: python -u cg_submit.py [-c config.json] file.zip")
+        sys.exit(0)
     # Test existance of the file
     if not os.path.exists(submit_file):
         print("Submit file not exist!", file=sys.stderr)
@@ -221,10 +233,11 @@ def submit_one(prob: tuple):
 submit_threads = []
 
 if __name__ == '__main__':
-    cfg = start()
-    loadcfg(cfg)
     readfile()
 
+    cfg = start()
+    loadcfg(cfg)
+    
     if len(submits) == 0:
         print("Warning: nothing to submit.")
         sys.exit(0)
