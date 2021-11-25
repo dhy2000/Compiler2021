@@ -1,6 +1,6 @@
 package frontend;
 
-import config.Config;
+import compiler.Config;
 import exception.FrontendException;
 import frontend.error.ErrorTable;
 import frontend.input.Source;
