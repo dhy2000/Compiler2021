@@ -2,14 +2,14 @@ package frontend;
 
 import config.Config;
 import exception.FrontendException;
-import frontend.visitor.Visitor;
 import frontend.error.ErrorTable;
+import frontend.input.Source;
 import frontend.lexical.TokenList;
 import frontend.lexical.Tokenizer;
 import frontend.syntax.CompUnit;
 import frontend.syntax.CompUnitParser;
-import frontend.input.Source;
-import intermediate.Intermediate;
+import frontend.visitor.Visitor;
+import middle.MiddleCode;
 
 import java.io.InputStream;
 
@@ -17,38 +17,39 @@ public class SysY {
 
     private TokenList tokens;
     private CompUnit compUnit;
-    private Intermediate intermediate;
+    private MiddleCode middleCode;
 
-    public SysY(InputStream src) {
+    public SysY(Config config) {
+        InputStream src = config.getSource();
         // read source Code
         Source source = new Source(src);
         try {
             // tokenize
             tokens = Tokenizer.tokenize(source);
-            if (Config.hasOperationOutput(Config.Operation.TOKENIZE)) {
-                tokens.output(Config.getTarget());
+            if (config.hasTarget(Config.Operation.TOKENIZE)) {
+                tokens.output(config.getTarget(Config.Operation.TOKENIZE));
             }
             // syntax parse
             compUnit = new CompUnitParser(tokens).parseCompUnit();
-            if (Config.hasOperationOutput(Config.Operation.SYNTAX)) {
-                compUnit.output(Config.getTarget());
+            if (config.hasTarget(Config.Operation.SYNTAX)) {
+                compUnit.output(config.getTarget(Config.Operation.SYNTAX));
             }
             // generate intermediate code
             Visitor visitor = new Visitor();
             visitor.analyseCompUnit(compUnit);
             ErrorTable errors = visitor.getErrorTable();
-            if (Config.hasOperationOutput(Config.Operation.ERROR)) {
-                errors.forEach(error -> Config.getTarget().println(error.getLineNum() + " " + error.getErrorTag()));
+            if (config.hasTarget(Config.Operation.ERROR)) {
+                errors.forEach(error -> config.getTarget(Config.Operation.ERROR).println(error.getLineNum() + " " + error.getErrorTag()));
             }
             if (!errors.isEmpty()) {
                 return;
             }
-            intermediate = visitor.getIntermediate();
+            middleCode = visitor.getIntermediate();
         } catch (FrontendException e) {
-            Config.getTarget().println(e.getMessage());
-            source.printAll(Config.getTarget());
+            config.getTarget(Config.Operation.EXCEPTION).println(e.getMessage());
+            source.printAll(config.getTarget(Config.Operation.EXCEPTION));
         } catch (Exception e) {
-            Config.getTarget().println(e.getClass().getSimpleName() + ": " + e.getMessage());
+            System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -61,7 +62,7 @@ public class SysY {
         return compUnit;
     }
 
-    public Intermediate getIntermediate() {
-        return intermediate;
+    public MiddleCode getIntermediate() {
+        return middleCode;
     }
 }

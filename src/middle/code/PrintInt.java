@@ -1,6 +1,6 @@
-package intermediate.code;
+package middle.code;
 
-import intermediate.operand.Operand;
+import middle.operand.Operand;
 
 /**
  * 输出整数，对应 Mars 的 1 号 syscall

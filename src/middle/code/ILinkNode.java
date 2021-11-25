@@ -1,4 +1,4 @@
-package intermediate.code;
+package middle.code;
 
 import java.util.Objects;
 

@@ -1,17 +1,13 @@
-package intermediate;
+package middle;
 
-import config.Config;
-import intermediate.code.*;
-import intermediate.operand.Immediate;
-import intermediate.operand.Operand;
-import intermediate.symbol.FuncMeta;
-import intermediate.symbol.Symbol;
+import middle.code.*;
+import middle.operand.Immediate;
+import middle.operand.Operand;
+import middle.symbol.FuncMeta;
+import middle.symbol.Symbol;
 import utility.ReaderUtil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -20,10 +16,10 @@ import java.util.*;
 public class MidRunner {
     private static final boolean ENABLE_DEBUG = false;
 
-    private final Intermediate intermediate;
-//    private final Scanner input = new Scanner(System.in);
-    private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    private final PrintStream output = Config.getTarget();
+    private final MiddleCode middleCode;
+
+    private final BufferedReader input;
+    private final PrintStream output;
     private final PrintStream debug = System.err;
 
     private static final int INSTRUCTION_LIMIT = 100000000;
@@ -59,8 +55,10 @@ public class MidRunner {
         memory.set(address / 4, value);
     }
 
-    public MidRunner(Intermediate ir) {
-        this.intermediate = ir;
+    public MidRunner(MiddleCode ir, InputStream input, PrintStream output) {
+        this.middleCode = ir;
+        this.input = new BufferedReader(new InputStreamReader(input));
+        this.output = output;
         currentProgram = ir.getMainFunction().getBody().getHead();
         currentStackSize = 0;
         tempVariables = new HashMap<>();
@@ -195,7 +193,7 @@ public class MidRunner {
             int value = readOperand(((PrintInt) code).getValue());
             output.print(value);
         } else if (code instanceof PrintStr) {
-            String content = intermediate.getGlobalStrings().get(((PrintStr) code).getLabel());
+            String content = middleCode.getGlobalStrings().get(((PrintStr) code).getLabel());
             output.print(content.replaceAll("\\\\n", "\n"));
         } else {
             throw new AssertionError("Bad IO Code");

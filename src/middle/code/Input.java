@@ -1,7 +1,7 @@
-package intermediate.code;
+package middle.code;
 
 
-import intermediate.symbol.Symbol;
+import middle.symbol.Symbol;
 
 public class Input extends ILinkNode {
     private final Symbol dst;

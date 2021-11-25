@@ -1,7 +1,7 @@
-package intermediate.code;
+package middle.code;
 
-import intermediate.operand.Operand;
-import intermediate.symbol.Symbol;
+import middle.operand.Operand;
+import middle.symbol.Symbol;
 
 /**
  * 指针相关的逻辑

@@ -1,11 +1,11 @@
-package intermediate.optimize;
+package middle.optimize;
 
-import intermediate.Intermediate;
-import intermediate.code.BasicBlock;
-import intermediate.code.BranchIfElse;
-import intermediate.code.ILinkNode;
-import intermediate.code.Jump;
-import intermediate.symbol.FuncMeta;
+import middle.MiddleCode;
+import middle.code.BasicBlock;
+import middle.code.BranchIfElse;
+import middle.code.ILinkNode;
+import middle.code.Jump;
+import middle.symbol.FuncMeta;
 
 import java.util.*;
 
@@ -27,7 +27,7 @@ public class MergeBlock implements MidOptimizer {
      * @param ir 需要优化的中间代码
      */
     @Override
-    public void optimize(Intermediate ir) {
+    public void optimize(MiddleCode ir) {
         // 先 BFS 搜一遍每个基本块的来源数目
         HashSet<BasicBlock> visited = new HashSet<>();
         Queue<BasicBlock> queue = new LinkedList<>();

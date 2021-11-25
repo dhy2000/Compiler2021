@@ -1,9 +1,9 @@
-package intermediate.optimize;
+package middle.optimize;
 
-import intermediate.Intermediate;
-import intermediate.code.*;
-import intermediate.operand.Operand;
-import intermediate.symbol.FuncMeta;
+import middle.MiddleCode;
+import middle.code.*;
+import middle.operand.Operand;
+import middle.symbol.FuncMeta;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public class PrintfTrans implements MidOptimizer {
     }
 
     @Override
-    public void optimize(Intermediate ir) {
+    public void optimize(MiddleCode ir) {
         HashSet<BasicBlock> visited = new HashSet<>();
         Queue<BasicBlock> queue = new LinkedList<>(); // BFS
         for (FuncMeta func : ir.getFunctions().values()) { // 遍历所有的函数

@@ -1,6 +1,4 @@
-package intermediate.code;
-
-import java.util.Objects;
+package middle.code;
 
 /**
  * 基本块, 连续执行的若干条中间指令。

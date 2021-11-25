@@ -18,13 +18,13 @@ import frontend.syntax.func.MainFuncDef;
 import frontend.syntax.stmt.Stmt;
 import frontend.syntax.stmt.complex.*;
 import frontend.syntax.stmt.simple.*;
-import intermediate.Intermediate;
-import intermediate.code.*;
-import intermediate.operand.Immediate;
-import intermediate.operand.Operand;
-import intermediate.symbol.FuncMeta;
-import intermediate.symbol.SymTable;
-import intermediate.symbol.Symbol;
+import middle.MiddleCode;
+import middle.code.*;
+import middle.operand.Immediate;
+import middle.operand.Operand;
+import middle.symbol.FuncMeta;
+import middle.symbol.SymTable;
+import middle.symbol.Symbol;
 
 import java.util.*;
 
@@ -38,10 +38,10 @@ public class Visitor {
 
     private SymTable currentSymTable = SymTable.global();   // 栈式符号表
 
-    private final Intermediate intermediate = new Intermediate(); // 最终生成的中间代码
+    private final MiddleCode middleCode = new MiddleCode(); // 最终生成的中间代码
 
-    public Intermediate getIntermediate() {
-        return intermediate;
+    public MiddleCode getIntermediate() {
+        return middleCode;
     }
 
     private final ErrorTable errorTable = new ErrorTable();
@@ -224,11 +224,11 @@ public class Visitor {
             if (!call.hasRightParenthesis()) {
                 errorTable.add(new Error(Error.Type.MISSING_RIGHT_PARENT, ident.lineNumber()));
             }
-            if (!intermediate.getFunctions().containsKey(name)) {
+            if (!middleCode.getFunctions().containsKey(name)) {
                 errorTable.add(new Error(Error.Type.UNDEFINED_IDENT, ident.lineNumber()));
                 return new Immediate(0);
             }
-            FuncMeta func = intermediate.getFunctions().get(name);
+            FuncMeta func = middleCode.getFunctions().get(name);
             // match arguments
             List<Operand> params = new ArrayList<>();
             List<Symbol> args = func.getParams();
@@ -732,7 +732,7 @@ public class Visitor {
                         currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, new Immediate(value), sym));
                     } else {
                         sym.setAddress(currentSymTable.capacity());
-                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
+                        middleCode.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                     }
                     currentSymTable.add(sym);
                 } else {
@@ -741,7 +741,7 @@ public class Visitor {
                         Symbol sym = new Symbol(name, currentField(), constant, value);
                         sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
-                        intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
+                        middleCode.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                     } else {    // 在函数里的非常量，可以运行时计算
                         Symbol sym = new Symbol(name, currentField());
                         stackSize += sym.capacity();
@@ -758,7 +758,7 @@ public class Visitor {
                 if (Objects.isNull(currentFunc)) {
                     sym = new Symbol(name, currentField(), false, 0);
                     sym.setAddress(currentSymTable.capacity());
-                    intermediate.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
+                    middleCode.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                 } else {
                     sym = new Symbol(name, currentField());
                     stackSize += sym.capacity();
@@ -806,7 +806,7 @@ public class Visitor {
                         }
                     } else {
                         sym.setAddress(currentSymTable.capacity());
-                        intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
+                        middleCode.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
                     }
                     currentSymTable.add(sym);
                 } else {
@@ -835,7 +835,7 @@ public class Visitor {
                     }
                     sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
                     sym.setAddress(currentSymTable.capacity());
-                    intermediate.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
+                    middleCode.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
                 } else {
                     sym = new Symbol(name, currentField(), arrayDims);
                     stackSize += sym.capacity();
@@ -893,7 +893,7 @@ public class Visitor {
         // 维护函数符号表
         FuncMeta.ReturnType returnType = func.getType().getType().getType().equals(Token.Type.VOIDTK) ? FuncMeta.ReturnType.VOID : FuncMeta.ReturnType.INT;
         String name = func.getName().getName();
-        if (intermediate.getFunctions().containsKey(name)) {
+        if (middleCode.getFunctions().containsKey(name)) {
             errorTable.add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
             return;
         }
@@ -902,7 +902,7 @@ public class Visitor {
             return;
         }
         FuncMeta meta = new FuncMeta(name, returnType, currentSymTable);
-        intermediate.putFunction(meta);
+        middleCode.putFunction(meta);
         currentFunc = meta;
         // 遍历形参表
         if (func.hasFParams()) {
@@ -963,9 +963,9 @@ public class Visitor {
         }
         FuncMeta mainMeta = new FuncMeta(currentSymTable);
         currentFunc = mainMeta;
-        intermediate.putFunction(mainMeta);
+        middleCode.putFunction(mainMeta);
         MainFuncDef main = unit.getMainFunc();
         funcBodyHelper(main.getBody(), mainMeta);
-        intermediate.setMainFunction(mainMeta);
+        middleCode.setMainFunction(mainMeta);
     }
 }

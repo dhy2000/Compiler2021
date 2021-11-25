@@ -3,12 +3,12 @@ package backend;
 import backend.hardware.Memory;
 import backend.hardware.RegisterFile;
 import backend.instruction.*;
-import intermediate.Intermediate;
-import intermediate.code.*;
-import intermediate.operand.Immediate;
-import intermediate.operand.Operand;
-import intermediate.symbol.FuncMeta;
-import intermediate.symbol.Symbol;
+import middle.MiddleCode;
+import middle.code.*;
+import middle.operand.Immediate;
+import middle.operand.Operand;
+import middle.symbol.FuncMeta;
+import middle.symbol.Symbol;
 
 import java.util.*;
 
@@ -16,12 +16,12 @@ import java.util.*;
  * 中间代码翻译到 MIPS
  */
 public class Translator {
-    private final Intermediate ir;
+    private final MiddleCode ir;
 
     private final RegisterMap registerMap = new RegisterMap();
     private final Mips mips = new Mips();
 
-    public Translator(Intermediate ir) {
+    public Translator(MiddleCode ir) {
         this.ir = ir;
     }
 

@@ -1,118 +1,172 @@
 package config;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Config {
 
     /**
-     * 参数指定输入源, 以 -i 开头
+     * 源代码: -s
      */
-    private static InputStream source = System.in;
+    private InputStream source = null;
 
     /**
-     * 参数指定输出目标, 以 -o 开头
+     * 解释执行的标准输入: -i
      */
-    private static PrintStream target = System.out;
+    private InputStream input = null;
 
     public enum Operation {
-        TOKENIZE("T"),
-        SYNTAX("S"),
-        ERROR("E"),
-        INTERMEDIATE("I"),
-        VIRTUAL_MACHINE("V"),
-        OBJECT("O"),
-        RUN_OBJECT("R"),
+        TOKENIZE("-T"),
+        SYNTAX("-S"),
+        ERROR("-E"),
+        MID_CODE("-M"),
+        VM_RUNNER("-V"),
+        OBJECT_CODE("-O"),
+        EXCEPTION("-X")
         ;
 
-        private final String tag;
+        private final String option;
 
-        Operation(String tag) {
-            this.tag = tag;
+        Operation(String option) {
+            this.option = option;
         }
 
-        public String getTag() {
-            return tag;
+        public String getOption() {
+            return option;
         }
     }
 
-    /**
-     * 指定编译器执行到的步骤, 为第一个命令行参数, 为 "-" + 对应枚举对象的 tag, 例如 "-T"
-     */
-    private static final Set<Operation> outputOperations = new HashSet<>();
+    private final Map<Operation, PrintStream> operationTarget = new HashMap<>();
 
-    public static InputStream getSource() {
+    public InputStream getSource() {
         return source;
     }
 
-    private static void setSource(InputStream source) {
-        Config.source = source;
+    public void setSource(InputStream source) {
+        this.source = source;
     }
 
-    public static PrintStream getTarget() {
-        return target;
+    public InputStream getInput() {
+        return input;
     }
 
-    private static void setTarget(OutputStream target) {
-        Config.target = new PrintStream(target);
+    public void setInput(InputStream input) {
+        this.input = input;
     }
 
-    public static boolean hasOperationOutput(Operation operation) {
-        return outputOperations.contains(operation);
+    public boolean hasTarget(Operation op) {
+        return operationTarget.containsKey(op);
     }
 
-    private static void addOperation(Operation operation) {
-        outputOperations.add(operation);
+    public PrintStream getTarget(Operation op) {
+        return operationTarget.get(op);
     }
 
-    public static void loadArgs(String[] args) throws FileNotFoundException {
-        boolean hasInputFile = false;
-        boolean hasOutputFile = false;
+    public void setTarget(Operation op, PrintStream target) {
+        operationTarget.put(op, target);
+    }
+
+    public Config() {}
+
+    // 加载命令行参数得到配置类, 如果参数不合法(出错)则返回 null
+    public static Config fromArgs(String[] args) {
+        Config config = new Config();
         for (int i = 0; i < args.length; i++) {
-            for (Operation elem : Operation.values()) {
-                if (args[i].equals("-" + elem.getTag())) {
-                    addOperation(elem);
+            if (args[i].equals("-s")) { // source file
+                if (Objects.nonNull(config.getSource())) {
+                    System.err.println("Only 1 source file supported.");
+                    return null;
                 }
-            }
-            if (args[i].equals("-i")) {
-                if (hasInputFile) {
-                    System.err.println("Warning: only 1 input file supported.");
-                    continue;
+                if (i + 1 >= args.length) {
+                    System.err.println("-s needs source file.");
+                    return null;
                 }
-                if (i + 1 < args.length) {
-                    String filename = args[i + 1];
-                    try {
-                        InputStream input = new FileInputStream(filename);
-                        setSource(input);
-                        hasInputFile = true;
-                    } catch (FileNotFoundException e) {
-                        System.err.println("Error: file \"" + filename + "\" not found");
-                        throw e;
+                String filename = args[i + 1];
+                i++;
+                try {
+                    FileInputStream input = new FileInputStream(filename);
+                    config.setSource(input);
+                } catch (FileNotFoundException e) {
+                    System.err.println("Cannot open source file: " + filename);
+                    return null;
+                }
+            } else if (args[i].equals("-i")) { // input file
+                if (Objects.nonNull(config.getInput())) {
+                    System.err.println("Only 1 input file supported.");
+                    return null;
+                }
+                if (i + 1 >= args.length) {
+                    System.err.println("-i needs input file.");
+                    return null;
+                }
+                String filename = args[i + 1];
+                i++;
+                try {
+                    FileInputStream input = new FileInputStream(filename);
+                    config.setInput(input);
+                } catch (FileNotFoundException e) {
+                    System.err.println("Cannot open input file: " + filename);
+                    return null;
+                }
+            } else { // target output
+                boolean isTarget = false;
+                for (Operation op : Operation.values()) {
+                    if (args[i].equals(op.getOption())) {
+                        isTarget = true;
+                        if (Objects.nonNull(config.getTarget(op))) {
+                            System.err.println("Duplicated target option: " + op.getOption());
+                            return null;
+                        }
+                        if (i + 1 >= args.length) {
+                            System.err.println(op.getOption() + " needs output file.");
+                            return null;
+                        }
+                        String filename = args[i + 1];
+                        i++;
+                        try {
+                            FileOutputStream output = new FileOutputStream(filename);
+                            config.setTarget(op, new PrintStream(output));
+                        } catch (FileNotFoundException e) {
+                            System.err.println("Cannot open output file of target " + op.name() + ": " + filename);
+                            return null;
+                        }
                     }
-                } else {
-                    System.err.println("\"-i\" need a file name.");
                 }
-            }
-            if (args[i].equals("-o")) {
-                if (hasOutputFile) {
-                    System.err.println("Warning: only 1 output file supported.");
-                    continue;
-                }
-                if (i + 1 < args.length) {
-                    String filename = args[i + 1];
-                    try {
-                        OutputStream output = new FileOutputStream(filename);
-                        setTarget(output);
-                        hasOutputFile = true;
-                    } catch (FileNotFoundException e) {
-                        System.err.println("Error: file \"" + filename + "\" cannot open.");
-                        throw e;
-                    }
-                } else {
-                    System.err.println("\"-o\" need a file name.");
+                if (!isTarget) {
+                    System.err.println("Can't resolve option " + args[i]);
+                    return null;
                 }
             }
         }
+        // default source and input
+        if (Objects.isNull(config.source)) {
+            String source = "testfile.txt";
+            try {
+                FileInputStream inputSource = new FileInputStream(source);
+                config.setSource(inputSource);
+            } catch (FileNotFoundException e) {
+                System.err.println("Cannot open default source file: " + source);
+                return null;
+            }
+        }
+        if (Objects.isNull(config.input)) {
+            config.setInput(System.in);
+        }
+        return config;
+    }
+
+    /**
+     * 打印命令行参数说明
+     * @return 参数说明
+     */
+    public static String usage() {
+        String header = "java -jar Compiler.jar -s source_file [-i input_file] [targets]\nTargets: \n";
+        StringBuilder sb = new StringBuilder();
+        for (Operation op : Operation.values()) {
+            sb.append(String.format("    %-2s [output_file] : %s", op.getOption(), op.name())).append("\n");
+        }
+        return header + sb;
     }
 }

@@ -1,4 +1,4 @@
-package intermediate.code;
+package middle.code;
 
 /**
  * 输出字符串，对应 Mars 的 4 号 syscall

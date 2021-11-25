@@ -1,4 +1,4 @@
-package intermediate.operand;
+package middle.operand;
 
 /**
  * 中间代码中的立即数

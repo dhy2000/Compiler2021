@@ -1,6 +1,6 @@
-package intermediate.symbol;
+package middle.symbol;
 
-import intermediate.operand.Operand;
+import middle.operand.Operand;
 
 import java.util.ArrayList;
 import java.util.Collections;

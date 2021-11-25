@@ -5,13 +5,9 @@ import backend.hardware.RegisterFile;
 import backend.instruction.JumpRegister;
 import backend.instruction.MipsInstruction;
 import backend.instruction.Syscall;
-import config.Config;
 import utility.ReaderUtil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -20,8 +16,8 @@ import java.util.*;
 public class Simulator {
     private static final boolean ENABLE_TRACE = false;
 
-    private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    private final PrintStream output = Config.getTarget();
+    private final BufferedReader input;
+    private final PrintStream output;
     private final PrintStream debug = System.err;
 
     public static final int PC_START = 0x00400000;
@@ -38,7 +34,9 @@ public class Simulator {
 
     private StringBuilder outputBuffer;
 
-    public Simulator(Mips mips) {
+    public Simulator(Mips mips, InputStream input, PrintStream output) {
+        this.input = new BufferedReader(new InputStreamReader(input));
+        this.output = output;
         // 加载指令
         int pc = PC_START;
         MipsInstruction instr = mips.getFirstInstruction();

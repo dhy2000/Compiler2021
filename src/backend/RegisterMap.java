@@ -1,6 +1,6 @@
 package backend;
 
-import intermediate.symbol.Symbol;
+import middle.symbol.Symbol;
 
 import java.util.*;
 

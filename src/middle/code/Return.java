@@ -1,6 +1,6 @@
-package intermediate.code;
+package middle.code;
 
-import intermediate.operand.Operand;
+import middle.operand.Operand;
 
 import java.util.Objects;
 

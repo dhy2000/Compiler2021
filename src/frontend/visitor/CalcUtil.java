@@ -10,8 +10,8 @@ import frontend.syntax.expr.multi.Exp;
 import frontend.syntax.expr.multi.MulExp;
 import frontend.syntax.expr.unary.*;
 import frontend.syntax.expr.unary.Number;
-import intermediate.symbol.SymTable;
-import intermediate.symbol.Symbol;
+import middle.symbol.SymTable;
+import middle.symbol.Symbol;
 
 import java.util.ArrayList;
 import java.util.Iterator;

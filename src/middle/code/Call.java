@@ -1,8 +1,8 @@
-package intermediate.code;
+package middle.code;
 
-import intermediate.operand.Operand;
-import intermediate.symbol.FuncMeta;
-import intermediate.symbol.Symbol;
+import middle.operand.Operand;
+import middle.symbol.FuncMeta;
+import middle.symbol.Symbol;
 
 import java.util.Collections;
 import java.util.List;

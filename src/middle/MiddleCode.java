@@ -1,10 +1,10 @@
-package intermediate;
+package middle;
 
-import intermediate.code.BasicBlock;
-import intermediate.code.BranchIfElse;
-import intermediate.code.ILinkNode;
-import intermediate.code.Jump;
-import intermediate.symbol.FuncMeta;
+import middle.code.BasicBlock;
+import middle.code.BranchIfElse;
+import middle.code.ILinkNode;
+import middle.code.Jump;
+import middle.symbol.FuncMeta;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * 中间代码的总体类，包括各个函数的入口以及全局变量
  */
-public class Intermediate {
+public class MiddleCode {
     private final Map<String, Integer> globalAddress;   // 这里的地址单位是字节（和 Mars 相同）
     private final Map<String, Integer> globalVariables;
     private final Map<String, List<Integer>> globalArrays;  // 展平的数组初值
@@ -22,7 +22,7 @@ public class Intermediate {
 
     private FuncMeta mainFunction;
 
-    public Intermediate() {
+    public MiddleCode() {
         this.globalAddress = new HashMap<>();
         this.globalVariables = new HashMap<>();
         this.globalArrays = new HashMap<>();

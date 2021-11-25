@@ -2,7 +2,7 @@ package backend.instruction;
 
 import backend.hardware.Memory;
 import backend.hardware.RegisterFile;
-import intermediate.code.ILinkNode;
+import middle.code.ILinkNode;
 
 /**
  * MIPS 指令的基本类型

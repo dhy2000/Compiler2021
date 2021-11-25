@@ -1,6 +1,6 @@
-package intermediate.symbol;
+package middle.symbol;
 
-import intermediate.code.BasicBlock;
+import middle.code.BasicBlock;
 
 import java.util.ArrayList;
 import java.util.Collections;

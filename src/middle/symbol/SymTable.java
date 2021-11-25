@@ -1,4 +1,4 @@
-package intermediate.symbol;
+package middle.symbol;
 
 import java.util.HashMap;
 import java.util.Map;
