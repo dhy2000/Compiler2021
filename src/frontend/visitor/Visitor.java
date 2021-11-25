@@ -44,6 +44,12 @@ public class Visitor {
         return intermediate;
     }
 
+    private final ErrorTable errorTable = new ErrorTable();
+
+    public ErrorTable getErrorTable() {
+        return errorTable;
+    }
+
     private FuncMeta currentFunc = null;
 
     private int blockCount = 0;
@@ -63,6 +69,8 @@ public class Visitor {
     private String currentField() {
         return currentSymTable.getField();
     }
+
+    public Visitor() {}
 
     /**
      * 表达式分析, 通常只会生成计算类型的中间代码
@@ -214,10 +222,10 @@ public class Visitor {
             Ident ident = call.getName();
             String name = ident.getName();
             if (!call.hasRightParenthesis()) {
-                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, ident.lineNumber()));
+                errorTable.add(new Error(Error.Type.MISSING_RIGHT_PARENT, ident.lineNumber()));
             }
             if (!intermediate.getFunctions().containsKey(name)) {
-                ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, ident.lineNumber()));
+                errorTable.add(new Error(Error.Type.UNDEFINED_IDENT, ident.lineNumber()));
                 return new Immediate(0);
             }
             FuncMeta func = intermediate.getFunctions().get(name);
@@ -238,7 +246,7 @@ public class Visitor {
             }
             boolean error = false;
             if (params.size() != args.size()) {
-                ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_NUM, ident.lineNumber()));
+                errorTable.add(new Error(Error.Type.MISMATCH_PARAM_NUM, ident.lineNumber()));
                 error = true;
             } else {
                 Iterator<Operand> iterParam = params.listIterator();
@@ -247,13 +255,13 @@ public class Visitor {
                     Operand param = iterParam.next();
                     Symbol arg = iterArg.next();
                     if (Objects.isNull(param)) {
-                        ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                        errorTable.add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                         error = true;
                         break;
                     }
                     else if (param instanceof Immediate) {
                         if (!arg.getType().equals(Symbol.Type.INT)) {
-                            ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                            errorTable.add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                             error = true;
                             break;
                         }
@@ -261,7 +269,7 @@ public class Visitor {
                     else {
                         assert param instanceof Symbol;
                         if (!((Symbol) param).getType().equals(arg.getType())) {
-                            ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
+                            errorTable.add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                             error = true;
                             break;
                         }
@@ -309,14 +317,14 @@ public class Visitor {
         if (base instanceof SubExp) {
             SubExp sub = (SubExp) base;
             if (!((SubExp) base).hasRightParenthesis()) {
-                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, sub.getLeftParenthesis().lineNumber()));
+                errorTable.add(new Error(Error.Type.MISSING_RIGHT_PARENT, sub.getLeftParenthesis().lineNumber()));
             }
             return analyseExp(sub.getExp());
         } else if (base instanceof LVal) {
             // 符号表相关错误(变量未定义等)
             LVal val = (LVal) base;
             if (!currentSymTable.contains(val.getName().getName(), true)) {
-                ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
+                errorTable.add(new Error(Error.Type.UNDEFINED_IDENT, val.getName().lineNumber()));
                 return new Immediate(0);
             }
             Symbol symbol = currentSymTable.get(val.getName().getName(), true);
@@ -329,7 +337,7 @@ public class Visitor {
                 }
                 LVal.Index index = iterIndex.next();
                 if (!index.hasRightBracket()) {
-                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, index.getLeftBracket().lineNumber()));
+                    errorTable.add(new Error(Error.Type.MISSING_RIGHT_BRACKET, index.getLeftBracket().lineNumber()));
                     return new Immediate(0);
                 }
                 indexes.add(analyseExp(index.getIndex()));
@@ -399,7 +407,7 @@ public class Visitor {
         }
         Symbol leftSym = (Symbol) ln;
         if (leftSym.isConstant()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MODIFY_CONST, left.getName().lineNumber()));
+            errorTable.add(new Error(Error.Type.MODIFY_CONST, left.getName().lineNumber()));
             return null;
         }
         return leftSym;
@@ -471,7 +479,7 @@ public class Visitor {
         String format = stmt.getFormatString().getInner();
         int count = checkFormatString(format);
         if (count < 0) {
-            ErrorTable.getInstance().add(new Error(Error.Type.ILLEGAL_CHAR, stmt.getFormatString().lineNumber()));
+            errorTable.add(new Error(Error.Type.ILLEGAL_CHAR, stmt.getFormatString().lineNumber()));
             return;
         }
         List<Operand> params = new ArrayList<>();
@@ -482,7 +490,7 @@ public class Visitor {
             params.add(param);
         }
         if (params.size() != count) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
+            errorTable.add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
             return;
         }
         currentBlock.append(new PrintFormat(format, params));
@@ -503,7 +511,7 @@ public class Visitor {
             }
         } else {
             if (stmt.hasValue()) {
-                ErrorTable.getInstance().add(new Error(Error.Type.RETURN_VALUE_VOID, stmt.getReturnTk().lineNumber()));
+                errorTable.add(new Error(Error.Type.RETURN_VALUE_VOID, stmt.getReturnTk().lineNumber()));
             } else {
                 currentBlock.append(new Return());
             }
@@ -514,7 +522,7 @@ public class Visitor {
         // 就是一个跳转，跳到往上的循环的下一层
         // 检查是否非循环块
         if (loopBlocks.empty()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getBreakTk().lineNumber()));
+            errorTable.add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getBreakTk().lineNumber()));
             return;
         }
         BasicBlock follow = loopFollows.peek();
@@ -525,7 +533,7 @@ public class Visitor {
         // 也是一个跳转，跳到往上的循环的头
         // 检查是否非循环块
         if (loopBlocks.empty()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getContinueTk().lineNumber()));
+            errorTable.add(new Error(Error.Type.CONTROL_OUTSIDE_LOOP, stmt.getContinueTk().lineNumber()));
             return;
         }
         BasicBlock loop = loopBlocks.peek();
@@ -537,7 +545,7 @@ public class Visitor {
     public void analyseIfStmt(IfStmt stmt) throws ConstExpException {
         // 缺右括号
         if (!stmt.hasRightParenthesis()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
+            errorTable.add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
         }
         // 生成新的基本块
         Operand cond = analyseCond(stmt.getCondition());
@@ -564,7 +572,7 @@ public class Visitor {
     public void analyseWhileStmt(WhileStmt stmt) throws ConstExpException {
         // 缺右括号
         if (!stmt.hasRightParenthesis()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
+            errorTable.add(new Error(Error.Type.MISSING_RIGHT_PARENT, stmt.getLeftParenthesis().lineNumber()));
         }
         // 生成新的基本块
         BasicBlock current = currentBlock;
@@ -621,7 +629,7 @@ public class Visitor {
         if (stmt.isSimple()) {
             // check semi
             if (!stmt.hasSemicolon()) {
-                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_SEMICOLON, stmt.getSimpleStmt().lineNumber()));
+                errorTable.add(new Error(Error.Type.MISSING_SEMICOLON, stmt.getSimpleStmt().lineNumber()));
             }
             SplStmt simple = stmt.getSimpleStmt();
             if (simple instanceof AssignStmt) {
@@ -661,7 +669,7 @@ public class Visitor {
     public void analyseDecl(Decl decl) throws ConstExpException {
         // 检查分号
         if (!decl.hasSemicolon()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_SEMICOLON, decl.getBType().lineNumber()));
+            errorTable.add(new Error(Error.Type.MISSING_SEMICOLON, decl.getBType().lineNumber()));
         }
         Def first = decl.getFirst();
         analyseDef(first);
@@ -701,12 +709,12 @@ public class Visitor {
         List<Integer> arrayDims = new ArrayList<>();
         boolean constant = def.isConst();
         if (currentSymTable.contains(name, false)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
+            errorTable.add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
             return;
         }
         // fix: 位于函数的顶层并且和形参相同也算重定义
         if (blockDepth == 1 && Objects.nonNull(currentFunc) && currentFunc.getParamTable().contains(name, false)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
+            errorTable.add(new Error(Error.Type.DUPLICATED_IDENT, ident.lineNumber()));
             return;
         }
         // (?): 和函数名相同不算重复定义
@@ -714,7 +722,7 @@ public class Visitor {
             if (def.isInitialized()) {
                 ExpInitVal init = (ExpInitVal) def.getInitVal();
                 if (init.isConst()) {
-                    int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
+                    int value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
                     Symbol sym = new Symbol(name, currentField(), constant, value);
                     if (Objects.nonNull(currentFunc)) {
                         stackSize += sym.capacity();
@@ -729,7 +737,7 @@ public class Visitor {
                     currentSymTable.add(sym);
                 } else {
                     if (Objects.isNull(currentFunc)) { // 没有在函数里，则必须能编译期算出
-                        int value = new CalcUtil(currentSymTable).calcExp(init.getExp());
+                        int value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
                         Symbol sym = new Symbol(name, currentField(), constant, value);
                         sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
@@ -767,9 +775,9 @@ public class Visitor {
             while (iter.hasNext()) {
                 Def.ArrDef ad = iter.next();
                 if (!ad.hasRightBracket()) {
-                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, ident.lineNumber()));
+                    errorTable.add(new Error(Error.Type.MISSING_RIGHT_BRACKET, ident.lineNumber()));
                 }
-                int value = new CalcUtil(currentSymTable).calcExp(ad.getArrLength());
+                int value = new CalcUtil(currentSymTable, errorTable).calcExp(ad.getArrLength());
                 totalSize *= value;
                 arrayDims.add(value);
             }
@@ -779,7 +787,7 @@ public class Visitor {
                 if (init.isConst() || Objects.isNull(currentFunc)) { // 常量或者位于全局
                     List<Integer> initValues = new ArrayList<>();
                     for (Exp exp : initExps) {
-                        int value = new CalcUtil(currentSymTable).calcExp(exp);
+                        int value = new CalcUtil(currentSymTable, errorTable).calcExp(exp);
                         initValues.add(value);
                     }
                     Symbol sym = new Symbol(name, currentField(), arrayDims, constant, initValues);
@@ -848,7 +856,7 @@ public class Visitor {
         Symbol arg;
         // 形参不能重名
         if (meta.getParamTable().contains(argName, false)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, param.getName().lineNumber()));
+            errorTable.add(new Error(Error.Type.DUPLICATED_IDENT, param.getName().lineNumber()));
             return;
         }
         if (!param.isArray()) {
@@ -858,16 +866,16 @@ public class Visitor {
             // first dim is ignored because Array-FParam is Pointer
             FuncFParam.FirstDim first = param.getFirstDim();
             if (!first.hasRightBracket()) {
-                ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, first.getLeftBracket().lineNumber()));
+                errorTable.add(new Error(Error.Type.MISSING_RIGHT_BRACKET, first.getLeftBracket().lineNumber()));
             }
             Iterator<FuncFParam.ArrayDim> iter = param.iterFollowDims();
             while (iter.hasNext()) {
                 FuncFParam.ArrayDim dim = iter.next();
                 if (!dim.hasRightBracket()) {
-                    ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_BRACKET, dim.getLeftBracket().lineNumber()));
+                    errorTable.add(new Error(Error.Type.MISSING_RIGHT_BRACKET, dim.getLeftBracket().lineNumber()));
                 }
                 ConstExp len = dim.getLength();
-                int length = new CalcUtil(currentSymTable).calcExp(len);
+                int length = new CalcUtil(currentSymTable, errorTable).calcExp(len);
                 dimSizes.add(length);
             }
             arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, false);
@@ -880,17 +888,17 @@ public class Visitor {
     public void analyseFunc(FuncDef func) throws ConstExpException {
         // 缺右括号
         if (!func.hasRightParenthesis()) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RIGHT_PARENT, func.getName().lineNumber()));
+            errorTable.add(new Error(Error.Type.MISSING_RIGHT_PARENT, func.getName().lineNumber()));
         }
         // 维护函数符号表
         FuncMeta.ReturnType returnType = func.getType().getType().getType().equals(Token.Type.VOIDTK) ? FuncMeta.ReturnType.VOID : FuncMeta.ReturnType.INT;
         String name = func.getName().getName();
         if (intermediate.getFunctions().containsKey(name)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
+            errorTable.add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
             return;
         }
         if (currentSymTable.contains(name, false)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
+            errorTable.add(new Error(Error.Type.DUPLICATED_IDENT, func.getName().lineNumber()));
             return;
         }
         FuncMeta meta = new FuncMeta(name, returnType, currentSymTable);
@@ -935,7 +943,7 @@ public class Visitor {
             }
         }
         if (!(returnFlag || meta.getReturnType().equals(FuncMeta.ReturnType.VOID))) {
-            ErrorTable.getInstance().add(new Error(Error.Type.MISSING_RETURN, funcBody.getRightBrace().lineNumber()));
+            errorTable.add(new Error(Error.Type.MISSING_RETURN, funcBody.getRightBrace().lineNumber()));
         }
     }
 

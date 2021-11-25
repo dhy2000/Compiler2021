@@ -14,15 +14,7 @@ public class ErrorTable implements Iterable<Error> {
         return errors.iterator();
     }
 
-    private static class InstanceHolder {
-        private static final ErrorTable instance = new ErrorTable();
-    }
-
-    private ErrorTable() {}
-
-    public static ErrorTable getInstance() {
-        return InstanceHolder.instance;
-    }
+    public ErrorTable() {}
 
     private final TreeSet<Error> errors = new TreeSet<>();
 

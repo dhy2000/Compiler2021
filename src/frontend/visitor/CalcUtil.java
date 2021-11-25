@@ -22,9 +22,11 @@ import java.util.Iterator;
 public class CalcUtil {
 
     private final SymTable symTable;
+    private final ErrorTable errorTable;
 
-    public CalcUtil(SymTable symTable) {
+    public CalcUtil(SymTable symTable, ErrorTable errorTable) {
         this.symTable = symTable;
+        this.errorTable = errorTable;
     }
 
     public int calcExp(Exp exp) throws ConstExpException {
@@ -101,7 +103,7 @@ public class CalcUtil {
         Ident ident = lVal.getName();
         String name = ident.getName();
         if (!symTable.contains(name, true)) {
-            ErrorTable.getInstance().add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
+            errorTable.add(new Error(Error.Type.UNDEFINED_IDENT, lVal.getName().lineNumber()));
             return 0;
         }
         Symbol symbol = symTable.get(name, true);

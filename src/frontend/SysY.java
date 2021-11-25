@@ -36,10 +36,11 @@ public class SysY {
             // generate intermediate code
             Visitor visitor = new Visitor();
             visitor.analyseCompUnit(compUnit);
+            ErrorTable errors = visitor.getErrorTable();
             if (Config.hasOperationOutput(Config.Operation.ERROR)) {
-                ErrorTable.getInstance().forEach(error -> Config.getTarget().println(error.getLineNum() + " " + error.getErrorTag()));
+                errors.forEach(error -> Config.getTarget().println(error.getLineNum() + " " + error.getErrorTag()));
             }
-            if (!ErrorTable.getInstance().isEmpty()) {
+            if (!errors.isEmpty()) {
                 return;
             }
             intermediate = visitor.getIntermediate();
