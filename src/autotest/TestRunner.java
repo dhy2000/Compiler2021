@@ -84,11 +84,12 @@ public class TestRunner {
         // send input-data into stdin
         outputFromInputStream(input, stdin);
         // get output-data from stdout
-        final int status = mars.waitFor(); // wait MARS end
         String output = readFromInputStream(stdout);
         String error = readFromInputStream(stderr);
+        final int status = mars.waitFor(); // wait MARS end
         if (status != 0) {
-            throw new RuntimeException("Error running MARS: " + error);
+            log.println("Error on running MARS, returned " + status + " with error message: ");
+            log.println(error);
         }
         return check(answer, output);
     }
