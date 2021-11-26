@@ -12,8 +12,8 @@ public class Compiler {
     private static final String[] tokenArgs     = new String[]{"-s", "testfile.txt", "-T", "output.txt"};
     private static final String[] syntaxArgs    = new String[]{"-s", "testfile.txt", "-S", "output.txt"};
     private static final String[] errorArgs     = new String[]{"-s", "testfile.txt", "-E", "error.txt"};
-    private static final String[] mipsArgs      = new String[]{"-s", "testfile.txt", "-O", "mips.txt"};
     private static final String[] pcodeArgs     = new String[]{"-s", "testfile.txt", "-V", "pcoderesult.txt"};
+    private static final String[] mipsArgs      = new String[]{"-s", "testfile.txt", "-O", "mips.txt"};
 
     public static final String[] defaultArgs = mipsArgs;    // default: mipsArgs
 
