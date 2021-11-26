@@ -13,6 +13,7 @@ output.txt
 input.txt
 pcoderesult.txt
 mips.txt
+InstructionStatistics.txt
 
 # Archives
 *.zip
