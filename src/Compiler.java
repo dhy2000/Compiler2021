@@ -6,16 +6,20 @@ import java.util.Objects;
 
 public class Compiler {
 
-    public static final boolean RUN_AUTOTEST = true;
-    public static final boolean MIPS = true;
+    public static final boolean RUN_AUTOTEST = false;   // default false
+    public static final boolean MIPS_TEST = true;       // true: test MIPS, false: test PCODE
 
-    private static final String[] mipsArgs = new String[]{"-s", "testfile.txt", "-O", "mips.txt"};
-    private static final String[] pcodeArgs = new String[]{"-s", "testfile.txt", "-V", "pcoderesult.txt"};
+    private static final String[] tokenArgs     = new String[]{"-s", "testfile.txt", "-T", "output.txt"};
+    private static final String[] syntaxArgs    = new String[]{"-s", "testfile.txt", "-S", "output.txt"};
+    private static final String[] errorArgs     = new String[]{"-s", "testfile.txt", "-E", "error.txt"};
+    private static final String[] mipsArgs      = new String[]{"-s", "testfile.txt", "-O", "mips.txt"};
+    private static final String[] pcodeArgs     = new String[]{"-s", "testfile.txt", "-V", "pcoderesult.txt"};
+
+    public static final String[] defaultArgs = mipsArgs;    // default: mipsArgs
 
     public static void runCompiler(String[] args) {
-        // load arguments
-        String[] argsDefault = MIPS ? mipsArgs : pcodeArgs;
-        Config config = Config.fromArgs(args.length > 0 ? args : argsDefault);
+        assert args.length > 0;
+        Config config = Config.fromArgs(args);
         if (Objects.isNull(config)) {
             System.err.println("Compiler failed launch due to previous errors.");
             System.out.println(Config.usage());
@@ -31,7 +35,7 @@ public class Compiler {
     }
 
     public static void autoTest() {
-        TestRunner runner = new TestRunner(MIPS ? TestRunner.Mode.MIPS : TestRunner.Mode.PCODE);
+        TestRunner runner = new TestRunner(MIPS_TEST ? TestRunner.Mode.MIPS : TestRunner.Mode.PCODE);
         runner.runAll();
     }
 
@@ -39,7 +43,7 @@ public class Compiler {
         if (RUN_AUTOTEST) {
             autoTest();
         } else {
-            runCompiler(args);
+            runCompiler(args.length > 0 ? args : defaultArgs);
         }
     }
 }

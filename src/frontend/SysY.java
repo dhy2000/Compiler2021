@@ -46,11 +46,21 @@ public class SysY {
             }
             middleCode = visitor.getIntermediate();
         } catch (FrontendException e) {
-            config.getTarget(Config.Operation.EXCEPTION).println(e.getMessage());
-            source.printAll(config.getTarget(Config.Operation.EXCEPTION));
+            if (config.hasTarget(Config.Operation.EXCEPTION)) {
+                config.getTarget(Config.Operation.EXCEPTION).println(e.getMessage());
+                source.printAll(config.getTarget(Config.Operation.EXCEPTION));
+            } else {
+                System.err.println(e.getMessage());
+                source.printAll(System.err);
+            }
         } catch (Exception e) {
-            System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-            e.printStackTrace();
+            if (config.hasTarget(Config.Operation.EXCEPTION)) {
+                config.getTarget(Config.Operation.EXCEPTION).println(e.getClass().getSimpleName() + ": " + e.getMessage());
+                e.printStackTrace(config.getTarget(Config.Operation.EXCEPTION));
+            } else {
+                System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

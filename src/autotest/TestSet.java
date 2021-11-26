@@ -31,6 +31,8 @@ public class TestSet implements Iterable<TestCase> {
     }
 
     private TestSet() {
+        // My Testcases
+
         // C
         testSet.add(new TestCase("C-1", "C/testfile1.txt", "C/input1.txt", "C/output1.txt"));
         testSet.add(new TestCase("C-2", "C/testfile2.txt", "C/input2.txt", "C/output2.txt"));
@@ -116,7 +118,6 @@ public class TestSet implements Iterable<TestCase> {
         testSet.add(new TestCase("A-24", "A/testfile24.txt", "A/input24.txt", "A/output24.txt"));
         testSet.add(new TestCase("A-25", "A/testfile25.txt", "A/input25.txt", "A/output25.txt"));
         testSet.add(new TestCase("A-26", "A/testfile26.txt", "A/input26.txt", "A/output26.txt"));
-        // Others
     }
 
 }
