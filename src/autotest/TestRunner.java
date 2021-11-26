@@ -132,13 +132,17 @@ public class TestRunner {
             exportPathCheck();
             FileInputStream testfile = new FileInputStream(rootPath + File.separator + test.getTestfile());
             FileInputStream stdin = new FileInputStream(rootPath + File.separator + test.getInput());
+            FileInputStream answer = new FileInputStream(rootPath + File.separator + test.getOutput());
             String testfilePath = EXPORT_TESTCASE_PATH + File.separator + "testfile.txt";
             String stdinPath = EXPORT_TESTCASE_PATH + File.separator + "input.txt";
+            String answerPath = EXPORT_TESTCASE_PATH + File.separator + "answer.txt";
             FileOutputStream storeTestfile = new FileOutputStream(testfilePath);
             FileOutputStream storeInputFile = new FileOutputStream(stdinPath);
+            FileOutputStream storeAnswerFile = new FileOutputStream(answerPath);
             outputFromInputStream(testfile, storeTestfile);
             outputFromInputStream(stdin, storeInputFile);
-            log.println("Exported to " + testfilePath + ", " + stdinPath);
+            outputFromInputStream(answer, storeAnswerFile);
+            log.println("Exported to " + testfilePath + ", " + stdinPath + ", " + answerPath);
         } catch (IOException e) {
             log.println("Failed to export testcase!");
             e.printStackTrace();
