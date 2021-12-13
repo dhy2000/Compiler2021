@@ -390,7 +390,7 @@ public class Translator {
     private void translateIO(ILinkNode code) {
         assert code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
         if (code instanceof Input) {
-            mips.append(new LoadImmediate(RegisterFile.Register.V0, 5));
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, Syscall.READ_INTEGER));
             mips.append(new Syscall());
             int regDst = allocRegister(((Input) code).getDst(), false);
             if (((Input) code).getDst().getType().equals(Symbol.Type.POINTER)) {
@@ -399,7 +399,7 @@ public class Translator {
                 mips.append(new Move(regDst, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
             }
         } else if (code instanceof PrintInt) {
-            mips.append(new LoadImmediate(RegisterFile.Register.V0, 1));
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, Syscall.PRINT_INTEGER));
             if (((PrintInt) code).getValue() instanceof Immediate) {
                 mips.append(new LoadImmediate(RegisterFile.Register.A0, ((Immediate) ((PrintInt) code).getValue()).getValue()));
             } else {
@@ -413,7 +413,7 @@ public class Translator {
             String label = ((PrintStr) code).getLabel();
             int address = mips.getStringAddress(label);
             mips.append(new LoadImmediate(RegisterFile.Register.A0, Mips.STRING_START_ADDRESS + address));
-            mips.append(new LoadImmediate(RegisterFile.Register.V0, 4));
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, Syscall.PRINT_STRING));
             mips.append(new Syscall());
         }
     }
