@@ -95,6 +95,14 @@ public class ReduceMov implements MidOptimizer {
                                 prev = prev.getPrev();
                                 continue;
                             }
+                        } else if (prev instanceof Call && ((Call) prev).hasRet()) {
+                            if (((Call) prev).getRet().equals(src)) {
+                                Call another = new Call(((Call) prev).getFunction(), ((Call) prev).getParams(), dst);
+                                prev.insertBefore(another);
+                                prev.remove();
+                                prev = prev.getPrev();
+                                continue;
+                            }
                         }
                         prev = prev.getPrev();
                     }
