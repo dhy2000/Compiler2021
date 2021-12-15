@@ -6,10 +6,7 @@ import backend.optimize.JumpFollow;
 import frontend.SysY;
 import middle.MidRunner;
 import middle.MiddleCode;
-import middle.optimize.MergeBlock;
-import middle.optimize.MulDivToShift;
-import middle.optimize.PrintfTrans;
-import middle.optimize.RemoveAfterJump;
+import middle.optimize.*;
 
 import java.util.Objects;
 
@@ -32,6 +29,7 @@ public class MainCompiler {
         new RemoveAfterJump().optimize(ir);
         new MergeBlock().optimize(ir);
         new MulDivToShift().optimize(ir);
+        new ReduceMov().optimize(ir);
         /* ------ MidCode Optimize End ------ */
 
         if (config.hasTarget(Config.Operation.MID_CODE)) {
