@@ -20,7 +20,9 @@ public class BinaryOp extends ILinkNode {
         LT,
         LE,
         EQ,
-        NE
+        NE,
+        SLL,
+        SRA
     }
 
     private final Op op;

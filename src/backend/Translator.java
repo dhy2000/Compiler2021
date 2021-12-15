@@ -232,6 +232,12 @@ public class Translator {
             case NE:
                 mips.append(new SetNotEqual(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
+            case SLL:
+                mips.append(new ShiftLeftVariable(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
+                break;
+            case SRA:
+                mips.append(new ShiftRightArithmeticVariable(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
+                break;
             default: throw new AssertionError("Bad BinaryOp");
         }
     }
@@ -261,6 +267,8 @@ public class Translator {
                     case LT: result = (src1 < src2) ? 1 : 0; break;
                     case EQ: result = (src1 == src2) ? 1 : 0; break;
                     case NE: result = (src1 != src2) ? 1 : 0; break;
+                    case SLL: result = (src1 << (src2 & 0x1f)); break;
+                    case SRA: result = (src1 >> (src2 & 0x1f)); break;
                     default: throw new AssertionError("Bad BinaryOp");
                 }
                 int register = allocRegister(code.getDst(), false);
@@ -343,6 +351,14 @@ public class Translator {
                         break;
                     case NE:
                         mips.append(new SetNotEqualImmediate(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
+                        break;
+                    case SLL:
+                        mips.append(new ShiftLeft(regSrc1, immediate, regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
+                        break;
+                    case SRA:
+                        mips.append(new ShiftRightArithmetic(regSrc1, immediate, regDst),
                                 registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     default: throw new AssertionError("Bad BinaryOp");

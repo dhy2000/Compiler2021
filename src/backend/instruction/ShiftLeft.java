@@ -9,7 +9,7 @@ public class ShiftLeft extends MipsInstruction {
     private final int regSrc;
     private final int bits;
 
-    public ShiftLeft(int regDst, int regSrc, int bits) {
+    public ShiftLeft(int regSrc, int bits, int regDst) {
         this.regDst = regDst;
         this.regSrc = regSrc;
         this.bits = bits;
@@ -29,7 +29,7 @@ public class ShiftLeft extends MipsInstruction {
 
     @Override
     public String instrToString() {
-        return String.format("sll $%s, $%s, %d", regDst, regSrc, bits);
+        return String.format("sll $%s, $%s, %d", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc), bits);
     }
 
     @Override

@@ -159,6 +159,8 @@ public class MidRunner {
             case LT: result = (src1 < src2) ? 1 : 0; break;
             case EQ: result = (src1 == src2) ? 1 : 0; break;
             case NE: result = (src1 != src2) ? 1 : 0; break;
+            case SLL: result = (src1 << (src2 & 0x1f)); break;
+            case SRA: result = (src1 >> (src2 & 0x1f)); break;
             default: throw new AssertionError("Bad BinaryOp");
         }
         writeToSymbol(code.getDst(), result);
