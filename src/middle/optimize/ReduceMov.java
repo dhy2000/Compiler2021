@@ -51,6 +51,7 @@ public class ReduceMov implements MidOptimizer {
                     assert mov.getSrc() instanceof Symbol && !(((Symbol) mov.getSrc()).hasAddress());
                     Symbol src = (Symbol) mov.getSrc();
                     Symbol dst = mov.getDst();
+                    mov.remove();
                     ILinkNode prev = mov.getPrev();
                     while (Objects.nonNull(prev) && prev.hasPrev()) {
                         // BinaryOp, UnaryOp, Input, AddressOffset
