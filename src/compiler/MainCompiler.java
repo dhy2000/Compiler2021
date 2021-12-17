@@ -18,36 +18,47 @@ public class MainCompiler {
     }
 
     public void run() throws Exception {
-        SysY sysy = new SysY(config);
-        MiddleCode ir = sysy.getIntermediate();
-        if (Objects.isNull(ir)) {
-            return;
-        }
-        new PrintfTrans().optimize(ir); // NECESSARY transformer! This is NOT an optimizer.
+        try {
+            SysY sysy = new SysY(config);
+            MiddleCode ir = sysy.getIntermediate();
+            if (Objects.isNull(ir)) {
+                return;
+            }
+            new PrintfTrans().optimize(ir); // NECESSARY transformer! This is NOT an optimizer.
 
-        /* ------ MidCode Optimize Begin ------ */
-        new RemoveAfterJump().optimize(ir);
-        new MergeBlock().optimize(ir);
-        new MulDivToShift().optimize(ir);
-        new ReduceMov().optimize(ir);
-        /* ------ MidCode Optimize End ------ */
+            /* ------ MidCode Optimize Begin ------ */
+            new RemoveAfterJump().optimize(ir);
+            new MergeBlock().optimize(ir);
+            new MulDivToShift().optimize(ir);
+            new ReduceMov().optimize(ir);
+            /* ------ MidCode Optimize End ------ */
 
-        if (config.hasTarget(Config.Operation.MID_CODE)) {
-            ir.output(config.getTarget(Config.Operation.MID_CODE));
-        }
-        if (config.hasTarget(Config.Operation.VM_RUNNER)) {
-            MidRunner vm = new MidRunner(ir, config.getInput(), config.getTarget(Config.Operation.VM_RUNNER));
-            vm.run();
-        }
+            if (config.hasTarget(Config.Operation.MID_CODE)) {
+                ir.output(config.getTarget(Config.Operation.MID_CODE));
+            }
+            if (config.hasTarget(Config.Operation.VM_RUNNER)) {
+                MidRunner vm = new MidRunner(ir, config.getInput(), config.getTarget(Config.Operation.VM_RUNNER));
+                vm.run();
+            }
 
-        if (config.hasTarget(Config.Operation.OBJECT_CODE)) {
-            Mips mips = new Translator(ir).toMips();
+            if (config.hasTarget(Config.Operation.OBJECT_CODE)) {
+                Mips mips = new Translator(ir).toMips();
 
-            /* ------ Mips Optimize Begin ------ */
-            new JumpFollow().optimize(mips);
-            /* ------ Mips Optimize End ------ */
+                /* ------ Mips Optimize Begin ------ */
+                new JumpFollow().optimize(mips);
+                /* ------ Mips Optimize End ------ */
 
-            mips.output(config.getTarget(Config.Operation.OBJECT_CODE));
+                mips.output(config.getTarget(Config.Operation.OBJECT_CODE));
+            }
+        } catch (Exception e) {
+            // Can detect exception here!
+            if (config.hasTarget(Config.Operation.EXCEPTION)) {
+                config.getTarget(Config.Operation.EXCEPTION).println(e.getClass().getSimpleName() + ": " + e.getMessage());
+                e.printStackTrace(config.getTarget(Config.Operation.EXCEPTION));
+            } else {
+                System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 }
