@@ -35,6 +35,7 @@ public class ReduceMov implements MidOptimizer {
                 visited.add(block);
                 ILinkNode node = block.getHead();
                 while (Objects.nonNull(node) && node.hasNext()) {
+                    detectBranch(node, queue);
                     // Inside a block
                     if (!(node instanceof UnaryOp && ((UnaryOp) node).getOp().equals(UnaryOp.Op.MOV))) {
                         node = node.getNext();

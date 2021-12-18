@@ -36,6 +36,7 @@ public class MulDivToShift implements MidOptimizer {
                 visited.add(block);
                 ILinkNode node = block.getHead();
                 while (Objects.nonNull(node) && node.hasNext()) {
+                    detectBranch(node, queue);
                     if (node instanceof BinaryOp) {
                         BinaryOp code = (BinaryOp) node;
                         BinaryOp.Op op = code.getOp();
@@ -67,6 +68,7 @@ public class MulDivToShift implements MidOptimizer {
                                 }
                             }
                         } else if (op.equals(BinaryOp.Op.DIV)) {
+                            // 负数的除法简化成位运算有 BUG！
                             if (src1 instanceof Symbol && src2 instanceof Immediate) {
                                 if (MathUtil.isLog2(((Immediate) src2).getValue())) {
                                     Immediate operand2 = new Immediate(MathUtil.log2(((Immediate) src2).getValue()));
