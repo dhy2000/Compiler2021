@@ -1,7 +1,9 @@
 import autotest.TestRunner;
 import compiler.Config;
 import compiler.MainCompiler;
+import utility.ZipUtil;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class Compiler {
@@ -23,6 +25,14 @@ public class Compiler {
         if (Objects.isNull(config)) {
             System.err.println("Compiler failed launch due to previous errors.");
             System.out.println(Config.usage());
+            System.exit(0);
+        }
+        if (config.isZip()) {
+            try {
+                ZipUtil.compress();
+            } catch (IOException e) {
+                System.err.println("Failed to zip source.");
+            }
             System.exit(0);
         }
         try {

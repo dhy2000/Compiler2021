@@ -17,6 +17,12 @@ public class Config {
      */
     private InputStream input = null;
 
+    /**
+     * 将编译器源代码打包为 zip 压缩文件: -z
+     * 该参数优先级最高
+     */
+    private boolean zip = false;
+
     public enum Operation {
         TOKENIZE("-T"),
         SYNTAX("-S"),
@@ -68,12 +74,24 @@ public class Config {
         operationTarget.put(op, target);
     }
 
+    public boolean isZip() {
+        return zip;
+    }
+
+    public void setZip(boolean zip) {
+        this.zip = zip;
+    }
+
     public Config() {}
 
     // 加载命令行参数得到配置类, 如果参数不合法(出错)则返回 null
     public static Config fromArgs(String[] args) {
         Config config = new Config();
         for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-z")) {
+                config.setZip(true);
+                return config;
+            }
             if (args[i].equals("-s")) { // source file
                 if (Objects.nonNull(config.getSource())) {
                     System.err.println("Only 1 source file supported.");
