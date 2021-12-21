@@ -1,7 +1,5 @@
 package backend.instruction;
 
-import backend.hardware.Memory;
-import backend.hardware.RegisterFile;
 import middle.code.ILinkNode;
 
 /**

@@ -1,8 +1,5 @@
 package backend.instruction;
 
-import backend.hardware.Memory;
-import backend.hardware.RegisterFile;
-
 public class SetLessThanImmediate extends MipsInstruction {
     private final int regSrc;
     private final int immediate;

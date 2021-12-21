@@ -1,8 +1,5 @@
 package backend.instruction;
 
-import backend.hardware.Memory;
-import backend.hardware.RegisterFile;
-
 public class SetEqualImmediate extends MipsInstruction {
 
     private final int regSrc;

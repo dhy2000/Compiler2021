@@ -1,8 +1,5 @@
 package backend.instruction;
 
-import backend.hardware.Memory;
-import backend.hardware.RegisterFile;
-
 public class Syscall extends MipsInstruction {
 
     public static final int PRINT_INTEGER = 1;

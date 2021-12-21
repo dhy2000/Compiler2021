@@ -1,6 +1,5 @@
 package backend.instruction;
 
-import backend.hardware.Memory;
 import backend.hardware.RegisterFile;
 
 public class ShiftLeftVariable extends MipsInstruction {

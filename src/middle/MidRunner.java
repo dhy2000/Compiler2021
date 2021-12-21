@@ -145,6 +145,7 @@ public class MidRunner {
         int src1 = readOperand(code.getSrc1());
         int src2 = readOperand(code.getSrc2());
         int result;
+        int oldResult = readOperand(code.getDst());
         switch (op) {
             case ADD: result = src1 + src2; break;
             case SUB: result = src1 - src2; break;
@@ -161,6 +162,8 @@ public class MidRunner {
             case NE: result = (src1 != src2) ? 1 : 0; break;
             case SLL: result = (src1 << (src2 & 0x1f)); break;
             case SRA: result = (src1 >> (src2 & 0x1f)); break;
+            case MOVN: result = (src2 != 0) ? src1 : oldResult; break;
+            case MOVZ: result = (src2 == 0) ? src1 : oldResult; break;
             default: throw new AssertionError("Bad BinaryOp");
         }
         writeToSymbol(code.getDst(), result);

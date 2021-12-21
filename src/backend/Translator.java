@@ -196,6 +196,7 @@ public class Translator {
         registerMap.clear();
     }
 
+    // R 型运算指令
     private void binaryOpHelper(int regSrc1, int regSrc2, int regDst, BinaryOp.Op op, Symbol src1, Symbol src2, Symbol dst) {
         switch (op) {
             case ADD: mips.append(new Addu(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
@@ -238,6 +239,12 @@ public class Translator {
             case SRA:
                 mips.append(new ShiftRightArithmeticVariable(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
+            case MOVN:
+                mips.append(new MoveNotZero(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
+                break;
+            case MOVZ:
+                mips.append(new MoveIfZero(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
+                break;
             default: throw new AssertionError("Bad BinaryOp");
         }
     }
@@ -253,6 +260,7 @@ public class Translator {
                 int src1 = ((Immediate) code.getSrc1()).getValue();
                 int src2 = ((Immediate) code.getSrc2()).getValue();
                 int result;
+                boolean moveTo = true;
                 switch (code.getOp()) {
                     case ADD: result = src1 + src2; break;
                     case SUB: result = src1 - src2; break;
@@ -269,10 +277,14 @@ public class Translator {
                     case NE: result = (src1 != src2) ? 1 : 0; break;
                     case SLL: result = (src1 << (src2 & 0x1f)); break;
                     case SRA: result = (src1 >> (src2 & 0x1f)); break;
+                    case MOVN: result = src1; moveTo = src2 != 0; break;
+                    case MOVZ: result = src1; moveTo = src2 == 0; break;
                     default: throw new AssertionError("Bad BinaryOp");
                 }
-                int register = allocRegister(code.getDst(), false);
-                mips.append(new LoadImmediate(register, result), registerCommentOne(register, code.getDst()));
+                if (moveTo) {
+                    int register = allocRegister(code.getDst(), false);
+                    mips.append(new LoadImmediate(register, result), registerCommentOne(register, code.getDst()));
+                }
             } else {
                 // 立即数, 寄存器
                 assert code.getSrc2() instanceof Symbol;
@@ -360,6 +372,16 @@ public class Translator {
                     case SRA:
                         mips.append(new ShiftRightArithmetic(regSrc1, immediate, regDst),
                                 registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
+                        break;
+                    case MOVN:
+                        if (immediate != 0) {
+                            mips.append(new Move(regDst, regSrc1), registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
+                        }
+                        break;
+                    case MOVZ:
+                        if (immediate == 0) {
+                            mips.append(new Move(regDst, regSrc1), registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
+                        }
                         break;
                     default: throw new AssertionError("Bad BinaryOp");
                 }
