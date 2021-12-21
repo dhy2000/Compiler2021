@@ -145,7 +145,12 @@ public class MidRunner {
         int src1 = readOperand(code.getSrc1());
         int src2 = readOperand(code.getSrc2());
         int result;
-        int oldResult = readOperand(code.getDst());
+        int oldResult;
+        try {
+            oldResult = readOperand(code.getDst());
+        } catch (NullPointerException e) {
+            oldResult = 0;
+        }
         switch (op) {
             case ADD: result = src1 + src2; break;
             case SUB: result = src1 - src2; break;

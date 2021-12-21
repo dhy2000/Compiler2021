@@ -69,9 +69,31 @@ public class MulDivOpt implements MidOptimizer {
                                 }
                             }
                         } else if (op.equals(BinaryOp.Op.DIV)) {
-                            // 负数的除法简化成位运算有 BUG！
-                            node = node.getNext();
-                            continue;
+                            // 除法简化成位运算时注意负数!
+                            if (src1 instanceof Symbol && src2 instanceof Immediate) {
+                                if (MathUtil.isLog2(((Immediate) src2).getValue())) {
+                                    Immediate operand2 = new Immediate(MathUtil.log2(((Immediate) src2).getValue()));
+                                    final String field = "div_opt";
+                                    Symbol quotient = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertAfter(new BinaryOp(BinaryOp.Op.SRA, src1, operand2, quotient));
+                                    node.remove();
+                                    node = node.getNext().getNext();
+                                    // 被除数为负，且不能整除
+                                    Symbol negFlag = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.LT, src1, new Immediate(0), negFlag));
+                                    Symbol prod = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.SLL, quotient, operand2, prod));
+                                    Symbol condLessZero = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.NE, src1, prod, condLessZero));
+                                    Symbol cond = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.AND, negFlag, condLessZero, cond));
+                                    Symbol fixQuotient = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, quotient, new Immediate(1), fixQuotient));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.MOVN, fixQuotient, cond, code.getDst()));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.MOVZ, quotient, cond, code.getDst()));
+                                    continue;
+                                }
+                            }
                         }
                         // 有负数, 负数对 2 的幂取模不能简化成按位与
                     }
