@@ -14,14 +14,4 @@ public class Syscall extends MipsInstruction {
     public String instrToString() {
         return "syscall";
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

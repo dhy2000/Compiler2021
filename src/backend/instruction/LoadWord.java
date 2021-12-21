@@ -31,16 +31,4 @@ public class LoadWord extends MipsInstruction {
     public String instrToString() {
         return String.format("lw $%s, %d($%s)", RegisterFile.getRegisterName(regDst), offset, RegisterFile.getRegisterName(regBase));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int base = rf.read(regBase);
-        int address = base + offset;
-        rf.write(regDst, mem.loadWord(address));
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

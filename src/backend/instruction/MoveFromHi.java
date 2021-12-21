@@ -19,15 +19,4 @@ public class MoveFromHi extends MipsInstruction {
     public String instrToString() {
         return "mfhi $" + RegisterFile.getRegisterName(regDst);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int hi = rf.getHi();
-        rf.write(regDst, hi);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

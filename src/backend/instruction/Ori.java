@@ -30,14 +30,4 @@ public class Ori extends MipsInstruction {
     public String instrToString() {
         return String.format("ori $%s, $%s, %d", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc), immediate);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, rf.read(regSrc) | immediate);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

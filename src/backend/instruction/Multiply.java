@@ -25,16 +25,4 @@ public class Multiply extends MipsInstruction {
     public String instrToString() {
         return String.format("mult $%s, $%s", RegisterFile.getRegisterName(regSrc1), RegisterFile.getRegisterName(regSrc2));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        long prod = (long) rf.read(regSrc1) * (long) rf.read(regSrc2);
-        rf.setLo((int) (prod));
-        rf.setHi((int) (prod >> 32));
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

@@ -18,17 +18,6 @@ public class JumpAndLink extends MipsInstruction {
     }
 
     @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int pc = rf.getProgramCounter();
-        rf.write(RegisterFile.Register.RA, pc + 4);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return true;
-    }
-
-    @Override
     public String getJumpTarget() {
         return target;
     }

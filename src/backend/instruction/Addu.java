@@ -34,17 +34,4 @@ public class Addu extends MipsInstruction {
                 RegisterFile.getRegisterName(regSrc1),
                 RegisterFile.getRegisterName(regSrc2));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int src1 = rf.read(regSrc1);
-        int src2 = rf.read(regSrc2);
-        int result = src1 + src2;
-        rf.write(regDst, result);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

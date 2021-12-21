@@ -31,14 +31,4 @@ public class ShiftLeft extends MipsInstruction {
     public String instrToString() {
         return String.format("sll $%s, $%s, %d", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc), bits);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, rf.read(regSrc) << bits);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

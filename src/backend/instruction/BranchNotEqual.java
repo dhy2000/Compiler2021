@@ -30,16 +30,6 @@ public class BranchNotEqual extends MipsInstruction {
     }
 
     @Override
-    public void execute(RegisterFile rf, Memory mem) {
-
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return rf.read(regSrc1) != rf.read(regSrc2);
-    }
-
-    @Override
     public String getJumpTarget() {
         return target;
     }

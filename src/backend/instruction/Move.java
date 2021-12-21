@@ -25,14 +25,4 @@ public class Move extends MipsInstruction {
     public String instrToString() {
         return String.format("move $%s, $%s", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, rf.read(regSrc));
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

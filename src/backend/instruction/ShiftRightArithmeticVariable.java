@@ -30,14 +30,4 @@ public class ShiftRightArithmeticVariable extends MipsInstruction {
     public String instrToString() {
         return String.format("srav $%s, $%s, $%s", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc), RegisterFile.getRegisterName(regBits));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, rf.read(regSrc) >> (rf.read(regBits) & 0x1f));
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

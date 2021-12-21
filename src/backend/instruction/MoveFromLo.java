@@ -19,15 +19,4 @@ public class MoveFromLo extends MipsInstruction {
     public String instrToString() {
         return "mflo $" + RegisterFile.getRegisterName(regDst);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int lo = rf.getLo();
-        rf.write(regDst, lo);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

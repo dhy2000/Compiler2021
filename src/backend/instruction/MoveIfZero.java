@@ -3,13 +3,12 @@ package backend.instruction;
 import backend.hardware.Memory;
 import backend.hardware.RegisterFile;
 
-public class Or extends MipsInstruction {
-
+public class MoveIfZero extends MipsInstruction {
     private final int regSrc1;
     private final int regSrc2;
     private final int regDst;
 
-    public Or(int regSrc1, int regSrc2, int regDst) {
+    public MoveIfZero(int regSrc1, int regSrc2, int regDst) {
         this.regSrc1 = regSrc1;
         this.regSrc2 = regSrc2;
         this.regDst = regDst;
@@ -29,9 +28,6 @@ public class Or extends MipsInstruction {
 
     @Override
     public String instrToString() {
-        return String.format("or $%s, $%s, $%s",
-                RegisterFile.getRegisterName(regDst),
-                RegisterFile.getRegisterName(regSrc1),
-                RegisterFile.getRegisterName(regSrc2));
+        return String.format("movz $%s, $%s, $%s", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc1), RegisterFile.getRegisterName(regSrc2));
     }
 }

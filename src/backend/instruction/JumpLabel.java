@@ -18,16 +18,6 @@ public class JumpLabel extends MipsInstruction {
     }
 
     @Override
-    public void execute(RegisterFile rf, Memory mem) {
-
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return true;
-    }
-
-    @Override
     public String getJumpTarget() {
         return target;
     }

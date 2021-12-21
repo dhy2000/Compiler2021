@@ -24,16 +24,6 @@ public class BranchGreaterEqualZero extends MipsInstruction {
     }
 
     @Override
-    public void execute(RegisterFile rf, Memory mem) {
-
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return rf.read(regSrc) >= 0;
-    }
-
-    @Override
     public String getJumpTarget() {
         return target;
     }

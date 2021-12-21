@@ -31,16 +31,4 @@ public class StoreWord extends MipsInstruction {
     public String instrToString() {
         return String.format("sw $%s, %d($%s)", RegisterFile.getRegisterName(regSrc), offset, RegisterFile.getRegisterName(regBase));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int value = rf.read(regSrc);
-        int address = rf.read(regBase) + offset;
-        mem.storeWord(address, value);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

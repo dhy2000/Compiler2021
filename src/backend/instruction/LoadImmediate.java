@@ -25,14 +25,4 @@ public class LoadImmediate extends MipsInstruction {
     public String instrToString() {
         return String.format("li $%s, %d", RegisterFile.getRegisterName(regDst), immediate);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, immediate);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

@@ -22,15 +22,4 @@ public class JumpRegister extends MipsInstruction {
     public String instrToString() {
         return "jr $" + RegisterFile.getRegisterName(regSrc);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        int target = rf.read(regSrc);
-        rf.setProgramCounter(target);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return true;
-    }
 }

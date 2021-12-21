@@ -30,14 +30,4 @@ public class SetGreaterEqual extends MipsInstruction {
     public String instrToString() {
         return String.format("sge $%s, $%s, $%s", RegisterFile.getRegisterName(regDst), RegisterFile.getRegisterName(regSrc1), RegisterFile.getRegisterName(regSrc2));
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, rf.read(regSrc1) >= rf.read(regSrc2) ? 1 : 0);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

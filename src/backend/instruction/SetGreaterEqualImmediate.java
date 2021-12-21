@@ -30,14 +30,4 @@ public class SetGreaterEqualImmediate extends MipsInstruction {
     public String instrToString() {
         return String.format("sge $%s, $%s, %d", regDst, regSrc, immediate);
     }
-
-    @Override
-    public void execute(RegisterFile rf, Memory mem) {
-        rf.write(regDst, rf.read(regSrc) >= immediate ? 1 : 0);
-    }
-
-    @Override
-    public boolean isJump(RegisterFile rf) {
-        return false;
-    }
 }

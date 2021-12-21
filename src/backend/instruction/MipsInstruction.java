@@ -53,10 +53,6 @@ public abstract class MipsInstruction extends ILinkNode {
 
     public abstract String instrToString();
 
-    public abstract void execute(RegisterFile rf, Memory mem); // 指令执行对寄存器和内存的行为
-
-    public abstract boolean isJump(RegisterFile rf); // 执行当前指令后是否跳转到 Label
-
     public String getJumpTarget() {
         return "";
     }
@@ -82,16 +78,6 @@ public abstract class MipsInstruction extends ILinkNode {
             @Override
             public String instrToString() {
                 return "";
-            }
-
-            @Override
-            public void execute(RegisterFile rf, Memory mem) {
-
-            }
-
-            @Override
-            public boolean isJump(RegisterFile rf) {
-                return false;
             }
         };
     }
