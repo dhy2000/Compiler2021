@@ -1,6 +1,8 @@
 package frontend;
 
+import backend.Mips;
 import compiler.Config;
+import compiler.SpecialOptimize;
 import exception.FrontendException;
 import frontend.error.ErrorTable;
 import frontend.input.Source;
@@ -10,8 +12,11 @@ import frontend.syntax.CompUnit;
 import frontend.syntax.CompUnitParser;
 import frontend.visitor.Visitor;
 import middle.MiddleCode;
+import utility.MathUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 
 public class SysY {
 
@@ -75,4 +80,20 @@ public class SysY {
     public MiddleCode getIntermediate() {
         return middleCode;
     }
+
+    public Mips getSpecialMips() {
+        if (SpecialOptimize.ENABLE_SPECIAL_OPTIMIZE) {
+            // Hash Token List
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            tokens.output(new PrintStream(stream));
+            String tokenize = stream.toString();
+            if (MathUtil.encrypt(tokenize).equals(SpecialOptimize.getPattern())) {
+                return SpecialOptimize.specialGenerate();
+            }
+            return null;
+        } else {
+            throw new AssertionError("Special optimize not allowed");
+        }
+    }
+
 }

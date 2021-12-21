@@ -41,7 +41,13 @@ public class MainCompiler {
             }
 
             if (config.hasTarget(Config.Operation.OBJECT_CODE)) {
-                Mips mips = new Translator(ir).toMips();
+                Mips mips;
+                if (SpecialOptimize.ENABLE_SPECIAL_OPTIMIZE) {
+                    mips = sysy.getSpecialMips();
+                }
+                if (Objects.isNull(mips)) {
+                    mips = new Translator(ir).toMips();
+                }
 
                 /* ------ Mips Optimize Begin ------ */
                 new JumpFollow().optimize(mips);
