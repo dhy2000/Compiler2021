@@ -497,7 +497,7 @@ public class Translator {
         // 寄存器写回, 返回值 $v0 赋值, 生成 jr 指令
         if (currentFunc.isMain()) {
             clearRegister(false);
-            mips.append(new LoadImmediate(RegisterFile.Register.V0, 10)); // Exit
+            mips.append(new LoadImmediate(RegisterFile.Register.V0, Syscall.TERMINATE)); // Exit
             mips.append(new Syscall());
             return;
         }
