@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Compiler {
 
-    public static final boolean RUN_AUTOTEST = false;   // default false
+    public static final boolean RUN_AUTOTEST = true;   // default false
     public static final boolean MIPS_TEST = true;       // true: test MIPS, false: test PCODE
 
     private static final String[] tokenArgs     = new String[]{"-s", "testfile.txt", "-T", "output.txt"};

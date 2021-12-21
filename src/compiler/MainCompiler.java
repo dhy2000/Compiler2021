@@ -29,6 +29,7 @@ public class MainCompiler {
             /* ------ MidCode Optimize Begin ------ */
             new RemoveAfterJump().optimize(ir);
             new MergeBlock().optimize(ir);
+            new MulDivOpt().optimize(ir);
             /* ------ MidCode Optimize End ------ */
 
             if (config.hasTarget(Config.Operation.MID_CODE)) {

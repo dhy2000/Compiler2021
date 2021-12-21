@@ -14,11 +14,12 @@ import java.util.Objects;
 import java.util.Queue;
 
 /**
- * 将 2 的整数次幂的乘除法换成移位
+ * 乘除优化
+ * 乘法将乘 2 的整数次幂转换成移位指令, 除以常数进行强度削弱优化
  */
-public class MulDivToShift implements MidOptimizer {
+public class MulDivOpt implements MidOptimizer {
 
-    public MulDivToShift() {
+    public MulDivOpt() {
 
     }
 
@@ -69,15 +70,8 @@ public class MulDivToShift implements MidOptimizer {
                             }
                         } else if (op.equals(BinaryOp.Op.DIV)) {
                             // 负数的除法简化成位运算有 BUG！
-                            if (src1 instanceof Symbol && src2 instanceof Immediate) {
-                                if (MathUtil.isLog2(((Immediate) src2).getValue())) {
-                                    Immediate operand2 = new Immediate(MathUtil.log2(((Immediate) src2).getValue()));
-                                    node.insertAfter(new BinaryOp(BinaryOp.Op.SRA, src1, operand2, code.getDst()));
-                                    node.remove();
-                                    node = node.getNext();
-                                    continue;
-                                }
-                            }
+                            node = node.getNext();
+                            continue;
                         }
                         // 有负数, 负数对 2 的幂取模不能简化成按位与
                     }
