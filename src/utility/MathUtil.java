@@ -30,6 +30,10 @@ public class MathUtil {
         return countLeadingZeros(~num);
     }
 
+    public static int absoluteValue(int num) {
+        return Math.abs(num);
+    }
+
     public static String encrypt(String message) {
         byte[] cipher;
         try {

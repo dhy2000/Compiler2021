@@ -13,6 +13,7 @@ public class UnaryOp extends ILinkNode {
         NOT,    // INT to INT
         CLO,    // INT to INT
         CLZ,    // INT to INT
+        ABS,    // INT to INT
     }
 
     private final Op op;

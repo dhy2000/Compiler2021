@@ -185,6 +185,7 @@ public class MidRunner {
             case NOT: result = (src != 0) ? 0 : 1; break;
             case CLO: result = MathUtil.countLeadingOnes(src); break;
             case CLZ: result = MathUtil.countLeadingZeros(src); break;
+            case ABS: result = MathUtil.absoluteValue(src); break;
             default: throw new AssertionError("Bad UnaryOp");
         }
         writeToSymbol(code.getDst(), result);

@@ -411,6 +411,7 @@ public class Translator {
                 case NOT: mips.append(new LoadImmediate(regDst, immediate != 0 ? 0 : 1), comment); break;
                 case CLO: mips.append(new LoadImmediate(regDst, MathUtil.countLeadingOnes(immediate)), comment); break;
                 case CLZ: mips.append(new LoadImmediate(regDst, MathUtil.countLeadingZeros(immediate)), comment); break;
+                case ABS: mips.append(new LoadImmediate(regDst, MathUtil.absoluteValue(immediate)), comment); break;
                 default: throw new AssertionError("Bad UnaryOp");
             }
         } else {
@@ -425,6 +426,7 @@ public class Translator {
                 case NOT: mips.append(new SetEqual(regSrc, RegisterFile.Register.ZERO, regDst), comment); break;
                 case CLO: mips.append(new CountLeadingOnes(regDst, regSrc)); break;
                 case CLZ: mips.append(new CountLeadingZeros(regDst, regSrc)); break;
+                case ABS: mips.append(new AbsoluteValue(regDst, regSrc)); break;
                 default: throw new AssertionError("Bad UnaryOp");
             }
         }
