@@ -139,7 +139,7 @@ public class MulDivOpt implements MidOptimizer {
                                     int magic, more;
                                     int divisor = ((Immediate) src2).getValue();
 
-                                    System.out.printf("Divisor = %d\n", divisor);
+//                                    System.out.printf("Divisor = %d\n", divisor);
 
                                     int abs = MathUtil.absoluteValue(divisor);
                                     int log2d = 31 - MathUtil.countLeadingZeros(abs);
@@ -150,14 +150,17 @@ public class MulDivOpt implements MidOptimizer {
                                         assert log2d >= 1;
                                         int rem, proposed;
                                         int[] divResult = MathUtil.divideU64To32(1 << (log2d - 1), 0, abs);
-                                        rem = divResult[0];
-                                        proposed = divResult[1];
+//                                        System.out.printf("%d, %d\n", divResult[0], divResult[1]);
+                                        rem = divResult[1];
+                                        proposed = divResult[0];
                                         proposed += proposed;
                                         int twiceRem = rem + rem;
+//                                        System.out.printf("%d, %d\n", twiceRem, proposed);
                                         if (MathUtil.getUnsignedInt(twiceRem) >= MathUtil.getUnsignedInt(abs)
                                                 || MathUtil.getUnsignedInt(twiceRem) < MathUtil.getUnsignedInt(rem)) {
                                             proposed += 1;
                                         }
+//                                        System.out.printf("%d\n", proposed);
                                         more = (log2d | 64) & 0xFF;
                                         proposed += 1;
                                         magic = proposed;
@@ -165,20 +168,24 @@ public class MulDivOpt implements MidOptimizer {
                                             more |= 128;
                                         }
                                     }
-                                    System.out.printf("magic = %d, more = %d\n", magic, more);
+//                                    System.out.printf("magic = %d, more = %d\n", magic, more);
                                     /* Got {magic, more} */
                                     int shift = more & 31;
                                     int mask = (1 << shift);
-                                    int sign = ((more & (1 << 7)) != 0) ? 1 : 0;
+                                    int sign = ((more & (1 << 7)) != 0) ? -1 : 0;
                                     int isPower2 = (magic == 0) ? 1 : 0;
+//                                    System.out.printf("# %d, %d, %d, %d\n", shift, mask, sign, isPower2);
                                     Symbol q = Symbol.temporary(field, Symbol.Type.INT);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.MULHI, new Immediate(magic), src1, q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, src1, q));
                                     Symbol qSign = Symbol.temporary(field, Symbol.Type.INT);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.LT, q, new Immediate(0), qSign));
+                                    node.insertBefore(new UnaryOp(UnaryOp.Op.NEG, qSign, qSign));
                                     int andRight = mask - isPower2;
+//                                    System.out.printf("q_sign &= %d\n", andRight);
                                     Symbol qAnd = Symbol.temporary(field, Symbol.Type.INT);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.AND, qSign, new Immediate(andRight), qAnd));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, qAnd, q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.SRA, q, new Immediate(shift), q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.XOR, q, new Immediate(sign), q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.SUB, q, new Immediate(sign), q));
@@ -202,7 +209,7 @@ public class MulDivOpt implements MidOptimizer {
                                         Symbol condLessZero = Symbol.temporary(field, Symbol.Type.INT);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.NE, src1, prod, condLessZero));
                                         Symbol cond = Symbol.temporary(field, Symbol.Type.INT);
-                                        node.insertBefore(new BinaryOp(BinaryOp.Op.AND, negFlag, condLessZero, cond));
+                                        node.insertBefore(new BinaryOp(BinaryOp.Op.ANDL, negFlag, condLessZero, cond));
                                         Symbol fixQuotient = Symbol.temporary(field, Symbol.Type.INT);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, quotient, new Immediate(1), fixQuotient));
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.MOVN, fixQuotient, cond, code.getDst()));

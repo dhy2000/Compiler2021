@@ -155,8 +155,10 @@ public class MidRunner {
         switch (op) {
             case ADD: result = src1 + src2; break;
             case SUB: result = src1 - src2; break;
-            case AND: result = ((src1 != 0) && (src2 != 0)) ? 1 : 0; break;
-            case OR: result = ((src1 != 0) || (src2 != 0)) ? 1 : 0; break;
+            case ANDL: result = ((src1 != 0) && (src2 != 0)) ? 1 : 0; break;
+            case ORL: result = ((src1 != 0) || (src2 != 0)) ? 1 : 0; break;
+            case AND: result = src1 & src2; break;
+            case OR: result = src1 | src2; break;
             case XOR: result = src1 ^ src2; break;
             case MUL: result = src1 * src2; break;
             case DIV: result = src1 / src2; break;

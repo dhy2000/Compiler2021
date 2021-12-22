@@ -82,8 +82,8 @@ public class Visitor {
             case MULT: return BinaryOp.Op.MUL;
             case DIV: return BinaryOp.Op.DIV;
             case MOD: return BinaryOp.Op.MOD;
-            case AND: return BinaryOp.Op.AND;
-            case OR: return BinaryOp.Op.OR;
+            case AND: return BinaryOp.Op.ANDL;
+            case OR: return BinaryOp.Op.ORL;
             case GEQ: return BinaryOp.Op.GE;
             case GRE: return BinaryOp.Op.GT;
             case LEQ: return BinaryOp.Op.LE;

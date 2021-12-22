@@ -10,9 +10,11 @@ public class BinaryOp extends ILinkNode {
     public enum Op {
         ADD,
         SUB,
-        AND,
-        OR,
-        XOR,
+        ANDL,   // logical
+        ORL,    // logical
+        AND,    // bitwise
+        OR,     // bitwise
+        XOR,    // bitwise
         MUL,
         DIV,
         MOD,
