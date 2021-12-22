@@ -20,7 +20,7 @@ import java.util.Queue;
 public class MulDivOpt implements MidOptimizer {
 
     public static final boolean ADVANCED_DIV_OPT = true;
-    public static final boolean OPT_MOD = false;             // 将 MOD 转化为 DIV 便于统一进行优化
+    public static final boolean OPT_MOD = true;             // 将 MOD 转化为 DIV 便于统一进行优化
 
     public MulDivOpt() {
 
@@ -134,55 +134,50 @@ public class MulDivOpt implements MidOptimizer {
                                      *
                                      * Use branch-free version to avoid generating new basic blocks
                                      */
+                                    /* Defines */
+                                    final int negativeDivisor = 128;
+                                    final int addMarker = 64;
+                                    final int s32ShiftMask = 31;
 
                                     /* Generate magic, more */
                                     int magic, more;
                                     int divisor = ((Immediate) src2).getValue();
-
-//                                    System.out.printf("Divisor = %d\n", divisor);
-
                                     int abs = MathUtil.absoluteValue(divisor);
                                     int log2d = 31 - MathUtil.countLeadingZeros(abs);
                                     if ((abs & (abs - 1)) == 0) {
                                         magic = 0;
-                                        more = (divisor < 0 ? (log2d | 128) : log2d) & 0xFF;
+                                        more = (divisor < 0 ? (log2d | negativeDivisor) : log2d) & 0xFF; // uint8_t more
                                     } else {
                                         assert log2d >= 1;
                                         int rem, proposed;
                                         int[] divResult = MathUtil.divideU64To32(1 << (log2d - 1), 0, abs);
-//                                        System.out.printf("%d, %d\n", divResult[0], divResult[1]);
                                         rem = divResult[1];
                                         proposed = divResult[0];
                                         proposed += proposed;
                                         int twiceRem = rem + rem;
-//                                        System.out.printf("%d, %d\n", twiceRem, proposed);
                                         if (MathUtil.getUnsignedInt(twiceRem) >= MathUtil.getUnsignedInt(abs)
                                                 || MathUtil.getUnsignedInt(twiceRem) < MathUtil.getUnsignedInt(rem)) {
                                             proposed += 1;
                                         }
-//                                        System.out.printf("%d\n", proposed);
-                                        more = (log2d | 64) & 0xFF;
+                                        more = (log2d | addMarker) & 0xFF;
                                         proposed += 1;
                                         magic = proposed;
                                         if (divisor < 0) {
-                                            more |= 128;
+                                            more |= negativeDivisor;
                                         }
                                     }
-//                                    System.out.printf("magic = %d, more = %d\n", magic, more);
                                     /* Got {magic, more} */
-                                    int shift = more & 31;
+                                    int shift = more & s32ShiftMask;
                                     int mask = (1 << shift);
-                                    int sign = ((more & (1 << 7)) != 0) ? -1 : 0;
+                                    int sign = ((more & (1 << 7)) != 0) ? -1 : 0; // (int8_t)more >> 7
                                     int isPower2 = (magic == 0) ? 1 : 0;
-//                                    System.out.printf("# %d, %d, %d, %d\n", shift, mask, sign, isPower2);
                                     Symbol q = Symbol.temporary(field, Symbol.Type.INT);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.MULHI, new Immediate(magic), src1, q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, src1, q));
-                                    Symbol qSign = Symbol.temporary(field, Symbol.Type.INT);
+                                    Symbol qSign = Symbol.temporary(field, Symbol.Type.INT);    // qSign = (q >> 31)
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.LT, q, new Immediate(0), qSign));
                                     node.insertBefore(new UnaryOp(UnaryOp.Op.NEG, qSign, qSign));
                                     int andRight = mask - isPower2;
-//                                    System.out.printf("q_sign &= %d\n", andRight);
                                     Symbol qAnd = Symbol.temporary(field, Symbol.Type.INT);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.AND, qSign, new Immediate(andRight), qAnd));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, qAnd, q));
