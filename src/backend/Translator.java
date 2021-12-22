@@ -9,6 +9,7 @@ import middle.operand.Immediate;
 import middle.operand.Operand;
 import middle.symbol.FuncMeta;
 import middle.symbol.Symbol;
+import utility.MathUtil;
 
 import java.util.*;
 
@@ -408,6 +409,8 @@ public class Translator {
                 case MOV: mips.append(new LoadImmediate(regDst, immediate), comment); break;
                 case NEG: mips.append(new LoadImmediate(regDst, -immediate), comment); break;
                 case NOT: mips.append(new LoadImmediate(regDst, immediate != 0 ? 0 : 1), comment); break;
+                case CLO: mips.append(new LoadImmediate(regDst, MathUtil.countLeadingOnes(immediate)), comment); break;
+                case CLZ: mips.append(new LoadImmediate(regDst, MathUtil.countLeadingZeros(immediate)), comment); break;
                 default: throw new AssertionError("Bad UnaryOp");
             }
         } else {
@@ -420,6 +423,8 @@ public class Translator {
                 case MOV: mips.append(new Move(regDst, regSrc), comment); break;
                 case NEG: mips.append(new Subu(RegisterFile.Register.ZERO, regSrc, regDst), comment); break;
                 case NOT: mips.append(new SetEqual(regSrc, RegisterFile.Register.ZERO, regDst), comment); break;
+                case CLO: mips.append(new CountLeadingOnes(regDst, regSrc)); break;
+                case CLZ: mips.append(new CountLeadingZeros(regDst, regSrc)); break;
                 default: throw new AssertionError("Bad UnaryOp");
             }
         }

@@ -20,13 +20,53 @@ import java.util.Queue;
 public class MulDivOpt implements MidOptimizer {
 
     public static final boolean ADVANCED_DIV_OPT = false;
+    public static final boolean OPT_MOD = true;             // 将 MOD 转化为 DIV 便于统一进行优化
 
     public MulDivOpt() {
 
     }
 
+    private void optimizeMod(MiddleCode ir) {
+        HashSet<BasicBlock> visited = new HashSet<>();
+        Queue<BasicBlock> queue = new LinkedList<>(); // BFS
+        for (FuncMeta func : ir.getFunctions().values()) {
+            queue.offer(func.getBody());
+            while (!queue.isEmpty()) {
+                BasicBlock block = queue.poll();
+                if (visited.contains(block)) {
+                    continue;
+                }
+                visited.add(block);
+                ILinkNode node = block.getHead();
+                while (Objects.nonNull(node) && node.hasNext()) {
+                    detectBranch(node, queue);
+                    if (node instanceof BinaryOp
+                            && ((BinaryOp) node).getOp().equals(BinaryOp.Op.MOD)
+                            && ((BinaryOp) node).getSrc1() instanceof Symbol
+                            && ((BinaryOp) node).getSrc2() instanceof Immediate) {
+                        // MOD a, b, rem --> DIV a, b, quo; MUL b, quo, part; SUB a, part, rem
+                        final String field = "mod_to_div";
+                        Symbol a = (Symbol) ((BinaryOp) node).getSrc1();
+                        Immediate b = (Immediate) ((BinaryOp) node).getSrc2();
+                        Symbol rem = ((BinaryOp) node).getDst();
+                        Symbol quo = Symbol.temporary(field, Symbol.Type.INT);
+                        Symbol part = Symbol.temporary(field, Symbol.Type.INT);
+                        node.insertBefore(new BinaryOp(BinaryOp.Op.DIV, a, b, quo));
+                        node.insertBefore(new BinaryOp(BinaryOp.Op.MUL, b, quo, part));
+                        node.insertBefore(new BinaryOp(BinaryOp.Op.SUB, a, part, rem));
+                        node.remove();
+                    }
+                    node = node.getNext();
+                }
+            }
+        }
+    }
+
     @Override
     public void optimize(MiddleCode ir) {
+        if (OPT_MOD) {
+            optimizeMod(ir);
+        }
         HashSet<BasicBlock> visited = new HashSet<>();
         Queue<BasicBlock> queue = new LinkedList<>(); // BFS
         for (FuncMeta func : ir.getFunctions().values()) {
@@ -73,11 +113,32 @@ public class MulDivOpt implements MidOptimizer {
                         } else if (op.equals(BinaryOp.Op.DIV)) {
                             // 除法简化成位运算时注意负数!
                             if (src1 instanceof Symbol && src2 instanceof Immediate) {
-                                if (MathUtil.isLog2(((Immediate) src2).getValue())) {
-                                    if (ADVANCED_DIV_OPT) {
-                                        // TODO: 完整的除法优化
-                                        node = node.getNext();
-                                    } else {
+                                if (ADVANCED_DIV_OPT) {
+                                    /*
+                                     * Reference: https://github.com/ridiculousfish/libdivide
+                                     *   - struct libdivide_s32_branchfree_t
+                                     *   - libdivide_s32_branchfree_gen
+                                     *   - libdivide_internal_s32_gen
+                                     *   - libdivide_s32_branchfree_do
+                                     *
+                                     * In SysY, we only consider signed-32bit division
+                                     *
+                                     * Use branch-free version to avoid generating new basic blocks
+                                     */
+
+
+
+
+
+
+
+
+
+
+
+                                    node = node.getNext();
+                                } else {
+                                    if (MathUtil.isLog2(((Immediate) src2).getValue())) {
                                         // 简易版除法优化，仅适用于除数为 2 的幂
                                         Immediate operand2 = new Immediate(MathUtil.log2(((Immediate) src2).getValue()));
                                         final String field = "div_opt";
@@ -99,8 +160,8 @@ public class MulDivOpt implements MidOptimizer {
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.MOVN, fixQuotient, cond, code.getDst()));
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.MOVZ, quotient, cond, code.getDst()));
                                     }
-                                    continue;
                                 }
+                                continue;
                             }
                         }
                         // 有负数, 负数对 2 的幂取模不能简化成按位与

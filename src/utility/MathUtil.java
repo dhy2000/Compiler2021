@@ -15,6 +15,21 @@ public class MathUtil {
         return bitCount - Integer.numberOfLeadingZeros(num);
     }
 
+    public static int countLeadingZeros(int num) {
+        int cnt = 0;
+        for (int i = (Integer.BYTES << 3) - 1; i >= 0; i--) {
+            if ((num & (1 << i)) != 0) {
+                break;
+            }
+            cnt++;
+        }
+        return cnt;
+    }
+
+    public static int countLeadingOnes(int num) {
+        return countLeadingZeros(~num);
+    }
+
     public static String encrypt(String message) {
         byte[] cipher;
         try {

@@ -5,6 +5,7 @@ import middle.operand.Immediate;
 import middle.operand.Operand;
 import middle.symbol.FuncMeta;
 import middle.symbol.Symbol;
+import utility.MathUtil;
 import utility.ReaderUtil;
 
 import java.io.*;
@@ -182,6 +183,8 @@ public class MidRunner {
             case MOV: result = src; break;
             case NEG: result = -src; break;
             case NOT: result = (src != 0) ? 0 : 1; break;
+            case CLO: result = MathUtil.countLeadingOnes(src); break;
+            case CLZ: result = MathUtil.countLeadingZeros(src); break;
             default: throw new AssertionError("Bad UnaryOp");
         }
         writeToSymbol(code.getDst(), result);

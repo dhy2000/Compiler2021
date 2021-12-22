@@ -10,7 +10,9 @@ public class UnaryOp extends ILinkNode {
     public enum Op {
         MOV,    // INT to INT
         NEG,    // INT to INT
-        NOT     // INT to INT
+        NOT,    // INT to INT
+        CLO,    // INT to INT
+        CLZ,    // INT to INT
     }
 
     private final Op op;
