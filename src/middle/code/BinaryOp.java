@@ -12,6 +12,7 @@ public class BinaryOp extends ILinkNode {
         SUB,
         AND,
         OR,
+        XOR,
         MUL,
         DIV,
         MOD,

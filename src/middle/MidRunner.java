@@ -157,6 +157,7 @@ public class MidRunner {
             case SUB: result = src1 - src2; break;
             case AND: result = ((src1 != 0) && (src2 != 0)) ? 1 : 0; break;
             case OR: result = ((src1 != 0) || (src2 != 0)) ? 1 : 0; break;
+            case XOR: result = src1 ^ src2; break;
             case MUL: result = src1 * src2; break;
             case DIV: result = src1 / src2; break;
             case MOD: result = src1 % src2; break;

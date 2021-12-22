@@ -39,6 +39,19 @@ public class MathUtil {
         return (int) (prod >> (Integer.BYTES << 3));
     }
 
+    public static long getUnsignedInt(int num) {
+        return num & 0xFFFFFFFFL;
+    }
+
+    public static int[] divideU64To32(int hi, int lo, int divisor) {
+        BigInteger n1 = BigInteger.valueOf(getUnsignedInt(hi)).shiftLeft(32);
+        BigInteger n2 = BigInteger.valueOf(getUnsignedInt(lo));
+        BigInteger n = n1.or(n2);
+        BigInteger d = BigInteger.valueOf(divisor);
+        BigInteger[] result = n.divideAndRemainder(d);
+        return new int[]{result[0].intValueExact(), result[1].intValueExact()};
+    }
+
     public static String encrypt(String message) {
         byte[] cipher;
         try {

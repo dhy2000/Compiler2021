@@ -204,6 +204,7 @@ public class Translator {
             case SUB: mips.append(new Subu(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
             case AND: mips.append(new And(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
             case OR: mips.append(new Or(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
+            case XOR: mips.append(new Xor(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2)); break;
             case MUL:
                 mips.append(new Multiply(regSrc1, regSrc2));
                 mips.append(new MoveFromLo(regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
@@ -271,6 +272,7 @@ public class Translator {
                     case SUB: result = src1 - src2; break;
                     case AND: result = ((src1 != 0) && (src2 != 0)) ? 1 : 0; break;
                     case OR: result = ((src1 != 0) || (src2 != 0)) ? 1 : 0; break;
+                    case XOR: result = src1 ^ src2; break;
                     case MUL: result = src1 * src2; break;
                     case DIV: result = src1 / src2; break;
                     case MOD: result = src1 % src2; break;
@@ -318,6 +320,8 @@ public class Translator {
                     case AND: mips.append(new Andi(regSrc1, immediate, regDst),
                             registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1())); break;
                     case OR: mips.append(new Ori(regSrc1, immediate, regDst),
+                            registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1())); break;
+                    case XOR: mips.append(new Xori(regSrc1, immediate, regDst),
                             registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1())); break;
                     case MUL:
                         regSrc2 = RegisterFile.Register.V1;

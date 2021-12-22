@@ -135,9 +135,51 @@ public class MulDivOpt implements MidOptimizer {
                                      * Use branch-free version to avoid generating new basic blocks
                                      */
 
-
-
-
+                                    /* Generate magic, more */
+                                    int magic, more;
+                                    int divisor = ((Immediate) src2).getValue();
+                                    int abs = MathUtil.absoluteValue(divisor);
+                                    int log2d = 31 - MathUtil.countLeadingZeros(abs);
+                                    if ((abs & (abs - 1)) == 0) {
+                                        magic = 0;
+                                        more = (divisor < 0 ? (log2d | 128) : log2d) & 0xFF;
+                                    } else {
+                                        assert log2d >= 1;
+                                        int rem, proposed;
+                                        int[] divResult = MathUtil.divideU64To32(1 << (log2d - 1), 0, abs);
+                                        rem = divResult[0];
+                                        proposed = divResult[1];
+                                        proposed += proposed;
+                                        int twiceRem = rem + rem;
+                                        if (MathUtil.getUnsignedInt(twiceRem) >= MathUtil.getUnsignedInt(abs)
+                                                || MathUtil.getUnsignedInt(twiceRem) < MathUtil.getUnsignedInt(rem)) {
+                                            proposed += 1;
+                                        }
+                                        more = (log2d | 64) & 0xFF;
+                                        proposed += 1;
+                                        magic = proposed;
+                                        if (divisor < 0) {
+                                            more |= 128;
+                                        }
+                                    }
+                                    /* Got {magic, more} */
+                                    int shift = more & 31;
+                                    int mask = (1 << shift);
+                                    int sign = ((more & (1 << 7)) != 0) ? 1 : 0;
+                                    int isPower2 = (magic == 0) ? 1 : 0;
+                                    Symbol q = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.MULHI, new Immediate(magic), src1, q));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, src1, q));
+                                    Symbol qSign = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.LT, q, new Immediate(0), qSign));
+                                    int andRight = mask - isPower2;
+                                    Symbol qAnd = Symbol.temporary(field, Symbol.Type.INT);
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.AND, qSign, new Immediate(andRight), qAnd));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.SRA, q, new Immediate(shift), q));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.XOR, q, new Immediate(sign), q));
+                                    node.insertBefore(new BinaryOp(BinaryOp.Op.SUB, q, new Immediate(sign), q));
+                                    node.insertBefore(new UnaryOp(UnaryOp.Op.MOV, q, ((BinaryOp) node).getDst()));
+                                    node.remove();
                                     node = node.getNext();
                                     continue;
                                 } else {
