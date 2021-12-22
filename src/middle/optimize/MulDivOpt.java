@@ -19,8 +19,8 @@ import java.util.Queue;
  */
 public class MulDivOpt implements MidOptimizer {
 
-    public static final boolean ADVANCED_DIV_OPT = false;
-    public static final boolean OPT_MOD = true;             // 将 MOD 转化为 DIV 便于统一进行优化
+    public static final boolean ADVANCED_DIV_OPT = true;
+    public static final boolean OPT_MOD = false;             // 将 MOD 转化为 DIV 便于统一进行优化
 
     public MulDivOpt() {
 
@@ -138,6 +138,9 @@ public class MulDivOpt implements MidOptimizer {
                                     /* Generate magic, more */
                                     int magic, more;
                                     int divisor = ((Immediate) src2).getValue();
+
+                                    System.out.printf("Divisor = %d\n", divisor);
+
                                     int abs = MathUtil.absoluteValue(divisor);
                                     int log2d = 31 - MathUtil.countLeadingZeros(abs);
                                     if ((abs & (abs - 1)) == 0) {
@@ -162,6 +165,7 @@ public class MulDivOpt implements MidOptimizer {
                                             more |= 128;
                                         }
                                     }
+                                    System.out.printf("magic = %d, more = %d\n", magic, more);
                                     /* Got {magic, more} */
                                     int shift = more & 31;
                                     int mask = (1 << shift);
