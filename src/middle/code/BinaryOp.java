@@ -24,7 +24,8 @@ public class BinaryOp extends ILinkNode {
         SLL,
         SRA,
         MOVN,   // MOV src1 TO dst IF src2
-        MOVZ    // MOV src1 TO dst IF !src2
+        MOVZ,   // MOV src1 TO dst IF !src2
+        MULHI,  // HI part of MUL
     }
 
     private final Op op;

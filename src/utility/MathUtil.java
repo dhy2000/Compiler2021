@@ -34,6 +34,11 @@ public class MathUtil {
         return Math.abs(num);
     }
 
+    public static int multiplyHigh(int num1, int num2) {
+        long prod = (long) num1 * (long) num2;
+        return (int) (prod >> (Integer.BYTES << 3));
+    }
+
     public static String encrypt(String message) {
         byte[] cipher;
         try {

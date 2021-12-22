@@ -246,6 +246,10 @@ public class Translator {
             case MOVZ:
                 mips.append(new MoveIfZero(regSrc1, regSrc2, regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
                 break;
+            case MULHI:
+                mips.append(new Multiply(regSrc1, regSrc2));
+                mips.append(new MoveFromHi(regDst), registerCommentThree(regDst, dst, regSrc1, src1, regSrc2, src2));
+                break;
             default: throw new AssertionError("Bad BinaryOp");
         }
     }
@@ -280,6 +284,7 @@ public class Translator {
                     case SRA: result = (src1 >> (src2 & 0x1f)); break;
                     case MOVN: result = src1; moveTo = src2 != 0; break;
                     case MOVZ: result = src1; moveTo = src2 == 0; break;
+                    case MULHI: result = MathUtil.multiplyHigh(src1, src2); break;
                     default: throw new AssertionError("Bad BinaryOp");
                 }
                 if (moveTo) {
@@ -383,6 +388,13 @@ public class Translator {
                         if (immediate == 0) {
                             mips.append(new Move(regDst, regSrc1), registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         }
+                        break;
+                    case MULHI:
+                        regSrc2 = RegisterFile.Register.V1;
+                        mips.append(new LoadImmediate(regSrc2, ((Immediate) code.getSrc2()).getValue()));
+                        mips.append(new Multiply(regSrc1, regSrc2));
+                        mips.append(new MoveFromHi(regDst),
+                                registerCommentTwo(regDst, code.getDst(), regSrc1, (Symbol) code.getSrc1()));
                         break;
                     default: throw new AssertionError("Bad BinaryOp");
                 }

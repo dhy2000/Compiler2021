@@ -170,6 +170,7 @@ public class MidRunner {
             case SRA: result = (src1 >> (src2 & 0x1f)); break;
             case MOVN: result = (src2 != 0) ? src1 : oldResult; break;
             case MOVZ: result = (src2 == 0) ? src1 : oldResult; break;
+            case MULHI: result = MathUtil.multiplyHigh(src1, src2); break;
             default: throw new AssertionError("Bad BinaryOp");
         }
         writeToSymbol(code.getDst(), result);
