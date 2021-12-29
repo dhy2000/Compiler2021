@@ -65,11 +65,6 @@ public class Visitor {
     private final Stack<BasicBlock> loopFollows = new Stack<>();
     private int stackSize = 0;
 
-
-    private String currentField() {
-        return currentSymTable.getField();
-    }
-
     public Visitor() {}
 
     /**
@@ -799,7 +794,7 @@ public class Visitor {
                         // 初始化
                         int offset = 0;
                         for (int val : initValues) {
-                            Symbol ptr = new Symbol("ptr_" + newBlockCount(), Symbol.BasicType.INT, false);
+                            Symbol ptr = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.POINTER);
                             currentBlock.append(new AddressOffset(sym, new Immediate(offset * Symbol.SIZEOF_INT), ptr));
                             currentBlock.append(new PointerOp(PointerOp.Op.STORE, ptr, new Immediate(val)));
                             offset++;
@@ -820,7 +815,7 @@ public class Visitor {
                     int offset = 0;
                     for (Exp exp: initExps) {
                         Operand op = analyseExp(exp);
-                        Symbol ptr = new Symbol("ptr_" + newBlockCount(), Symbol.BasicType.INT, false);
+                        Symbol ptr = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.POINTER);
                         currentBlock.append(new AddressOffset(sym, new Immediate(offset * Symbol.SIZEOF_INT), ptr));
                         currentBlock.append(new PointerOp(PointerOp.Op.STORE, ptr, op));
                         offset++;
