@@ -200,10 +200,10 @@ public class MidRunner {
         if (code instanceof Input) {
             Symbol symbol = ((Input) code).getDst();
             int value = ReaderUtil.readInt(input);
-            if (symbol.getType().equals(Symbol.Type.INT)) {
+            if (symbol.getRefType().equals(Symbol.RefType.ITEM)) {
                 writeToSymbol(symbol, value);
             } else {
-                assert symbol.getType().equals(Symbol.Type.POINTER);
+                assert symbol.getRefType().equals(Symbol.RefType.POINTER);
                 int address = readOperand(symbol);
                 storeMemoryWord(address, value);
             }
@@ -267,9 +267,9 @@ public class MidRunner {
         Symbol base = code.getBase();
         int offset = readOperand(code.getOffset());
         Symbol target = code.getTarget();
-        assert target.getType().equals(Symbol.Type.POINTER);
-        assert (base.getType().equals(Symbol.Type.ARRAY) && base.hasAddress()) || (base.getType().equals(Symbol.Type.POINTER));
-        if (base.getType().equals(Symbol.Type.ARRAY)) {
+        assert target.getRefType().equals(Symbol.RefType.POINTER);
+        assert (base.getRefType().equals(Symbol.RefType.ARRAY) && base.hasAddress()) || (base.getRefType().equals(Symbol.RefType.POINTER));
+        if (base.getRefType().equals(Symbol.RefType.ARRAY)) {
             assert base.hasAddress();
             int address = getSymbolAddress(base);
             writeToSymbol(target, address + offset);

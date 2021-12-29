@@ -33,10 +33,10 @@ public class Tokenizer {
             }
             // get token
             boolean matchToken = false;
-            for (Token.Type type : Token.Type.values()) {
-                String token = source.matchFollowing(type.getPattern());
+            for (Token.Type refType : Token.Type.values()) {
+                String token = source.matchFollowing(refType.getPattern());
                 if (Objects.nonNull(token)) {
-                    ts.append(Token.newInstance(type, source.getLineIndex(), token));
+                    ts.append(Token.newInstance(refType, source.getLineIndex(), token));
                     source.forward(token.length());
                     matchToken = true;
                     break;

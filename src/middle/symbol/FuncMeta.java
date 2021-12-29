@@ -19,20 +19,20 @@ public class FuncMeta {
         VOID
     }
 
-    private final ReturnType type;
+    private final ReturnType refType;
 
 
-    public FuncMeta(String name, ReturnType type, SymTable global) {
+    public FuncMeta(String name, ReturnType refType, SymTable global) {
         this.name = name;
         this.paramTable = new SymTable(name, global);
-        this.type = type;
+        this.refType = refType;
         this.main = false;
     }
 
     public FuncMeta(SymTable global) {
         this.name = "main";
         this.paramTable = new SymTable(this.name, global);
-        this.type = ReturnType.INT;
+        this.refType = ReturnType.INT;
         this.main = true;
     }
 
@@ -41,7 +41,7 @@ public class FuncMeta {
     }
 
     public ReturnType getReturnType() {
-        return type;
+        return refType;
     }
 
     public String getName() { // 返回原始的函数名，用于符号表

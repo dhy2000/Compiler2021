@@ -111,7 +111,7 @@ public class Visitor {
     public Operand analyseLOrExp(LOrExp exp) {
         BasicBlock orFollow = new BasicBlock("COND_OR_" + newBlockCount(), BasicBlock.Type.BASIC);
         LAndExp first = exp.getFirst();
-        Symbol or = Symbol.temporary(currentField(), Symbol.Type.INT); // or result
+        Symbol or = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM); // or result
         Operand and = analyseLAndExp(first);
         if (Objects.isNull(and)) {
             return null;
@@ -140,7 +140,7 @@ public class Visitor {
     public Operand analyseLAndExp(LAndExp exp) {
         BasicBlock andFollow = new BasicBlock("COND_AND_" + newBlockCount(), BasicBlock.Type.BASIC);
         EqExp first = exp.getFirst();
-        Symbol and = Symbol.temporary(currentField(), Symbol.Type.INT); // and result
+        Symbol and = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM); // and result
         Operand item = analyseBinaryExp(first);
         if (Objects.isNull(item)) {
             return null;
@@ -200,7 +200,7 @@ public class Visitor {
             if (Objects.isNull(subResult)) {
                 return null;
             }
-            Symbol temp = Symbol.temporary(currentField(), Symbol.Type.INT);
+            Symbol temp = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
             currentBlock.append(new BinaryOp(tokenToBinaryOp(op), ret, subResult, temp));
             ret = temp;
         }
@@ -260,7 +260,7 @@ public class Visitor {
                         break;
                     }
                     else if (param instanceof Immediate) {
-                        if (!arg.getType().equals(Symbol.Type.INT)) {
+                        if (!arg.getRefType().equals(Symbol.RefType.ITEM)) {
                             errorTable.add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                             error = true;
                             break;
@@ -268,7 +268,7 @@ public class Visitor {
                     }
                     else {
                         assert param instanceof Symbol;
-                        if (!((Symbol) param).getType().equals(arg.getType())) {
+                        if (!((Symbol) param).getRefType().equals(arg.getRefType())) {
                             errorTable.add(new Error(Error.Type.MISMATCH_PARAM_TYPE, ident.lineNumber()));
                             error = true;
                             break;
@@ -285,7 +285,7 @@ public class Visitor {
                 return null;
             } else {
                 if (!error) {
-                    Symbol r = Symbol.temporary(currentField(), Symbol.Type.INT);
+                    Symbol r = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                     currentBlock.append(new Call(func, params, r));
                     result = r;
                 } else {
@@ -299,7 +299,7 @@ public class Visitor {
         Iterator<Token> iterUnaryOp = exp.iterUnaryOp();
         while (iterUnaryOp.hasNext()) {
             Token op = iterUnaryOp.next();
-            Symbol tmp = Symbol.temporary(currentField(), Symbol.Type.INT);
+            Symbol tmp = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
             UnaryOp ir = new UnaryOp(tokenToUnaryOp(op), result, tmp);
             currentBlock.append(ir);
             result = tmp;
@@ -332,7 +332,7 @@ public class Visitor {
             Iterator<LVal.Index> iterIndex = val.iterIndexes();
             List<Operand> indexes = new ArrayList<>();
             while (iterIndex.hasNext()) {
-                if (symbol.getType().equals(Symbol.Type.INT)) {
+                if (symbol.getRefType().equals(Symbol.RefType.ITEM)) {
                     throw new AssertionError("int symbol has index");
                 }
                 LVal.Index index = iterIndex.next();
@@ -342,24 +342,24 @@ public class Visitor {
                 }
                 indexes.add(analyseExp(index.getIndex()));
             }
-            if ((!indexes.isEmpty() && symbol.getType().equals(Symbol.Type.INT))
-                    || ( symbol.getType().equals(Symbol.Type.ARRAY) && indexes.size() > symbol.getDimCount())
-                    || (symbol.getType().equals(Symbol.Type.POINTER) && indexes.size() > symbol.getDimCount() + 1)) {
+            if ((!indexes.isEmpty() && symbol.getRefType().equals(Symbol.RefType.ITEM))
+                    || ( symbol.getRefType().equals(Symbol.RefType.ARRAY) && indexes.size() > symbol.getDimCount())
+                    || (symbol.getRefType().equals(Symbol.RefType.POINTER) && indexes.size() > symbol.getDimCount() + 1)) {
                 throw new AssertionError("Array indexes more than dimension!");
             }
             Operand offset = new Immediate(0);
             for (int i = indexes.size() - 1; i >= 0; i--) {
                 // offset += arrayIndexes[i] * baseOffset;
-                Symbol prod = Symbol.temporary(currentField(), Symbol.Type.INT);
+                Symbol prod = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                 Operand offsetBase = new Immediate(symbol.getBaseOfDim(i));
                 currentBlock.append(new BinaryOp(BinaryOp.Op.MUL, indexes.get(i), offsetBase, prod));
-                Symbol sum = Symbol.temporary(currentField(), Symbol.Type.INT);
+                Symbol sum = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                 currentBlock.append(new BinaryOp(BinaryOp.Op.ADD, offset, prod, sum));
                 offset = sum;
             }
-            if (symbol.getType().equals(Symbol.Type.INT)) {
+            if (symbol.getRefType().equals(Symbol.RefType.ITEM)) {
                 return symbol;
-            } else if (symbol.getType().equals(Symbol.Type.ARRAY)) {
+            } else if (symbol.getRefType().equals(Symbol.RefType.ARRAY)) {
                 // ARRAY
                 int depth = indexes.size();
                 Symbol ptr = symbol.toPointer().subPointer(depth);
@@ -367,7 +367,7 @@ public class Visitor {
                 if (left || depth < symbol.getDimCount()) {
                     return ptr;
                 } else {
-                    Symbol value = Symbol.temporary(currentField(), Symbol.Type.INT);
+                    Symbol value = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                     currentBlock.append(new PointerOp(PointerOp.Op.LOAD, ptr, value));
                     return value;
                 }
@@ -379,7 +379,7 @@ public class Visitor {
                 if (left || depth <= symbol.getDimCount()) {
                     return ptr;
                 } else {
-                    Symbol value = Symbol.temporary(currentField(), Symbol.Type.INT);
+                    Symbol value = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                     currentBlock.append(new PointerOp(PointerOp.Op.LOAD, ptr, value));
                     return value;
                 }
@@ -387,7 +387,7 @@ public class Visitor {
         } else if (base instanceof Number) {
             return new Immediate(((Number) base).getValue().getValue());
         } else {
-            throw new AssertionError("BasePrimaryExp type error!");
+            throw new AssertionError("BasePrimaryExp refType error!");
         }
     }
 
@@ -425,8 +425,8 @@ public class Visitor {
         if (Objects.isNull(leftSym)) {
             return;
         }
-        assert !leftSym.getType().equals(Symbol.Type.ARRAY);
-        if (leftSym.getType().equals(Symbol.Type.POINTER)) {
+        assert !leftSym.getRefType().equals(Symbol.RefType.ARRAY);
+        if (leftSym.getRefType().equals(Symbol.RefType.POINTER)) {
             currentBlock.append(new PointerOp(PointerOp.Op.STORE, leftSym, rn));
         } else {
             currentBlock.append(new UnaryOp(UnaryOp.Op.MOV, rn, leftSym));
@@ -611,7 +611,7 @@ public class Visitor {
             } else if (item instanceof Decl) {
                 analyseDecl((Decl) item);
             } else {
-                throw new AssertionError("BlockItem wrong type!");
+                throw new AssertionError("BlockItem wrong refType!");
             }
         }
         currentBlock.append(new Jump(follow));
@@ -647,7 +647,7 @@ public class Visitor {
             } else if (simple instanceof ReturnStmt) {
                 analyseReturnStmt((ReturnStmt) simple);
             } else {
-                throw new AssertionError("SplStmt wrong type!");
+                throw new AssertionError("SplStmt wrong refType!");
             }
         } else {
             CplStmt complex = stmt.getComplexStmt();
@@ -658,7 +658,7 @@ public class Visitor {
             } else if (complex instanceof Block) {
                 analyseBlock((Block) complex);
             } else {
-                throw new AssertionError("CplStmt wrong type!");
+                throw new AssertionError("CplStmt wrong refType!");
             }
         }
     }
@@ -723,7 +723,7 @@ public class Visitor {
                 ExpInitVal init = (ExpInitVal) def.getInitVal();
                 if (init.isConst()) {
                     int value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
-                    Symbol sym = new Symbol(name, currentField(), constant, value);
+                    Symbol sym = new Symbol(name, Symbol.BasicType.INT, constant, value);
                     if (Objects.nonNull(currentFunc)) {
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
@@ -738,12 +738,12 @@ public class Visitor {
                 } else {
                     if (Objects.isNull(currentFunc)) { // 没有在函数里，则必须能编译期算出
                         int value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
-                        Symbol sym = new Symbol(name, currentField(), constant, value);
+                        Symbol sym = new Symbol(name, Symbol.BasicType.INT, constant, value);
                         sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
                         middleCode.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                     } else {    // 在函数里的非常量，可以运行时计算
-                        Symbol sym = new Symbol(name, currentField());
+                        Symbol sym = new Symbol(name, Symbol.BasicType.INT);
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
                         currentFunc.updateStackSize(stackSize);
@@ -756,11 +756,11 @@ public class Visitor {
             } else {
                 Symbol sym;
                 if (Objects.isNull(currentFunc)) {
-                    sym = new Symbol(name, currentField(), false, 0);
+                    sym = new Symbol(name, Symbol.BasicType.INT, false, 0);
                     sym.setAddress(currentSymTable.capacity());
                     middleCode.addGlobalVariable(sym.getName(), sym.getInitValue(), sym.getAddress());
                 } else {
-                    sym = new Symbol(name, currentField());
+                    sym = new Symbol(name, Symbol.BasicType.INT);
                     stackSize += sym.capacity();
                     sym.setAddress(stackSize);
                     currentFunc.updateStackSize(stackSize);
@@ -790,7 +790,7 @@ public class Visitor {
                         int value = new CalcUtil(currentSymTable, errorTable).calcExp(exp);
                         initValues.add(value);
                     }
-                    Symbol sym = new Symbol(name, currentField(), arrayDims, constant, initValues);
+                    Symbol sym = new Symbol(name, Symbol.BasicType.INT, arrayDims, constant, initValues);
                     if (Objects.nonNull(currentFunc)) {
                         stackSize += sym.capacity();
                         sym.setAddress(stackSize);
@@ -799,7 +799,7 @@ public class Visitor {
                         // 初始化
                         int offset = 0;
                         for (int val : initValues) {
-                            Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), false);
+                            Symbol ptr = new Symbol("ptr_" + newBlockCount(), Symbol.BasicType.INT, false);
                             currentBlock.append(new AddressOffset(sym, new Immediate(offset * Symbol.SIZEOF_INT), ptr));
                             currentBlock.append(new PointerOp(PointerOp.Op.STORE, ptr, new Immediate(val)));
                             offset++;
@@ -811,7 +811,7 @@ public class Visitor {
                     currentSymTable.add(sym);
                 } else {
                     // 运行时赋值
-                    Symbol sym = new Symbol(name, currentField(), arrayDims);
+                    Symbol sym = new Symbol(name, Symbol.BasicType.INT, arrayDims);
                     stackSize += sym.capacity();
                     sym.setAddress(stackSize);
                     currentFunc.updateStackSize(stackSize);
@@ -820,7 +820,7 @@ public class Visitor {
                     int offset = 0;
                     for (Exp exp: initExps) {
                         Operand op = analyseExp(exp);
-                        Symbol ptr = new Symbol("ptr_" + newBlockCount(), currentField(), false);
+                        Symbol ptr = new Symbol("ptr_" + newBlockCount(), Symbol.BasicType.INT, false);
                         currentBlock.append(new AddressOffset(sym, new Immediate(offset * Symbol.SIZEOF_INT), ptr));
                         currentBlock.append(new PointerOp(PointerOp.Op.STORE, ptr, op));
                         offset++;
@@ -833,11 +833,11 @@ public class Visitor {
                     for (int i = 0; i < totalSize; i++) {
                         initZeros.add(0);
                     }
-                    sym = new Symbol(name, currentField(), arrayDims, false, initZeros);
+                    sym = new Symbol(name, Symbol.BasicType.INT, arrayDims, false, initZeros);
                     sym.setAddress(currentSymTable.capacity());
                     middleCode.addGlobalArray(sym.getName(), sym.getInitArray(), sym.getAddress());
                 } else {
-                    sym = new Symbol(name, currentField(), arrayDims);
+                    sym = new Symbol(name, Symbol.BasicType.INT, arrayDims);
                     stackSize += sym.capacity();
                     sym.setAddress(stackSize);
                     currentFunc.updateStackSize(stackSize);
@@ -860,7 +860,7 @@ public class Visitor {
             return;
         }
         if (!param.isArray()) {
-            arg = new Symbol(param.getName().getName(), meta.getParamTable().getField());
+            arg = new Symbol(param.getName().getName(), Symbol.BasicType.INT);
         } else {
             List<Integer> dimSizes = new ArrayList<>();
             // first dim is ignored because Array-FParam is Pointer
@@ -878,7 +878,7 @@ public class Visitor {
                 int length = new CalcUtil(currentSymTable, errorTable).calcExp(len);
                 dimSizes.add(length);
             }
-            arg = new Symbol(argName, meta.getParamTable().getField(), dimSizes, false);
+            arg = new Symbol(argName, Symbol.BasicType.INT, dimSizes, false);
         }
         meta.addParam(arg);
         arg.setAddress(meta.getParamTable().capacity());

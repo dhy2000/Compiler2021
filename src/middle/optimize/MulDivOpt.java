@@ -49,8 +49,8 @@ public class MulDivOpt implements MidOptimizer {
                         Symbol a = (Symbol) ((BinaryOp) node).getSrc1();
                         Immediate b = (Immediate) ((BinaryOp) node).getSrc2();
                         Symbol rem = ((BinaryOp) node).getDst();
-                        Symbol quo = Symbol.temporary(field, Symbol.Type.INT);
-                        Symbol part = Symbol.temporary(field, Symbol.Type.INT);
+                        Symbol quo = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
+                        Symbol part = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                         node.insertBefore(new BinaryOp(BinaryOp.Op.DIV, a, b, quo));
                         node.insertBefore(new BinaryOp(BinaryOp.Op.MUL, b, quo, part));
                         node.insertBefore(new BinaryOp(BinaryOp.Op.SUB, a, part, rem));
@@ -171,14 +171,14 @@ public class MulDivOpt implements MidOptimizer {
                                     int mask = (1 << shift);
                                     int sign = ((more & (1 << 7)) != 0) ? -1 : 0; // (int8_t)more >> 7
                                     int isPower2 = (magic == 0) ? 1 : 0;
-                                    Symbol q = Symbol.temporary(field, Symbol.Type.INT);
+                                    Symbol q = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.MULHI, new Immediate(magic), src1, q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, src1, q));
-                                    Symbol qSign = Symbol.temporary(field, Symbol.Type.INT);    // qSign = (q >> 31)
+                                    Symbol qSign = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);    // qSign = (q >> 31)
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.LT, q, new Immediate(0), qSign));
                                     node.insertBefore(new UnaryOp(UnaryOp.Op.NEG, qSign, qSign));
                                     int andRight = mask - isPower2;
-                                    Symbol qAnd = Symbol.temporary(field, Symbol.Type.INT);
+                                    Symbol qAnd = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.AND, qSign, new Immediate(andRight), qAnd));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, q, qAnd, q));
                                     node.insertBefore(new BinaryOp(BinaryOp.Op.SRA, q, new Immediate(shift), q));
@@ -192,20 +192,20 @@ public class MulDivOpt implements MidOptimizer {
                                     if (MathUtil.isLog2(((Immediate) src2).getValue())) {
                                         // 简易版除法优化，仅适用于除数为 2 的幂
                                         Immediate operand2 = new Immediate(MathUtil.log2(((Immediate) src2).getValue()));
-                                        Symbol quotient = Symbol.temporary(field, Symbol.Type.INT);
+                                        Symbol quotient = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                         node.insertAfter(new BinaryOp(BinaryOp.Op.SRA, src1, operand2, quotient));
                                         node.remove();
                                         node = node.getNext().getNext();
                                         // 被除数为负，且不能整除
-                                        Symbol negFlag = Symbol.temporary(field, Symbol.Type.INT);
+                                        Symbol negFlag = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.LT, src1, new Immediate(0), negFlag));
-                                        Symbol prod = Symbol.temporary(field, Symbol.Type.INT);
+                                        Symbol prod = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.SLL, quotient, operand2, prod));
-                                        Symbol condLessZero = Symbol.temporary(field, Symbol.Type.INT);
+                                        Symbol condLessZero = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.NE, src1, prod, condLessZero));
-                                        Symbol cond = Symbol.temporary(field, Symbol.Type.INT);
+                                        Symbol cond = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.ANDL, negFlag, condLessZero, cond));
-                                        Symbol fixQuotient = Symbol.temporary(field, Symbol.Type.INT);
+                                        Symbol fixQuotient = Symbol.temporary(Symbol.BasicType.INT, Symbol.RefType.ITEM);
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.ADD, quotient, new Immediate(1), fixQuotient));
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.MOVN, fixQuotient, cond, code.getDst()));
                                         node.insertBefore(new BinaryOp(BinaryOp.Op.MOVZ, quotient, cond, code.getDst()));

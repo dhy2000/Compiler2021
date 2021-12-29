@@ -111,9 +111,9 @@ public class CalcUtil {
             throw new ConstExpException(ident.lineNumber(), ident.getName());
         }
 
-        if (symbol.getType().equals(Symbol.Type.INT)) {
+        if (symbol.getRefType().equals(Symbol.RefType.ITEM)) {
             return symbol.getInitValue();
-        } else if (symbol.getType().equals(Symbol.Type.ARRAY)) {
+        } else if (symbol.getRefType().equals(Symbol.RefType.ARRAY)) {
             ArrayList<Integer> indexes = new ArrayList<>();
             Iterator<LVal.Index> iter = lVal.iterIndexes();
             while (iter.hasNext()) {

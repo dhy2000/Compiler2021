@@ -20,7 +20,7 @@ public class PointerOp extends ILinkNode {
     public PointerOp(Op op, Symbol address, Operand another) {
         this.op = op;
         this.address = address;
-        assert address.getType().equals(Symbol.Type.POINTER);
+        assert address.getRefType().equals(Symbol.RefType.POINTER);
         if (op.equals(Op.LOAD)) {
             assert another instanceof Symbol;
             this.dst = (Symbol) another;

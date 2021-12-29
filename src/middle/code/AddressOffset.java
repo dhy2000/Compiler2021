@@ -12,8 +12,8 @@ public class AddressOffset extends ILinkNode {
     private final Symbol target; // pointer
 
     public AddressOffset(Symbol base, Operand offset, Symbol target) {
-        assert base.getType().equals(Symbol.Type.POINTER) || base.getType().equals(Symbol.Type.ARRAY);
-        assert target.getType().equals(Symbol.Type.POINTER);
+        assert base.getRefType().equals(Symbol.RefType.POINTER) || base.getRefType().equals(Symbol.RefType.ARRAY);
+        assert target.getRefType().equals(Symbol.RefType.POINTER);
         this.base = base;
         this.offset = offset;
         this.target = target;

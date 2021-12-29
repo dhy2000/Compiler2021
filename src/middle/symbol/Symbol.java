@@ -13,15 +13,32 @@ public class Symbol implements Operand {
     public static final int SIZEOF_INT = 4;
 
     private final String name;
-    private final String field;
 
-    public enum Type {
-        INT,
+    public enum BasicType {
+        INT(4),
+        SHORT(2),
+        CHAR(1),
+        ;
+
+        private final int size;
+
+        BasicType(int size) {
+            this.size = size;
+        }
+
+        public int getSize() {
+            return size;
+        }
+    }
+
+    public enum RefType {
+        ITEM,
         ARRAY,      // 数组
         POINTER,    // 作为函数参数或者数组寻址后的临时变量，**比数组少一维**！
     }
 
-    private final Type type;
+    private final BasicType basicType;
+    private final RefType refType;
     private boolean local; // 是否为局部变量，如果是则基地址为当前运行栈栈底；如果否则基地址为全局空间头部
     private int address = -1; // 相对基地址的位移
 
@@ -32,9 +49,9 @@ public class Symbol implements Operand {
     private final Integer initValue;        // 整数变量的初值
     private final List<Integer> initArray;  // 数组的初值（展平了的）
 
-    private static List<Integer> suffixProduct(List<Integer> list, boolean pointer) {
+    private static List<Integer> suffixProduct(List<Integer> list, int basicSize, boolean pointer) {
         List<Integer> suffix = new ArrayList<>();
-        int prod = SIZEOF_INT;
+        int prod = basicSize;
         List<Integer> revInput = new ArrayList<>(list);
         Collections.reverse(revInput);
         for (int num : revInput) {
@@ -48,10 +65,10 @@ public class Symbol implements Operand {
         return Collections.unmodifiableList(suffix);
     }
 
-    public Symbol(String name, String field) {
+    public Symbol(String name, BasicType type) {
         this.name = name;
-        this.field = field;
-        this.type = Type.INT;
+        this.basicType = type;
+        this.refType = RefType.ITEM;
         this.constant = false;
         this.dimSize = Collections.emptyList();
         this.initValue = null;
@@ -59,10 +76,10 @@ public class Symbol implements Operand {
         this.dimBase = Collections.emptyList();
     }
 
-    public Symbol(String name, String field, boolean constant, int init) {
+    public Symbol(String name, BasicType type, boolean constant, int init) {
         this.name = name;
-        this.field = field;
-        this.type = Type.INT;
+        this.basicType = type;
+        this.refType = RefType.ITEM;
         this.constant = constant;
         this.initValue = init;
         this.dimSize = Collections.emptyList();
@@ -70,57 +87,53 @@ public class Symbol implements Operand {
         this.dimBase = Collections.emptyList();
     }
 
-    public Symbol(String name, String field, List<Integer> dimSize) {
+    public Symbol(String name, BasicType type, List<Integer> dimSize) {
         this.name = name;
-        this.field = field;
-        this.type = Type.ARRAY;
+        this.basicType = type;
+        this.refType = RefType.ARRAY;
         this.constant = false;
         this.initValue = null;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initArray = Collections.emptyList();
-        this.dimBase = suffixProduct(dimSize, false);
+        this.dimBase = suffixProduct(dimSize, type.size, false);
     }
 
-    public Symbol(String name, String field, List<Integer> dimSize, boolean constant, List<Integer> init) {
+    public Symbol(String name, BasicType type, List<Integer> dimSize, boolean constant, List<Integer> init) {
         this.name = name;
-        this.field = field;
-        this.type = Type.ARRAY;
+        this.basicType = type;
+        this.refType = RefType.ARRAY;
         this.constant = constant;
         this.initValue = null;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initArray = Collections.unmodifiableList(init);
-        this.dimBase = suffixProduct(dimSize, false);
+        this.dimBase = suffixProduct(dimSize, type.size,false);
     }
 
-    public Symbol(String name, String field, List<Integer> dimSize, boolean constant) {
+    public Symbol(String name, BasicType type, List<Integer> dimSize, boolean constant) {
         this.name = name;
-        this.field = field;
-        this.type = Type.POINTER;
+        this.basicType = type;
+        this.refType = RefType.POINTER;
         this.constant = constant;
         this.dimSize = Collections.unmodifiableList(dimSize);
         this.initValue = null;
         this.initArray = Collections.emptyList();
-        this.dimBase = suffixProduct(dimSize, true);
+        this.dimBase = suffixProduct(dimSize, type.size, true);
     }
 
-    public Symbol(String name, String field, boolean constant) {
+    public Symbol(String name, BasicType type, boolean constant) {
         this.name = name;
-        this.field = field;
-        this.type = Type.POINTER;
+        this.basicType = type;
+        this.refType = RefType.POINTER;
         this.constant = constant;
         this.dimSize = Collections.emptyList();
         this.initValue = null;
         this.initArray = Collections.emptyList();
-        this.dimBase = suffixProduct(dimSize, true);
+        this.dimBase = suffixProduct(dimSize, type.size,true);
     }
 
 
     public String getName() {
         return name;
-    }
-
-    public String getField() {
-        return field;
     }
 
     public boolean isLocal() {
@@ -131,8 +144,12 @@ public class Symbol implements Operand {
         this.local = local;
     }
 
-    public Type getType() {
-        return type;
+    public RefType getRefType() {
+        return refType;
+    }
+
+    public BasicType getBasicType() {
+        return basicType;
     }
 
     public boolean hasAddress() {
@@ -160,17 +177,17 @@ public class Symbol implements Operand {
     }
 
     public int getSizeOfDim(int dim) {
-        assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
+        assert refType.equals(RefType.ARRAY) || refType.equals(RefType.POINTER);
         return dimSize.get(dim);
     }
 
     public int getBaseOfDim(int dim) {
-        assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
+        assert refType.equals(RefType.ARRAY) || refType.equals(RefType.POINTER);
         return dimBase.get(dim);
     }
 
     public int getBase() {
-        assert type.equals(Type.ARRAY) || type.equals(Type.POINTER);
+        assert refType.equals(RefType.ARRAY) || refType.equals(RefType.POINTER);
         return dimBase.isEmpty() ? SIZEOF_INT : dimBase.iterator().next();
     }
 
@@ -183,9 +200,9 @@ public class Symbol implements Operand {
     }
 
     public int capacity() {
-        if (type.equals(Type.INT)) {
+        if (refType.equals(RefType.ITEM)) {
             return SIZEOF_INT;
-        } else if (type.equals(Type.POINTER)) {
+        } else if (refType.equals(RefType.POINTER)) {
             return SIZEOF_INT;
         } else {
             return SIZEOF_INT * dimSize.stream().reduce((i, i2) -> i * i2).orElse(1);
@@ -193,25 +210,25 @@ public class Symbol implements Operand {
     }
 
     public Symbol toPointer() {
-        assert type.equals(Type.ARRAY);
+        assert refType.equals(RefType.ARRAY);
         ArrayList<Integer> reducedDimSize = new ArrayList<>();
         for (int i = 1; i < dimSize.size(); i++) {
             reducedDimSize.add(dimSize.get(i));
         }
         tempCount = tempCount + 1;
-        Symbol sym = new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
+        Symbol sym = new Symbol("ptr_" + tempCount, basicType, reducedDimSize, constant);
         sym.setLocal(true);
         return sym;
     }
 
     public Symbol subPointer(int depth) {
-        assert type.equals(Type.POINTER);
+        assert refType.equals(RefType.POINTER);
         ArrayList<Integer> reducedDimSize = new ArrayList<>();
         for (int i = depth; i < dimSize.size(); i++) {
             reducedDimSize.add(dimSize.get(i));
         }
         tempCount = tempCount + 1;
-        Symbol sym = new Symbol("ptr_" + tempCount, field, reducedDimSize, constant);
+        Symbol sym = new Symbol("ptr_" + tempCount, basicType, reducedDimSize, constant);
         sym.setLocal(true);
         return sym;
     }
@@ -220,19 +237,19 @@ public class Symbol implements Operand {
     public String toString() {
         // String address = !hasAddress() ? "(tmp)" : ("@[" + (isLocal() ? "sp-" + getAddress() : "data+" + getAddress()) + "]");
         String address = !hasAddress() ? "(tmp)" : String.format(isLocal() ? "@[sp-0x%x]" : "@[data+0x%x]", getAddress());
-        return name + address + ":" + type;
+        return name + address + ":" + refType;
     }
 
     // 临时变量暂时不具备栈上空间
     private static int tempCount = 0;
-    public static Symbol temporary(String field, Type type) {
-        assert type.equals(Type.INT) || type.equals(Type.POINTER);
+    public static Symbol temporary(BasicType type, RefType refType) {
+        assert refType.equals(RefType.ITEM) || refType.equals(RefType.POINTER);
         tempCount = tempCount + 1;
         Symbol sym;
-        if (type.equals(Type.POINTER)) {
-            sym = new Symbol("ptr_" + tempCount, field, false);
+        if (refType.equals(RefType.POINTER)) {
+            sym = new Symbol("ptr_" + tempCount, type, false);
         } else {
-            sym = new Symbol("tmp_" + tempCount, field);
+            sym = new Symbol("tmp_" + tempCount, type);
         }
         sym.setLocal(true);
         return sym;

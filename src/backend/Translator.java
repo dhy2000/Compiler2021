@@ -73,7 +73,7 @@ public class Translator {
                 recordUseTempVariable(((UnaryOp) code).getSrc());
             } else if (code instanceof Input) {
                 // store input into pointer
-                if (((Input) code).getDst().getType().equals(Symbol.Type.POINTER)) {
+                if (((Input) code).getDst().getRefType().equals(Symbol.RefType.POINTER)) {
                     recordUseTempVariable(((Input) code).getDst());
                 }
             } else if (code instanceof PrintInt) {
@@ -456,7 +456,7 @@ public class Translator {
             mips.append(new LoadImmediate(RegisterFile.Register.V0, Syscall.READ_INTEGER));
             mips.append(new Syscall());
             int regDst = allocRegister(((Input) code).getDst(), false);
-            if (((Input) code).getDst().getType().equals(Symbol.Type.POINTER)) {
+            if (((Input) code).getDst().getRefType().equals(Symbol.RefType.POINTER)) {
                 mips.append(new StoreWord(regDst, 0, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
             } else {
                 mips.append(new Move(regDst, RegisterFile.Register.V0), registerCommentOne(regDst, ((Input) code).getDst()));
@@ -547,7 +547,7 @@ public class Translator {
         Symbol pointer = code.getTarget();
         int regPtr = allocRegister(pointer, true);
         String commentOne = registerCommentOne(regPtr, pointer);
-        if (base.getType().equals(Symbol.Type.ARRAY)) {
+        if (base.getRefType().equals(Symbol.RefType.ARRAY)) {
             if (offset instanceof Immediate) {
                 // 数组 + 立即数
                 String commentArray = "global " + base;

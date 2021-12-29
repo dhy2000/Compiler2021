@@ -7,22 +7,22 @@ import java.util.regex.Pattern;
 
 public abstract class Token implements Component {
 
-    private final Type type;
+    private final Type refType;
     private final int line;
     private final String content;
 
-    public Token(Type type, int line, String content) {
-        this.type = type;
+    public Token(Type refType, int line, String content) {
+        this.refType = refType;
         this.line = line;
         this.content = content;
     }
 
     public String typeName() {
-        return type.name();
+        return refType.name();
     }
 
     public Type getType() {
-        return type;
+        return refType;
     }
 
     public int lineNumber() {
@@ -108,12 +108,12 @@ public abstract class Token implements Component {
         }
     }
 
-    public static Token newInstance(Type type, int line, String content) {
-        switch (type) {
+    public static Token newInstance(Type refType, int line, String content) {
+        switch (refType) {
             case IDENFR: return new Ident(content, line);
             case INTCON: return new IntConst(content, line);
             case STRCON: return new FormatString(content, line);
-            default: return new ReservedToken(type, line, content);
+            default: return new ReservedToken(refType, line, content);
         }
     }
 }
