@@ -17,7 +17,7 @@ public class Compiler {
     private static final String[] pcodeArgs     = new String[]{"-s", "testfile.txt", "-V", "pcoderesult.txt"};
     private static final String[] mipsArgs      = new String[]{"-s", "testfile.txt", "-O", "mips.txt"};
 
-    public static final String[] defaultArgs = mipsArgs;    // default: mipsArgs
+    public static final String[] defaultArgs = errorArgs;    // default: mipsArgs
 
     public static void runCompiler(String[] args) {
         assert args.length > 0;
