@@ -428,6 +428,28 @@ public class Visitor {
         }
     }
 
+    public void analyseUnaryStmt(UnaryStmt stmt) {
+        LVal left = stmt.getlVal();
+        Token op = stmt.getUnaryTk();
+        Symbol leftSym = checkLVal(left);
+        if (Objects.isNull(leftSym)) {
+            return;
+        }
+        assert !leftSym.getRefType().equals(Symbol.RefType.ARRAY);
+        if (leftSym.getRefType().equals(Symbol.RefType.POINTER)) {
+            throw new AssertionError("Will not inc/dec on array elements");
+        } else {
+
+            if (op.getType().equals(Token.Type.INC)) {
+                currentBlock.append(new BinaryOp(BinaryOp.Op.ADD, leftSym, new Immediate(1), leftSym));
+            } else if (op.getType().equals(Token.Type.DEC)) {
+                currentBlock.append(new BinaryOp(BinaryOp.Op.SUB, leftSym, new Immediate(1), leftSym));
+            } else {
+                throw new AssertionError("Wrong Unary Stmt");
+            }
+        }
+    }
+
     public void analyseExpStmt(ExpStmt stmt) {
         // 这个最容易
         analyseExp(stmt.getExp());
@@ -641,6 +663,8 @@ public class Visitor {
                 analyseOutputStmt((OutputStmt) simple);
             } else if (simple instanceof ReturnStmt) {
                 analyseReturnStmt((ReturnStmt) simple);
+            } else if (simple instanceof UnaryStmt) {
+                analyseUnaryStmt((UnaryStmt) simple);
             } else {
                 throw new AssertionError("SplStmt wrong refType!");
             }

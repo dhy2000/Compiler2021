@@ -165,12 +165,10 @@ public class StmtParser {
                     return parseInputStmt(target, next, twice);
                 } else {
                     iterator.previous();
-                    if (next.getType().equals(Token.Type.INC) || next.getType().equals(Token.Type.DEC)) {
-                        return parseUnaryStmt(target, next);
-                    } else {
-                        return parseAssignStmt(target, next);
-                    }
+                    return parseAssignStmt(target, next);
                 }
+            } else if (next.getType().equals(Token.Type.INC) || next.getType().equals(Token.Type.DEC)) {
+                return parseUnaryStmt(target, next);
             } else {
                 iterator.previous();
                 // fall through
