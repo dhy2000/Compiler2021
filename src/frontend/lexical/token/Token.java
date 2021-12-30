@@ -71,8 +71,8 @@ public abstract class Token implements Component {
         EQL("=="),
         NEQ("!="),
 
-        INC("\\+\\+"),
-        DEC("--"),
+        INC("\\+\\+(?=\\s*;)"),
+        DEC("--(?=\\s*;)"),
 
         PLUS("\\+"),
         MINU("-"),

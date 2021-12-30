@@ -16,6 +16,14 @@ public class TokenList {
         maxLineNumber = Math.max(maxLineNumber, token.lineNumber());
     }
 
+    public void fix() {
+        Iterator<Token> iter = tokens.iterator();
+        while (iter.hasNext()) {
+            Token token = iter.next();
+
+        }
+    }
+
     public int getMaxLineNumber() {
         return maxLineNumber;
     }
