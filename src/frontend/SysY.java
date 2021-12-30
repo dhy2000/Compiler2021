@@ -4,6 +4,7 @@ import backend.Mips;
 import compiler.Config;
 import compiler.SpecialOptimize;
 import exception.FrontendException;
+import frontend.error.Error;
 import frontend.error.ErrorTable;
 import frontend.input.Source;
 import frontend.lexical.TokenList;
@@ -44,7 +45,11 @@ public class SysY {
             visitor.analyseCompUnit(compUnit);
             ErrorTable errors = visitor.getErrorTable();
             if (config.hasTarget(Config.Operation.ERROR)) {
-                errors.forEach(error -> config.getTarget(Config.Operation.ERROR).println(error.getLineNum() + " " + error.getErrorTag()));
+                errors.forEach(error -> {
+                    if (!error.getType().equals(Error.Type.VAR_AT_CONST)) {
+                        config.getTarget(Config.Operation.ERROR).println(error.getLineNum() + " " + error.getErrorTag());
+                    }
+                });
             }
             if (!errors.isEmpty()) {
                 return;
