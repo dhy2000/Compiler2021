@@ -1,6 +1,7 @@
 package frontend.visitor;
 
 import exception.ConstExpException;
+import exception.VarAtConstException;
 import frontend.error.Error;
 import frontend.error.ErrorTable;
 import frontend.lexical.token.Ident;
@@ -717,7 +718,12 @@ public class Visitor {
             if (def.isInitialized()) {
                 ExpInitVal init = (ExpInitVal) def.getInitVal();
                 if (init.isConst()) {
-                    int value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
+                    int value = 0;
+                    try {
+                        value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
+                    } catch (VarAtConstException e) {
+                        errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
+                    }
                     Symbol sym = new Symbol(name, Symbol.BasicType.INT, constant, value);
                     if (Objects.nonNull(currentFunc)) {
                         stackSize += sym.capacity();
@@ -732,7 +738,12 @@ public class Visitor {
                     currentSymTable.add(sym);
                 } else {
                     if (Objects.isNull(currentFunc)) { // 没有在函数里，则必须能编译期算出
-                        int value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
+                        int value = 0;
+                        try {
+                            value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
+                        } catch (VarAtConstException e) {
+                            errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
+                        }
                         Symbol sym = new Symbol(name, Symbol.BasicType.INT, constant, value);
                         sym.setAddress(currentSymTable.capacity());
                         currentSymTable.add(sym);
@@ -772,7 +783,12 @@ public class Visitor {
                 if (!ad.hasRightBracket()) {
                     errorTable.add(new Error(Error.Type.MISSING_RIGHT_BRACKET, ident.lineNumber()));
                 }
-                int value = new CalcUtil(currentSymTable, errorTable).calcExp(ad.getArrLength());
+                int value = 0;
+                try {
+                    value = new CalcUtil(currentSymTable, errorTable).calcExp(ad.getArrLength());
+                } catch (VarAtConstException e) {
+                    errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
+                }
                 totalSize *= value;
                 arrayDims.add(value);
             }
@@ -782,7 +798,12 @@ public class Visitor {
                 if (init.isConst() || Objects.isNull(currentFunc)) { // 常量或者位于全局
                     List<Integer> initValues = new ArrayList<>();
                     for (Exp exp : initExps) {
-                        int value = new CalcUtil(currentSymTable, errorTable).calcExp(exp);
+                        int value = 0;
+                        try {
+                            value = new CalcUtil(currentSymTable, errorTable).calcExp(exp);
+                        } catch (VarAtConstException e) {
+                            errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
+                        }
                         initValues.add(value);
                     }
                     Symbol sym = new Symbol(name, Symbol.BasicType.INT, arrayDims, constant, initValues);
@@ -870,7 +891,12 @@ public class Visitor {
                     errorTable.add(new Error(Error.Type.MISSING_RIGHT_BRACKET, dim.getLeftBracket().lineNumber()));
                 }
                 ConstExp len = dim.getLength();
-                int length = new CalcUtil(currentSymTable, errorTable).calcExp(len);
+                int length = 0;
+                try {
+                    length = new CalcUtil(currentSymTable, errorTable).calcExp(len);
+                } catch (VarAtConstException e) {
+                    errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
+                }
                 dimSizes.add(length);
             }
             arg = new Symbol(argName, Symbol.BasicType.INT, dimSizes, false);
