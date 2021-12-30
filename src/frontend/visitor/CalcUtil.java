@@ -75,6 +75,9 @@ public class CalcUtil {
         int result = 0;
         if (base instanceof FunctionCall) {
             FunctionCall call = (FunctionCall) base;
+            if (requireConst) {
+                throw new VarAtConstException(call.getName().lineNumber(), call.getName().getName());
+            }
             throw new ConstExpException(call.getName().lineNumber(), call.getName().getName());
         } else if (base instanceof PrimaryExp) {
             BasePrimaryExp primary = ((PrimaryExp) base).getBase();
