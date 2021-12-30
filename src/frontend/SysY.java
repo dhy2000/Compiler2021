@@ -62,7 +62,9 @@ public class SysY {
                 source.printAll(System.err);
                 if (e instanceof WrongTokenException) {
                     StackTraceElement[] trace = e.getStackTrace();
-                    if (trace[0].getMethodName().equals("parsePrimaryExp")) {
+                    if (trace[0].getMethodName().equals("parsePrimaryExp")
+                            && trace[1].getMethodName().equals("parseBaseUnaryExp")
+                            && trace[2].getMethodName().equals("parseUnaryExp")) {
                         throw new AssertionError("panic");
                     }
 //                    if (trace[0].getClassName().equals("frontend.syntax.expr.ExprParser")) {
