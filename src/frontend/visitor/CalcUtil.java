@@ -108,7 +108,9 @@ public class CalcUtil {
         }
         Symbol symbol = symTable.get(name, true);
         if (!symbol.isConstant()) {
-            throw new ConstExpException(ident.lineNumber(), ident.getName());
+            // throw new ConstExpException(ident.lineNumber(), ident.getName());
+            errorTable.add(new Error(Error.Type.VAR_AT_CONST, ident.lineNumber()));
+            return 0;
         }
 
         if (symbol.getRefType().equals(Symbol.RefType.ITEM)) {

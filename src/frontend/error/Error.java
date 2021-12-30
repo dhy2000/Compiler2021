@@ -46,6 +46,7 @@ public class Error implements Comparable<Error> {
         MISSING_RIGHT_BRACKET("k"),
         MISMATCH_PRINTF("l"),
         CONTROL_OUTSIDE_LOOP("m"),
+        VAR_AT_CONST("p"),
         ;
 
         private final String tag;
