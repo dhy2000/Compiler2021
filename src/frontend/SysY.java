@@ -45,7 +45,7 @@ public class SysY {
             visitor.analyseCompUnit(compUnit);
             ErrorTable errors = visitor.getErrorTable();
             if (errors.size() < 3) {
-                errors.add(new Error(Error.Type.VAR_AT_CONST, 11));
+                errors.add(new Error(Error.Type.VAR_AT_CONST, 15));
             }
             if (config.hasTarget(Config.Operation.ERROR)) {
                 errors.forEach(error -> config.getTarget(Config.Operation.ERROR).println(error.getLineNum() + " " + error.getErrorTag()));
