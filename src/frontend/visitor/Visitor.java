@@ -720,7 +720,7 @@ public class Visitor {
                 if (init.isConst()) {
                     int value = 0;
                     try {
-                        value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
+                        value = new CalcUtil(currentSymTable, errorTable, true).calcExp(init.getExp());
                     } catch (VarAtConstException e) {
                         errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
                     }
@@ -740,7 +740,7 @@ public class Visitor {
                     if (Objects.isNull(currentFunc)) { // 没有在函数里，则必须能编译期算出
                         int value = 0;
                         try {
-                            value = new CalcUtil(currentSymTable, errorTable).calcExp(init.getExp());
+                            value = new CalcUtil(currentSymTable, errorTable, false).calcExp(init.getExp());
                         } catch (VarAtConstException e) {
                             errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
                         }
@@ -785,7 +785,7 @@ public class Visitor {
                 }
                 int value = 0;
                 try {
-                    value = new CalcUtil(currentSymTable, errorTable).calcExp(ad.getArrLength());
+                    value = new CalcUtil(currentSymTable, errorTable, true).calcExp(ad.getArrLength());
                 } catch (VarAtConstException e) {
                     errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
                 }
@@ -800,7 +800,7 @@ public class Visitor {
                     for (Exp exp : initExps) {
                         int value = 0;
                         try {
-                            value = new CalcUtil(currentSymTable, errorTable).calcExp(exp);
+                            value = new CalcUtil(currentSymTable, errorTable, init.isConst()).calcExp(exp);
                         } catch (VarAtConstException e) {
                             errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
                         }
@@ -893,7 +893,7 @@ public class Visitor {
                 ConstExp len = dim.getLength();
                 int length = 0;
                 try {
-                    length = new CalcUtil(currentSymTable, errorTable).calcExp(len);
+                    length = new CalcUtil(currentSymTable, errorTable, true).calcExp(len);
                 } catch (VarAtConstException e) {
                     errorTable.add(new Error(Error.Type.VAR_AT_CONST, e.getLineNumber()));
                 }

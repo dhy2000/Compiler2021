@@ -25,9 +25,12 @@ public class CalcUtil {
     private final SymTable symTable;
     private final ErrorTable errorTable;
 
-    public CalcUtil(SymTable symTable, ErrorTable errorTable) {
+    private final boolean requireConst;
+
+    public CalcUtil(SymTable symTable, ErrorTable errorTable, boolean requireConst) {
         this.symTable = symTable;
         this.errorTable = errorTable;
+        this.requireConst = requireConst;
     }
 
     public int calcExp(Exp exp) throws ConstExpException, VarAtConstException {
@@ -108,7 +111,7 @@ public class CalcUtil {
             return 0;
         }
         Symbol symbol = symTable.get(name, true);
-        if (!symbol.isConstant()) {
+        if (requireConst && !symbol.isConstant()) {
             throw new VarAtConstException(ident.lineNumber(), ident.getName());
         }
 
