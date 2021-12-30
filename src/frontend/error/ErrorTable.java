@@ -18,6 +18,10 @@ public class ErrorTable implements Iterable<Error> {
         errors.add(e);
     }
 
+    public int size() {
+        return errors.size();
+    }
+
     public boolean isEmpty() {
         return errors.isEmpty();
     }
