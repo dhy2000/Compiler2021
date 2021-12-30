@@ -1,6 +1,7 @@
 package frontend.visitor;
 
 import exception.ConstExpException;
+import exception.VarAtConstException;
 import frontend.error.Error;
 import frontend.error.ErrorTable;
 import frontend.lexical.token.Ident;
@@ -29,11 +30,11 @@ public class CalcUtil {
         this.errorTable = errorTable;
     }
 
-    public int calcExp(Exp exp) throws ConstExpException {
+    public int calcExp(Exp exp) throws ConstExpException, VarAtConstException {
         return calcAddExp(exp.getAddExp());
     }
 
-    public int calcAddExp(AddExp exp) throws ConstExpException {
+    public int calcAddExp(AddExp exp) throws ConstExpException, VarAtConstException {
         int result = calcMulExp(exp.getFirst());
         Iterator<Token> iterOperator = exp.iterOperator();
         Iterator<MulExp> iterOperand = exp.iterOperand();
@@ -49,7 +50,7 @@ public class CalcUtil {
         return result;
     }
 
-    public int calcMulExp(MulExp exp) throws ConstExpException {
+    public int calcMulExp(MulExp exp) throws ConstExpException, VarAtConstException {
         int result = calcUnaryExp(exp.getFirst());
         Iterator<Token> iterOperator = exp.iterOperator();
         Iterator<UnaryExp> iterOperand = exp.iterOperand();
@@ -66,7 +67,7 @@ public class CalcUtil {
         return result;
     }
 
-    public int calcUnaryExp(UnaryExp exp) throws ConstExpException {
+    public int calcUnaryExp(UnaryExp exp) throws ConstExpException, VarAtConstException {
         BaseUnaryExp base = exp.getBase();
         int result = 0;
         if (base instanceof FunctionCall) {
@@ -99,7 +100,7 @@ public class CalcUtil {
         return result;
     }
 
-    public int calcLVal(LVal lVal) throws ConstExpException {
+    public int calcLVal(LVal lVal) throws ConstExpException, VarAtConstException {
         Ident ident = lVal.getName();
         String name = ident.getName();
         if (!symTable.contains(name, true)) {
@@ -108,9 +109,7 @@ public class CalcUtil {
         }
         Symbol symbol = symTable.get(name, true);
         if (!symbol.isConstant()) {
-            // throw new ConstExpException(ident.lineNumber(), ident.getName());
-            errorTable.add(new Error(Error.Type.VAR_AT_CONST, ident.lineNumber()));
-            return 0;
+            throw new VarAtConstException(ident.lineNumber(), ident.getName());
         }
 
         if (symbol.getRefType().equals(Symbol.RefType.ITEM)) {
@@ -139,7 +138,7 @@ public class CalcUtil {
         return number.getValue().getValue();
     }
 
-    public int calcSubExp(SubExp exp) throws ConstExpException {
+    public int calcSubExp(SubExp exp) throws ConstExpException, VarAtConstException {
         return calcExp(exp.getExp());
     }
 }
