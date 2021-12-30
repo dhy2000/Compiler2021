@@ -9,3 +9,7 @@
 
 - 新增词法 `++`, `--`
 - 增加两种语句类型 `IncreaseStmt` 和 `DecreaseStmt`
+
+## !!
+
+- `i ++ 1`
