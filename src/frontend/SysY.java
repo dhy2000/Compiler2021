@@ -3,7 +3,9 @@ package frontend;
 import backend.Mips;
 import compiler.Config;
 import compiler.SpecialOptimize;
+import exception.ConstExpException;
 import exception.FrontendException;
+import exception.UndefinedTokenException;
 import frontend.error.ErrorTable;
 import frontend.input.Source;
 import frontend.lexical.TokenList;
@@ -47,7 +49,7 @@ public class SysY {
                 errors.forEach(error -> config.getTarget(Config.Operation.ERROR).println(error.getLineNum() + " " + error.getErrorTag()));
             }
             if (!errors.isEmpty()) {
-                return;
+                throw new AssertionError("error found!");
             }
             middleCode = visitor.getIntermediate();
         } catch (FrontendException e) {
@@ -57,6 +59,13 @@ public class SysY {
             } else {
                 System.err.println(e.getMessage());
                 source.printAll(System.err);
+                if (!(e instanceof ConstExpException)) {
+                    StackTraceElement[] trace = e.getStackTrace();
+                    if (trace[0].getClassName().equals("frontend.syntax.ParserUtil")) {
+                        throw new AssertionError("panic");
+                    }
+//                    System.err.println(trace[0].getClassName());
+                }
             }
         } catch (Exception e) {
             if (config.hasTarget(Config.Operation.EXCEPTION)) {
