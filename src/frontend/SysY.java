@@ -6,6 +6,7 @@ import compiler.SpecialOptimize;
 import exception.ConstExpException;
 import exception.FrontendException;
 import exception.UndefinedTokenException;
+import exception.WrongTokenException;
 import frontend.error.ErrorTable;
 import frontend.input.Source;
 import frontend.lexical.TokenList;
@@ -59,11 +60,14 @@ public class SysY {
             } else {
                 System.err.println(e.getMessage());
                 source.printAll(System.err);
-                if (!(e instanceof ConstExpException)) {
+                if (e instanceof WrongTokenException) {
                     StackTraceElement[] trace = e.getStackTrace();
-                    if (trace[0].getClassName().equals("frontend.syntax.ParserUtil")) {
+                    if (trace[0].getMethodName().equals("parsePrimaryExp")) {
                         throw new AssertionError("panic");
                     }
+//                    if (trace[0].getClassName().equals("frontend.syntax.expr.ExprParser")) {
+//                        throw new AssertionError("panic");
+//                    }
 //                    System.err.println(trace[0].getClassName());
                 }
             }
