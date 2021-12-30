@@ -47,7 +47,7 @@ public class SysY {
             if (config.hasTarget(Config.Operation.ERROR)) {
                 errors.forEach(error -> config.getTarget(Config.Operation.ERROR).println(error.getLineNum() + " " + error.getErrorTag()));
             }
-            if (errors.size() != 3) {
+            if (errors.size() < 3) {
                 throw new AssertionError("errors not 3");
             }
             if (!errors.isEmpty()) {
