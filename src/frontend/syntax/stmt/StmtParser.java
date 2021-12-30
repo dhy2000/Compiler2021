@@ -41,6 +41,12 @@ public class StmtParser {
         return new AssignStmt(target, assignTk, exp);
     }
 
+    // <UnaryStmt>     := <LVal> '++' | '--'
+    public UnaryStmt parseUnaryStmt(LVal target, Token unaryTk) {
+        assert unaryTk.getType().equals(Token.Type.INC) || unaryTk.getType().equals(Token.Type.DEC);
+        return new UnaryStmt(target, unaryTk);
+    }
+
     // <ExpStmt>       := <Exp>
     public ExpStmt parseExpStmt(Exp exp) {
         return new ExpStmt(exp);
@@ -159,7 +165,11 @@ public class StmtParser {
                     return parseInputStmt(target, next, twice);
                 } else {
                     iterator.previous();
-                    return parseAssignStmt(target, next);
+                    if (next.getType().equals(Token.Type.INC) || next.getType().equals(Token.Type.DEC)) {
+                        return parseUnaryStmt(target, next);
+                    } else {
+                        return parseAssignStmt(target, next);
+                    }
                 }
             } else {
                 iterator.previous();
