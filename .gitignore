@@ -8,16 +8,9 @@
 
 # Test files
 /testfile/
-testfile.txt
-output.txt
-input.txt
-pcoderesult.txt
-mips.txt
-InstructionStatistics.txt
+*.txt
 
 # Archives
 *.zip
 *.jar
-
-# Notes and documents
-/doc/
+*.rar
