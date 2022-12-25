@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class TestSet implements Iterable<TestCase> {
 
-    public static final String ROOT_PATH = "testfile/testfiles";
+    public static final String ROOT_PATH = "testfile/2022";
 
     private final List<TestCase> testSet = new ArrayList<>();
 
@@ -63,6 +63,7 @@ public class TestSet implements Iterable<TestCase> {
         testSet.add(new TestCase("C-27", "C/testfile27.txt", "C/input27.txt", "C/output27.txt"));
         testSet.add(new TestCase("C-28", "C/testfile28.txt", "C/input28.txt", "C/output28.txt"));
         testSet.add(new TestCase("C-29", "C/testfile29.txt", "C/input29.txt", "C/output29.txt"));
+        testSet.add(new TestCase("C-30", "C/testfile30.txt", "C/input30.txt", "C/output30.txt"));
         // B
         testSet.add(new TestCase("B-1", "B/testfile1.txt", "B/input1.txt", "B/output1.txt"));
         testSet.add(new TestCase("B-2", "B/testfile2.txt", "B/input2.txt", "B/output2.txt"));
@@ -91,6 +92,9 @@ public class TestSet implements Iterable<TestCase> {
         testSet.add(new TestCase("B-25", "B/testfile25.txt", "B/input25.txt", "B/output25.txt"));
         testSet.add(new TestCase("B-26", "B/testfile26.txt", "B/input26.txt", "B/output26.txt"));
         testSet.add(new TestCase("B-27", "B/testfile27.txt", "B/input27.txt", "B/output27.txt"));
+        testSet.add(new TestCase("B-28", "B/testfile28.txt", "B/input28.txt", "B/output28.txt"));
+        testSet.add(new TestCase("B-29", "B/testfile29.txt", "B/input29.txt", "B/output29.txt"));
+        testSet.add(new TestCase("B-30", "B/testfile30.txt", "B/input30.txt", "B/output30.txt"));
         // A
         testSet.add(new TestCase("A-1", "A/testfile1.txt", "A/input1.txt", "A/output1.txt"));
         testSet.add(new TestCase("A-2", "A/testfile2.txt", "A/input2.txt", "A/output2.txt"));
@@ -118,6 +122,10 @@ public class TestSet implements Iterable<TestCase> {
         testSet.add(new TestCase("A-24", "A/testfile24.txt", "A/input24.txt", "A/output24.txt"));
         testSet.add(new TestCase("A-25", "A/testfile25.txt", "A/input25.txt", "A/output25.txt"));
         testSet.add(new TestCase("A-26", "A/testfile26.txt", "A/input26.txt", "A/output26.txt"));
+        testSet.add(new TestCase("A-27", "A/testfile27.txt", "A/input27.txt", "A/output27.txt"));
+        testSet.add(new TestCase("A-28", "A/testfile28.txt", "A/input28.txt", "A/output28.txt"));
+        testSet.add(new TestCase("A-29", "A/testfile29.txt", "A/input29.txt", "A/output29.txt"));
+        testSet.add(new TestCase("A-30", "A/testfile30.txt", "A/input30.txt", "A/output30.txt"));
     }
 
 }
