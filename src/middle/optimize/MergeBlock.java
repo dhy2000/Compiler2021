@@ -20,7 +20,7 @@ public class MergeBlock implements MidOptimizer {
     }
 
     // Block -> 来源数目
-    private Map<BasicBlock, Integer> blockSources = new HashMap<>();
+    private final Map<BasicBlock, Integer> blockSources = new HashMap<>();
 
     /**
      * 先 BFS 遍历，对每个基本块记录其有几个来源

@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Queue;
 
 /**
- * 将跳转语句后面的指令（属于死代码，无法被执行到）删除
+ * 将跳转语句后面的指令删除
  */
 public class RemoveAfterJump implements MidOptimizer {
 

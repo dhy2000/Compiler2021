@@ -31,7 +31,6 @@ import java.util.*;
 /**
  * 语义分析器：遍历语法树，维护符号表，进行错误处理，生成中间代码
  * 和语法分析类似的类递归下降结构
- *
  * 这里把每部分的分析器合到了一个大类中，因为要维护一个统一的栈（符号作用域）
  */
 public class Visitor {
@@ -488,7 +487,18 @@ public class Visitor {
             errorTable.add(new Error(Error.Type.MISMATCH_PRINTF, stmt.getFormatString().lineNumber()));
             return;
         }
-        currentBlock.append(new PrintFormat(format, params));
+        // currentBlock.append(new PrintFormat(format, params));
+        String[] parts = format.split("%d", -1); // use limit:-1 to keep empty strings
+        assert parts.length == params.size() + 1;
+        for (int i = 0; i < parts.length; i++) {
+            if (!parts[i].isEmpty()) {
+                String label = middleCode.addGlobalString(parts[i]);
+                currentBlock.append(new PrintStr(label));
+            }
+            if (i < params.size()) {
+                currentBlock.append(new PrintInt(params.get(i)));
+            }
+        }
     }
 
     public void analyseReturnStmt(ReturnStmt stmt) {

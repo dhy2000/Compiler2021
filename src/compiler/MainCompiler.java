@@ -17,15 +17,13 @@ public class MainCompiler {
         this.config = config;
     }
 
-    public void run() throws Exception {
+    public void run() {
         try {
             SysY sysy = new SysY(config);
             MiddleCode ir = sysy.getIntermediate();
             if (Objects.isNull(ir)) {
                 return;
             }
-            new PrintfTrans().optimize(ir); // NECESSARY transformer! This is NOT an optimizer.
-
             /* ------ MidCode Optimize Begin ------ */
             new RemoveAfterJump().optimize(ir);
             new MergeBlock().optimize(ir);

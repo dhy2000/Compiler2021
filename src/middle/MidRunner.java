@@ -196,7 +196,7 @@ public class MidRunner {
     }
 
     private void runIO(ILinkNode code) {
-        assert code instanceof PrintFormat || code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
+        assert code instanceof Input || code instanceof PrintInt || code instanceof PrintStr;
         if (code instanceof Input) {
             Symbol symbol = ((Input) code).getDst();
             int value = ReaderUtil.readInt(input);
@@ -210,11 +210,9 @@ public class MidRunner {
         } else if (code instanceof PrintInt) {
             int value = readOperand(((PrintInt) code).getValue());
             output.print(value);
-        } else if (code instanceof PrintStr) {
+        } else {
             String content = middleCode.getGlobalStrings().get(((PrintStr) code).getLabel());
             output.print(content.replaceAll("\\\\n", "\n"));
-        } else {
-            throw new AssertionError("Bad IO Code");
         }
     }
 
