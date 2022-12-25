@@ -1,0 +1,94 @@
+const int SingleDecl = 0;
+const int DoubleDecl1 = 0, DoubleDecl2 = 1;
+const int TripleDecl1 = 2, TripleDecl2 = 3, TripleDecl3 = 4;
+const int OneDConstArr[2] = {1, 2};
+const int TwoDConstArr[2][2] = {{1, 2}, {3, 4}};
+
+int SingleVal;
+int SingleValWithInitVal = 1;
+int DoubleVal1, DoubleVal2;
+int TripleVal1, TripleVal2, TripleVal3;
+int OneDArr[10];
+int OneDArrWithInitVal[2] = {1, 2};
+int TwoDArr[2][2];
+int TwoDArrWithInitVal[2][2] = {{1, 2}, {3, 4}};
+
+int function0Param() { return 0; }
+
+int function1Param(int p1) { return 1; }
+
+int function2Param(int p1, int p2) { return 2; }
+
+int function3Param(int p1, int p2, int p3) { return 3; }
+
+int function1dArrParam(int a[]) { return 0; }
+
+int function2dArrParam(int a2[][2]) { return 0; }
+
+void functionNoRetStmt() {}
+
+void functionNoRetVal() { return; }
+
+int main()
+{
+    int local;
+    int localWithInitVal = 0;
+    int localDouble1, localDouble2;
+    int localTriple1, localTriple2, localTriple3;
+    int localArr[5];
+    int localArrWithInitVal[5] = {1, 2, 3, 4, 5};
+    int local2dArr[2][2];
+    int local2dArrWithInitVal[2][2] = {{1, 2}, {3, 4}};
+    local = getint();
+    local = 1;
+    local = SingleDecl;
+    local = OneDConstArr[0];
+    local = TwoDConstArr[0][0];
+    local = 1 + 1;
+    local = 1 - 1;
+    local = 1 * 1;
+    local = 1 / 1;
+    local = 1 % 1;
+    local = 1 + 1 * (1 / 1);
+    local = +1;
+    local = -1;
+    localArr[0] = 1;
+    local2dArr[0][0] = 1;
+    local = function0Param();
+    local = function1Param(local);
+    local = function2Param(local, local);
+    local = function3Param(local, local, local);
+    local = function1Param(localArr[0]);
+    local = function1dArrParam(localArr);
+    local = function2dArrParam(local2dArr);
+    functionNoRetStmt();
+    ; // null stmt
+    {
+    } // null block
+    if (local == 0)
+    {
+        local = 1;
+    }
+    else
+    {
+        local = 0;
+    }
+    if (local > 0)
+    {
+        local = 0;
+    }
+
+    while (local > 0)
+    {
+        local = local - 1;
+        if (local < 0)
+        {
+            break;
+        }
+        continue;
+    }
+
+    printf("20373866\n");
+    printf("output with formatted String: local=%d", local);
+    return 0;
+}

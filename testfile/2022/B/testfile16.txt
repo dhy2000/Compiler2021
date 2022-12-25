@@ -1,0 +1,41 @@
+void fun1() {
+    return;
+}
+
+int fun2(int x) {
+    int a = 0;
+    return 114514;
+}
+
+void fun3(int a[], int b[][4]) {
+    return;
+}
+
+int main() {
+    printf("%d\n", 20373370);
+    const int arr1[2][3] = {{4, 5, 6}, {7, 8, 9}}, a1 = 114, a2 = 514;
+    int c = 2;
+    int arr2[2][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}}, arr3[5] = {0, 0, 0, 0, 0}, b = 4;
+
+    int e;
+    e = getint();
+
+    fun1();
+    e = fun2(e);
+    fun3(arr2[0], arr2);
+    e = 1 % 2 + 4 / 3;
+    if (!0) {
+        ;
+    }
+    
+    printf("%d\n", a1 + a2);
+    printf("%d\n", b * c + 9);
+    printf("%d\n", b);
+    printf("%d\n", c);
+    printf("%d\n", b - c + c);
+    printf("%d\n", arr3[3]);
+    printf("%d\n", arr2[0][0] + arr2[1][3]);
+    printf("%d\n", 0);
+    printf("\n");
+    return 0;
+}

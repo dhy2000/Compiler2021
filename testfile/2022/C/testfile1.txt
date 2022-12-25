@@ -1,0 +1,10 @@
+int main()
+{
+    int n;
+    n = getint();
+    int i = 19241027;
+    // only mod
+    if (n % 4 == 0)
+        printf("%d\n", i);
+    return 0;
+}

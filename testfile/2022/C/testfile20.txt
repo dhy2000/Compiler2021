@@ -1,0 +1,35 @@
+const int a = 100;
+const int b = 10,c = 1;
+const int x = 1,y = 2,z = 3;
+int main(){
+	printf("20373480\n");
+	if(a!=99){
+		printf("20373480\n");
+	}
+	if(c<=10 && b>=10){
+		printf("20373480\n");
+	}
+	if(a>99 || b<20){
+		printf("20373480\n");
+	}
+	int i;
+	i=-5;
+	;
+	while(i<0){
+		if(i==-1){
+			break;
+		}else{
+			i=i+1;
+			continue;
+		}
+		break;
+	}
+	i=-1;
+	printf("i=%d\n",i);
+	printf("20373480\n");
+	printf("20373480\n");
+	printf("20373480\n");
+	printf("20373480\n");
+	printf("20373480");
+	return 0;
+}

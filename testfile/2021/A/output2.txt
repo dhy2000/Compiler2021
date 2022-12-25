@@ -1,0 +1,14 @@
+16061069
+input groups
+input your birth year,month,day,ep:1998 1 1
+input current year,month,day,ep:2020 2 2
+you have lived 8585 days
+input your birth year,month,day,ep:1998 1 1
+input current year,month,day,ep:2020 2 2
+you have lived 676288 days
+input your birth year,month,day,ep:1998 1 1
+input current year,month,day,ep:2020 2 2
+please input time legally
+input your birth year,month,day,ep:1998 1 1
+input current year,month,day,ep:2020 2 2
+please input time legally

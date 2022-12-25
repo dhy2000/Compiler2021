@@ -1,0 +1,11 @@
+20373614
+add:6
+input:8
+2022!!!
+run:2000
+run:2020
+not run:3
+not run:9999
+not run:100
+year1:2022,year2:2000,year3:2020,year4:3,year5:9999,year6:100
+printsth

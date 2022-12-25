@@ -1,0 +1,10 @@
+20185641
+Check some basic arry define: Success!
+Check some basic Def and const: Success!
+Check a simple ;: Success!
+Check function with arry: Success!
+Check function with part of arry: Success!
+Check functioin with two dimission parm: Success!
+function void with one parm : Success!
+function (int with no parm ): Success!
+Check function: Success!

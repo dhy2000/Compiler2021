@@ -1,0 +1,10 @@
+19231007
+input recurrent cycle:
+cycle is: 2
+input initial value:
+initial value is: 2
+your input is good
+A = 7
+B = 3
+C = 1
+final value is: 1010

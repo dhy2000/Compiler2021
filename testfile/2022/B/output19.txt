@@ -1,0 +1,86 @@
+20373453
+
+Successfully call a function with 3 types of paras.
+
+Just get a number [0] (smaller than or equal to 100).
+lucky number: 1
+(0)11
+(1)22
+The ones digit of the lucky number is greater than 7.
+
+Just get a number [741] (greater than 100).
+lucky number: 3
+(0)11
+(1)22
+(3)44
+
+Just get a number [12] (smaller than or equal to 100).
+lucky number: 5
+(0)11
+(1)22
+(3)44
+(4)55
+(5)66
+
+Just get a number [543] (greater than 100).
+lucky number: 7
+(0)11
+(1)22
+(3)44
+(4)55
+(5)66
+(6)77
+(7)88
+
+Just get a number [24] (smaller than or equal to 100).
+lucky number: 9
+(0)11
+(1)22
+(3)44
+(4)55
+(5)66
+(6)77
+(7)88
+The ones digit of the lucky number is greater than 7.
+
+Just get a number [86885] (greater than 100).
+lucky number: 1
+(0)11
+(1)22
+The ones digit of the lucky number is greater than 7.
+
+Just get a number [6] (smaller than or equal to 100).
+lucky number: 3
+(0)11
+(1)22
+(3)44
+
+Just get a number [167] (greater than 100).
+lucky number: 5
+(0)11
+(1)22
+(3)44
+(4)55
+(5)66
+
+Just get a number [968] (greater than 100).
+lucky number: 7
+(0)11
+(1)22
+(3)44
+(4)55
+(5)66
+(6)77
+(7)88
+
+Just get a number [99] (smaller than or equal to 100).
+lucky number: 9
+(0)11
+(1)22
+(3)44
+(4)55
+(5)66
+(6)77
+(7)88
+The ones digit of the lucky number is greater than 7.
+GLOBAL simple_var_c: 327

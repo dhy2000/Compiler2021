@@ -1,0 +1,94 @@
+int g1, g2, g3;
+int e1 = 1, f1 = 1, f2 = 1;
+int i1 = 2, i2; 
+int a9[10];
+int a12[10][10];
+int h1[10], h2[10][10], h3;
+const int c = 10, f3 = 5;
+const int c1[2] = {1,2};
+
+void add_machine( int e1, int f1, int f2 ){
+	int g1, g2, g3;
+	return;
+}		
+			
+int arr_check_2( int a[][4], int e1, int f1 ){
+	return 1;
+}
+
+void arr_check_1( int a[] ){
+	int b = 1;
+	printf("%d\n", b);
+	return;
+}
+
+int main()
+{	
+	int a1;
+	int arr_check_2 = 1;
+	int a2 = 2;
+	int g1 = 0, g2 = 0, g3 = 0;
+	int a3 = 1, a4 = 2, a5 = 0;
+	int e1 = 2, f1 = 2, f2 = 2;
+	int h1 = 3, h2[3] = {1, 2, 3}, h3;
+	const int b1 = 1;
+	const int a6 = 1, a7 = 2, a8 = 3;	
+	int c = 20;
+	int a10[10] = {1,1,1,1,1,2,2,2,2,2};
+	int a13[4][4] = {{1,2,3,4}, {1,2,3,4}, {1,2,3,4}, {1,2,3,4}};
+	const int a15[2] = {1,1};
+	const int a14[2][2] = {{1,2}, {2,3}};
+	
+	add_machine( e1 + arr_check_2, f1, f2 );
+	
+	printf("20373608\n");
+	arr_check_1( a13[0] );
+	arr_check_1( a10 );
+
+	a1 = 4 + c + e1;
+	a9[0] = 1;
+	a9[1] = 2;
+	a12[0][0] = 2;
+	a2 = 0;
+	a3 = 0;
+	g1 = g1 + 4;
+	printf("this is outside g1 %d\n", g1);
+	a13[0][1] = a13[0][1] + g1;
+	{
+		int g1 = 2, g2, g3;
+		int h1, h2, h3;
+		g1 = g1 + 1; 
+		a9[0] = g1 + 1; 
+		printf("this is inside g1 %d\n", g1);
+	}
+	g1 = g1 + 1;
+	printf("this is outside g1 %d agsin\n", g1);
+	while( a2 <= 9 ){
+		a3 = 0;
+		while( a3 <= 9 ){
+			a12[a2][a3] = 1;
+			a3 = a3 + 1;
+		}
+		a2 = a2 + 1;
+	}
+	if( a2 > 1 ){
+		a2 = a2 - 1;
+		a2 = +1;
+		a2 = -1;
+	}
+	else{
+		a2 = a2 + 1;
+	}
+	if( a2 > 1 ){
+		;
+	}
+	if( a2 > 1 ){
+		
+	}
+	printf("a9[0] is %d\n", a9[0]);
+	printf("a13[0][1] is %d\n", a13[0][1]);
+	printf("a13[0][2] is %d\n", a13[0][2]);
+	printf("a12[9][9] is %d", a12[9][9]);
+	return 0;
+}
+

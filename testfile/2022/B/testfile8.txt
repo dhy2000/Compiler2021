@@ -1,0 +1,97 @@
+// 全局常量
+const int g_con_a[(1+1)*8/(3+1)] = {1,2,3,4};
+const int g_con_b[2][2] = {{1,4},{2,4}}, g_con_c[2] = {0,0};
+const int N = 2;
+
+// 全局变量
+int g_a[4];
+int g_b[2][2] = {{5,9},{10,2}}, g_c[2];
+
+int getArraySum(int a[], int len) {
+	int i, sum;
+	i = 0;
+	sum = 0;
+	while(i < len) {
+		sum = sum + a[i];
+		i = i + 1;
+	}
+	return sum;
+}
+
+int getTwoDimArraySum(int a[][2], int row) {
+	int i,j, sum;
+	i = 0;
+	j = 0;
+	sum = 0;
+	while(i < row) {
+		j = 0;
+		while(j < 2) {
+			sum = sum + a[i][j];
+			j = j + 1;
+		}
+		i = i + 1;
+	}
+	return sum;
+}
+
+int get_g_con_b_sum() {
+	return g_con_b[0][0] + g_con_b[0][1] + g_con_b[1][0] + g_con_b[1][1];
+}
+
+int main() {
+	printf("20374042\n");
+	// 局部常量
+	const int con_a[4] = {g_con_a[0], 4, g_con_b[1][1], 19};
+	const int con_b[2][2] = {{1,9},{3,8}}, con_c[2] = {0,0};
+	// 局部变量
+	int a[4] = {g_con_a[3], g_con_a[3]+g_b[0][0], N+4, con_b[1][1]}; 
+	int b[2][1+3%2] = {{4,8},{-2,249}}, c[(N+1)*2%4];
+	c[0] = b[1][1];
+	c[1] = N;
+	// 测试初值
+	// global
+	printf("g_con_a: %d %d %d %d\n",g_con_a[0], g_con_a[1], g_con_a[2], g_con_a[3]);
+	printf("g_con_b: %d %d %d %d\n",g_con_b[0][0], g_con_b[0][1], g_con_b[1][0], g_con_b[1][1]);
+	printf("g_con_c: %d %d\n",g_con_c[0], g_con_c[1]);
+	printf("g_a: %d %d %d %d\n",g_a[0], g_a[1], g_a[2], g_a[3]);
+	printf("g_b: %d %d %d %d\n",g_b[0][0], g_b[0][1], g_b[1][0], g_b[1][1]);
+	printf("g_c: %d %d\n",g_c[0], g_c[1]);
+	// local
+	printf("con_a: %d %d %d %d\n",con_a[0], con_a[1], con_a[2], con_a[3]);
+	printf("con_b: %d %d %d %d\n",con_b[0][0], con_b[0][1], con_b[1][0], con_b[1][1]);
+	printf("con_c: %d %d\n",con_c[0], con_c[1]);
+	printf("a: %d %d %d %d\n",a[0], a[1], a[2], a[3]);
+	printf("b: %d %d %d %d\n",b[0][0], b[0][1], b[1][0], b[1][1]);
+	printf("c: %d %d\n",c[0], c[1]);
+	// 局部常量覆盖全局常量
+	const int g_con_a[4] = {N, N+2,con_b[1][1], g_con_b[0][0]};
+	printf("g_con_a: %d %d %d %d\n",g_con_a[0], g_con_a[1], g_con_a[2], g_con_a[3]);
+	// 局部变量覆盖全局变量
+	int g_a[4] = {g_c[1], g_con_a[2], 239, N-284};
+	printf("g_a: %d %d %d %d\n",g_a[0], g_a[1], g_a[2], g_a[3]); 
+	// 局部常量覆盖全局变量
+	const int g_b[2][2] = {{1,9},{-139,24}};
+	printf("g_b: %d %d %d %d\n",g_b[0][0], g_b[0][1], g_b[1][0], g_b[1][1]);
+	// 局部变量覆盖全局常量
+	int g_con_b[2][N];
+	g_con_b[0][0] = -1823;
+	g_con_b[0][1] = b[0][0];
+	g_con_b[1][0] = a[3] + c[1];
+	g_con_b[1][1] = 29424;
+	printf("g_con_b: %d %d %d %d\n",g_con_b[0][0], g_con_b[0][1], g_con_b[1][0], g_con_b[1][1]); 
+	// int 覆盖 数组
+	int g_c = 19;
+	g_c = g_c * (g_con_b[0][0] + g_b[1][1]);
+	printf("g_c: %d\n",g_c); 
+	// 数组传参
+	int sum;
+	sum = getArraySum(g_a, 4);
+	printf("g_a sum: %d\n",sum);
+	sum = getArraySum(g_con_b[1], 2);
+	printf("g_con_b[1] sum: %d\n",sum); 
+	sum = getTwoDimArraySum(g_con_b, 2);
+	printf("g_con_b sum: %d\n",sum);
+	sum = get_g_con_b_sum();
+	printf("real global const b sum: %d\n",sum); 
+	return 0;
+} 

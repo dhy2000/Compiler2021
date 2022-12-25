@@ -1,0 +1,189 @@
+const int N = 10007;
+const int const_diag_matrix[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}, const_d_matrix = 3;
+const int const_base[3] = {1, 0, 0};
+const int const_a = 1, const_b = 2, const_c = 3, const_d = 4;
+
+int diag_matrix[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}, d_matrix = 3;
+int base[3] = {1, 0, 0};
+
+int matrix_A[10][10];
+int matrix_B[10][10];
+
+/* print id */
+void print_id(int id) { 
+	printf("%d\n", id);
+	if (0 && 4 > 5) 
+		return;
+}
+
+/* print matrix */
+void print_matrix(int matrix[][10])
+{
+	int i = 0, j;
+	while(i < 10){
+		j = 0;
+		while(j < 10){
+			if ( j == 10 - 1)
+				printf("%d", matrix[i][j]);
+			else
+				printf("%d ", matrix[i][j]);
+			j = j + 1;
+		}
+		printf("\n");
+		i = i + 1;
+	}
+}
+
+/* create two matrixes */
+void create_double_matrix(int matrix_A[][10], int matrix_B[][10], int x, int y)
+{
+	int i = 0, j;
+	while (i < 10)
+    {
+        j = 0;
+        while (j < 10)
+        {
+            matrix_A[i][j] = i + 1 + x;
+            matrix_B[i][j] = j + 1 + y;
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+}
+
+int sum_matrix(int matrix[][10])
+{
+	int i = 0, j, k;
+	int res = 0;
+	while(i < 10){
+		j = 0;
+		while(j < 10){
+			 res = res + matrix[i][j];
+			j = j + 1;
+		}
+		i = i + 1;
+	}
+	return res;
+}
+
+/* multi two matrixs */
+int multi_double_matrix(int matrix_A[][10], int matrix_B[][10])
+{
+	int matrix_C[10][10];
+	int i = 0, j, k;
+	while (i < 10)
+    {
+        j = 0;
+        while (j < 10)
+        {
+            k = 0;
+            matrix_C[i][j] = 0;
+            while (k < 10)
+            {
+                matrix_C[i][j] = matrix_C[i][j] + matrix_A[i][k] * matrix_B[k][j];
+                k = k + 1;
+            }
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    return sum_matrix(matrix_C);
+}
+
+/* vector dot */
+int vdot(int x[], int y[]) {
+	int d = 0, sum = 0;
+	while (1 || 0) {
+		sum = sum + x[d] * y[d] / 1;
+		d = d + 1;
+		if (d == const_d_matrix || 0 && ! - sum < 7 + 1 || + sum > 8 - 1) break;
+		else if (1) continue;
+		else ;
+	}
+	return sum;
+}
+
+void print_vec(int v[]) {
+	printf("%d %d %d\n", v[0], v[1], v[2]);
+}
+
+/*math problem*/
+void print_solve_math_problem()
+{
+	{
+		printf("Let us solve math problem\n");
+	}
+}
+void empty_block(){}
+void solve_math_problem(int x, int y)
+{
+	int tmp;
+	print_solve_math_problem();
+	empty_block();
+	
+	if(x == y)
+	{
+		printf("x not equal to y\n");
+		return ;
+	}
+	else
+	{
+		if(x != y)
+		{
+			printf("x is not equal to y and ");
+			if(x >= y)
+			{
+				tmp = x - y;
+				printf("x is %d more than y\n",tmp);
+			}
+			if( x <= y)
+			{
+				tmp = y - x;
+				printf("y is %d more than x\n",tmp);
+			}
+		}
+	}
+	return ;
+}
+
+int main(){
+	
+	/* init vector */
+	const int N = 3;
+	int v[3], i = 0;
+	while ( i < N )
+	{
+		v[i] = getint();
+		i = i + 1;
+	}
+	
+	/* print id */
+	if(!0 && 0 || 1)
+		print_id(20373623);
+	
+	/* matrix */	
+	create_double_matrix(matrix_A,matrix_B,0,0);
+	printf("\n");
+	print_matrix(matrix_A);
+	printf("\n");
+	print_matrix(matrix_B);
+	int res = ((1 + 1 / 1 * 1) % 2) - +1 - +-1;
+	res = multi_double_matrix(matrix_A,matrix_B);
+	printf("%d\n",res);
+	
+	/* vector */
+	i = 0;
+	while ( i < N )
+	{
+		int res = 0;
+		res = vdot(v,diag_matrix[i]);
+		printf("%d\n",res);
+		i = i + 1;
+	}
+	
+	/*math problem*/
+	solve_math_problem(100,100);
+	solve_math_problem(200,100);
+	solve_math_problem(100,300);
+	return 0;
+}

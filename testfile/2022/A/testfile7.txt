@@ -1,0 +1,86 @@
+int a = 100;
+const int n = 10;
+int arr[10] = {666, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int one[1] = {1}; 
+const int two[1][1] = {{2}};
+int sum, ave;
+int aa, bb, cc, dd;
+const int ca = 0, cb = 1, ccc = 2, cd = 3;
+
+void Sum(int arr[]) {
+    sum = 0;
+    int i;
+    i = 0;
+    while (i < n) {
+        sum = sum +  +arr[i];
+        i = i + 1;
+    }
+    ave = sum / n;
+    return;
+}
+
+int echo() {
+    int _;
+    _ = getint();
+    printf("%d\n", _);
+    return _; 
+}
+
+int add(int x, int y) {
+    return x+y;
+}
+
+int modify(int block[][3], int x, int y, int val) {
+    int ret;
+    if (x >=2 || y >= 3) ret = 0;
+    else {
+        block[x][y] = val;
+        ret = 1;
+    }
+    return ret;
+} 
+
+int main() {
+    printf("20373020\n");
+    
+    ;;;
+    Sum(arr);
+    const int m = 520, _ = 522;
+    add(m, arr[0]);
+    int tik;
+    if (ave + sum > m) {}
+    if (ave + sum >= m) {tik = 1;}
+    
+    printf("%d\n", tik); 
+
+    if (ave + sum <= m && ! sum % ave != m) {
+        while (tik != m) {
+            tik = tik + 1;
+            if (tik % 2 == 0) break;
+            else continue;
+        }
+    }    
+    
+    printf("%d\n", tik); 
+    
+    tik = echo(); //this is also a print stmt
+    
+    int block[2][3] = {{0,1,2},{2,3,3}};
+    tik = modify(block, 0, 0, 8);
+    printf("%d\n", tik);
+    printf("%d\n", block[0][0]);
+    tik = block[0][0];
+    
+    tik = modify(block, 1, 4, 8);
+    printf("%d\n", tik);
+    tik = tik * 1;
+    
+    printf("const %d var %d glob %d\n", m, tik, sum);
+    
+    int ca[2] = {arr[0], arr[1]}; 
+    printf("%d\n", (-arr[0] - -arr[1]));
+
+    printf("this is end\n");
+    
+    return 0;
+}

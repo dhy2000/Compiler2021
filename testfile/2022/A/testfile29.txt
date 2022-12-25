@@ -1,0 +1,206 @@
+const int c_01 = 1;
+const int c_02 = 2, c_03 = 3, c_04 = 4, c_05 = 5 * 2 + 1;
+const int c_06[3] = { 1, 2, 3 };
+const int c_07[2][2] = { {1, 2}, {3, 4} };
+
+
+int v_01 = 1;
+int v_02;
+int v_03 = 3, v_04, v_05 = 2;
+int v_06[3] = { 1, 2, 3 };
+int v_07[2][2] = { {1, 2}, {3, 4} };
+
+void func_01() {
+	printf("Hello World\n");
+	{}
+	return;
+}
+
+
+int func_02() {
+	v_01 = v_01 + 1;
+	int y = 0;
+	int x = 1;
+	{
+		int x = 2;
+		{
+			int x = 3;
+			{
+				y = x + 1;
+			}
+			y = y + x;
+		}
+		y = y + x;
+	}
+	y = y + x;
+	return y + 11 * 22 / 33 % 44 + (11 % 22 / 33 * 44) - ((11 + -+-+-1 - +-+-+2));
+}
+
+
+int func_03(int a) {
+	int v_01 = 1;
+	return (a * v_01 * v_05 / 123);
+}
+
+
+int func_04(int a, int b) {
+	int v_01 = 1;
+	int v_02 = 2;
+	return ((a * v_01 + b / v_02) + func_02() - func_03(b));
+}
+
+
+int func_05(int a[]) {
+	return a[0] * 100;
+}
+
+
+int func_06(int a[][3]) {
+	return a[0][0] + a[1][1] + a[2][2];
+}
+
+int func_07(int a, int b[], int c[][3]) {
+	return a + b[0] + c[0][0];
+}
+
+
+int test_if_and_while_01() {
+	int t_01 = -10;
+	int t_02 = 0;
+	int t_03 = 1;
+	int t_04 = 0;
+	int i = 0, j = 100;
+	if (!t_01 >= 0) {
+		t_03 = 2;
+		t_04 = +-1;
+	}
+	if (t_02 < 0) {
+		t_04 = v_01;
+		if (t_03 == 1)
+			t_04 = func_02();
+		else
+			t_04 = 123 * 456;
+	}
+	else {
+		t_04 = +-func_04(v_01, v_05);
+	}
+
+
+	while (t_04 > 0)
+		t_04 = t_04 - 1;
+	while (t_01 < 0) {
+		i = i + 1;
+		if (i <= 10)
+			continue;
+		if (i == 12)
+			break;
+	}
+
+	if (j > 40) {
+		if (j > 50) {
+			if (j > 60) {
+				if (j > 70) {
+					i = 0;
+				}
+				else i = -1;
+			}
+			else i = -2;
+		}
+		else i = -3;
+	}
+	else i = -4;
+
+	return i;
+}
+
+
+int test_if_and_while_02() {
+	int i = 0;
+	if (v_01) i = i + 1;
+	if (123 < v_01) i = i + 1;
+	if (c_01 > (114514 * v_01 + c_01 / (func_03(v_01) + 6))) i = i + 1;
+	if (func_03(v_01) <= func_04(v_01, v_05)) i = i + 1;
+	if (+-+-123 >= -+-+func_03(v_05)) i = i + 1;
+	if (123 < v_01 == func_03(v_01) <= func_04(v_01, v_05)) i = i + 1;
+	if (123 < v_01 != func_03(v_01) >= func_04(v_01, v_05)) i = i + 1;
+
+	int j = 1, k = 2;
+	if (j == 1 && func_02() && j == 2) i = i + 1;
+	if (k != 2 || func_02()) i = i + 1;
+	if (j == 2 || j == 3 || j == 4 || j == 5) i = i + 1;
+	if (j == 2 || j == 1 && k == 2) i = i + 1;
+
+	return i;
+}
+
+
+int main() {
+	;
+	1+1;
+	const int vc = c_01, vc_2 = 3;
+	const int c_01 = 2;
+	int v_PE_01 = 114514;
+	int v_PE_02 = v_01;
+	int v_PE_03 = c_01;
+	int v_PE_04 = (11 * 22 / 33 % 44 + 55 - 66 + -77 - +88 + func_02());
+
+
+	int v_UE_01 = v_PE_01;
+	int v_UE_02 = func_03(v_01);
+	int v_UE_03_1 = +-+-+-114514;
+	int v_UE_03_2 = -+-+-+func_04(v_01, v_03);
+
+
+	int v_ME_01 = v_UE_01;
+	int v_ME_02 = 10 * v_01;
+	int v_ME_03 = func_03(v_01) / c_01;
+	int v_ME_04 = +-+-+-1 % -+-+-+func_04(v_01, v_05);
+
+
+	int v_AE_01 = v_ME_01;
+	int v_AE_02 = 114514 * v_01 + c_01 / (func_03(v_01) + 6);
+	int v_AE_03 = +-+-+-1 % -+-+-+func_04(v_01, v_05) - 123;
+
+
+	const int vs_const[4 / 2] = { 1, 1 };
+	int vs_01[9 / 3] = { 1, 2, 3 };
+	int vs_02[9 / 3][12 / 4] = { {11, 12, 13},{21, 22, 23},{31, 32, 33} };
+	int vs_03[3];
+	int vs_04[3][3];
+	int vs_05 = vs_const[0];
+	int vs_06 = vs_01[1];
+	int vs_07 = vs_02[1][2];
+	vs_01[0] = 10;
+	vs_02[1][2] = 10;
+	int vs_test = vs_05 + vs_06 + vs_07 + func_05(vs_02[0]) + func_06(vs_02) + func_07(v_01, vs_01, vs_02);
+
+
+	int vm;
+	int v_02 = 1;
+	int vm_01;
+	vm_01 = getint();
+	int vm_i_1 = test_if_and_while_01();
+	int vm_i_2 = test_if_and_while_02();
+	int vm_02 = func_02();
+	int vm_03 = func_03(v_03);
+	int vm_04 = func_04(v_02, v_03);
+	int vm_AE = v_AE_01 / v_AE_02 % v_AE_03;
+	int vm_ME = v_ME_01 * v_ME_02 + v_ME_03 * v_ME_04;
+	int vm_UE = v_UE_01 - v_UE_02 - v_UE_03_1 - v_UE_03_1 - v_UE_03_2;
+	int vm_PE = v_PE_01 + v_PE_02 + v_PE_03 + v_PE_04;
+
+
+	printf("20377020\n");
+	printf("vm_01 = %d\n", vm_01 + 1);
+	printf("vm_02 = %d,  vm_03 = %d\n", vm_02, vm_03);
+	printf("vm_04 = %d\n", vm_04);
+	printf("vm_AE = %d\n", vm_AE);
+	printf("vm_ME = %d\n", vm_ME);
+	printf("vm_UE = %d\n", vm_UE);
+	printf("vm_PE = %d\n", vm_PE);
+	printf("vm_i_1 = %d,  vm_i_2 = %d\n", vm_i_1, vm_i_2);
+	printf("vs_test = %d\n", vs_test);
+
+
+	return 0;
+}

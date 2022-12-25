@@ -1,0 +1,56 @@
+const int globalA[2] = {20, 373};
+int globalVa[2];
+int globalVb[2] = {3, 737};
+int findElement(int a[], int index) {
+    if(a[index] != 0) {
+        return a[index];
+    } else {
+        return 0;
+    }
+    return 0;
+}
+int writeElement(int a[], int index, int num) {
+    a[index] = num;
+    return 1;
+}
+int f(int a[], int x) {
+    if (x < 3) {
+        return 1;
+    }
+    int t = findElement(a, x);
+    if (t != 0) {
+        return t;
+    } else {
+        writeElement(a, x-1, f(a, x-1));
+        writeElement(a, x-2, f(a, x-2));
+        return f(a, x-1) + f(a, x-2);
+    }
+    return 0;
+}
+int printStudentId(int year, int college, int iter) {
+    printf("%d%d%d\n",year, college, iter);
+    return 1;
+}
+int main() {
+    int n, i;
+    int result;
+    int c[41];
+    int d[41];
+    i = 0;
+    while (i < 41)
+    {
+        d[i] = 0;
+        i = i + 1;
+    }
+    n = getint();
+    result = f(d, n);
+    printStudentId(globalA[0], globalA[1], globalVb[1]);
+    printf("result is %d\n", result);
+    i = 0;
+    while (i < 8)
+    {
+        printf("front %d is %d\n", i + 1, d[n - i - 1]);
+        i = i + 1;
+    }
+    return 0;
+}

@@ -1,0 +1,55 @@
+
+int a,b=2+0;
+int c=3+0;
+int d=4;
+
+void shayemeiyou(){
+    int m;
+}
+int yi(){
+    return 1;
+}
+int pidoubushi(int n){
+    return 0;
+}
+int mult(int g,int k){
+    return g*k;
+}
+int main(){
+    int i=0;
+    int m;
+    int s=1;
+    printf("19373044\n");
+    printf("s+1=%d\n",s+1);
+    m=getint();
+    printf("m=%d\n",m);
+    {
+    }
+    if(!m){
+        m=m+yi();
+    }
+    printf("m=%d\n",m);
+    if(m==1){
+        m=m-1;
+    }
+    else;
+    printf("m=%d\n",m);
+    while(m!=3){
+        printf("m=%d\n",m);
+        m=-+-((mult(m,1)/1+1)%4);
+    }
+    i=mult(m,1);
+    printf("m=%d\n",m);
+    while(m>0){
+        if(m<=0){
+            continue;
+        }
+        printf("before break\n");
+        break;
+    }
+   if(m>=0){
+    }
+    return 0;
+
+}
+

@@ -1,0 +1,31 @@
+const int N = 123;
+const int ARR[3] = {1, 2, 3}, BRR[2][2] = {{1, 2}, {3, 4}};
+int uninit;
+int global = 123;
+int arr[3] = {4, 5, 6}, brr[2][2] = {{1, 2}, {3, 4}};
+
+int add(int a, int b){
+   return 0;
+}
+
+int getArr(int arr[][2]){
+   return 0;
+}
+
+int printArr(int arr[]){
+   return 0;
+}
+
+void print(){
+
+}
+
+int main ( ) {
+   {}
+   int a = 123;
+   a = 114514;
+   arr[0] = 1919810;
+   brr[0][0] = 114514;
+   printf("20373389");
+   return 0;
+}

@@ -1,0 +1,60 @@
+const int a0 = 1;
+const int b0 = 2, c0 = -(10 + 3 * 2 - 6 / 2 % 2), c1 = 0;
+int d0 = 3;
+int e0 = 5, f0 = (10 + 3) * 2 / 1 - 6 / 2;
+
+int calcul(int a) {
+	int c = 3;
+	if(a < 10) {
+		c = c * a;
+	}
+	else {
+		c = c * (a + 1);
+	}
+	while(c < 30) {
+		c = c + 1;
+		if(c % 2 != 0)
+			continue;
+		if(c % 26 == 0)
+			break;
+	}
+	return c;
+}
+
+int sum(int a, int b) {
+	int n = 0;
+	n = a + b;
+	return n;
+}
+
+void myPrint() {
+	printf("test\n");
+	printf("%d\n", sum(3, 5));
+	return;
+}
+
+int main() {
+	printf("20373506\n");
+	int a0 = calcul(3);
+	printf("%d\n", -a0);
+	myPrint();
+	int ab = 5, bc = 6, cd = 7;
+	cd = getint();
+	if(sum(sum(ab, bc), cd) < 10) {
+		printf("<10\n");
+	}
+	if(sum(sum(ab, bc), cd) <= 18) {
+		printf("<=18\n");
+	}
+	if(sum(sum(ab, bc), cd) > 5) {
+		printf(">5\n");
+	}
+	if(sum(sum(ab, bc), cd) >= 50) {
+		printf(">=50\n");
+	}
+	/*
+		printf("test1\n");
+	*/
+	//printf("test2\n");
+	return 0;
+}

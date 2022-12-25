@@ -1,0 +1,46 @@
+void printMyID(int id)
+{
+    int i = 5;
+ 	while(i >= 3){
+         printf("%d\n",id);
+         i = i - 1;
+    } 
+    while(i > 0){
+         printf("%d\n",id);
+         i = i - 1;
+    }       
+    int j = 0;
+    while(j <= 3){
+         printf("%d\n",id);
+         j = j + 1;
+    }     
+    while(j < 5){
+         printf("%d\n",id);
+         j = j + 1;
+    }
+	return;   
+}
+
+int playID(int id)
+{
+	int i = 0;
+    while(i < id){
+        i = i + 1;
+        if(i == 711){
+            continue;
+        }
+        if(i == 19182622){
+            break;
+        }
+    }
+    return i;
+}
+int block(){return 1;}
+
+int main()
+{
+	const int id = 19182622;
+	printMyID(id);
+                while(0);
+	return 0;
+}

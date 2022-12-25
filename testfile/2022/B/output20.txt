@@ -1,0 +1,2 @@
+20373866
+output with formatted String: local=0

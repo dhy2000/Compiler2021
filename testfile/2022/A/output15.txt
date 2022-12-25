@@ -1,0 +1,10 @@
+20373377
+5: tmp is 687
+6: a2*tmp = 41220
+7: i = 1, tmp is 2021
+right judge
+1
+4
+3
+func1 = 2037
+in func2

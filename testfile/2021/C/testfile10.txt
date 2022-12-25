@@ -1,0 +1,64 @@
+const int ci=1;
+const int ciexp=1+1*1/1%1-1;
+const int ca=1,cb=2;
+int i=-+1;
+int iexp=1+1*1/1%1-1;
+int a=1,b=2;
+void funv(int a,int b) {{
+	printf("funv\n");
+}}
+int funi(int a){
+	printf("funi\n");
+	return 0;
+}
+int funvnop(){
+	return 0;
+}
+int main() {
+	int ma1,ma2,ma3,ma4;
+	printf("19373025\n");
+	ma1=1;
+	ma2=1+1;
+	ma3=1;
+	ma4=1;
+	if(ma1!=ma2) {
+		int mif1=1;
+		printf("%d\n",mif1); 
+	} else {
+		return 0;
+	}
+	if(ma1==ma3){
+		funi(ma1);
+	}
+	if(ma1!=ma3){
+		funvnop();
+	}
+	if(ma1>=ma3){
+		
+	}
+	if(ma2<=ma3){
+		funvnop();
+	}
+	if(ma1>ma3){
+		funvnop();
+	}
+	if(ma2<ma3){
+		funvnop();
+	}
+	funvnop();
+	while(ma1==ma4){
+		ma4=2;
+		continue;
+	}
+	while(ma1==ma4){
+		break;
+	}
+	printf("try\n");
+	printf("try\n");
+	printf("try\n");
+	printf("try\n");
+	printf("try\n");
+	printf("try\n");
+	printf("try\n");
+	return 0;
+}

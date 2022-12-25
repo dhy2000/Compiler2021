@@ -1,0 +1,95 @@
+/*
+// Created by emilyu on 2022/9/6.
+// it's about Fibonacci
+// B
+*/
+const int MOD = 13331, TEST0[5] = {0, 1, 2, 3, 4}, TEST1[2][2] = {{1, 2},
+                                                                  {3, 4}};
+int num[100];
+
+void mul(int a[][2], int b[][2], int c[][2]) {
+    int temp[2][2] = {{0, 0},
+                      {0, 0}};
+    int i = 0, j, k;
+    while (i < 2) {
+        j = 0;
+        while (j < 2) {
+            k = 0;
+            while (k < 2) {
+                int x = temp[i][j] + a[i][k] * b[k][j];
+                temp[i][j] = x % MOD;
+                k = k + 1;
+            }
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    i = 0;
+    while (i < 2) {
+        j = 0;
+        while (j < 2) {
+            c[i][j] = temp[i][j];
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+}
+
+int f_final(int n) {
+    int x[2] = {1, 1};
+    int res[2][2] = {{1, 0},
+                     {0, 1}};
+    int t[2][2] = {{1, 1},
+                   {1, 0}};
+    int k = n - 1;
+    while (k) {
+        if (k % 2) {
+            mul(res, t, res);
+        }
+        mul(t, t, t);
+        k = k / 2;
+    }
+    int c[2] = {0, 0};
+    int i = 0;
+    while (i < 2) {
+        int j = 0;
+        while (j < 2) {
+            int r = c[i] + x[j] * res[j][i];
+            c[i] = r % MOD;
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    return c[0];
+}
+
+void printAns(int n, int x[]) {     // test address
+    int i = 1;
+    while (i <= n) {
+        printf("%d ", f_final(x[i]));
+        i = i + 1;
+    }
+}
+
+int main() {
+    printf("20373569 the mafia~\n");
+    printf("testConst: %d %d %d\n", TEST0[1] * TEST0[4], TEST1[0][0] * TEST1[1][1], TEST1[1][0] + TEST0[2]);
+    int n;
+    n = getint();
+    int i = 1;
+    while (i <= n) {
+        int a;
+        a = getint();
+        num[i] = a;
+        {
+            i = i + 1;
+        }
+    }
+    printAns(n, num);
+    int maxx = num[n];
+    maxx = maxx + 5 - + - +((num[n] * 2 / 99 + num[1] * num[n] % MOD) - 1);
+    printf("\ntestExp: %d\n", maxx);
+    {
+    }
+    return 0;
+}

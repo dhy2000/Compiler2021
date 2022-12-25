@@ -1,0 +1,110 @@
+int s1_1[3][5]={{25*4,200,300,400,500},{111,222,333,444,555},{99,102,0,123,145}};
+int s2_1[3][5]={{100,200,300,400,500},{111,222,333,444,555},{99,102,0,123,145}};
+int add[3]={123,666,456},s_2[3]={0,0,0};
+int s_3[3]={0,0,0};
+const int a1=1,a2=2,a3=3;
+const int month[9]={1,2,3,4,5,6,7,8,9};
+const int year_1=4,year_2=year_1*25;
+void get_average(int a[][5]){
+    int s=0,i=2;
+    while(i>=0){
+        s=a[i][0]+a[i][1]+a[i][2]+a[i][3]+a[i][4];
+        s=s/5;
+        s_2[i]=s;
+        i=i-1;
+        //aaaa
+    }
+    return;
+}
+void blank(int a,int b,int c){}
+void blank2(int a,int b[],int C23[]){;}
+int add_1(int a,int s[]){
+    int i_1=2,sum=0;
+    while(i_1>=0){
+        sum=sum+s[i_1];
+        i_1=i_1-1;
+    }
+    a=a-3;
+    sum=sum/a;
+    a=a+4;
+    sum=sum*a;
+    sum=sum-a;
+    a=a+6;
+    sum=sum%a;
+    return sum;
+}
+int checkyear(int year){
+    if(year>=0){
+    if(year!=+2022||year<=2021){
+        if((year%(-year_1*-year_2))==0||(year%year_1)==0&&(year%year_2)!=0){
+            printf("run:%d\n",year);
+        }
+        else{
+            printf("not run:%d\n",year);
+        }
+    }
+    else{
+        printf("2022!!!\n");
+    }
+    }
+    return year;
+}
+void printsth(){
+    printf("printsth\n");
+    return;
+}/*
+int getint(){
+    int n;
+    scanf("%d",&n);
+    return n;
+}*/
+int main(){{
+    int j=0,k=3,i=3;
+    int in_put;
+    int x,y,z;
+    int x_1;
+    int y_1,z_1;
+    int aaa,bbb,ccc,ddd,eee,fff;
+    in_put=getint();
+    x=getint();
+    y=getint();
+    z=getint();
+    x_1=getint();
+    y_1=getint();
+    z_1=getint();
+    printf("20373614\n");
+    get_average(s1_1);
+    while(i>0){
+        if(s_2[i-1]==300){
+            i=i-1;
+            continue;
+            }
+        else{
+            if(1&&!(s_2[i-1]-300)&&s_2[i-1]<100){
+                printf("LOW:%d\n",s_2[i-1]);
+            }
+            if(1&&0>1){
+                if(s_2[i-1]==300||s_2[i-1]>332){
+                    printf("HIGH:%d\n",s_2[i-1]);
+                    break;
+                }
+            }
+            i=i-1;
+        }
+    }
+    j=add_1(5,add);
+    printf("add:%d\n",j);
+    k=add_1(in_put,add);
+    printf("input:%d\n",k);
+    aaa=checkyear(x);
+    bbb=checkyear(y);
+    ccc=checkyear(z);
+    ddd=checkyear(x_1);
+    eee=checkyear(y_1);
+    fff=checkyear(z_1);
+    blank2(j,add,s1_1[0]);
+    printf("year1:%d,year2:%d,year3:%d,year4:%d,year5:%d,year6:%d\n",aaa,bbb,ccc,ddd,eee,fff);
+}
+printsth();
+return 0;
+}

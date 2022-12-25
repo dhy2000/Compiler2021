@@ -1,0 +1,18 @@
+int x[10],i=0;
+
+int main()
+{
+	printf("19182623\n");
+	while(i<=10)
+{if(i==2)
+{
+i=4;
+continue;
+}
+ x[i]=i;
+i = i + 1;
+if(i==5)
+break;}
+
+	return 0;
+}

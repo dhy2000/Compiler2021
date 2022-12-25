@@ -1,0 +1,94 @@
+//		FuncDef
+void funa() {
+}
+
+int funb(int a) {
+	return a;
+}
+
+void func(int a, int b[], int c[][2]) {
+	return;
+}
+
+
+int if_else_fun(int x) {
+	int a, ret = 2;
+	a = x;
+	
+	;
+	a;
+	
+	if (a == 1) ret = 1;
+	if (a == 1 + 1) ;
+	else {
+		ret = 4;
+	}
+	
+	return ret;
+}
+
+int while_fun(int x) {
+	int ret = 1;
+	int a = x;
+	while (a > 0) {
+		if (1) a = a - 1;
+		if (a % 2 != 1) continue;
+		if (a <= x / 2) break;
+	}
+	return a;
+}
+
+//		MainFuncDef
+int main() {
+	printf("20373380\n");
+	
+	const int cona = 1;
+	const int conb[2] = {1, 2}, conc[2][2] = {{1, 2}, {3, 4}};
+	const int conx = 1, cony = 2, conz = 3;	
+	int vara = 1;
+	int varb[2] = {1, 2}, varc[2][2] = {{1, 2}, {3, 4}};
+	
+	int x, a, b[2], c[2][2];
+	x = getint();
+	a = cona;
+	b[1] = conb[1];
+	c[1][1] = conc[1][1];
+	
+	funa();
+	funb(a);
+	func(a, b, c);
+	
+	int f[20];
+	f[0] = 1;
+	f[1] = 1+2;
+	f[2] = 1-2;
+	f[3] = 1*2;
+	f[4] = 1/2;
+	f[5] = 1%2;
+	f[6] = +1;
+	f[7] = -1;
+	f[8] = a;
+	f[9] = -a;
+	f[10] = 0;
+	if (1 < 2) f[11] = 1;
+	else f[11] = 0;
+	if (1 > 2) f[12] = 1;
+	else f[12] = 0;
+	if (1 <= 2) f[13] = 1;
+	else f[13] = 0;
+	if (1 >= 2) f[14] = 1;
+	else f[14] = 0;
+	
+	printf("2\n");
+	printf("3\n");
+	printf("4\n");
+	printf("5\n");
+	printf("6\n");
+	printf("7\n");
+	printf("8\n");
+	printf("9\n");
+	printf("10\n");
+	
+	
+	return 0;
+}

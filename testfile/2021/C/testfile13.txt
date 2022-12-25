@@ -1,0 +1,22 @@
+int fib(int i){
+    if (i == 1) {
+        return 1;
+    }
+    if (i == 2) {
+        return 2;
+    }
+    return fib(i - 1) + fib(i - 2);
+}
+int main () {
+    int i = 2,j = 5;
+    i = getint();
+    j = getint();
+    //const int a[3][2] = {{1,2},{2,3},{3,4}};
+    const int a[2] = {1,2};
+    i = (-(i * j) * fib(4) + 0 + a[fib(1)] * 1 - 1/2) * 5;
+    j = 7*5923/56*56 - fib(fib(6)) + (1+2-(89/2*36-53) /1*6-2*(45*56/85-56+35*56/4-9));
+    int k = +-+5;
+    printf("%d, %d, %d\n", i, j, k);
+    return 0;
+}
+

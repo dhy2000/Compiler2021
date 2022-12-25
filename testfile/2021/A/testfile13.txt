@@ -1,0 +1,147 @@
+
+const int const55[5][5] = {{0,1,2,3,4},{3,4,5,6,7},{6,7,8,9,10},{9,10,11,12,13},{12,13,14,15,16}};
+const int const5[5] = {5,10,15,20,25};
+const int zero = 0,one = 1,two = 2, three = 3;
+int size=5;
+int n22[2][2] = {{0,5},{561,5648}};
+int n3[3 + 0 * 0] = {231,546,48651};
+int var5[5];
+int var33[3][3];
+int a=1,b,c,d;
+
+int getSqu(int x) {
+	return x * x;
+}
+void set1N3() {
+	int i = 0;
+	while (i < 3) {
+		{
+			n3[i] = 1;
+			i = i + 1;
+		}
+	}
+	return ;
+}
+
+int getSum(int n[][3], int size0) {
+	int i=0,sum;
+	int j;
+	sum = 0;
+	j = 0;
+	while (i<size0) {
+		while (j < 3) {
+			sum = sum + n[i][j];
+		j = j + 1;
+		}
+		i = i + 1;
+	}
+	return -(-sum);
+	
+
+}
+//get var3 sum
+
+int getMax(int m, int n, int p, int q) {
+	int max = m;
+	if (n > max && 1 == 1 && 1 || 0 != 0 && 0 || 114514 <= 5438/2) {
+		max = n;
+	}
+	if (p > max && 3 >= 5 % 2 || !(1 + 2 * 52)) {
+		max = p;
+	} else max = max;
+	if (q > max || 0 || max == max && max == -max && 0 || 1+1>23-1) {
+		max = q;
+	}
+	return max;
+}
+
+int getSquSum(int x[],int size) {
+	int i = 0;
+	int sum = 0;
+	while (i < size) {
+		sum = sum + getSqu(x[i]);
+		i = i + 1;
+	}
+	return sum;
+	
+}
+
+int main() {
+	const int constInMain = 1;
+	int m,n,p,q;
+	m = getint();
+	n = getint();
+	p = getint();
+	q = getint();
+	printf("19373330\n");
+	int i = 0;
+	printf("max of mnpq is %d\n",getMax(m,n,p,q));//2
+	int max = getMax(m,n,p,q);
+	int temp;
+	set1N3();
+	{
+		{
+			while (i < m) {
+				i = i + 1;
+				break;
+			}
+			int out1 = getMax(i,n,0,-114514);
+			temp = out1;
+			printf("i or m ? %d\n",out1);//3
+		}
+	}
+	int out2 = (543-543+2-2)/5;
+	i = (54482261-444561) * 0 / 521135 % 6371;
+	while (i < 3) {
+		i = i + 1;
+		if (i > 2) continue ;
+		else out2 = out2 + n3[i] * 8 - 0;
+		out2 = out2 + 114514;
+		
+	}
+	printf("out1 %d out2 %d\n",temp,out2);//4
+	var33[0][0] = 9*8/7-6+5%4;
+	var33[0][1] = (1) + 5 / (2) * (6 - 2 *5 %4) - (5 * 4);
+	var33[0][2] = ((getMax(1,2,3,4)) + (var33[0][0] - 5 / 6) + (648648 % 2)) * ((m+n-2 * 1) + (44) - (0 + 0) );
+	var33[1][0] = 114514 + zero - zero * zero;
+	int sumVar33 = getSum(var33,3);
+	printf("sum of array var33 is %d\n",sumVar33);
+	//5
+	int out3;
+	out3 = getSquSum(n3,3);
+	printf("squ sum of s3 %d\n",out3);
+	//6
+	int out4 = out3 + constInMain;
+	out4 = getMax(getSquSum(n3,3),getSqu(1 + 2),5*8,getSqu(n22[1][0]));
+	printf("max of four number %d\n",out4);
+	//7
+	if (!(+5438 - 2) >= 2) {
+		printf("i don t want this\n");
+	} else {
+		printf("Kirov reporrrting %d\n",constInMain);
+	}
+	//8
+	int out5;
+	{
+		out5 = constInMain + 5;
+		out5 = out5 + getMax(1,-231,-156*156,-123/3501);
+		if (!(((1+2)))) {
+			out5 = 32132132;
+		}
+	}
+	{
+	}
+	{
+	}
+	if (2 > 1) ;
+	{
+		printf("For the Union %d\n",out5);
+		//9
+	}
+	
+	printf("okmotherfuckeroveridontwanttobehornyanymoreijustwanttobehappy\n");
+	
+	
+	
+	return 0;
+}

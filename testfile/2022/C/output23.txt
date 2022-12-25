@@ -1,0 +1,7 @@
+20373569 the mafia~
+funcTest: move disk from 3 to 1
+funcTest: move disk from 2 to 1
+blockTest: 7 == 7, 8 == 8
+blockTest: 5 == 7, 12 == 12
+Exptest: 100 7 12 -2147483648 119 10 40 318
+Exptest: 10

@@ -1,0 +1,35 @@
+19231177
+1
+23
+3
+4
+52
+6
+7
+8
+99
+10
+appear
+20
+not
+30
+not
+40
+not
+50
+not
+60
+not
+99
+not
+99
+not
+99
+not
+print123
+123
+/****/123
+/**/123
+print return value :
+in : 5 ,out = 50
+in : 5 ,out = 50

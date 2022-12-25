@@ -1,0 +1,8 @@
+19373682
+hello? 12345 12345 12345
+func1 done!
+func2 done!
+func3 input = 0
+func3 done!
+204 204 100 100 20400 100 0 100 100
+func4 done!

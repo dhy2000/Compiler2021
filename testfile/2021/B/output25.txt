@@ -1,0 +1,10 @@
+19373341
+m = 6, n = 23, mm = 26, nn = 353
+max of mm and nn: 353; min of mm and nn: 26
+mainConst1 = 10
+Sum of normalConst: 35
+23 is odd!
+Sum of array: 6
+sum of array: 24
+array contains 4 even number!
+All even!

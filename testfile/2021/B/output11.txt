@@ -1,0 +1,10 @@
+19182616
+5 is a prime number
+c and d are both positive
+2
+3
+4
+1
+2
+5
+6

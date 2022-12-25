@@ -1,0 +1,19 @@
+20373743
+input: 6
+a is [[1, 1], [1, 0]]
+a is [[2, 1], [1, 1]]
+a is [[3, 2], [2, 1]]
+a is [[5, 3], [3, 2]]
+a is [[8, 5], [5, 3]]
+a is [[13, 8], [8, 5]]
+a is [[21, 13], [13, 8]]
+a is [[34, 21], [21, 13]]
+a is [[55, 34], [34, 21]]
+get matrix after 9 multplFIB_M turns!
+given original vector: [13, 8]
+get next vector: [21, 13]!
+a and b is true
+c is true
+a || c is true
+sum of a, b, c is 12
+sum of lis front id 6

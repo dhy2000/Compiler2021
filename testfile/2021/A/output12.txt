@@ -1,0 +1,10 @@
+19182636
+! is ok
+< is ok
+> is ok
+<= is ok
+>= is ok
+== != is ok
+or is ok
+the priority of and/or is ok
+6 7

@@ -1,0 +1,73 @@
+/*测试范围：
+	编译单元存在全局变量定义
+	常量声明（一次和多次） 
+	普通变量常数定义
+	常表达式初值
+	void 类型函数
+	无形参函数
+	单形参函数
+	Block 内为空
+	[Exp];（覆盖两种情况）
+	return 无 Exp
+	无参的函数调用 
+	覆盖 ! 的 UnaryOp
+	一参的函数调用
+	含 >= 的 RelExp
+	覆盖 ;
+*/
+
+int ans;
+const int zero = 0, end = -1;
+void gcd(int a, int b) {
+	if (a == zero) {
+		ans = b;
+		return;
+	}
+	if (b == zero) {
+		ans = a;
+		return;
+	}
+	
+	if (a >= b) gcd(a % b, b);
+	else gcd(a, b % a);
+	return;
+} 
+
+void output(int ans) {
+	printf("gcd is %d\n", ans);
+	return;
+}
+
+void error() {
+	printf("invaild input!\n");
+	return;
+}
+
+int main() {
+	int a, b;
+	
+	a = getint();
+	while(a != end) {
+		b = getint();
+		
+		//Cond 不能作为 ! 的运算对象
+		if (a == 0) {
+			error(); 
+			a = getint();
+			continue;
+		}
+		if (!b) {
+			error(); 
+			a = getint();
+			continue;
+		}
+		
+		gcd(a, b);
+		output(ans);
+		a = getint();
+	}
+	
+	{}
+	;
+	return 0;
+}

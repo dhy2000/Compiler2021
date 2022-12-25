@@ -1,0 +1,125 @@
+const int sb = 250;
+const int mmm = 2, nnn = 3, jjj = 4, kkk = 2 * 3;
+const int arr1[1] = {5}, arr2[2][2] = {{1, 2},
+                                       {4, 5}};
+
+int funcExp(int a, int b) {
+    int c, d;
+    if (a == b) {
+        c = a;
+    }
+    if (a != b) {
+        a = c;
+    }
+    if (a == b || c == b) {
+        c = a;
+    }
+    if (a == b && c == b) {
+        a = c;
+    }
+    if (a == c && a == b || a == 0) {
+        c = 2;
+    }
+    if (a < b) {
+        a = 1;
+    }
+    if (a > b) {
+        b = 1;
+    }
+    if (a <= c) {
+        a = 2;
+    }
+    if (a >= c) {
+        c = 2;
+    }
+    c = a + b;
+    c = a / b;
+    c = a - b;
+    c = a % b;
+    c = a * b;
+    c = a;
+    c = +a;
+    c = -a;
+    return c;
+}
+
+int func0() {
+    return 1;
+}
+
+int func1(int a) {
+    return a + 1;
+}
+
+int func2(int a, int b) {
+    return a + b;
+}
+
+void func3() {
+
+}
+
+void fun4() {
+    return;
+}
+
+int func5(int a[], int b[][2]) {
+    return a[0] * b[1][1];
+}
+
+int main() {
+    int a;
+    int a1[3] = {0, 1, 2};
+    int a2[2][2] = {{2, 2},
+                    {2, 2}};
+    int a3[1] = {0};
+    int a4[1][1] = {{0}};
+    if (func0()) { ;
+        3 * 3;
+    }
+    a3[0] = 1;
+    a4[0][0] = 1;
+    a = func5(a1, a2);
+    a = func1(a3[0]);
+    a = getint();
+    int arr3[3];
+    int arr[3] = {0, 2, 4};
+    printf("19231248");
+    if (a == 4) {
+        a = 5;
+    } else {
+        a = 6;
+    }
+    while (a < 8) {
+        a = a + 1;
+        if (a > 6) {
+            break;
+        } else {
+            continue;
+        }
+    }
+    if (!1) {
+        a = sb;
+    }
+    a = func1(a);
+    a = func2(a, a);
+    int b = sb + mmm;
+    a = b * sb;
+    a = b / sb;
+    a = sb % b;
+    a = +sb;
+    a = -sb;
+    a = (+sb);
+    a = (-sb);
+    printf("%d\n",a);
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    printf("19231248\n");
+    return 0;
+}

@@ -1,0 +1,13 @@
+16061069
+input an integer,judge if it is prime number,10 groups in total
+input > 0 is needed
+input > 0 is needed
+1 is not concerned
+2 is a prime number
+3 is a prime number
+4 is not a prime number
+5 is a prime number
+6 is not a prime number
+7 is a prime number
+8 is not a prime number
+while times is 22 in total

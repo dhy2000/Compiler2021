@@ -1,0 +1,52 @@
+const int a = 1;
+const int b = 2 * 6 + 1, _a_b[2%2+1] = {5}, _a_3_b[2/2+1][2*1-1] = {{0},{3452%2+4*3}};
+int c, d[2%2+1], _a_4_b[2/2+1][2*1-1] = {{0},{3452%2+4*3}}, z;
+int _d_e =  1;
+int glo_1, glo_2, glo_3, glo_4, glo_5, glo_6, glo_7, glo_8, glo_9;
+
+void test_1(int var_1, int var_2[], int var_3[][1]){
+	c = var_1 + var_2[0] + var_3[0][0];
+	
+} 
+
+int main() {
+	const int f = 1;
+	const int g = 2 * 6 + 1, _a_b_[2%2+1] = {a}, _a_3_b_d[2/2+1][2*1-1] = {{0},{3452%2+4*3}};
+	int c, d[2%2+1], _a_4_b_d[2/2+1][2*1-1] = {{0},{3452%2+4*3}};
+	int _d_e_g = (_a_3_b_d[0][0] + _a_4_b_d[0][0]) * b + 1;
+	d[0] = 1;
+	_a_4_b_d[0][0] = 1;
+	c = _d_e_g + _a_4_b_d[0][0];
+	glo_1 = getint();
+	glo_2 = getint();
+	glo_3 = getint();
+	glo_4 = getint();
+	glo_5 = getint();
+	glo_6 = getint();
+	glo_7 = getint();
+	glo_8 = getint();
+	glo_9 = getint();
+	test_1(c, d, _a_4_b_d);
+	while(glo_9 > 0 || glo_8 > 0 && glo_7 > 0) {
+		if(glo_2>2) {
+			glo_2 = glo_2 - 1;
+			continue;
+		} else {
+			glo_2 = glo_2 - 1;
+			glo_1 = glo_1 - 1;
+			if (glo_1 < 0)
+				break;
+		}
+	}
+	printf("19231076\n");
+	printf(">/!~varg1 is:%d;~\n", glo_1);
+	printf(">/!~varg2 is:%d;~\n", glo_2);
+	printf(">/!~varg3 is:%d;~\n", glo_3);
+	printf(">/!~varg4 is:%d;~\n", glo_4);
+	printf(">/!~varg5 is:%d;~\n", glo_5);
+	printf(">/!~varg6 is:%d;~\n", glo_6);
+	printf(">/!~varg7 is:%d;~\n", glo_7);
+	printf(">/!~varg8 is:%d;~\n", glo_8);
+	printf(">/!~varg9 is:%d;~\n", glo_9);
+	return 0;
+}

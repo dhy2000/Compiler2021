@@ -1,0 +1,79 @@
+/*test5：Stmt的[2]~[9] */
+void test() {
+	return;
+}
+
+int main()
+{
+	//Decl
+	int a = 2;
+	int b = 5;
+	
+	//First Stmt
+	printf("19373332\n");	//[1]
+	
+	//Stmt
+	/*[2]: [Exp] ';'  //有无Exp两种情况*/
+	a + b;
+	;
+	
+	/*[3]: Block */
+	{
+		/*重复0次*/ 
+	}
+	{
+		/*重复多次*/ 
+		int c = 1;
+		int d = 0;
+		c = a;
+		d = b * 9 + 1;
+		printf("Stmt-3(Block): c = %d, d = %d\n", c, d);	//[2]
+		int e = 1;
+		int f = 0;
+		e = 2 * c;
+		f = e * d / c * 9 + 1;
+		printf("Stmt-3(Block): e = %d, f = %d\n", e, f);	//[3]
+	}
+	
+	/*[4]: 'if' '( Cond ')' Stmt [ 'else' Stmt ] // 1.有else 2.无else*/
+	if(b != 0) a = a + 1;
+	if(b != 0) {
+		a = 0;
+	} else {
+		a = 1;
+	}
+	printf("Stmt-4(if) check finish!\n");	//[4]
+	
+	/*[5]: 'while' '(' Cond ')' Stmt*/
+	/*[6]: 'break' ';' | 'continue' ';'*/
+	int i = 0;
+	while(a < 10) {
+		i = i * 2;
+		a = a + 1;
+		if(a >= 6) {
+			continue;
+		}
+		if(a == 5) {
+			break;
+		}
+	}
+	printf("Stmt-5,6 check finish!\n");	//[5]
+	
+    /*[7]: 'return' [Exp] ';' // 1.有Exp 2.无Exp*/
+    /*最后的return 0就是了*/ 
+    printf("Stmt-7 check finish!\n");	//[6]
+    
+    /*[8]: LVal = 'getint''('')'';'*/
+    a = getint();
+    //scanf("%d", &a);
+	printf("Stmt-8 check finish!\n");	//[7]
+    
+    /*[9]: 'printf' '('FormatString {',' Exp} ')'';' // 1.有Exp 2.无Exp */
+    printf("\n");						//[8]
+    printf("FormatChar.\n");			//[9]
+    printf("%d\n", a * 2 + 1);			//[10]
+    
+    test();
+	
+	return 0;	
+}

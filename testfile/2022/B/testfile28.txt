@@ -1,0 +1,75 @@
+const int MAXN = 100;
+
+void swap(int a[], int i, int j) {
+    int tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+}
+
+
+void heapify(int a[], int i) {
+    int l, r;
+    int largest;
+    l = 2 * i;
+    r = 2 * i + 1;
+
+    if (l <= a[0]) {
+        if (a[l] > a[i])
+            largest = l;
+        else
+            largest = i;
+    } else
+        largest = i;
+    if (r <= a[0]) {
+        if (a[r] > a[largest])
+            largest = r;
+    }
+
+    if (largest != i) {
+        swap(a, i, largest);
+        heapify(a, largest);
+    }
+}
+
+
+void build_heap(int a[]) {
+    int i = a[0] / 2;
+    while (i >= 1) {
+        heapify(a, i);
+        i = i - 1;
+    }
+}
+
+
+void heap_sort() {
+    int i, n;
+    int a[MAXN];
+    n = getint();
+    a[0] = n;
+    i = 1;
+    while (i < n + 1) {
+        a[i] = getint();
+        i = i + 1;
+    }
+    build_heap(a);
+    i = n;
+    while (i >= 2) {
+        swap(a, 1, i);
+        a[0] = a[0] - 1;
+        heapify(a, 1);
+        i = i - 1;
+    }
+    i = 1;
+    printf("20377020\n");
+    while (i < n + 1) {
+        printf("%d\n", a[i]);
+        i = i + 1;
+    }
+
+}
+
+
+int main() {
+    heap_sort();
+    return 0;
+}

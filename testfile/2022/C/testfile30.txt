@@ -1,0 +1,23 @@
+// #include<stdio.h>
+int main() {
+    printf("20376156\n");
+    int x = 2;
+    if (x == 1) {
+        ;;;
+    } else if (x == 2) {
+        x = 9 - 8;
+    } else {
+        printf("%d\n", x);
+    }
+    if (x == 1) printf("hhh\n");
+    {{{{}}}};;
+    x = 11;
+    while (x >= 0) {
+        x = x - 2;
+        if (x == 1) continue;
+        else if (x == 3) break;
+        x = x - 1;
+    }
+    printf("%d\n", x);
+    return 0;
+}

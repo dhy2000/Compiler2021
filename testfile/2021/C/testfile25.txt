@@ -1,0 +1,152 @@
+
+const int normalConst1 = 10;
+const int normalConst2 = 12, normalConst3 = 13, normalConst4 = 14;
+
+int normalVar1 = 21;
+int normalVar2 = 22, normalVar3 = 23;
+
+int cnt;
+
+void output(int n) {
+	cnt = cnt + 1;
+	printf("the num is %d\n", n);
+	return;
+}
+
+void judgeEvenOdd(int n) {
+	if (n % 2 == 0) {
+	cnt = cnt + 1;
+		printf("%d is even!\n", n);
+	} else {
+		cnt = cnt + 1;
+		printf("%d is odd!\n", n);
+	}
+	return ;
+}
+
+void get2Max(int m, int n) {
+	if (m > n) {
+		cnt = cnt + 1;
+		printf("max of %d and %d is %d\n", m, n, m);
+	} else {
+		if (m <= n) {
+			cnt = cnt + 1;
+			printf("max of %d and %d is %d\n", m, n, n);
+		}
+	}
+	return ;
+}
+
+int get2Min(int m, int n) {
+	int ans = m;
+	if (m > n) {
+		printf("min of %d and %d is %d\n", m, n, n);
+		cnt = cnt + 1;
+		ans = n;
+	} else {
+		if (m < n) {
+			printf("min of %d and %d is %d\n", m, n, m);
+			cnt = cnt + 1;
+			ans = m;
+		} else {
+			if (m == n) {
+				printf("%d and %d are equals\n", m, n);
+				cnt = cnt + 1;
+				ans = n;
+			}
+		}
+	}
+	return ans;
+}
+
+void start() {
+	cnt = cnt + 1;
+	printf("19373341\n");
+	return ;
+}
+
+void isPrime(int n) {
+	int flag = 0;
+	int i = 3;
+	if (n % 2 == 0) {
+		printf("No, %d is not a prime! It has a factor 2\n", n);
+		cnt = cnt + 1;
+		flag = 1;
+	}
+	if (!flag) {
+		while (1) {
+			if (n % i == 0) {
+				printf("No, %d is not a prime! It has a factor %d\n", n, i);
+				cnt = cnt + 1;
+				flag = 1; 
+				break;
+			} else {
+				i = i + 2;
+				continue;
+			}
+		}
+		if (flag == 0) {
+			printf("Yes, %d is a prime!\n", n);
+			cnt = cnt + 1;
+		}
+	}
+	return ;
+}
+
+int main() {
+	while (1) {
+		start();
+		if (cnt == 10) {
+			break;
+		}
+		const int i = 13, j = 212;
+		const int ii = 21;
+		int k = 1, kk = 2;
+		int nnnnn = 22;
+		int nnn;
+		nnn = 123;
+		if (cnt == 10) {
+			break;
+		}
+		int m;
+		m = getint();
+		int n;
+		n = getint();
+		int mm;
+		mm = getint();
+		output(j / i + 4 * j - i);
+		output(m);
+		output(n);
+		output(mm);
+		if (cnt == 10) {
+			break;
+		}
+		judgeEvenOdd(m);
+		if (cnt >= 10) {
+			break;
+		}
+		if (cnt == 10) {
+			break;
+		}
+		judgeEvenOdd(n);
+		if (cnt == 10) {
+			break;
+		}
+		get2Max(m, n);
+		if (cnt == 10) {
+			break;
+		}
+		get2Min(m, n);
+		if (cnt == 10) {
+			break;
+		}
+		if (cnt == 10) {
+			break;
+		}
+		isPrime(mm);
+		if (cnt == 10) {
+			break;
+		}
+	}
+	return 0;
+}

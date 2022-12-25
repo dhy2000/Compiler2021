@@ -1,0 +1,121 @@
+/*
+#include <stdio.h>
+int getint(){
+    int n;
+    scanf("%d",&n);
+    return n;
+}
+*/
+
+
+// ConstDecl
+const int c1 = 1;
+const int c2 = 2, c3 = 3, c4 = 4;
+const int c5 = 5, c6 = 6;
+const int carr[2] = {1,2};
+const int cmat[2][3] = {{1,2,3},{4,5,6}};
+
+// VarDecl
+int v1 = 1;
+int v2 = 2, v3 = 3, v4;
+int v5;
+int arr[2] = {1,2};
+int mat[2][3] = {{1,2,3},{4,5,6}};
+int arr2[3], mat2[2][3];
+
+// FuncDef
+void f()
+{
+    printf("This is f().\n");
+    int a = 4;
+    a = 5;
+    a = a+1;
+    ;
+    {}
+    {
+        a = a+2;
+    }
+    if (1) {
+        ;
+    }
+    if (a) {
+        ;
+    } else {
+        ;
+    }
+    while (a > 0) {
+        a = a-1;
+        if (a == 1) {
+            break;
+        } else {
+            continue;
+        }
+    }
+
+    return;
+}
+int g0()
+{
+    return 0;
+}
+int g1(int a)
+{
+    return a+1;
+}
+int g2(int a, int b)
+{
+    return a+b;
+}
+int g3(int a,int b,int c)
+{
+    return a+b+c; 
+}
+
+
+void h(int arr[], int mat[][4])
+{
+    printf("%d, %d\n", arr[0], mat[0][0]);
+}
+void n(){}
+
+
+int main()
+{
+    int a = 1;
+    a = getint();
+    printf("19373035\n");
+    a = a+1;
+    int arr[3];
+    arr[0] = 1;
+    int mat[3][4];
+    mat[0][0] = 1;
+    (1+1);
+    a;
+    3;
+    2+5-a;
+    arr[1];
+    g0();
+    g1(3);
+    g2(3,5);
+    g3(a,a,a);
+    if (!a) {}
+    h(arr,mat);
+    h(mat[0],mat);
+    v1 * v2 + 3 - 4;
+
+
+    if(v1 / v2 < v1) ;
+    if(v1 % v2 > v1) ;
+    if(v1 % v2 >= v1) ;
+    if(v1 % v2 <= v1) ;
+    if (3 == 2) ;
+    if (3 != 2) ;
+    if(3 && 2) ;
+    if (3 || 2) ;
+    +1;
+    -1;
+
+
+    printf("a:%d\n", a+1);
+    return 0;
+}

@@ -1,0 +1,81 @@
+const int a0=0;
+
+void f()
+{
+	return;
+}
+void ff(int a,int b,int c)
+{
+	c=c+1;
+	return;
+}
+int fd(int a)
+{
+	return a;
+}
+int fk(int a,int b[],int c[][2])
+{
+	return 1;
+}
+
+int main()
+{
+	printf("21371064");
+	printf("\n");
+	printf("heihei%d\n",a0);
+	printf("%d\n",8);
+	printf("AC\n");
+	printf("WA\n");
+	printf("TLE\n");
+	printf("RE\n");
+	printf("PE\n");
+	printf("AK!!\n");
+	int a1=1;
+	if(a0<a1) a1=1;
+	if(a0>a1) a1=1;
+	else a1=1;
+	if(a0==a1) a1=3*4;
+	if(!a1) a1=3-4+5;
+	if(a0>=a1) a1=9;
+	if(a0<=a1) a1=10;
+/*
+	while(a0>=a1)
+	{
+		a1++;
+		break;
+	}*/
+	while(a0>=a1)
+	{
+		if(a1==4) a1=5;
+		break;
+		continue;
+	}
+// a1=3;
+	a1=3/5;
+	a1=a1%6;
+	a1=2;
+	if(a1==2)
+	{
+		a1=3;
+		a1=4;
+	}
+	while(a1==4)
+	{
+		a1=a1+1;
+		continue;
+	}
+	if(a1==5&&a1==4) a1=6;
+	if(a1!=6||a1==3) a1=a0;
+	int a2[2],a3[2]={1,2};
+	int a4[2][2]={{1,2},{3,4}},a5[3]={1,2,3};
+	int a6[2][2]={{1,2},{1,2}};
+	int C[2]={4+2/4*2%6-5,9};
+	C[0]=fd(a1);
+	C[1]=fk(C[1],a2,a4);
+	int n=4;
+	n=getint();
+	f();
+	ff(C[1],a4[1][0],a6[1][1]);
+	n=fd(3+a0);
+	return 0;
+}

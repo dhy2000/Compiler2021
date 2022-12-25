@@ -1,0 +1,108 @@
+// #include <stdio.h>
+
+/*
+ * check for LevelA: logic expression
+ */
+
+int global_array[10];
+
+int addIndex(int i, int array[]) {
+    array[i] = array[i] + 1;
+    return 1;
+}
+
+int main() {
+    int a0 = 0;
+    int a1 = 1;
+
+    // &&
+    if (!a0 && a1)
+        global_array[1] = 1;
+    if (a0 && a1)
+        global_array[2] = -1;
+    else
+        global_array[2] = 2;
+    if (!a1 && a0)
+        global_array[3] = -1;
+    else
+        global_array[3] = 3;
+    int i = 1;
+    while (i < 5 && i > 0) {
+        i = i * 2;
+    }
+    if (i >= 5) {
+        global_array[4] = 4;
+    } else {
+        global_array[4] = -1;
+    }
+
+    // ||
+    if (a0 || a1) {
+        global_array[5] = 5;
+    } else {
+        global_array[5] = -1;
+    }
+    if (a0 || !a1) {
+        global_array[6] = -1;
+    } else
+        global_array[6] = 6;
+    while (6 < 3 || 4 <= 7){
+        global_array[7] = 7;
+        break;
+    }
+    if (global_array[7] != 7) {
+        global_array[7] = -1;
+    }
+
+    // short-circuit
+    int tool[2] = {0, 0};
+    if (0 && addIndex(0, tool))
+        ;
+    if (tool[0]) {
+        global_array[8] = -1;
+    } else
+        global_array[8] = 8;
+    if (1 || addIndex(1, tool))
+        ;
+    if (tool[1])
+        global_array[9] = -1;
+    else
+        global_array[9] = 9;
+
+    // check
+    printf("19231011\n");
+    printf("start checking for logic expressions\n");
+    i = 0;
+    while (i < 5 && global_array[i] == i) {
+        i = i + 1;
+    }
+    if (i == 5) {
+        printf("check for AND calculation: successfully!\n");
+    } else {
+        printf("check for AND calculation: something wrong!\n");
+    }
+
+    i = 5;
+    while (i < 8 && global_array[i] == i) {
+        i = i + 1;
+    }
+    if (i == 8) {
+        printf("check for OR calculation: successfully!\n");
+    } else {
+        printf("check for OR calculation: something wrong!\n");
+    }
+
+    i = 8;
+    while (i < 10 && global_array[i] == i) {
+        i = i + 1;
+    }
+    if (i == 10) {
+        printf("check for short-circuit calculation: successfully!\n");
+    } else {
+        printf("check for short-circuit calculation: something wrong!\n");
+    }
+
+    printf("end checking\n");
+
+    return 0;
+}

@@ -1,0 +1,10 @@
+20373358
+Some global constants: 0 1 2 3
+Some local constants: 1 2 3 4
+Some global variables: 1 2 3
+Some local variables: 2 8 5
+Set global variable as 5
+Set local variable as 6
+Calculate -7
+Calculate 4
+Calculate 3

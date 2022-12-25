@@ -1,0 +1,64 @@
+//This one is aimed at B-level, which will include arrays 
+
+//#include <stdio.h>
+//#include <stdlib.h>
+const int wzy[8] = {2,0,3,7,3,3,5,4};
+int id[1][6] = {{2,0,0,6,1,3}};
+int zeroArray[3] = {0,0,0};
+const int useless[2][2] = {{0,0},{0,0}};
+
+//int getint(){ int n; scanf("%d",&n); return n; }
+void Permutation(int m, int n, int arr[], int temp[])
+{
+    int i = 0;
+    //�ݹ鵽�ײ�
+    if(m >= n)
+    {
+    	while (i<n-1) {
+    		printf("%d ", arr[i]);
+    		i = i + 1;
+		}
+        printf("%d\n", arr[i]);
+    }
+    else
+    {
+        while(i<n)
+        {
+            if (temp[i] == 0)
+            {
+                temp[i] = 1;
+                arr[m] = i + 1;
+                //�ݹ鵽��һ��
+                Permutation(m + 1, n, arr, temp);
+                //��֤�ݹ�󱣳���һ���˳��
+                temp[i] = 0;
+            }
+            i = i + 1;
+        }
+    }
+    return;
+}
+
+//int twoDimension(int array[1][6]) {
+//	return array[1][5];
+//}
+
+int main()
+{
+    int arr[15], temp[15], n;
+	n = getint();
+    printf("20373354\n");
+    int i = zeroArray[0];
+    i = useless[0][0];
+    //��Ҫ����ʶ����temp��ʼ��Ϊ0���ֲ�����Ĭ��������ɸ���Ϊȫ�ֱ�����Ĭ��Ϊ0��
+    while(i < n) {
+    	temp[i] = 0;
+    	i = i + 1;
+	}
+        
+    Permutation(0, n, arr, temp);
+//    twoDimension(id);
+    return 0;
+}
+
+

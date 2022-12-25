@@ -1,0 +1,27 @@
+int getnum(int num) {
+	return num * num + 1;
+}
+
+int main() {
+	printf("20231097\n");
+	int num;
+	num = getint();
+	if(num <= 0) {
+		int i = 0;
+		while(i < 11) {
+			if(i == 10) {
+				break;
+			}
+			if(i == 1) {
+				continue;
+			}
+			printf("a");
+			i = i + 1;
+		}
+	}
+	else {
+		int i = 0;
+		printf("%d\n",getnum(num));
+	}
+	return 0;
+}

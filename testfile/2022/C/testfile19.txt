@@ -1,0 +1,40 @@
+void compare(int x, int y){
+    printf("a=%d, b=%d\n", x, y);
+    if(x>y)
+        printf("a>b\n");
+    else
+        printf("a<=b\n");
+}
+
+void test(int x){
+    if(x<0)
+        printf("input = %d\n", x);
+    else
+        printf("Illegal input\n");
+}
+
+void printI(int n){
+    int i;
+    i = 0;
+    while(i<n){
+        printf("cur i=%d\n", i);
+        i = i + 1;
+        if(i==n){
+            break;
+        }
+    }
+}
+
+int main(){
+    int a=4, b=7;
+    printf("20373472\n");
+    compare(a, b);
+    printI(2);
+    if(a+b>10)
+        test(a-b);
+    //printf("abc");
+    /*
+     * printf("def");
+     */
+    return 0;
+}

@@ -1,0 +1,89 @@
+int my;
+
+void decl(){
+    const int a = 1, a1[2]={1,1};
+    int x = 2, x1[2];
+    return;
+}
+
+int repite(int a1){
+    printf("repite\n");
+    return a1;
+}
+
+int repite2(int a1, int a2){
+    printf("repite2\n");
+    return a1 * a2;
+}
+
+int f1(int a1, int a2[], int a3[][2]){
+    ;
+    int s1;
+    if(!(a1)){
+        s1 = a1;
+    }
+    if(a1 != 2){
+        s1 = a1;
+    } else{
+        s1 = s1 + a1;
+    }
+    while(a2[0] >= 0){
+        a2[0] = a2[0] - 1;
+        if(a2[0] == 0){
+            continue;
+        }
+    }
+    return a2[0]*a2[0];
+}
+
+
+
+void f2(int a1, int a2[], int a3[][2]){
+    ;
+    int s1;
+    if(a1 == 2){
+        s1 = a1;
+    }
+    if(a1 == 3){
+
+    }
+    if(a1 != 2){
+        s1 = a1;
+    } else{
+        s1 = s1 + a1;
+    }
+    while(1){
+        if(a2[0] == -1 || a2[0] <= 0 && a2[1] == 2){
+            break;
+        }
+        a2[0] = a2[0] - 1;
+    }
+    return;
+}
+
+int main(){
+    printf("20373110\n");
+    const int a = 1, a1[2] = {1,1}, a2[2][2] = {{1,1},{2/2,1}};
+    const int a_1 = 1, a_2 = 2;
+    const int a_3 = 1;
+    int x = 2;
+    int b, c[2] = {1, 1}, d[2*1][2/1] = {{a, a}, {a, a}}, e[2][2] = {{1, 1}, {1, 1}};
+    int y, z[2] = {x, x}, Z[2*1][2/1] = {{x, x}, {1*x, 2*1}};
+    int x1 = 1, x2 = 2;
+    y = getint();
+    printf("input test:%d %d\n", y, d[1][1]);
+    printf("calculate test:%d %d %d %d, %d %d %d, %d %d\n", (x*Z[1][1]), z[1], 1, 2,
+           Z[1][1] * Z[1][0], Z[1][1]/Z[1][0], Z[1][1] % Z[1][0],
+           Z[1][1] + Z[1][1], Z[1][1] - Z[1][1]);
+    if(Z[1][1] < Z[1][0] || Z[1][1] > Z[1][0] || Z[1][1] <= Z[1][0] || Z[1][1] >= Z[1][0] ||
+           Z[1][1] == Z[1][0] || Z[1][1] != Z[1][0]){
+            printf("1\n");
+        }
+    printf("excute repite(a) = %d\n", repite(a));
+    printf("excute repite2(a) = %d\n", repite2(a, c[0]));
+    printf("excute +f1(x, z, Z) = %d\n", +f1(x, z, Z));
+    printf("excute +f1(x, z, Z) = %d\n", -f1(x, Z[1], Z));
+    f2(x, z, Z);
+    decl();
+    return 0;
+}

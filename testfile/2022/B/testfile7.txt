@@ -1,0 +1,131 @@
+int x0;
+int x1,x2,x3;
+int a=1;
+int x=0;
+int y=1,z=2,q=3;
+int w=1+3;
+const int m=13;
+const int arra[3]={1,2,3};
+const int arrb[2][2]={{1,2},{3,4}};
+void fun1(){
+	int t0=1,t1=2;
+	int t2;
+	t2=t1-t0;
+	return;
+}
+int fun2(int a0,int a1[],int a2[][3]){
+	int t;
+	t=a0+a0;
+	return 1+2;
+}
+void fun3(int a1){
+	int t;
+	t=a1+a1;
+}
+int fun4(){
+	return 1;
+}
+void fun5(int a0,int a1[]){
+	int t=0;
+	t=a0+a0;
+}
+
+int main(){
+	const int a0=0;
+	const int a1=1,a2=12,a3=3;
+	const int b1=1,b2=2;
+	int a;
+	a=getint();
+	int b=1,c=2;
+	int d=b+c;
+	int e=0;
+	int f_=0;
+	int _t=1;
+	int g=+-+c;
+	g=-+-c;
+	int arr1[3]={a,1,2};
+	int arr2[3][3]={{0,1,2},{3,4,5},{6,7,8}};
+	int arr3[3];
+	int arr4[3][3];
+	int arr5[2][2]={{1,2},{3,4}};
+	int arr6[2][2]={{arr5[0][0],arr5[0][1]},{arr5[1][0],arr5[1][1]}};
+	const int arr7[3]={1,2,3};
+	const int arr8[2][2]={{1,2},{3,4}};
+	arr2[2][0]=9;
+	arr1[1]=3;
+	e=arr1[1];
+	e=arr2[1][1];
+	e=+b;
+	e=a*b;
+	e=(a+b);
+	e=a*b+b;
+	e=a*(b+b);
+	e=a*(b-1);
+	e=c/b;
+	e=fun4();
+	e=c%b;
+	int a4;
+	int a5,a6,a7;
+	if(b!=0){
+		b=b-1;
+	}
+	if(!b==0 ){
+		b=b+1;
+	}
+	fun1();
+	c=fun2(a,arr1,arr2);
+	e=fun2(a,arr2[1],arr2);
+	fun3(a);
+	fun5(a,arr1);
+	if(a==0){
+		a=a+1;
+		a=a+0;
+		; 
+	}
+	else{
+		a=a-0;
+		a=a+0;
+	}
+	if(a==1){
+		a=a+1;
+	}
+	if(a==3){
+		a=a+1;
+		a=a+0;
+	}
+	if(a>=7){
+		if(a<=10){
+			a=a+1;
+		}	
+	}
+	if(a>7){
+		a=a-1;
+	}
+	if(a<7){
+		a=a+1;
+	}
+	if(a==7){
+	}
+	if(a>=8)
+		a=a-1;
+	while(a<=10){
+		a=a+1;
+		if(a==2){
+			continue;
+		}
+		b=b+1;
+		break;
+	}
+	printf("20231231\n");
+	printf("%d\n",d-1);
+	printf("%d\n",a);
+	//printf("%d%d\n",c,d);
+	printf("%d\n",b);
+	printf("%d\n",c);
+	printf("%d\n",e);
+	printf("%d\n",f_);
+	printf("%d\n",_t);
+	printf("9\n");
+	printf("10");
+	return 0;
+}

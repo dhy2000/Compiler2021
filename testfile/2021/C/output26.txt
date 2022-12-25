@@ -1,0 +1,10 @@
+19373276
+ !()*+,-./0123456789:;<>=?@[]^_`~{}|
+qwertyuiopasd
+fghjklzxcvbnmQWERTYUIOPASD
+FGHJKLZXCVBNM0
+72 23
+addSum: 105, 45
+-2169
+1008-6
+end

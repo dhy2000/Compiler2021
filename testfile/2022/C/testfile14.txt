@@ -1,0 +1,36 @@
+int main(){
+	int a = 0,b=0;
+	a=getint();
+	b=getint();
+	printf("20373276\n");
+	int c=0;
+	int flag=0;
+	if ( a==1 ) c=1;
+	else {c=3;}
+	printf("%d",c);
+	if (a==2) c=2;
+	while ( c<1000 ) {
+		if ( a==1 ) {
+			break;
+		}
+		if ( a!=1 && flag==0 ) {
+			a=a-1;
+			flag=1;
+			continue;
+		}
+		a=a-1;
+		b=b+1;
+		c=c+1;
+	}
+	printf("%d",a);
+	printf("%d",b);
+	printf("%d",c);
+	if (a>5) printf("1");
+	if (a<5) printf("2");
+	if (a>=5) printf("3");
+	if (a<=5) printf("4");
+	if (a==1 && b==4) {
+		printf("6");
+	}
+	return 0;
+}

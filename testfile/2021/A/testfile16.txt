@@ -1,0 +1,84 @@
+const int Mod = 10007;
+
+const int dx[2] = {1, 0};
+const int dy[2] = {0, 1};
+
+const int Map[5][5] = {
+	{0, 1, 0, 1, 0},
+	{0, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1},
+	{1, 0, 1, 0, 1},
+	{1, 1, 1, 0, 1}
+};
+
+
+int strP[2];
+int ans, base;
+int val[5][5];
+
+int CalcMod(int x) {
+	return x - x / Mod * Mod;
+}
+
+int Check(int y) {
+	if (y >= 0 && y < 5) {
+		return 1;
+	}
+	return 0;
+}
+
+int check(int x, int y) {
+	if (0 > x || 5 <= x || !Check(y)) return 0;
+	if (Map[x][y]) {
+		return 1;
+	} else return 0;
+	return 0;
+}
+
+void dfs(int x, int y, int base, int height[][5]) {
+	if (val[x][y] != 0) {
+		return;
+	}
+	val[x][y] = CalcMod(base * height[x][y] % Mod + Mod);
+	if (val[x][y] == 0) val[x][y] = 1;
+	int t1 = 0, t2 = 0;
+	if (check(x + dx[0], y + dy[0])) {
+		dfs(x + dx[0], y + dy[0], val[x][y], height);
+		t1 = 1;
+	}
+	if (check(x + dx[1], y + dy[1])) {
+		dfs(x + dx[1], y + dy[1], val[x][y], height);
+		t2 = 1;
+	}
+	if (t1 != 0 || t2 != 0) return;
+	val[x][y] = -1;
+}
+
+int main() {
+	printf("19373459\n");
+	int i = 0, j;
+	int height[5][5];
+	while (i < 5) {
+		j = 0;
+		while (j < 5) {
+			height[i][j] = getint();	
+			j = j + 1;
+		}
+		i = i + 1;
+		if (i == 5) break;
+		else continue;
+	}
+	i = 0;
+	;
+	i;
+	while(i < 2) {
+		strP[i] = getint();
+		i = i + 1;
+	}
+	base = getint();
+	dfs(strP[0], strP[1], base, height);
+	printf("val20: %d, val21:%d, val22:%d, val23:%d, val24:%d\n", val[2][0], val[2][1], val[2][2], val[2][3], val[2][4]);
+	printf("val30: %d, val32: %d, val34: %d\n", val[3][0], val[3][2], val[3][4]);
+	printf("val40: %d, val42:%d, val43:%d, val44:%d\n", val[4][0], val[4][2], val[4][3], val[4][4]);
+	return 0;
+}

@@ -1,0 +1,74 @@
+const int month_days[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+
+int get_days(int year,int month,int day){
+    int flag = 0;
+    int i = 0;
+    int days = 0;
+    if(!(year%4) && (year%100)){
+        flag = 1;
+    }else{
+        if(year%400 == 0){
+            flag = 1;
+        }
+    }
+    while(i < month - 1){
+        days = days + month_days[i];
+        i = i + 1;
+    }
+    days = days + day;
+    if(month > 2){
+        days = days + flag;
+    }
+    return days;
+}
+
+int main(){
+    int groups;
+    int birth_year;
+    int birth_month;
+    int birth_day;
+    int cur_year;
+    int cur_month;
+    int cur_day;
+    int year;
+    printf("16061069\n");
+    printf("input groups\n");
+    groups = getint();
+    while(groups != 0){
+        int live_days = 0;
+        printf("input your birth year,month,day,ep:1998 1 1\n");
+        birth_year = getint();
+        birth_month = getint();
+        birth_day = getint();
+        printf("input current year,month,day,ep:2020 2 2\n");
+        cur_year = getint();
+        cur_month = getint();
+        cur_day = getint();
+        year = birth_year;
+        if(cur_year < birth_year){
+            printf("please input time legally\n");
+        }else{
+            while(year < cur_year){
+                if(year%400 == 0){
+                    live_days = live_days + 366;
+                }else{
+                    if(!(year%100) || (year%4)){
+                        live_days = live_days + 365;
+                    }else{
+                        live_days = live_days + 366;
+                    }
+                }
+                year = year + 1;
+            }
+            live_days = live_days - get_days(birth_year,birth_month,birth_day) + get_days(cur_year,cur_month,cur_day);
+            if(live_days >= 0){
+                printf("you have lived %d days\n",live_days);
+            }else{
+                printf("please input time legally\n");
+            }
+        }
+        groups = groups - 1;
+    }
+    return 0;
+}

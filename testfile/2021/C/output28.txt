@@ -1,0 +1,10 @@
+19373332
+Stmt-3(Block): c = 2, d = 46
+Stmt-3(Block): e = 4, f = 829
+Stmt-4(if) check finish!
+Stmt-5,6 check finish!
+Stmt-7 check finish!
+Stmt-8 check finish!
+
+FormatChar.
+13

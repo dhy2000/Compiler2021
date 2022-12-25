@@ -1,0 +1,10 @@
+19373466
+const declaration: const int a[4][2]={{1, 2}, {3, 4}, {5, 6}, {7, 8}}, b[2][1] = {{9}, {10}}
+global var declaration: int c[1][2]={{11, 12}}
+global var declaration(not initialized): des[4][1], des2[4][2]
+use ConstDef in FuncFParam (exactly, the len of array)
+calculate a * b, your result is des[4][1] = {{29}, {67}, {105}, {143}}
+calculate des * c
+then calculate the sum of each row(store in rowSum[4])
+your result is (4 row): 667, 1541, 2415, 3289
+finish

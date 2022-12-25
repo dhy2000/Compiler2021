@@ -1,0 +1,7 @@
+gcd is 1
+gcd is 1
+gcd is 1
+gcd is 2
+invaild input!
+invaild input!
+gcd is 9

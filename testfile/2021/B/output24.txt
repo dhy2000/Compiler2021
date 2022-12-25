@@ -1,0 +1,9 @@
+19373063
+1.localVirable1 = 11,localVirable2 = 10 
+2.
+[2][0]:10|10 , [2]:-7|30
+[1][0]:8|8 , [1]:-8|20
+[0][0]:6|6 , [0]:-9|10
+9?
+3.function of kinds of parameters testified
+4.non exp testified

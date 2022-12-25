@@ -1,0 +1,148 @@
+//常数定义
+const int a = 1;
+const int b=2,c = 3,ddd=4;
+const int onedearray[2] = {0,1}; 
+const int twodearray[2][2] = {{0,1},{2,3}}; 
+
+const int twodearray1[2][2] = {{0,1},{2,3}},twodearray111[2][2] = {{0,1},{2,3}}; 
+const int onedearray11111[2] = {0,1},onedearray1221[2] = {0,1}; 
+const int ww = 1+1;
+const int www = 1-1;
+const int wwww = 1*1;
+const int wwwww = 1/1;
+
+//函数定义函数实参 
+void funcnon1(){
+	
+} 
+
+
+int funcint1(){
+	int funcint1 = 1+1;
+	return 1;
+}
+int add3(int k,int l,int z){
+	
+	return k+z+l;
+}
+int add2(int k,int l){
+	
+	return k+l;
+}
+int add1(int k){
+	
+	return k;
+}
+void addd(int ooo){
+	return;
+}
+void threeparam(int w,int z,int k){
+	return;
+}
+void twoparam(int w,int z){
+	return;
+}
+void funcparam1(int i[]){
+	
+}
+void funcparam3(int i[],int b[],int c[]){
+	
+}
+void funcparam2arr(int i[][1]){
+	
+}
+
+
+int main(){
+
+
+	int as;
+	int asd,asfa,asffff;
+	as = getint();
+	int emptyarr[1]= {0};
+	int emptyarr1[1][1]= {{0}};
+	int var1 = 1;
+	int var2=2,var3=3,var4 =4;
+	var1 = (-as);
+	var1=+as;
+	if(!as){
+		as = 1;
+	}
+	int vararray1[2] = {1,2};
+	int func1[2] = {1,2};
+	int func2[2] = {1,2};
+	int func3[2] = {1,2};
+	int vararray2[2][2] = {{0,1},{2,3}}; 
+	vararray2[1][1] = 4;
+	int vararray21[2][2]= {{0,1},{2,3}},vararray213[2][2]= {{0,1},{2,3}};
+	int vararray31231[2] = {1,2},vararray212[2] = {1,2};
+	var4 = var1 * var2;
+	var4 = var2 / var1;
+	var4 = var1 % var2;
+	var4 = var1 + var2;
+	var4 = var2 - var1;
+	var4 = 3+3/3+var1*var2;
+	int func;
+	func = add2(var3,var4);
+	func = add1(var2);
+	func = funcint1();
+	twoparam(var1,var2);
+	threeparam(var3,var1,var2);
+	addd(var3);
+	funcnon1();
+	funcparam1(vararray1);
+	funcparam3(func1,func2,vararray21[0]);
+	funcparam2arr(emptyarr1);
+	while(var4 != 0){
+		
+		var4 = 0;
+		if(var4 ==3)
+		{;
+			break;
+		}
+		else{
+			var3=1;
+		}
+		
+		
+		
+		if(var4>4)
+		{
+
+			continue;
+		}
+		
+	}
+
+
+	if(a<b&&a ==  1){
+		var4 = 3;
+	}
+	if(a>b||a == 1){
+		var4 = 3;
+	}
+	if(a<=b){
+		var4 = 3;
+	}
+	if(a>=b){
+		var4 = 3;
+	}
+	if(var1 == var2){
+		var4 = 3;
+	}
+	if(var1 != var2){
+		var4 = 3; 
+	} 
+
+	printf("20231229\n");
+	printf("%d\n",a);
+	printf("%d\n",b);
+	printf("%d\n",c);
+	printf("%d\n",ddd);
+	printf("%d\n",var1);
+	printf("%d\n",var2);
+	printf("%d\n",var3);
+	printf("%d\n",vararray2[1][1]);
+	printf("%d\n",vararray2[1][0]);
+	return 0;
+}

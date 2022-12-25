@@ -1,0 +1,88 @@
+//testfile 2
+const int NUM = 3;
+const int NUMd = 1, NUMe = 2;
+const int NUMa = 5, NUMb = (1+5)*3/6 , NUMc = -2 ;
+const int CON_arr[3] = {1,2,3};
+const int CON_brr[2][3] = {{1,2,3},{4,5,6}};
+int n = 0;
+void func(int a[]) {
+	a[0] = 1000; 
+}
+int ffunc(int a[][3]){
+	return 1;
+}
+void function1(int parm){
+	printf("function void with one parm : Success!\n");
+	return ;
+}
+int  function2(){
+	
+	return 1;
+}
+int function3(int parm1,int parm2,int parm3){
+	return parm1+parm2+parm3;
+}
+int function4(int parm1,int parm2){
+	return 2;
+}
+int main(){
+    {}
+	printf("20185641");
+	int arr[3] = {1,2,3};
+	int brr[2][3] = {{1,2,3},{4,5,6}};
+	//int crr[] = {1,2,3}; //Wrong!
+	//int drr[][3] = {{1,2,3},{4,5,6}}; //Wrong!
+	int err[1][2] = {{CON_arr[0],CON_arr[1]}};
+	printf("\nCheck some basic arry define: Success!\n");
+	
+	int a = 0;
+	int f = 1, g = +4;
+	int b, c = ((3*(1+5))/6)%2 , d = a+8;
+	int e = NUM; //e=3
+	printf("Check some basic Def and const: Success!\n");
+	;
+	printf("Check a simple ;: Success!\n");
+	if(a != 0) //false
+		a = a+1;
+	if(a==(e-3)){
+		//printf("Check if without {} : Success!\n");
+		;
+	}
+	else{
+		;
+		printf("Check if with else: Wrong!\n");
+	}
+	
+	int in = brr[1][0]+6;
+	
+	func(arr);
+    printf("Check function with arry: Success!\n");
+	func(brr[1]);
+    printf("Check function with part of arry: Success!\n");
+	while(brr[1][0]>1){
+		brr[1][0] = in;
+		break;
+	}
+	int res = ffunc(brr);
+	if(res == 1)
+		printf("Check functioin with two dimission parm: Success!\n");
+		
+	function1(3);
+	printf("function (int with no parm ): Success!\n");
+	
+	int re =function3(1,2,3);
+	if(re == 6){
+        ;
+		//printf("function (int with three parm) : Success!\n");
+	}
+	int re2 = function4(4,f);
+	printf("Check function: Success!");	
+	
+	if(!f){ //f=1
+		printf("Check UnaryOp : ! : Wrong!\n");
+	}
+	if(f<=-2) printf("Check <= : Wrong!\n");
+		
+
+	return 0;
+}

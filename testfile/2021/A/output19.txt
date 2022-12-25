@@ -1,0 +1,10 @@
+19373135
+global g_var_6[1][0]:1, g_var_6[1][1]:1
+local l_var_4:1, l_var_5:1, l_var_6:1, l_var_7:10, l_var_8:100
+exp l_var_4:1
+exp l_var_5:0
+exp l_var_6:0
+if l_var_4:3
+while l_var_5:0
+while l_var_5:0
+getint l_var_6:1

@@ -1,0 +1,8 @@
+20231204
+awadwad is 545 now
+awadwad has changed in block
+awadwad is 11 now
+double if
+cur val in loop is 101
+input n and the array which length is n, then will sort this array, n is required less than 20
+after sort, the array is: -65 -56 0 1 1 1 2 10 13 13 36 44 47 56 76 79 146 469 479 898 414414

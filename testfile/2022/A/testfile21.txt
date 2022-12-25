@@ -1,0 +1,132 @@
+
+const int one=1,two=2,three = one+two;
+const int four =4,five = 5;
+int x1 = 0,x2 =0;
+/* 
+*/
+const int a[2][2]= {{1,2},{1,2}};
+const int arr_t [3] = {1,2,3};
+int add(int a , int b)
+{
+    return a+b;
+}
+int add_three(int a,int b,int c)
+{
+    return a+b+c;
+}
+
+int total_array2(int a[][2],int x)
+{
+    int sum = 0,i=0,j=0;
+    while(i<x)
+    {
+        j = 0;
+        while(j<2)
+        {
+            sum = sum+a[i][j];
+            j = j+1;
+        }
+        i = i+1;
+    }
+
+    return sum;
+}
+int total(int a[],int n)
+{
+    int i = 0;
+    int sum = 0;
+    while(i<n)
+    {
+        sum =sum+ a[i];
+        i=i+1;
+    }
+    return sum;
+
+}
+int getone()
+{
+    return 1;
+}
+void needprint()
+{
+    printf("20373473\n");
+    return ;
+}
+int getsize(int a)
+{
+    return a;
+}
+int main()
+{
+    {
+        
+    }
+    {
+        ;
+    }
+    int s = -1;
+    s = getint();
+    s= getone();
+    s = s-1;
+    s = (s+4)/2*5;
+    s = -s;
+    if(!s>0)
+        s = getsize(s);
+      needprint(); //1
+    {
+        int one = 0,two = 1;
+        printf("%d %d\n",one,two);
+    }
+    s = add_three(1,2,3);
+    int temp = add(one,two);
+    printf("%d\n",temp);   //2
+    int i = 1;
+    int a = 1;
+    int x = 0;
+    int array1[2] = {1,2};
+    int array2[2][2]={{1,2},{2,3}};
+    int array3[2] = {2,3};
+    temp = total_array2(array2,2);
+    x = total(array1,2);
+    if(x>array1[0]&&x>0)
+    {
+        array1[0]=x;
+        printf("%d\n",array1[0]);//3
+    }
+    i = 0;
+    while (i<2)
+    {
+        /* code */
+        x = total(array2[i],2);
+        if(array2[i][0]<x&&0<=x)
+        {
+            array2[i][0]=x;
+            printf("%d\n",array2[i][0]);//4
+        }
+        else
+            continue;
+        i = i+1;
+    }
+    
+    a = +i+i;
+    printf("%d\n",a%i);   //5
+    printf("%d\n",i*a);   //6
+    i = add(a,i);
+    printf("%d\n",i/i);   //7
+    i = 0;
+    while(i<2)
+    {
+        if(array1[i]!=array3[i]&&array1[i]>=array3[i]||array1[i]>0)
+        {
+            printf("%d\n",array1[i]);
+            if(array1[i]==array3[i])
+            {
+                break;
+            }
+        }
+        i = i+1;
+    }
+    printf("\n");
+    printf("%d",i);
+    return 0 ;
+}

@@ -1,0 +1,10 @@
+20373608
+1
+1
+this is outside g1 4
+this is inside g1 3
+this is outside g1 5 agsin
+a9[0] is 4
+a13[0][1] is 6
+a13[0][2] is 3
+a12[9][9] is 1

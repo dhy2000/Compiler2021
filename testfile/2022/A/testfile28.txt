@@ -1,0 +1,141 @@
+const int a = 2;
+const int b = 1 + 2 * 3 - 2 / 2 % 2;
+const int m = 2 , n = 5;
+const int p = 1, q = 2, r = 3;
+const int c[3] = {1, 2 ,3};
+const int d[2][2] = {{1, 2}, {2, 3}};
+
+int var_a;
+int var_b = 3;
+int var_c = (2 + 3) * 2;
+int var_m = 1, var_n = 2;
+int var_1 = 2, var_2 = 3, var_3 = 4;
+int var_d[3] = {7, 8, 9};
+int var_e[2][1] = {{1},{2}};
+
+void nothing1() {
+	
+}
+
+void nothing2() {
+	;
+}
+
+int f_a(int x) {
+	return x;
+}
+
+int f_b(int a[]) {
+	return a[1];
+}
+
+int f_c(int a, int b) {
+	return a+b;
+} 
+void f_d() {
+	var_d[0] = 1;
+	return;	
+}
+
+int f_e(int a, int b[][2]) {
+	return a * b[0][0];
+}
+
+int if_1() {
+	int a = 1, b = 2;
+	if(a < b) {
+		return a;
+	}
+	return 0;
+}
+
+int if_2() {
+	if(1) {
+		return 2;
+	}else {
+		return 3;
+	}
+	return 0;
+}
+
+int if_3(int a, int b) {
+	if(a < b) {
+		return a;
+	} else if(a > b) {
+		return b;
+	} else {
+		return 0;
+	}
+	return +-+1;
+}
+
+int while_1() {
+	int i = 0;
+	while(i < 10) {
+		i = i + 1;
+	}
+	return i;
+}
+
+int while_2() {
+	int i = 1;
+	int j = 5;
+	while(i < j) {
+		i = i + 1;
+		if(i >= 3) 
+		break;
+	}
+	return i;
+}
+
+int while_3(int n) {
+	int cnt = 0;
+	int x = 0;
+	while(x <= n) {
+		x = x + 1;
+		if(x%2 == 0) continue;
+		if(x%2 != 0) {
+			cnt = cnt + 1;
+		}
+	}
+	return cnt;
+}
+
+int cond_1(int a, int b, int c) {
+	if(a < b || b < c) {
+		return a;
+	}else if(a > b && b > c) {
+		return c;
+	}else if(a < 0 || b < 0 || c < 0) {
+		return 1;
+	}
+	return 0;
+}
+
+int cond_2() {
+	int a = 1, b = 2;
+	if(!a < b) {
+		return 1;
+	}	
+	return 0;
+}
+
+int main() {
+	int in_1, in_2;
+	int ans = cond_1(1, 2, 3);
+	in_1 = getint();
+	in_2 = getint();
+	int t1[2][2] = {{1, 2}, {3, 4}};
+	printf("20373974\n");
+	printf("%d\n", f_a(in_1));
+	printf("%d\n", f_b(t1[0]));
+	printf("%d\n", f_c(1, 2));
+	f_d();
+	printf("%d\n", f_e(2, t1));
+	printf("%d\n", if_1() + if_2());
+	printf("%d\n", if_3(2, 3));
+	printf("%d\n", while_1());
+	printf("%d\n", while_2());
+	printf("%d\n", while_3(10));
+	return 0;
+}

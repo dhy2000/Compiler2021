@@ -1,0 +1,29 @@
+const int PI = 3;
+int temp = 100;
+
+int add(int a, int b) {
+	return a + b;
+}
+
+int main() {
+	const int a = 9;
+	const int b = 11;
+	int c = 0, now = 10;
+	
+	while (now > 0) {
+		now = now - 1;
+		printf("20373053\n");
+	}
+
+	while (c < 10000) {
+		if (c < 50) {
+			c = add(c, a);
+		} else {
+			c = add(c, b);
+		}
+	}
+	
+	printf("%d", c);
+	
+	return 0;
+}

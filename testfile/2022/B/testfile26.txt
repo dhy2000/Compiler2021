@@ -1,0 +1,111 @@
+int m1[5],f3[3],i2[2][2] = {{9,8},{7,6}};
+const int s1[3] = {1,2,3};
+const int c1 = 3;
+const int c2 = 0,c3 = 1,c4 = 5;
+const int s2[2][2] = {{1,2}, {3,4}};
+const int a0 = 1;
+const int b0 = 2, c0 = 3;
+int q1,q2,q3,q4;
+int q55 = 1,q65 = 2;
+int q5=1,q6=2,q7=4,q8=5;
+int r1,r3,r4,r5= 0;
+int fun(int x[], int y[]) {
+	int tempp;
+	tempp = x[0] + y[0];
+	return tempp;
+}
+int fun2(int c[][3]) {
+	return 1;
+}
+void fun3(int d[][3])
+{
+	return ;
+}
+void fun4(int m[],int d[][3])
+{
+	return ;
+}
+void fun5(int m,int m11[],int m111[][3]) {
+	return;
+}
+int main()
+{
+	int f = 4;
+	int h1 = 1;
+	int f2[3] = {1,2,3};
+	int m3[2][3] = {{i2[0][0],2,i2[0][1]},{2,i2[1][0],5}};
+	int t;
+	int j1,j2,j3,j4 = 5;
+	int j7,j8,j9,j10;
+	int j11 = -1,j12 = 1;
+	int t5;
+	t5 = -1;
+	t5 = +1;
+	t5 = fun2(m3);
+	fun3(m3);
+	fun4(f2,m3);
+	fun5(h1,f2,m3);
+	t = fun(i2[0],m3[1]);
+	int bian = 10;
+	t = m3[0][1] + m3[1][2] + 1;
+	while(bian > 0) {
+	printf("20373869\n");
+	bian = bian - 1;
+	}
+	bian = (bian + 3) *2;
+	bian = bian+bian-1;
+	bian = 3;
+	int v_4 = 1,v_5 = 3,v_3 = 2,v_1 = 1,v_6 = 1;
+	v_4 = (1 + 1) *1;
+	v_4 = (v_5 - 1) /1;
+	
+	v_3 = 1 + 1 - 1;
+	v_5 = v_4 + v_3;
+	v_4 = (1 + 1) * 1 %1;
+	v_4 = (1 - 1) * v_3 %1;
+	v_5 = 1/1;
+	v_3 = v_4 * v_6 / v_5 % v_1;
+	if (bian >= 0) {
+		
+	}
+	if (bian >0) {
+		
+	}
+	if (bian <0) {
+		
+	}
+	if (bian <= 0){
+		
+	}
+	if (bian + 1 > 0) {
+		
+	}
+	if (bian - 1 > 0) {
+		
+	}
+	while(bian > 0) {
+	t = t + 1;
+	bian = bian - 1;
+	}
+	v_5 = 0;
+	while (v_5 != 1) {
+		v_5 = 1;
+		break;
+	}
+	while(v_5) {
+		v_5 = 0;
+		continue;
+	}
+	while(!v_5) {
+		v_5= 1;
+	}
+	{
+		
+	}
+	{
+		int c = 1;
+		c = c*1 + 2;
+		
+	}
+	return 0;
+}

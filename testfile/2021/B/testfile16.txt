@@ -1,0 +1,88 @@
+const int notuse[3] = {0, 0, 0};
+const int notuse2[2][1] = {{1}, {1}};
+const int n = 2, k = 1;
+
+int a[4][2]={{1, 2}, {3, 4}, {5, 6}, {7, 8}};
+int b[2][1] = {{9}, {10}};
+int c[1][2]={{11, 12}}, des[4][1], des2[4][2], m;
+
+void matrixMul(int a1[][2], int a2[][1], int op){
+    int i = 0, j = 0, l = 0, tmp;
+    while(m > i) {
+        l = 0;
+        while(k > l) {
+            tmp = 0;
+            j = 0;
+            while(n > j) {
+                tmp = tmp + a1[i][j] * a2[j][l];
+                j = j + 1;
+            }
+
+            if (op == 1) {
+                des[i][l] = tmp;
+            } else {
+                des2[i][l] = tmp;
+            }
+            l = l + 1;
+        }
+        i = i + 1;
+    }
+    return;
+}
+
+void matrixMul2(int a1[][1], int a2[][2], int op){
+    int i = 0, j = 0, l = 0, tmp;
+    while(m > i) {
+        l = 0;
+        while(n > l) {
+            tmp = 0;
+            j = 0;
+            while(k > j) {
+                tmp = tmp + a1[i][j] * a2[j][l];
+                j = j + 1;
+            }
+            if (op == 1) {
+                des[i][l] = tmp;
+            } else {
+                des2[i][l] = tmp;
+            }
+            l = l + 1;
+        }
+        i = i + 1;
+    }
+    return;
+}
+
+int arraySum(int a3[], int h) {
+    int i = 0, ans = 0;
+    while(i < h) {
+        ans = ans + a3[i];
+        i = i+1;
+    }
+    return ans;
+}
+
+int main() {
+    int rowSum[4] = {0, 0, 0, 0};
+    printf("19373466\n");
+    printf("const declaration: const int a[4][2]={{1, 2}, {3, 4}, {5, 6}, {7, 8}}, b[2][1] = {{9}, {10}}\n");
+    printf("global var declaration: int c[1][2]={{11, 12}}\n");
+    printf("global var declaration(not initialized): des[4][1], des2[4][2]\n");
+    printf("use ConstDef in FuncFParam (exactly, the len of array)\n");
+    m = 4;
+    matrixMul(a, b, 1);
+    printf("calculate a * b, your result is des[4][1] = {{%d}, {%d}, {%d}, {%d}}\n", des[0][0], des[1][0], des[2][0], des[3][0]);
+    m = 4;
+    matrixMul2(des, c, 2);
+    rowSum[0] = arraySum(des2[0], 2);
+    rowSum[1] = arraySum(des2[1], 2);
+    rowSum[2] = arraySum(des2[2], 2);
+    rowSum[3] = arraySum(des2[3], 2);
+    printf("calculate des * c\n");
+    printf("then calculate the sum of each row(store in rowSum[4])\n");
+    printf("your result is (4 row): %d, %d, %d, %d\n", rowSum[0], rowSum[1], rowSum[2], rowSum[3]);
+    printf("finish\n");
+
+    return 0;
+}
+

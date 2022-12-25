@@ -1,0 +1,10 @@
+19231076
+>/!~varg1 is:1;~
+>/!~varg2 is:6;~
+>/!~varg3 is:7;~
+>/!~varg4 is:6;~
+>/!~varg5 is:5;~
+>/!~varg6 is:4;~
+>/!~varg7 is:3;~
+>/!~varg8 is:2;~
+>/!~varg9 is:-1;~

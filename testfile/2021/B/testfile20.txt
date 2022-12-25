@@ -1,0 +1,97 @@
+int val_L = 0;
+const int const_a = 1 - 2 + (-3)*4 + 5/(2+3) - 6 % 4, const_b =((5-10)*(-4) + 4)/6 * (3%6/3);
+const int const_array1_a[2] = {1, 1};
+const int const_array2_a[2][2] = { {1, 1}, {1, 1} }, const_array2_b[2][2] = { {1, 1}, {1, 1} };
+int var_array1_a[2] = {0, 0};
+int var_array2_a[2][2] = { {1, 1}, {1, 1} };
+
+void check_LandEq() {
+    val_L = 0;
+    if (!0) {
+        val_L = val_L + 1;
+    }
+    if (1 != 0) {
+        val_L = val_L + 1;
+    }
+    if (val_L == 2) {
+        printf("L and Eq is ok (no params)\n");
+    } else {
+        printf("sth wrong with L and Eq (no params)\n");
+    }
+}
+
+int check_Rel(int a, int b, int c) {
+    int val_Rel = 0;
+    if (a >= 1) {
+        val_Rel = val_Rel + 1;
+    }
+    if (a <= 2) {
+        val_Rel = val_Rel + 1;
+    }
+    if (1 < b) {
+        val_Rel = val_Rel + 1;
+    }
+    if (b > 2) {
+        val_Rel = val_Rel + 1;
+    }
+    if (c == 2) {
+        val_Rel = val_Rel + 1;
+    }
+    if (c != 3) {
+        val_Rel = val_Rel + 1;
+    }
+    return val_Rel;
+}
+
+void check_Add(int x) {
+    if (const_a == x) {
+        printf("Add is ok1\n");
+    }
+    if (const_b == 4) {
+        printf("Add is ok2\n");
+    }
+}
+
+void check_block(int a2, int b2[], int c2[][2]) {
+    int tmp0 = -1;
+    int tmp1 = 1;
+    if( a2 > 0 ) {
+        while(tmp1 > 0) {
+            tmp1 = tmp1 - 2;
+            if (b2[1] == 0) {
+                break;
+            }
+            tmp1 = tmp1 - 2;
+        }
+    } else {
+        while(tmp0 < 0) {
+            tmp0 = tmp0 + 2;
+            if (c2[1][1] == 1) {
+                continue;
+            }
+            tmp0 = tmp0 + 2;
+        }
+    }
+    ;
+    printf("%d\n",tmp0);
+    printf("%d\n",tmp1);
+    return;
+}
+
+
+int main() {
+    int a, val_Rel;
+    printf("19373408 all weak points\n");
+    check_LandEq();
+    val_Rel = check_Rel(1, 6, 2);
+    if (val_Rel == 6) {
+        printf("Rel is ok (with params)\n");
+    } else {
+        printf("sth wrong with Rel (no params)\n");
+    }
+    check_Add(-14);
+    a = getint();//1
+    check_block(a, var_array1_a, var_array2_a);
+    check_block(-1, var_array1_a, var_array2_a);
+    return 0;
+}

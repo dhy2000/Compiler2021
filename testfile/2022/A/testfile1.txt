@@ -1,0 +1,184 @@
+/// 1.花括号内重复0次(单个常量)
+const int A_GLOBAL = 1;
+/// 2.花括号内重复多次(单个常量)
+const int B_GLOBAL = 2, C_GLOBAL = 3;
+const int D_GLOBAL = 4, E_GLOBAL = 5, F_GLOBAL = 6;
+
+/// 一维数组    Arr1_X_GLOBAL
+const int Arr1_1_GLOBAL[5] = {1, 2, 3, 4, 5};
+/// 二维数组    Arr2_X_GLOBAL
+const int Arr2_1_GLOBAL[3][2] = {{1,2},{3,4},{5,6}};
+
+int a_glogal;
+/// 一维数组    arr1_X_global
+int arr1_1_global[5] = {1, 2, 3, 4, 5};
+/// 二维数组    arr2_X_global
+int arr2_1_global[3][2] = {{1,2},{3,4},{5,6}};
+
+/**
+ * 存在 FuncDef
+ * FuncDef → FuncType Ident '(' [FuncFParams] ')' Block // 1.无形参 2.有形参       √
+ * FuncType → 'void' | 'int' // 覆盖两种类型的函数        √
+ * testfile1    这里是 int 有参/无参
+ *
+ * FuncFParams → FuncFParam { ',' FuncFParam } // 1.花括号内重复0次 2.花括号内重复多次                    √
+ * FuncFParam → BType Ident ['[' ']' { '[' ConstExp ']' }] // 1.普通变量 2.一维数组变量 3.二维数组变量          √
+ *
+ * 语句块
+ * Block → '{' { BlockItem } '}' // 1.花括号内重复0次 2.花括号内重复多次       Stmt
+ * BlockItem → Decl | Stmt // 覆盖两种语句块项                              √( 这个本身没什么意义，主要看Stmt的各种情况能不能覆盖全 )
+ */
+ /**     语句 Stmt
+  * 每种类型的语句都要覆盖
+  * Stmt → LVal '=' Exp ';'                                     √
+  *             | [Exp] ';' //有无Exp两种情况                     √
+  *             | Block                                         √( 这个只要跟在 if-else 或者 while 里面有语句块就行 )
+  *             | 'if' '(' Cond ')' Stmt [ 'else' Stmt ] // 1.有else 2.无else         √
+  *             | 'while' '(' Cond ')' Stmt                     √
+  *             | 'break' ';'                                   √
+  *             | 'continue' ';'                                √
+  *             | 'return' [Exp] ';' // 1.有Exp 2.无Exp                               √
+  *             | LVal '=' 'getint''('')'';'                                        √
+  *             | 'printf''('FormatString{','Exp}')'';' // 1.有Exp 2.无Exp            √
+  * 表达式 Exp → AddExp
+  * 条件表达式 Cond → LOrExp
+  * 左值表达式 LVal → Ident {'[' Exp ']'} //1.普通变量 2.一维数组 3.二维数组   ( 也就是说，在赋值表达式的左边必须包含这三种 )      √
+  * 基本表达式 PrimaryExp → '(' Exp ')' | LVal | Number // 三种情况均需覆盖               √
+  * 数值 Number → IntConst // 存在即可 Ident 和 IntConst 是终结符 ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+  *
+  * 单目运算符 UnaryOp → '+' | '−' | '!' 注：'!'仅出现在条件表达式中 // 三种均需覆盖            √
+  * 一元表达式 UnaryExp → PrimaryExp | Ident '(' [FuncRParams] ')' // 3种情况均需覆盖, 函数调用也需要覆盖FuncRParams的不同情况
+  *                         | UnaryOp UnaryExp                                      √
+  * 乘除模表达式 MulExp → UnaryExp | MulExp ('*' | '/' | '%') UnaryExp // 1.UnaryExp 2.* 3./ 4.% 均需覆盖
+  * 加减表达式 AddExp → MulExp | AddExp ('+' | '−') MulExp // 1.MulExp 2.+ 需覆盖 3.- 需覆盖
+  * 关系表达式 RelExp → AddExp | RelExp ('<' | '>' | '<=' | '>=') AddExp // 1.AddExp 2.< 3.> 4.<= 5.>= 均需覆盖
+  * 相等性表达式 EqExp → RelExp | EqExp ('==' | '!=') RelExp // 1.RelExp 2.== 3.!= 均 需覆盖
+  * 逻辑与表达式 LAndExp → EqExp | LAndExp '&&' EqExp // 1.EqExp 2.&& 均需覆盖
+  * 逻辑或表达式 LOrExp → LAndExp | LOrExp '||' LAndExp // 1.LAndExp 2.|| 均需覆盖
+  */
+
+/**
+ * FuncDef → FuncType Ident '(' [FuncFParams] ')' Block // 1.无形参 2.有形参       √
+ */
+/// FuncFParams → FuncFParam { ',' FuncFParam }     2.花括号内重复多次
+/// 覆盖了 FuncRParam 的三种不同情况      FuncFParam → BType Ident ['[' ']' { '[' ConstExp ']' }]
+/// 语句块 Block → '{' { BlockItem } '}' 2.花括号内重复多次
+/// 'return' [Exp] ';' // 1.有Exp.
+int func_params(int a, int b[], int c[][2])
+{
+    /// Stmt → LVal '=' Exp ';'
+    int d = a*2 + b[0] % 2 + c[0][0] % 3;
+    /// [Exp] ';' //有无Exp两种情况 1.有Exp
+    a_glogal = d * (a + 2);
+    /// [Exp] ';' //有无Exp两种情况 2.无Exp    当然，这里如果 if()后面直接跟; 也是能实现的
+    ;
+
+    if (a_glogal < 50) {
+        printf("Now a_global is %d, it is < 50.\n", a_glogal);
+    } else if (a_glogal == 50) {
+        printf("Now a_global is exactly 50!!!.\n");
+    } else {
+        printf("Now a_global is %d, it is > 50.\n", a_glogal);
+    }
+    return 0;
+}
+
+int func2_params(int a, int b, int c)
+{
+    int res = 6 * (a + b + c)  / 2 - 2;
+    printf("I am a function with 3 param: {{ %d, %d, %d }} and I return %d.\n", a, b, c, res);
+    return res;
+}
+/// FuncFParams → FuncFParam { ',' FuncFParam }     1.花括号内重复0次
+/// 语句块 Block → '{' { BlockItem } '}' 2.花括号内重复多次
+/// 'return' [Exp] ';' // 2.无Exp.
+void func3_params(int a)
+{
+    printf("I am a function with only one param: {{ %d }} and I return noting.\n", a);
+    return;
+}
+
+void func4_params(int a, int b)
+{
+    printf("I am a function with 2 param: {{ %d, %d }} and I return noting.\n", a, b);
+    return;
+}
+
+int func_no_params()
+{
+    printf("I am a function without params and I return 0.\n");
+    return 0;
+}
+
+/// 语句块 Block → '{' { BlockItem } '}' 1.花括号内重复0次
+void func2_no_params()
+{
+}
+
+/**
+ * 主函数定义 MainFuncDef → 'int' 'main' '(' ')' Block // 存在main函数
+ */
+int main()
+{
+    int main_var_a, main_var_b, main_var_c;
+    ///  | LVal '=' 'getint''('')'';'
+    main_var_a = getint();
+    main_var_b = getint();
+
+    /// 'printf''('FormatString{','Exp}')'';' // 2.无Exp
+    printf("19241091\n");
+    /// 'printf''('FormatString{','Exp}')'';' // 1.有Exp
+    printf("A_GLOBAL = %d\n", A_GLOBAL);
+
+    func3_params(C_GLOBAL);
+    func4_params(A_GLOBAL, B_GLOBAL);
+
+    func_no_params();
+    func2_no_params();
+
+    /// PrimaryExp → '(' Exp ')' | LVal | Number // 三种情况均需覆盖
+    arr1_1_global[1] = 2;   //Number
+    arr1_1_global[4] = C_GLOBAL;    // LVal
+    arr1_1_global[2] = Arr1_1_GLOBAL[3];    // 2 LVal
+    arr2_1_global[1][1] = Arr2_1_GLOBAL[1][1]; //4 LVal
+
+    arr2_1_global[1][1] = (arr1_1_global[1] * 2);   // '(' Exp ')'
+    printf("arr2_1_global[1][1] is %d\n", arr2_1_global[1][1]);
+
+    func_params(A_GLOBAL, arr1_1_global, arr2_1_global);
+
+    /// 一元表达式 UnaryExp → PrimaryExp | Ident '(' [FuncRParams] ')' | UnaryOp UnaryExp
+    /// 这里是 Ident '(' [FuncRParams] ')'  并且 函数调用覆盖了 FuncRParams 的三种不同情况
+    main_var_c = func2_params(B_GLOBAL, arr1_1_global[1], arr2_1_global[1][1]);
+    printf("Now main_var_c is %d\n", main_var_c);
+
+    if ( main_var_a % 7 != 0 && main_var_b % 7 != 0 ) {
+        /// PrimaryExp | Ident '(' [FuncRParams] ')' | UnaryOp UnaryExp
+        /// 这里是 UnaryExp → UnaryOp UnaryExp
+        ///  UnaryExp → PrimaryExp      PrimaryExp → LVal       LVal → Ident {'[' Exp ']'}
+
+        while (!main_var_a) {
+            main_var_a = main_var_a + main_var_b;
+            if (main_var_a % 7 == 0 || main_var_a > 100) {
+                break;
+            } else {
+                continue;
+            }
+        }
+    }
+
+    if (main_var_a >= 30) {
+        printf("Now main_var_a is %d, it is >= 30\n", main_var_a);
+    } else if (main_var_a <= 10) {
+        printf("Now main_var_a is %d, it is <= 10\n", main_var_a);
+    } else {
+        printf("Now main_var_a is %d, it is > 10 and < 30\n", main_var_a);
+    }
+
+    main_var_a = -main_var_a;
+    main_var_b = +main_var_b;
+
+    printf("==================testfile1 end==================");
+
+    return 0;
+}

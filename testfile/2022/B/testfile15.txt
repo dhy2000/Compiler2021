@@ -1,0 +1,60 @@
+
+//语句块 
+void f0() {
+	
+} 
+
+int main()
+{
+	// printf("  "{, Exp}) 无Exp 
+	printf("20373361\n");
+	printf("");
+	
+	// B 常量声明，基本类型，常数定义、常量初值
+	
+	const int c_tool = 20;
+	const int ci_a = c_tool%3, ca_a[3/*hhh*/] = {c_tool+1, -2, c_tool-1};
+	const int ca_b[2][(1+1)] = {{1, c_tool*2}, {c_tool/3, 5}};
+	// printf("  "{, Exp}) 有Exp 
+	printf("%d ia-%d aa-%d-%d-%d ab-%d-%d-%d-%d\n", 1+0, ci_a, ca_a[0], ca_a[1], ca_a[1+1], ca_b[c_tool - 20][0], ca_b[0][1], ca_b[1][0], ca_b[1][1]); 
+
+	// B 变量声明，变量定义，变量初值的三种情况
+	// B 左值表达式 
+	int tool_;
+	tool_ = +-+10; 
+	int i_a;
+	int a_a[3];
+	
+	int t1 = 13, t2; //t1不要动！！！ 
+	t2 = getint(); // 28
+	// //基本表达式  PrimaryExp  数值   一元表达式 
+	a_a[0] = (t1 + (t2 % 3)) / 2;
+	a_a[1] = ((((97))));
+	a_a[t1 - 11] = a_a[0] * (9 - a_a[1]);
+	int i_b = c_tool/19, a_b[1] = {10}, a_c[2][1] = {{tool_},{-9}};
+	i_a = getint();
+	a_c[1][0] = a_c[1][0] - +1; 
+	printf("%d %d %d %d %d %d %d %d %d\n",i_a, i_b, a_a[0], a_a[1], a_a[2], a_b[0], a_b[0], a_c[0][0], a_c[1][0]);
+	{
+		int i_a = 100;
+		{
+			100;
+			int i_a = 200;
+			printf("in in block i_a = %d\n", i_a);
+		}
+		f0(); 
+		i_a;
+		printf("in block i_a = %d\n", i_a);
+	}
+	; 
+	printf("out block i_a = %d\n", i_a);
+	;
+
+	printf("t\n");
+	printf("t\n");
+	printf("t\n");
+	printf("t");
+	
+	return 0;
+}
+

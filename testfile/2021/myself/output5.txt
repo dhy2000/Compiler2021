@@ -1,0 +1,1417 @@
+18375354
+Testing 166......
+Call isPrime(166): true-factor 2 found. --> 166 is not a prime!
+166 is not leap year.
+166 is not a prime leap year. 
+Testing 2529......
+Call isPrime(2529): true-factor 3 found. --> 2529 is not a prime!
+2529 is not leap year.
+2529 is not a prime leap year. 
+Testing 8......
+Call isPrime(8): true-factor 2 found. --> 8 is not a prime!
+8 is leap year.
+8 is not a prime leap year. 
+Testing 2027......
+Call isPrime(2027): 2027 is a prime.
+2027 is not leap year.
+2027 is not a prime leap year. 
+Testing 1887......
+Call isPrime(1887): true-factor 3 found. --> 1887 is not a prime!
+1887 is not leap year.
+1887 is not a prime leap year. 
+Testing 2714......
+Call isPrime(2714): true-factor 2 found. --> 2714 is not a prime!
+2714 is not leap year.
+2714 is not a prime leap year. 
+Testing 599......
+Call isPrime(599): 599 is a prime.
+599 is not leap year.
+599 is not a prime leap year. 
+Testing 1410......
+Call isPrime(1410): true-factor 2 found. --> 1410 is not a prime!
+1410 is not leap year.
+1410 is not a prime leap year. 
+Testing 1565......
+Call isPrime(1565): true-factor 5 found. --> 1565 is not a prime!
+1565 is not leap year.
+1565 is not a prime leap year. 
+Testing 1439......
+Call isPrime(1439): 1439 is a prime.
+1439 is not leap year.
+1439 is not a prime leap year. 
+Testing 2142......
+Call isPrime(2142): true-factor 2 found. --> 2142 is not a prime!
+2142 is not leap year.
+2142 is not a prime leap year. 
+Testing 1630......
+Call isPrime(1630): true-factor 2 found. --> 1630 is not a prime!
+1630 is not leap year.
+1630 is not a prime leap year. 
+Testing 1848......
+Call isPrime(1848): true-factor 2 found. --> 1848 is not a prime!
+1848 is leap year.
+1848 is not a prime leap year. 
+Testing 2900......
+Call isPrime(2900): true-factor 2 found. --> 2900 is not a prime!
+2900 is not leap year.
+2900 is not a prime leap year. 
+Testing 2290......
+Call isPrime(2290): true-factor 2 found. --> 2290 is not a prime!
+2290 is not leap year.
+2290 is not a prime leap year. 
+Testing 1647......
+Call isPrime(1647): true-factor 3 found. --> 1647 is not a prime!
+1647 is not leap year.
+1647 is not a prime leap year. 
+Testing 187......
+Call isPrime(187): true-factor 11 found. --> 187 is not a prime!
+187 is not leap year.
+187 is not a prime leap year. 
+Testing 2520......
+Call isPrime(2520): true-factor 2 found. --> 2520 is not a prime!
+2520 is leap year.
+2520 is not a prime leap year. 
+Testing 869......
+Call isPrime(869): true-factor 11 found. --> 869 is not a prime!
+869 is not leap year.
+869 is not a prime leap year. 
+Testing 2328......
+Call isPrime(2328): true-factor 2 found. --> 2328 is not a prime!
+2328 is leap year.
+2328 is not a prime leap year. 
+Testing 2677......
+Call isPrime(2677): 2677 is a prime.
+2677 is not leap year.
+2677 is not a prime leap year. 
+Testing 33......
+Call isPrime(33): true-factor 3 found. --> 33 is not a prime!
+33 is not leap year.
+33 is not a prime leap year. 
+Testing 18......
+Call isPrime(18): true-factor 2 found. --> 18 is not a prime!
+18 is not leap year.
+18 is not a prime leap year. 
+Testing 1505......
+Call isPrime(1505): true-factor 5 found. --> 1505 is not a prime!
+1505 is not leap year.
+1505 is not a prime leap year. 
+Testing 1549......
+Call isPrime(1549): 1549 is a prime.
+1549 is not leap year.
+1549 is not a prime leap year. 
+Testing 1319......
+Call isPrime(1319): 1319 is a prime.
+1319 is not leap year.
+1319 is not a prime leap year. 
+Testing 1121......
+Call isPrime(1121): true-factor 19 found. --> 1121 is not a prime!
+1121 is not leap year.
+1121 is not a prime leap year. 
+Testing 562......
+Call isPrime(562): true-factor 2 found. --> 562 is not a prime!
+562 is not leap year.
+562 is not a prime leap year. 
+Testing 308......
+Call isPrime(308): true-factor 2 found. --> 308 is not a prime!
+308 is leap year.
+308 is not a prime leap year. 
+Testing 901......
+Call isPrime(901): true-factor 17 found. --> 901 is not a prime!
+901 is not leap year.
+901 is not a prime leap year. 
+Testing 2816......
+Call isPrime(2816): true-factor 2 found. --> 2816 is not a prime!
+2816 is leap year.
+2816 is not a prime leap year. 
+Testing 2722......
+Call isPrime(2722): true-factor 2 found. --> 2722 is not a prime!
+2722 is not leap year.
+2722 is not a prime leap year. 
+Testing 2003......
+Call isPrime(2003): 2003 is a prime.
+2003 is not leap year.
+2003 is not a prime leap year. 
+Testing 139......
+Call isPrime(139): 139 is a prime.
+139 is not leap year.
+139 is not a prime leap year. 
+Testing 2199......
+Call isPrime(2199): true-factor 3 found. --> 2199 is not a prime!
+2199 is not leap year.
+2199 is not a prime leap year. 
+Testing 2772......
+Call isPrime(2772): true-factor 2 found. --> 2772 is not a prime!
+2772 is leap year.
+2772 is not a prime leap year. 
+Testing 1022......
+Call isPrime(1022): true-factor 2 found. --> 1022 is not a prime!
+1022 is not leap year.
+1022 is not a prime leap year. 
+Testing 260......
+Call isPrime(260): true-factor 2 found. --> 260 is not a prime!
+260 is leap year.
+260 is not a prime leap year. 
+Testing 1333......
+Call isPrime(1333): true-factor 31 found. --> 1333 is not a prime!
+1333 is not leap year.
+1333 is not a prime leap year. 
+Testing 914......
+Call isPrime(914): true-factor 2 found. --> 914 is not a prime!
+914 is not leap year.
+914 is not a prime leap year. 
+Testing 3002......
+Call isPrime(3002): true-factor 2 found. --> 3002 is not a prime!
+3002 is not leap year.
+3002 is not a prime leap year. 
+Testing 1692......
+Call isPrime(1692): true-factor 2 found. --> 1692 is not a prime!
+1692 is leap year.
+1692 is not a prime leap year. 
+Testing 2692......
+Call isPrime(2692): true-factor 2 found. --> 2692 is not a prime!
+2692 is leap year.
+2692 is not a prime leap year. 
+Testing 1477......
+Call isPrime(1477): true-factor 7 found. --> 1477 is not a prime!
+1477 is not leap year.
+1477 is not a prime leap year. 
+Testing 561......
+Call isPrime(561): true-factor 3 found. --> 561 is not a prime!
+561 is not leap year.
+561 is not a prime leap year. 
+Testing 2938......
+Call isPrime(2938): true-factor 2 found. --> 2938 is not a prime!
+2938 is not leap year.
+2938 is not a prime leap year. 
+Testing 2398......
+Call isPrime(2398): true-factor 2 found. --> 2398 is not a prime!
+2398 is not leap year.
+2398 is not a prime leap year. 
+Testing 2510......
+Call isPrime(2510): true-factor 2 found. --> 2510 is not a prime!
+2510 is not leap year.
+2510 is not a prime leap year. 
+Testing 1611......
+Call isPrime(1611): true-factor 3 found. --> 1611 is not a prime!
+1611 is not leap year.
+1611 is not a prime leap year. 
+Testing 1769......
+Call isPrime(1769): true-factor 29 found. --> 1769 is not a prime!
+1769 is not leap year.
+1769 is not a prime leap year. 
+Testing 1721......
+Call isPrime(1721): 1721 is a prime.
+1721 is not leap year.
+1721 is not a prime leap year. 
+Testing 1702......
+Call isPrime(1702): true-factor 2 found. --> 1702 is not a prime!
+1702 is not leap year.
+1702 is not a prime leap year. 
+Testing 531......
+Call isPrime(531): true-factor 3 found. --> 531 is not a prime!
+531 is not leap year.
+531 is not a prime leap year. 
+Testing 1332......
+Call isPrime(1332): true-factor 2 found. --> 1332 is not a prime!
+1332 is leap year.
+1332 is not a prime leap year. 
+Testing 2328......
+Call isPrime(2328): true-factor 2 found. --> 2328 is not a prime!
+2328 is leap year.
+2328 is not a prime leap year. 
+Testing 2445......
+Call isPrime(2445): true-factor 3 found. --> 2445 is not a prime!
+2445 is not leap year.
+2445 is not a prime leap year. 
+Testing 2445......
+Call isPrime(2445): true-factor 3 found. --> 2445 is not a prime!
+2445 is not leap year.
+2445 is not a prime leap year. 
+Testing 2778......
+Call isPrime(2778): true-factor 2 found. --> 2778 is not a prime!
+2778 is not leap year.
+2778 is not a prime leap year. 
+Testing 2332......
+Call isPrime(2332): true-factor 2 found. --> 2332 is not a prime!
+2332 is leap year.
+2332 is not a prime leap year. 
+Testing 2637......
+Call isPrime(2637): true-factor 3 found. --> 2637 is not a prime!
+2637 is not leap year.
+2637 is not a prime leap year. 
+Testing 3343......
+Call isPrime(3343): 3343 is a prime.
+3343 is not leap year.
+3343 is not a prime leap year. 
+Testing 1164......
+Call isPrime(1164): true-factor 2 found. --> 1164 is not a prime!
+1164 is leap year.
+1164 is not a prime leap year. 
+Testing 1265......
+Call isPrime(1265): true-factor 5 found. --> 1265 is not a prime!
+1265 is not leap year.
+1265 is not a prime leap year. 
+Testing 169......
+Call isPrime(169): true-factor 13 found. --> 169 is not a prime!
+169 is not leap year.
+169 is not a prime leap year. 
+Testing 2932......
+Call isPrime(2932): true-factor 2 found. --> 2932 is not a prime!
+2932 is leap year.
+2932 is not a prime leap year. 
+Testing 547......
+Call isPrime(547): 547 is a prime.
+547 is not leap year.
+547 is not a prime leap year. 
+Testing 632......
+Call isPrime(632): true-factor 2 found. --> 632 is not a prime!
+632 is leap year.
+632 is not a prime leap year. 
+Testing 3291......
+Call isPrime(3291): true-factor 3 found. --> 3291 is not a prime!
+3291 is not leap year.
+3291 is not a prime leap year. 
+Testing 2031......
+Call isPrime(2031): true-factor 3 found. --> 2031 is not a prime!
+2031 is not leap year.
+2031 is not a prime leap year. 
+Testing 1360......
+Call isPrime(1360): true-factor 2 found. --> 1360 is not a prime!
+1360 is leap year.
+1360 is not a prime leap year. 
+Testing 2227......
+Call isPrime(2227): true-factor 17 found. --> 2227 is not a prime!
+2227 is not leap year.
+2227 is not a prime leap year. 
+Testing 592......
+Call isPrime(592): true-factor 2 found. --> 592 is not a prime!
+592 is leap year.
+592 is not a prime leap year. 
+Testing 1787......
+Call isPrime(1787): 1787 is a prime.
+1787 is not leap year.
+1787 is not a prime leap year. 
+Testing 2893......
+Call isPrime(2893): true-factor 11 found. --> 2893 is not a prime!
+2893 is not leap year.
+2893 is not a prime leap year. 
+Testing 2690......
+Call isPrime(2690): true-factor 2 found. --> 2690 is not a prime!
+2690 is not leap year.
+2690 is not a prime leap year. 
+Testing 2300......
+Call isPrime(2300): true-factor 2 found. --> 2300 is not a prime!
+2300 is not leap year.
+2300 is not a prime leap year. 
+Testing 2828......
+Call isPrime(2828): true-factor 2 found. --> 2828 is not a prime!
+2828 is leap year.
+2828 is not a prime leap year. 
+Testing 2801......
+Call isPrime(2801): 2801 is a prime.
+2801 is not leap year.
+2801 is not a prime leap year. 
+Testing 850......
+Call isPrime(850): true-factor 2 found. --> 850 is not a prime!
+850 is not leap year.
+850 is not a prime leap year. 
+Testing 1388......
+Call isPrime(1388): true-factor 2 found. --> 1388 is not a prime!
+1388 is leap year.
+1388 is not a prime leap year. 
+Testing 1192......
+Call isPrime(1192): true-factor 2 found. --> 1192 is not a prime!
+1192 is leap year.
+1192 is not a prime leap year. 
+Testing 2810......
+Call isPrime(2810): true-factor 2 found. --> 2810 is not a prime!
+2810 is not leap year.
+2810 is not a prime leap year. 
+Testing 2334......
+Call isPrime(2334): true-factor 2 found. --> 2334 is not a prime!
+2334 is not leap year.
+2334 is not a prime leap year. 
+Testing 3095......
+Call isPrime(3095): true-factor 5 found. --> 3095 is not a prime!
+3095 is not leap year.
+3095 is not a prime leap year. 
+Testing 1690......
+Call isPrime(1690): true-factor 2 found. --> 1690 is not a prime!
+1690 is not leap year.
+1690 is not a prime leap year. 
+Testing 1167......
+Call isPrime(1167): true-factor 3 found. --> 1167 is not a prime!
+1167 is not leap year.
+1167 is not a prime leap year. 
+Testing 407......
+Call isPrime(407): true-factor 11 found. --> 407 is not a prime!
+407 is not leap year.
+407 is not a prime leap year. 
+Testing 1326......
+Call isPrime(1326): true-factor 2 found. --> 1326 is not a prime!
+1326 is not leap year.
+1326 is not a prime leap year. 
+Testing 1266......
+Call isPrime(1266): true-factor 2 found. --> 1266 is not a prime!
+1266 is not leap year.
+1266 is not a prime leap year. 
+Testing 1067......
+Call isPrime(1067): true-factor 11 found. --> 1067 is not a prime!
+1067 is not leap year.
+1067 is not a prime leap year. 
+Testing 2989......
+Call isPrime(2989): true-factor 7 found. --> 2989 is not a prime!
+2989 is not leap year.
+2989 is not a prime leap year. 
+Testing 597......
+Call isPrime(597): true-factor 3 found. --> 597 is not a prime!
+597 is not leap year.
+597 is not a prime leap year. 
+Testing 1725......
+Call isPrime(1725): true-factor 3 found. --> 1725 is not a prime!
+1725 is not leap year.
+1725 is not a prime leap year. 
+Testing 3055......
+Call isPrime(3055): true-factor 5 found. --> 3055 is not a prime!
+3055 is not leap year.
+3055 is not a prime leap year. 
+Testing 3264......
+Call isPrime(3264): true-factor 2 found. --> 3264 is not a prime!
+3264 is leap year.
+3264 is not a prime leap year. 
+Testing 3298......
+Call isPrime(3298): true-factor 2 found. --> 3298 is not a prime!
+3298 is not leap year.
+3298 is not a prime leap year. 
+Testing 75......
+Call isPrime(75): true-factor 3 found. --> 75 is not a prime!
+75 is not leap year.
+75 is not a prime leap year. 
+Testing 709......
+Call isPrime(709): 709 is a prime.
+709 is not leap year.
+709 is not a prime leap year. 
+Testing 1724......
+Call isPrime(1724): true-factor 2 found. --> 1724 is not a prime!
+1724 is leap year.
+1724 is not a prime leap year. 
+Testing 1700......
+Call isPrime(1700): true-factor 2 found. --> 1700 is not a prime!
+1700 is not leap year.
+1700 is not a prime leap year. 
+Testing 3364......
+Call isPrime(3364): true-factor 2 found. --> 3364 is not a prime!
+3364 is leap year.
+3364 is not a prime leap year. 
+Testing 3230......
+Call isPrime(3230): true-factor 2 found. --> 3230 is not a prime!
+3230 is not leap year.
+3230 is not a prime leap year. 
+Testing 1469......
+Call isPrime(1469): true-factor 13 found. --> 1469 is not a prime!
+1469 is not leap year.
+1469 is not a prime leap year. 
+Testing 1703......
+Call isPrime(1703): true-factor 13 found. --> 1703 is not a prime!
+1703 is not leap year.
+1703 is not a prime leap year. 
+Testing 2408......
+Call isPrime(2408): true-factor 2 found. --> 2408 is not a prime!
+2408 is leap year.
+2408 is not a prime leap year. 
+Testing 644......
+Call isPrime(644): true-factor 2 found. --> 644 is not a prime!
+644 is leap year.
+644 is not a prime leap year. 
+Testing 2561......
+Call isPrime(2561): true-factor 13 found. --> 2561 is not a prime!
+2561 is not leap year.
+2561 is not a prime leap year. 
+Testing 3295......
+Call isPrime(3295): true-factor 5 found. --> 3295 is not a prime!
+3295 is not leap year.
+3295 is not a prime leap year. 
+Testing 3148......
+Call isPrime(3148): true-factor 2 found. --> 3148 is not a prime!
+3148 is leap year.
+3148 is not a prime leap year. 
+Testing 2338......
+Call isPrime(2338): true-factor 2 found. --> 2338 is not a prime!
+2338 is not leap year.
+2338 is not a prime leap year. 
+Testing 335......
+Call isPrime(335): true-factor 5 found. --> 335 is not a prime!
+335 is not leap year.
+335 is not a prime leap year. 
+Testing 2031......
+Call isPrime(2031): true-factor 3 found. --> 2031 is not a prime!
+2031 is not leap year.
+2031 is not a prime leap year. 
+Testing 980......
+Call isPrime(980): true-factor 2 found. --> 980 is not a prime!
+980 is leap year.
+980 is not a prime leap year. 
+Testing 3186......
+Call isPrime(3186): true-factor 2 found. --> 3186 is not a prime!
+3186 is not leap year.
+3186 is not a prime leap year. 
+Testing 2341......
+Call isPrime(2341): 2341 is a prime.
+2341 is not leap year.
+2341 is not a prime leap year. 
+Testing 3243......
+Call isPrime(3243): true-factor 3 found. --> 3243 is not a prime!
+3243 is not leap year.
+3243 is not a prime leap year. 
+Testing 1031......
+Call isPrime(1031): 1031 is a prime.
+1031 is not leap year.
+1031 is not a prime leap year. 
+Testing 3350......
+Call isPrime(3350): true-factor 2 found. --> 3350 is not a prime!
+3350 is not leap year.
+3350 is not a prime leap year. 
+Testing 1889......
+Call isPrime(1889): 1889 is a prime.
+1889 is not leap year.
+1889 is not a prime leap year. 
+Testing 2426......
+Call isPrime(2426): true-factor 2 found. --> 2426 is not a prime!
+2426 is not leap year.
+2426 is not a prime leap year. 
+Testing 1382......
+Call isPrime(1382): true-factor 2 found. --> 1382 is not a prime!
+1382 is not leap year.
+1382 is not a prime leap year. 
+Testing 1292......
+Call isPrime(1292): true-factor 2 found. --> 1292 is not a prime!
+1292 is leap year.
+1292 is not a prime leap year. 
+Testing 1966......
+Call isPrime(1966): true-factor 2 found. --> 1966 is not a prime!
+1966 is not leap year.
+1966 is not a prime leap year. 
+Testing 2681......
+Call isPrime(2681): true-factor 7 found. --> 2681 is not a prime!
+2681 is not leap year.
+2681 is not a prime leap year. 
+Testing 2507......
+Call isPrime(2507): true-factor 23 found. --> 2507 is not a prime!
+2507 is not leap year.
+2507 is not a prime leap year. 
+Testing 2213......
+Call isPrime(2213): 2213 is a prime.
+2213 is not leap year.
+2213 is not a prime leap year. 
+Testing 2756......
+Call isPrime(2756): true-factor 2 found. --> 2756 is not a prime!
+2756 is leap year.
+2756 is not a prime leap year. 
+Testing 2430......
+Call isPrime(2430): true-factor 2 found. --> 2430 is not a prime!
+2430 is not leap year.
+2430 is not a prime leap year. 
+Testing 2296......
+Call isPrime(2296): true-factor 2 found. --> 2296 is not a prime!
+2296 is leap year.
+2296 is not a prime leap year. 
+Testing 1976......
+Call isPrime(1976): true-factor 2 found. --> 1976 is not a prime!
+1976 is leap year.
+1976 is not a prime leap year. 
+Testing 3289......
+Call isPrime(3289): true-factor 11 found. --> 3289 is not a prime!
+3289 is not leap year.
+3289 is not a prime leap year. 
+Testing 3240......
+Call isPrime(3240): true-factor 2 found. --> 3240 is not a prime!
+3240 is leap year.
+3240 is not a prime leap year. 
+Testing 727......
+Call isPrime(727): 727 is a prime.
+727 is not leap year.
+727 is not a prime leap year. 
+Testing 1701......
+Call isPrime(1701): true-factor 3 found. --> 1701 is not a prime!
+1701 is not leap year.
+1701 is not a prime leap year. 
+Testing 2988......
+Call isPrime(2988): true-factor 2 found. --> 2988 is not a prime!
+2988 is leap year.
+2988 is not a prime leap year. 
+Testing 2751......
+Call isPrime(2751): true-factor 3 found. --> 2751 is not a prime!
+2751 is not leap year.
+2751 is not a prime leap year. 
+Testing 3187......
+Call isPrime(3187): 3187 is a prime.
+3187 is not leap year.
+3187 is not a prime leap year. 
+Testing 2860......
+Call isPrime(2860): true-factor 2 found. --> 2860 is not a prime!
+2860 is leap year.
+2860 is not a prime leap year. 
+Testing 3363......
+Call isPrime(3363): true-factor 3 found. --> 3363 is not a prime!
+3363 is not leap year.
+3363 is not a prime leap year. 
+Testing 1583......
+Call isPrime(1583): 1583 is a prime.
+1583 is not leap year.
+1583 is not a prime leap year. 
+Testing 135......
+Call isPrime(135): true-factor 3 found. --> 135 is not a prime!
+135 is not leap year.
+135 is not a prime leap year. 
+Testing 1798......
+Call isPrime(1798): true-factor 2 found. --> 1798 is not a prime!
+1798 is not leap year.
+1798 is not a prime leap year. 
+Testing 2101......
+Call isPrime(2101): true-factor 11 found. --> 2101 is not a prime!
+2101 is not leap year.
+2101 is not a prime leap year. 
+Testing 258......
+Call isPrime(258): true-factor 2 found. --> 258 is not a prime!
+258 is not leap year.
+258 is not a prime leap year. 
+Testing 325......
+Call isPrime(325): true-factor 5 found. --> 325 is not a prime!
+325 is not leap year.
+325 is not a prime leap year. 
+Testing 1590......
+Call isPrime(1590): true-factor 2 found. --> 1590 is not a prime!
+1590 is not leap year.
+1590 is not a prime leap year. 
+Testing 2126......
+Call isPrime(2126): true-factor 2 found. --> 2126 is not a prime!
+2126 is not leap year.
+2126 is not a prime leap year. 
+Testing 1821......
+Call isPrime(1821): true-factor 3 found. --> 1821 is not a prime!
+1821 is not leap year.
+1821 is not a prime leap year. 
+Testing 3355......
+Call isPrime(3355): true-factor 5 found. --> 3355 is not a prime!
+3355 is not leap year.
+3355 is not a prime leap year. 
+Testing 2552......
+Call isPrime(2552): true-factor 2 found. --> 2552 is not a prime!
+2552 is leap year.
+2552 is not a prime leap year. 
+Testing 2872......
+Call isPrime(2872): true-factor 2 found. --> 2872 is not a prime!
+2872 is leap year.
+2872 is not a prime leap year. 
+Testing 2073......
+Call isPrime(2073): true-factor 3 found. --> 2073 is not a prime!
+2073 is not leap year.
+2073 is not a prime leap year. 
+Testing 1097......
+Call isPrime(1097): 1097 is a prime.
+1097 is not leap year.
+1097 is not a prime leap year. 
+Testing 1412......
+Call isPrime(1412): true-factor 2 found. --> 1412 is not a prime!
+1412 is leap year.
+1412 is not a prime leap year. 
+Testing 1175......
+Call isPrime(1175): true-factor 5 found. --> 1175 is not a prime!
+1175 is not leap year.
+1175 is not a prime leap year. 
+Testing 1406......
+Call isPrime(1406): true-factor 2 found. --> 1406 is not a prime!
+1406 is not leap year.
+1406 is not a prime leap year. 
+Testing 3069......
+Call isPrime(3069): true-factor 3 found. --> 3069 is not a prime!
+3069 is not leap year.
+3069 is not a prime leap year. 
+Testing 2234......
+Call isPrime(2234): true-factor 2 found. --> 2234 is not a prime!
+2234 is not leap year.
+2234 is not a prime leap year. 
+Testing 2256......
+Call isPrime(2256): true-factor 2 found. --> 2256 is not a prime!
+2256 is leap year.
+2256 is not a prime leap year. 
+Testing 3092......
+Call isPrime(3092): true-factor 2 found. --> 3092 is not a prime!
+3092 is leap year.
+3092 is not a prime leap year. 
+Testing 2123......
+Call isPrime(2123): true-factor 11 found. --> 2123 is not a prime!
+2123 is not leap year.
+2123 is not a prime leap year. 
+Testing 2645......
+Call isPrime(2645): true-factor 5 found. --> 2645 is not a prime!
+2645 is not leap year.
+2645 is not a prime leap year. 
+Testing 335......
+Call isPrime(335): true-factor 5 found. --> 335 is not a prime!
+335 is not leap year.
+335 is not a prime leap year. 
+Testing 3379......
+Call isPrime(3379): true-factor 31 found. --> 3379 is not a prime!
+3379 is not leap year.
+3379 is not a prime leap year. 
+Testing 2958......
+Call isPrime(2958): true-factor 2 found. --> 2958 is not a prime!
+2958 is not leap year.
+2958 is not a prime leap year. 
+Testing 3198......
+Call isPrime(3198): true-factor 2 found. --> 3198 is not a prime!
+3198 is not leap year.
+3198 is not a prime leap year. 
+Testing 1671......
+Call isPrime(1671): true-factor 3 found. --> 1671 is not a prime!
+1671 is not leap year.
+1671 is not a prime leap year. 
+Testing 118......
+Call isPrime(118): true-factor 2 found. --> 118 is not a prime!
+118 is not leap year.
+118 is not a prime leap year. 
+Testing 740......
+Call isPrime(740): true-factor 2 found. --> 740 is not a prime!
+740 is leap year.
+740 is not a prime leap year. 
+Testing 2796......
+Call isPrime(2796): true-factor 2 found. --> 2796 is not a prime!
+2796 is leap year.
+2796 is not a prime leap year. 
+Testing 3102......
+Call isPrime(3102): true-factor 2 found. --> 3102 is not a prime!
+3102 is not leap year.
+3102 is not a prime leap year. 
+Testing 2946......
+Call isPrime(2946): true-factor 2 found. --> 2946 is not a prime!
+2946 is not leap year.
+2946 is not a prime leap year. 
+Testing 871......
+Call isPrime(871): true-factor 13 found. --> 871 is not a prime!
+871 is not leap year.
+871 is not a prime leap year. 
+Testing 302......
+Call isPrime(302): true-factor 2 found. --> 302 is not a prime!
+302 is not leap year.
+302 is not a prime leap year. 
+Testing 3339......
+Call isPrime(3339): true-factor 3 found. --> 3339 is not a prime!
+3339 is not leap year.
+3339 is not a prime leap year. 
+Testing 2048......
+Call isPrime(2048): true-factor 2 found. --> 2048 is not a prime!
+2048 is leap year.
+2048 is not a prime leap year. 
+Testing 409......
+Call isPrime(409): 409 is a prime.
+409 is not leap year.
+409 is not a prime leap year. 
+Testing 2703......
+Call isPrime(2703): true-factor 3 found. --> 2703 is not a prime!
+2703 is not leap year.
+2703 is not a prime leap year. 
+Testing 2189......
+Call isPrime(2189): true-factor 11 found. --> 2189 is not a prime!
+2189 is not leap year.
+2189 is not a prime leap year. 
+Testing 566......
+Call isPrime(566): true-factor 2 found. --> 566 is not a prime!
+566 is not leap year.
+566 is not a prime leap year. 
+Testing 3182......
+Call isPrime(3182): true-factor 2 found. --> 3182 is not a prime!
+3182 is not leap year.
+3182 is not a prime leap year. 
+Testing 465......
+Call isPrime(465): true-factor 3 found. --> 465 is not a prime!
+465 is not leap year.
+465 is not a prime leap year. 
+Testing 60......
+Call isPrime(60): true-factor 2 found. --> 60 is not a prime!
+60 is leap year.
+60 is not a prime leap year. 
+Testing 1870......
+Call isPrime(1870): true-factor 2 found. --> 1870 is not a prime!
+1870 is not leap year.
+1870 is not a prime leap year. 
+Testing 596......
+Call isPrime(596): true-factor 2 found. --> 596 is not a prime!
+596 is leap year.
+596 is not a prime leap year. 
+Testing 112......
+Call isPrime(112): true-factor 2 found. --> 112 is not a prime!
+112 is leap year.
+112 is not a prime leap year. 
+Testing 3126......
+Call isPrime(3126): true-factor 2 found. --> 3126 is not a prime!
+3126 is not leap year.
+3126 is not a prime leap year. 
+Testing 644......
+Call isPrime(644): true-factor 2 found. --> 644 is not a prime!
+644 is leap year.
+644 is not a prime leap year. 
+Testing 1669......
+Call isPrime(1669): 1669 is a prime.
+1669 is not leap year.
+1669 is not a prime leap year. 
+Testing 1712......
+Call isPrime(1712): true-factor 2 found. --> 1712 is not a prime!
+1712 is leap year.
+1712 is not a prime leap year. 
+Testing 2129......
+Call isPrime(2129): 2129 is a prime.
+2129 is not leap year.
+2129 is not a prime leap year. 
+Testing 285......
+Call isPrime(285): true-factor 3 found. --> 285 is not a prime!
+285 is not leap year.
+285 is not a prime leap year. 
+Testing 2313......
+Call isPrime(2313): true-factor 3 found. --> 2313 is not a prime!
+2313 is not leap year.
+2313 is not a prime leap year. 
+Testing 3299......
+Call isPrime(3299): 3299 is a prime.
+3299 is not leap year.
+3299 is not a prime leap year. 
+Testing 3279......
+Call isPrime(3279): true-factor 3 found. --> 3279 is not a prime!
+3279 is not leap year.
+3279 is not a prime leap year. 
+Testing 1808......
+Call isPrime(1808): true-factor 2 found. --> 1808 is not a prime!
+1808 is leap year.
+1808 is not a prime leap year. 
+Testing 3299......
+Call isPrime(3299): 3299 is a prime.
+3299 is not leap year.
+3299 is not a prime leap year. 
+Testing 619......
+Call isPrime(619): 619 is a prime.
+619 is not leap year.
+619 is not a prime leap year. 
+Testing 1650......
+Call isPrime(1650): true-factor 2 found. --> 1650 is not a prime!
+1650 is not leap year.
+1650 is not a prime leap year. 
+Testing 2259......
+Call isPrime(2259): true-factor 3 found. --> 2259 is not a prime!
+2259 is not leap year.
+2259 is not a prime leap year. 
+Testing 2428......
+Call isPrime(2428): true-factor 2 found. --> 2428 is not a prime!
+2428 is leap year.
+2428 is not a prime leap year. 
+Testing 3153......
+Call isPrime(3153): true-factor 3 found. --> 3153 is not a prime!
+3153 is not leap year.
+3153 is not a prime leap year. 
+Testing 1573......
+Call isPrime(1573): true-factor 11 found. --> 1573 is not a prime!
+1573 is not leap year.
+1573 is not a prime leap year. 
+Testing 669......
+Call isPrime(669): true-factor 3 found. --> 669 is not a prime!
+669 is not leap year.
+669 is not a prime leap year. 
+Testing 1060......
+Call isPrime(1060): true-factor 2 found. --> 1060 is not a prime!
+1060 is leap year.
+1060 is not a prime leap year. 
+Testing 1405......
+Call isPrime(1405): true-factor 5 found. --> 1405 is not a prime!
+1405 is not leap year.
+1405 is not a prime leap year. 
+Testing 256......
+Call isPrime(256): true-factor 2 found. --> 256 is not a prime!
+256 is leap year.
+256 is not a prime leap year. 
+Testing 1849......
+Call isPrime(1849): true-factor 43 found. --> 1849 is not a prime!
+1849 is not leap year.
+1849 is not a prime leap year. 
+Testing 864......
+Call isPrime(864): true-factor 2 found. --> 864 is not a prime!
+864 is leap year.
+864 is not a prime leap year. 
+Testing 2797......
+Call isPrime(2797): 2797 is a prime.
+2797 is not leap year.
+2797 is not a prime leap year. 
+Testing 2373......
+Call isPrime(2373): true-factor 3 found. --> 2373 is not a prime!
+2373 is not leap year.
+2373 is not a prime leap year. 
+Testing 1430......
+Call isPrime(1430): true-factor 2 found. --> 1430 is not a prime!
+1430 is not leap year.
+1430 is not a prime leap year. 
+Testing 1313......
+Call isPrime(1313): true-factor 13 found. --> 1313 is not a prime!
+1313 is not leap year.
+1313 is not a prime leap year. 
+Testing 741......
+Call isPrime(741): true-factor 3 found. --> 741 is not a prime!
+741 is not leap year.
+741 is not a prime leap year. 
+Testing 244......
+Call isPrime(244): true-factor 2 found. --> 244 is not a prime!
+244 is leap year.
+244 is not a prime leap year. 
+Testing 1995......
+Call isPrime(1995): true-factor 3 found. --> 1995 is not a prime!
+1995 is not leap year.
+1995 is not a prime leap year. 
+Testing 1442......
+Call isPrime(1442): true-factor 2 found. --> 1442 is not a prime!
+1442 is not leap year.
+1442 is not a prime leap year. 
+Testing 2908......
+Call isPrime(2908): true-factor 2 found. --> 2908 is not a prime!
+2908 is leap year.
+2908 is not a prime leap year. 
+Testing 1641......
+Call isPrime(1641): true-factor 3 found. --> 1641 is not a prime!
+1641 is not leap year.
+1641 is not a prime leap year. 
+Testing 218......
+Call isPrime(218): true-factor 2 found. --> 218 is not a prime!
+218 is not leap year.
+218 is not a prime leap year. 
+Testing 58......
+Call isPrime(58): true-factor 2 found. --> 58 is not a prime!
+58 is not leap year.
+58 is not a prime leap year. 
+Testing 2088......
+Call isPrime(2088): true-factor 2 found. --> 2088 is not a prime!
+2088 is leap year.
+2088 is not a prime leap year. 
+Testing 746......
+Call isPrime(746): true-factor 2 found. --> 746 is not a prime!
+746 is not leap year.
+746 is not a prime leap year. 
+Testing 2319......
+Call isPrime(2319): true-factor 3 found. --> 2319 is not a prime!
+2319 is not leap year.
+2319 is not a prime leap year. 
+Testing 2261......
+Call isPrime(2261): true-factor 7 found. --> 2261 is not a prime!
+2261 is not leap year.
+2261 is not a prime leap year. 
+Testing 2399......
+Call isPrime(2399): 2399 is a prime.
+2399 is not leap year.
+2399 is not a prime leap year. 
+Testing 511......
+Call isPrime(511): true-factor 7 found. --> 511 is not a prime!
+511 is not leap year.
+511 is not a prime leap year. 
+Testing 152......
+Call isPrime(152): true-factor 2 found. --> 152 is not a prime!
+152 is leap year.
+152 is not a prime leap year. 
+Testing 939......
+Call isPrime(939): true-factor 3 found. --> 939 is not a prime!
+939 is not leap year.
+939 is not a prime leap year. 
+Testing 2182......
+Call isPrime(2182): true-factor 2 found. --> 2182 is not a prime!
+2182 is not leap year.
+2182 is not a prime leap year. 
+Testing 2461......
+Call isPrime(2461): true-factor 23 found. --> 2461 is not a prime!
+2461 is not leap year.
+2461 is not a prime leap year. 
+Testing 1643......
+Call isPrime(1643): true-factor 31 found. --> 1643 is not a prime!
+1643 is not leap year.
+1643 is not a prime leap year. 
+Testing 904......
+Call isPrime(904): true-factor 2 found. --> 904 is not a prime!
+904 is leap year.
+904 is not a prime leap year. 
+Testing 2704......
+Call isPrime(2704): true-factor 2 found. --> 2704 is not a prime!
+2704 is leap year.
+2704 is not a prime leap year. 
+Testing 345......
+Call isPrime(345): true-factor 3 found. --> 345 is not a prime!
+345 is not leap year.
+345 is not a prime leap year. 
+Testing 2190......
+Call isPrime(2190): true-factor 2 found. --> 2190 is not a prime!
+2190 is not leap year.
+2190 is not a prime leap year. 
+Testing 3061......
+Call isPrime(3061): 3061 is a prime.
+3061 is not leap year.
+3061 is not a prime leap year. 
+Testing 804......
+Call isPrime(804): true-factor 2 found. --> 804 is not a prime!
+804 is leap year.
+804 is not a prime leap year. 
+Testing 1566......
+Call isPrime(1566): true-factor 2 found. --> 1566 is not a prime!
+1566 is not leap year.
+1566 is not a prime leap year. 
+Testing 1906......
+Call isPrime(1906): true-factor 2 found. --> 1906 is not a prime!
+1906 is not leap year.
+1906 is not a prime leap year. 
+Testing 2465......
+Call isPrime(2465): true-factor 5 found. --> 2465 is not a prime!
+2465 is not leap year.
+2465 is not a prime leap year. 
+Testing 1508......
+Call isPrime(1508): true-factor 2 found. --> 1508 is not a prime!
+1508 is leap year.
+1508 is not a prime leap year. 
+Testing 1517......
+Call isPrime(1517): true-factor 37 found. --> 1517 is not a prime!
+1517 is not leap year.
+1517 is not a prime leap year. 
+Testing 911......
+Call isPrime(911): 911 is a prime.
+911 is not leap year.
+911 is not a prime leap year. 
+Testing 3087......
+Call isPrime(3087): true-factor 3 found. --> 3087 is not a prime!
+3087 is not leap year.
+3087 is not a prime leap year. 
+Testing 334......
+Call isPrime(334): true-factor 2 found. --> 334 is not a prime!
+334 is not leap year.
+334 is not a prime leap year. 
+Testing 740......
+Call isPrime(740): true-factor 2 found. --> 740 is not a prime!
+740 is leap year.
+740 is not a prime leap year. 
+Testing 3361......
+Call isPrime(3361): 3361 is a prime.
+3361 is not leap year.
+3361 is not a prime leap year. 
+Testing 2448......
+Call isPrime(2448): true-factor 2 found. --> 2448 is not a prime!
+2448 is leap year.
+2448 is not a prime leap year. 
+Testing 377......
+Call isPrime(377): true-factor 13 found. --> 377 is not a prime!
+377 is not leap year.
+377 is not a prime leap year. 
+Testing 1182......
+Call isPrime(1182): true-factor 2 found. --> 1182 is not a prime!
+1182 is not leap year.
+1182 is not a prime leap year. 
+Testing 2103......
+Call isPrime(2103): true-factor 3 found. --> 2103 is not a prime!
+2103 is not leap year.
+2103 is not a prime leap year. 
+Testing 2789......
+Call isPrime(2789): 2789 is a prime.
+2789 is not leap year.
+2789 is not a prime leap year. 
+Testing 2927......
+Call isPrime(2927): 2927 is a prime.
+2927 is not leap year.
+2927 is not a prime leap year. 
+Testing 1485......
+Call isPrime(1485): true-factor 3 found. --> 1485 is not a prime!
+1485 is not leap year.
+1485 is not a prime leap year. 
+Testing 1385......
+Call isPrime(1385): true-factor 5 found. --> 1385 is not a prime!
+1385 is not leap year.
+1385 is not a prime leap year. 
+Testing 2554......
+Call isPrime(2554): true-factor 2 found. --> 2554 is not a prime!
+2554 is not leap year.
+2554 is not a prime leap year. 
+Testing 1977......
+Call isPrime(1977): true-factor 3 found. --> 1977 is not a prime!
+1977 is not leap year.
+1977 is not a prime leap year. 
+Testing 1642......
+Call isPrime(1642): true-factor 2 found. --> 1642 is not a prime!
+1642 is not leap year.
+1642 is not a prime leap year. 
+Testing 3054......
+Call isPrime(3054): true-factor 2 found. --> 3054 is not a prime!
+3054 is not leap year.
+3054 is not a prime leap year. 
+Testing 1726......
+Call isPrime(1726): true-factor 2 found. --> 1726 is not a prime!
+1726 is not leap year.
+1726 is not a prime leap year. 
+Testing 2803......
+Call isPrime(2803): 2803 is a prime.
+2803 is not leap year.
+2803 is not a prime leap year. 
+Testing 541......
+Call isPrime(541): 541 is a prime.
+541 is not leap year.
+541 is not a prime leap year. 
+Testing 844......
+Call isPrime(844): true-factor 2 found. --> 844 is not a prime!
+844 is leap year.
+844 is not a prime leap year. 
+Testing 2047......
+Call isPrime(2047): true-factor 23 found. --> 2047 is not a prime!
+2047 is not leap year.
+2047 is not a prime leap year. 
+Testing 621......
+Call isPrime(621): true-factor 3 found. --> 621 is not a prime!
+621 is not leap year.
+621 is not a prime leap year. 
+Testing 2699......
+Call isPrime(2699): 2699 is a prime.
+2699 is not leap year.
+2699 is not a prime leap year. 
+Testing 2932......
+Call isPrime(2932): true-factor 2 found. --> 2932 is not a prime!
+2932 is leap year.
+2932 is not a prime leap year. 
+Testing 3018......
+Call isPrime(3018): true-factor 2 found. --> 3018 is not a prime!
+3018 is not leap year.
+3018 is not a prime leap year. 
+Testing 768......
+Call isPrime(768): true-factor 2 found. --> 768 is not a prime!
+768 is leap year.
+768 is not a prime leap year. 
+Testing 1570......
+Call isPrime(1570): true-factor 2 found. --> 1570 is not a prime!
+1570 is not leap year.
+1570 is not a prime leap year. 
+Testing 3165......
+Call isPrime(3165): true-factor 3 found. --> 3165 is not a prime!
+3165 is not leap year.
+3165 is not a prime leap year. 
+Testing 1487......
+Call isPrime(1487): 1487 is a prime.
+1487 is not leap year.
+1487 is not a prime leap year. 
+Testing 627......
+Call isPrime(627): true-factor 3 found. --> 627 is not a prime!
+627 is not leap year.
+627 is not a prime leap year. 
+Testing 1235......
+Call isPrime(1235): true-factor 5 found. --> 1235 is not a prime!
+1235 is not leap year.
+1235 is not a prime leap year. 
+Testing 3068......
+Call isPrime(3068): true-factor 2 found. --> 3068 is not a prime!
+3068 is leap year.
+3068 is not a prime leap year. 
+Testing 1277......
+Call isPrime(1277): 1277 is a prime.
+1277 is not leap year.
+1277 is not a prime leap year. 
+Testing 1927......
+Call isPrime(1927): true-factor 41 found. --> 1927 is not a prime!
+1927 is not leap year.
+1927 is not a prime leap year. 
+Testing 2671......
+Call isPrime(2671): 2671 is a prime.
+2671 is not leap year.
+2671 is not a prime leap year. 
+Testing 477......
+Call isPrime(477): true-factor 3 found. --> 477 is not a prime!
+477 is not leap year.
+477 is not a prime leap year. 
+Testing 906......
+Call isPrime(906): true-factor 2 found. --> 906 is not a prime!
+906 is not leap year.
+906 is not a prime leap year. 
+Testing 2578......
+Call isPrime(2578): true-factor 2 found. --> 2578 is not a prime!
+2578 is not leap year.
+2578 is not a prime leap year. 
+Testing 1780......
+Call isPrime(1780): true-factor 2 found. --> 1780 is not a prime!
+1780 is leap year.
+1780 is not a prime leap year. 
+Testing 1040......
+Call isPrime(1040): true-factor 2 found. --> 1040 is not a prime!
+1040 is leap year.
+1040 is not a prime leap year. 
+Testing 3380......
+Call isPrime(3380): true-factor 2 found. --> 3380 is not a prime!
+3380 is leap year.
+3380 is not a prime leap year. 
+Testing 479......
+Call isPrime(479): 479 is a prime.
+479 is not leap year.
+479 is not a prime leap year. 
+Testing 656......
+Call isPrime(656): true-factor 2 found. --> 656 is not a prime!
+656 is leap year.
+656 is not a prime leap year. 
+Testing 3123......
+Call isPrime(3123): true-factor 3 found. --> 3123 is not a prime!
+3123 is not leap year.
+3123 is not a prime leap year. 
+Testing 2330......
+Call isPrime(2330): true-factor 2 found. --> 2330 is not a prime!
+2330 is not leap year.
+2330 is not a prime leap year. 
+Testing 1734......
+Call isPrime(1734): true-factor 2 found. --> 1734 is not a prime!
+1734 is not leap year.
+1734 is not a prime leap year. 
+Testing 3014......
+Call isPrime(3014): true-factor 2 found. --> 3014 is not a prime!
+3014 is not leap year.
+3014 is not a prime leap year. 
+Testing 907......
+Call isPrime(907): 907 is a prime.
+907 is not leap year.
+907 is not a prime leap year. 
+Testing 1415......
+Call isPrime(1415): true-factor 5 found. --> 1415 is not a prime!
+1415 is not leap year.
+1415 is not a prime leap year. 
+Testing 2400......
+Call isPrime(2400): true-factor 2 found. --> 2400 is not a prime!
+2400 is leap year.
+2400 is not a prime leap year. 
+Testing 2048......
+Call isPrime(2048): true-factor 2 found. --> 2048 is not a prime!
+2048 is leap year.
+2048 is not a prime leap year. 
+Testing 3240......
+Call isPrime(3240): true-factor 2 found. --> 3240 is not a prime!
+3240 is leap year.
+3240 is not a prime leap year. 
+Testing 955......
+Call isPrime(955): true-factor 5 found. --> 955 is not a prime!
+955 is not leap year.
+955 is not a prime leap year. 
+Testing 202......
+Call isPrime(202): true-factor 2 found. --> 202 is not a prime!
+202 is not leap year.
+202 is not a prime leap year. 
+Testing 1132......
+Call isPrime(1132): true-factor 2 found. --> 1132 is not a prime!
+1132 is leap year.
+1132 is not a prime leap year. 
+Testing 1424......
+Call isPrime(1424): true-factor 2 found. --> 1424 is not a prime!
+1424 is leap year.
+1424 is not a prime leap year. 
+Testing 822......
+Call isPrime(822): true-factor 2 found. --> 822 is not a prime!
+822 is not leap year.
+822 is not a prime leap year. 
+Testing 1290......
+Call isPrime(1290): true-factor 2 found. --> 1290 is not a prime!
+1290 is not leap year.
+1290 is not a prime leap year. 
+Testing 1179......
+Call isPrime(1179): true-factor 3 found. --> 1179 is not a prime!
+1179 is not leap year.
+1179 is not a prime leap year. 
+Testing 1633......
+Call isPrime(1633): true-factor 23 found. --> 1633 is not a prime!
+1633 is not leap year.
+1633 is not a prime leap year. 
+Testing 603......
+Call isPrime(603): true-factor 3 found. --> 603 is not a prime!
+603 is not leap year.
+603 is not a prime leap year. 
+Testing 310......
+Call isPrime(310): true-factor 2 found. --> 310 is not a prime!
+310 is not leap year.
+310 is not a prime leap year. 
+Testing 2177......
+Call isPrime(2177): true-factor 7 found. --> 2177 is not a prime!
+2177 is not leap year.
+2177 is not a prime leap year. 
+Testing 3308......
+Call isPrime(3308): true-factor 2 found. --> 3308 is not a prime!
+3308 is leap year.
+3308 is not a prime leap year. 
+Testing 463......
+Call isPrime(463): 463 is a prime.
+463 is not leap year.
+463 is not a prime leap year. 
+Testing 3370......
+Call isPrime(3370): true-factor 2 found. --> 3370 is not a prime!
+3370 is not leap year.
+3370 is not a prime leap year. 
+Testing 175......
+Call isPrime(175): true-factor 5 found. --> 175 is not a prime!
+175 is not leap year.
+175 is not a prime leap year. 
+Testing 804......
+Call isPrime(804): true-factor 2 found. --> 804 is not a prime!
+804 is leap year.
+804 is not a prime leap year. 
+Testing 589......
+Call isPrime(589): true-factor 19 found. --> 589 is not a prime!
+589 is not leap year.
+589 is not a prime leap year. 
+Testing 1837......
+Call isPrime(1837): true-factor 11 found. --> 1837 is not a prime!
+1837 is not leap year.
+1837 is not a prime leap year. 
+Testing 3391......
+Call isPrime(3391): 3391 is a prime.
+3391 is not leap year.
+3391 is not a prime leap year. 
+Testing 1089......
+Call isPrime(1089): true-factor 3 found. --> 1089 is not a prime!
+1089 is not leap year.
+1089 is not a prime leap year. 
+Testing 1132......
+Call isPrime(1132): true-factor 2 found. --> 1132 is not a prime!
+1132 is leap year.
+1132 is not a prime leap year. 
+Testing 2131......
+Call isPrime(2131): 2131 is a prime.
+2131 is not leap year.
+2131 is not a prime leap year. 
+Testing 368......
+Call isPrime(368): true-factor 2 found. --> 368 is not a prime!
+368 is leap year.
+368 is not a prime leap year. 
+Testing 1582......
+Call isPrime(1582): true-factor 2 found. --> 1582 is not a prime!
+1582 is not leap year.
+1582 is not a prime leap year. 
+Testing 1384......
+Call isPrime(1384): true-factor 2 found. --> 1384 is not a prime!
+1384 is leap year.
+1384 is not a prime leap year. 
+Testing 811......
+Call isPrime(811): 811 is a prime.
+811 is not leap year.
+811 is not a prime leap year. 
+Testing 287......
+Call isPrime(287): true-factor 7 found. --> 287 is not a prime!
+287 is not leap year.
+287 is not a prime leap year. 
+Testing 147......
+Call isPrime(147): true-factor 3 found. --> 147 is not a prime!
+147 is not leap year.
+147 is not a prime leap year. 
+Testing 1939......
+Call isPrime(1939): true-factor 7 found. --> 1939 is not a prime!
+1939 is not leap year.
+1939 is not a prime leap year. 
+Testing 2270......
+Call isPrime(2270): true-factor 2 found. --> 2270 is not a prime!
+2270 is not leap year.
+2270 is not a prime leap year. 
+Testing 77......
+Call isPrime(77): true-factor 7 found. --> 77 is not a prime!
+77 is not leap year.
+77 is not a prime leap year. 
+Testing 1500......
+Call isPrime(1500): true-factor 2 found. --> 1500 is not a prime!
+1500 is not leap year.
+1500 is not a prime leap year. 
+Testing 3256......
+Call isPrime(3256): true-factor 2 found. --> 3256 is not a prime!
+3256 is leap year.
+3256 is not a prime leap year. 
+Testing 1962......
+Call isPrime(1962): true-factor 2 found. --> 1962 is not a prime!
+1962 is not leap year.
+1962 is not a prime leap year. 
+Testing 2756......
+Call isPrime(2756): true-factor 2 found. --> 2756 is not a prime!
+2756 is leap year.
+2756 is not a prime leap year. 
+Testing 2412......
+Call isPrime(2412): true-factor 2 found. --> 2412 is not a prime!
+2412 is leap year.
+2412 is not a prime leap year. 
+Testing 2060......
+Call isPrime(2060): true-factor 2 found. --> 2060 is not a prime!
+2060 is leap year.
+2060 is not a prime leap year. 
+Testing 2063......
+Call isPrime(2063): 2063 is a prime.
+2063 is not leap year.
+2063 is not a prime leap year. 
+Testing 1813......
+Call isPrime(1813): true-factor 7 found. --> 1813 is not a prime!
+1813 is not leap year.
+1813 is not a prime leap year. 
+Testing 1004......
+Call isPrime(1004): true-factor 2 found. --> 1004 is not a prime!
+1004 is leap year.
+1004 is not a prime leap year. 
+Testing 936......
+Call isPrime(936): true-factor 2 found. --> 936 is not a prime!
+936 is leap year.
+936 is not a prime leap year. 
+Testing 1482......
+Call isPrime(1482): true-factor 2 found. --> 1482 is not a prime!
+1482 is not leap year.
+1482 is not a prime leap year. 
+Testing 292......
+Call isPrime(292): true-factor 2 found. --> 292 is not a prime!
+292 is leap year.
+292 is not a prime leap year. 
+Testing 3224......
+Call isPrime(3224): true-factor 2 found. --> 3224 is not a prime!
+3224 is leap year.
+3224 is not a prime leap year. 
+Testing 1805......
+Call isPrime(1805): true-factor 5 found. --> 1805 is not a prime!
+1805 is not leap year.
+1805 is not a prime leap year. 
+Testing 2326......
+Call isPrime(2326): true-factor 2 found. --> 2326 is not a prime!
+2326 is not leap year.
+2326 is not a prime leap year. 
+Testing 1281......
+Call isPrime(1281): true-factor 3 found. --> 1281 is not a prime!
+1281 is not leap year.
+1281 is not a prime leap year. 
+Testing 830......
+Call isPrime(830): true-factor 2 found. --> 830 is not a prime!
+830 is not leap year.
+830 is not a prime leap year. 
+Testing 669......
+Call isPrime(669): true-factor 3 found. --> 669 is not a prime!
+669 is not leap year.
+669 is not a prime leap year. 
+Testing 779......
+Call isPrime(779): true-factor 19 found. --> 779 is not a prime!
+779 is not leap year.
+779 is not a prime leap year. 
+Testing 2055......
+Call isPrime(2055): true-factor 3 found. --> 2055 is not a prime!
+2055 is not leap year.
+2055 is not a prime leap year. 
+Testing 844......
+Call isPrime(844): true-factor 2 found. --> 844 is not a prime!
+844 is leap year.
+844 is not a prime leap year. 
+Testing 2863......
+Call isPrime(2863): true-factor 7 found. --> 2863 is not a prime!
+2863 is not leap year.
+2863 is not a prime leap year. 
+Testing 1549......
+Call isPrime(1549): 1549 is a prime.
+1549 is not leap year.
+1549 is not a prime leap year. 
+Testing 2373......
+Call isPrime(2373): true-factor 3 found. --> 2373 is not a prime!
+2373 is not leap year.
+2373 is not a prime leap year. 
+Testing 962......
+Call isPrime(962): true-factor 2 found. --> 962 is not a prime!
+962 is not leap year.
+962 is not a prime leap year. 
+Testing 752......
+Call isPrime(752): true-factor 2 found. --> 752 is not a prime!
+752 is leap year.
+752 is not a prime leap year. 
+Testing 2146......
+Call isPrime(2146): true-factor 2 found. --> 2146 is not a prime!
+2146 is not leap year.
+2146 is not a prime leap year. 

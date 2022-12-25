@@ -1,0 +1,156 @@
+const int a = 1;
+const int b = 1 + 1;
+const int c = 1 + 1 * 1;
+const int d = 1 + 1 * (1 + 1);
+const int e = 1 - 1;
+const int f = 1 - 1 / 1;
+const int g = 1 - 1 % a;
+const int h = 1 + 1 - c + (f - g);
+const int l = 489%562%13%910*895*284+769/458*721%442*666%630-531/898-666%625*471%646*260%7-998%68*92/369%747/62/707*258+34*236*708+257-706%240/1000/73*163%328+532+309*272+673%970*874/994;
+const int o = 444%255%242%317%795/623/559*35,p = -+-(1 + 1 * (1 + 1));
+const int q = -+-(1 + 1 * (1 + 1))*655 + e*p,qq = -+-(1 + 1 * (1 + 1))*655 + e%p,qqq = -+-(1 + 1 * (1 + 1))*655 + e / p;
+const int arr[1 + 1 * (1 + 1)] = {444%255%242%317%795/623/559*35, -45, 1 - 1 / 1};
+const int brr[1 + 1 * (1 + 1)][1] = {{1}, {1},{1}};
+int awa,awd = 141;
+int crr[2][3] = {{949+229%375%393+355+948*181-867%366*71*660%20/737/293-5/479+311/176%158*43/66+682-788%887*715, 1 + 1 * (1 + 1) + 225, -22}, {16, 4, 11 - 1}};
+int drr[1][2] = {{141, 141 - 25}};
+int err[2] = {225, 747};
+
+void foo1() {
+    return;
+    return;
+    return;
+}
+
+void foo2(int a) {
+
+}
+
+
+void mqsort(int l, int r, int q[]) {
+    if (l >= r) return;
+    int x = q[(l + r) / 2], i = l - 1, j = r + 1;
+    while(i < j) {
+        i = i + 1;
+        while (q[i] < x) {
+            i = i + 1;
+        }
+        j = j - 1;
+        while(q[j] > x) {
+            j = j - 1;
+        }
+        if (i < j) {
+            int t = q[i];
+            q[i] = q[j];
+            q[j] = t;
+        }
+    }
+    mqsort(l, j, q);
+    mqsort(j +1, r, q);
+}
+
+int foo3(int c, int d) {
+    return c + d;
+}
+
+void mqsort2(int l, int r, int q[][20]) {
+    if (l >= r) return;
+    int x = q[1][(l + r) / 2], i = l - 1, j = r + 1;
+    while(i < j) {
+        i = i + 1;
+        while (q[1][i] < x) {
+            i = i + 1;
+        }
+        j = j - 1;
+        while(q[1][j] > x) {
+            j = j - 1;
+        }
+        if (i < j) {
+            int t = q[1][i];
+            q[1][i] = q[1][j];
+            q[1][j] = t;
+        }
+    }
+    mqsort2(l, j, q);
+    mqsort2(j +1, r, q);
+}
+
+int main() {
+    awa = 10;
+    ;
+    int awadwad;
+    awadwad = 545;
+    ;
+    ;
+    ;
+    printf("20231204\n");
+    243/440%570-559/373%960/460%101%205%16/487-107/234/435 + a;
+    {
+        printf("awadwad is %d now\n", awadwad);
+        int awadwad = 11;
+        printf("awadwad has changed in block\n");
+        printf("awadwad is %d now\n", awadwad);
+    }
+    int fowao = 14;
+    if (208*695%426/896 < fowao) {
+        ;
+    }
+    if (208*695%426/896 > fowao) {
+
+    }
+    if (208*695%426/896 == fowao) {
+
+    }
+    if (fowao != g) {
+        ;
+        if (!g) {
+            int k = crr[0][1];
+        }
+    }
+    if (247*821-45%268%445*262-938%66-140*975*882/758*199/282-175*80/646+181/962%857%193*658*287/796%674*285%314 >= fowao)
+        if (fowao == fowao)
+            if (fowao)
+                printf("double if\n");
+    int waidj = 11;
+    while (waidj <= 10000) {
+        waidj = waidj + 1;
+        if (waidj > 100) {
+            printf("cur val in loop is %d\n", waidj);
+        } else
+            continue;
+        if (waidj == 101) {
+            break;
+        }
+    }
+    printf("input n and the array which length is n, then will sort this array, n is required less than 20\n");
+    int n;
+    n = getint();
+    int q[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int i = 0;
+    int qq[2][20] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+    while (i < n) {
+        qq[1][i] = q[i];
+        i = i + 1;
+    }
+    i = 0;
+    while (i < n) {
+        q[i] = getint();
+        i = i + 1;
+    }
+    mqsort(0, n-1, q);
+    i = 0;
+    printf("after sort, the array is: ");
+    while (i < n) {
+        printf("%d ", q[i]);
+        i = i + 1;
+    }
+    printf("414");
+    printf("414");
+    mqsort2(0, n - 1, qq);
+    mqsort(0, n - 1, qq[1]);
+    int waf = foo3(n, err[0]);
+    crr[0][1] = waf;
+    err[1] = crr[0][1];
+    crr[0][1] = err[1];
+    return 0;
+}

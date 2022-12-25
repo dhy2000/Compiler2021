@@ -1,0 +1,26 @@
+int max(int a[], int len) {
+    int i = 1;
+    int result = a[0];
+    while (i < len) {
+        if (a[i] < result)
+            result = a[i];
+        i = i+1;
+    }
+    return result;
+}
+
+void dummy(int a[][2]) {
+    return;
+}
+
+int main() {
+    printf("21210109\n");
+    const int a[2] = {1,1+1}, b[2][2] = {{1,1+1},{1+2,4}};
+    int c[2] = {1,1+1}, d[2][2] = {{1,1+1},{1+2,4}};
+    printf("%d, %d\n", max(c,2), max(d[1],2));
+    dummy(d);
+    c[0] = 100;
+    d[0][0] = 1000;
+    printf("%d, %d\n", c[0], d[0][0]);
+    return 0;
+}

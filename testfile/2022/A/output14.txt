@@ -1,0 +1,20 @@
+20373374
+True1 2 13 4 5 10 12 9 26 44 0 303 1000 32 54 123 0 1 2 4 5 9 10 12 13 26 32 44 54 123 303 1000 
+1 32 sum is 1638
+answer is 5
+True
+fei
+or
+True
+Tr1
+True
+dayu
+3
+Tr1
+True
+dayu
+Tr1
+end1 10
+3
+err
+13-10319

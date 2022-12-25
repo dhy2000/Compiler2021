@@ -1,0 +1,87 @@
+const int zhenghw = 100;
+const int ID = 19373339;
+const int abc123 = 1, abc124 = 2, abc125 = +3;
+int a;
+int b,c,d,f,g;
+int AA;
+int e = 66;
+const int a3[2][2] = {{1,2},{3,4}};
+const int h3 = 6;
+int b3,c3,d3;
+int e3[4],f3[3],ii3[2][2] = {{9,8},{7,6}};
+int g3[2] = {1,2};
+int funcAA(int x[], int y[]) {
+	int tempp;
+	tempp = x[0] + y[0];
+	return tempp;
+}
+int func1 (int paramA) {
+	int declInBlock;
+	int temp = 2;
+	declInBlock = abc123;
+	declInBlock = +3;
+	if (e) temp = 1;
+		else temp = 2;
+	if (e == 66) temp = 3;
+		else temp = 4;
+	if (e != abc123) temp = 5;
+		else temp=6;
+	if (e > 1) temp = 7;
+	if (e + 4 < 80) temp = 8;
+	if (e <= 90) temp = 9;
+	if (e >= 100) temp = 10;
+	if (e * 2 == 140) temp = 11;
+	if (e / 2 == 33) temp = 12;
+	if (e % abc124 == 1) temp = 13;
+	if (!(0 + 1)) temp = 14;
+	while (e - 1 >= 0) {
+		int bbb = e - 1;
+		e = bbb;
+		break;
+	} 
+	while (1 == 0) continue;
+	return (-temp);
+}
+
+void func2 () {
+	;
+	return;
+}
+
+int func3 (int xxx, int yyy) {
+	{
+	}
+	return (4);
+}
+
+int func4 () {
+	return 1;
+}
+
+int main() {
+	a = +-zhenghw;
+	b = abc123 + abc124 + abc124;
+	c = abc123 + abc124*abc125;
+	d = func3(abc123, 1);
+	f = func1(abc124);
+	g= func4();
+	b3 = a3[0][1];
+	c3 = a3[1][0];
+	d3 = a3[1][1];
+	int temp3,inn;
+	int	j3[2][3] = {{ii3[0][0],2,ii3[0][1]},{4,ii3[1][0],ii3[1][1]}};
+	temp3 = funcAA(ii3[0], j3[1]);
+	func2();
+	inn = getint();
+	printf("19373339");
+	printf("\n");
+	printf("%d\n",b3);
+	printf("%d\n",c3);
+	printf("%d\n",d3);
+	printf("%d\n",temp3);
+	printf("%d\n",g3[3/3]);
+	printf("123456\n");
+	printf("123456\n");
+	printf("123456\n");
+	return 0;
+}

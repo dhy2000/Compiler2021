@@ -1,0 +1,24 @@
+/*cover basis, focus on Decl*/
+int main(){
+	printf("19373135\n");
+	const int l_const_0 = 0;
+	printf("l_const_0, should be 0: %d\n", l_const_0);
+	const int l_const_1 = l_const_0 + 1;
+	printf("l_const_1, should be 1: %d\n", l_const_1);
+	const int l_const_2 = 2, l_const_3 = 2 * l_const_1, l_const_4 = 4;
+	printf("l_const_3, should be 2: %d\n", l_const_3);
+	const int l_const_5[3] = {1, 2, 3}, l_const_6[2][2] = {{1, l_const_1}, {0,0}};
+	printf("l_const_5[2], l_const_6[0][1], should be 3, 1: %d, %d\n", l_const_5[2], l_const_6[0][1]);
+	int l_var_0 = 0;
+	printf("l_var_0, should be 0: %d\n", l_var_0);
+	int l_var_1 = 2 * (l_var_0 + 1);
+	printf("l_var_1, should be 2: %d\n", l_var_1);
+	int l_var_2, l_var_3 = 2 * l_var_1, l_var_4;
+	printf("l_var_3, should be 4: %d\n", l_var_3);
+	int l_var_5;
+	l_var_5 = 5;
+	printf("l_var_5, should be 5: %d\n", l_var_5);
+	int l_var_6[3] = {1, 2, 3}, l_var_7[2][2] = {{1, l_const_1}, {1, 1}};
+	printf("l_var_6[2], l_var_7[0][1], should be 3, 1: %d, %d", l_var_6[2], l_var_7[0][1]); 
+	return 0;
+}

@@ -1,0 +1,10 @@
+20373980
+Received!Counting...
+The number you want is 89(Using recursion)
+The number you want is 89(Using while block)
+Multiply:100
+Division:1
+Delivery:0
+200 17
+x is bigger!
+Finished!

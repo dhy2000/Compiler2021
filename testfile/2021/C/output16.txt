@@ -1,0 +1,10 @@
+19373373
+j : 4, k : 10, l : 4
+a! = 720, num = 5
+6
+scanf a, b to get gcd and lcm
+gcd is 5
+lcm is 30
+-6
+scanf a to get Fibonacci
+fib is 8

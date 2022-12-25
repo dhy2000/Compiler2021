@@ -1,0 +1,129 @@
+const int pi = 3;
+const int const2[3][3] = {{1,2,3},{4,5,6},{7,8,9}};
+const int constconst[5] = {1,1,1,1,1};
+int a33[3][3] = {{1,2,3},{4,5,6},{7,8,9}};
+int const1[5] = {1,1,1,1,1};
+int zero = 0;
+int a2[2][2] = {{1,2},{3,4}};
+int a1[5];
+int m,n,p,q;
+int i = 0;
+
+int getSqu(int x) {
+	return x * x;
+}
+
+int getSquSum(int a[][3],int size) {
+	int j=0,k=0;
+	int sum = 0;
+	while (j < size) {
+		while(k < 3) {
+			sum = sum + getSqu(a[j][k]);
+			k = k + 1;
+		}
+		j = j + 1;
+	}
+	return sum;
+}
+
+int sleep(int s) {
+	return s + 101;
+}
+
+
+void sort(int a[],int l, int r) {
+	int i = l;
+	int j = r;
+	int medium = (i+j)/2;
+	int temp;
+	while (i < j) {
+		while (a[i] < a[medium] ) i = i + 1;
+		while (a[j] > a[medium] ) j = j - 1;
+		if (i <= j) {
+			temp = a[i];
+			a[i] = a[j];
+			a[j] = temp;
+			
+			i = i + 1;
+			j = j - 1;
+		}
+	}
+	if (l<j) sort(a,l,j);
+	if (r>i) sort(a,i,r);
+	return ;
+	
+}
+
+int getD(int a[], int size) {
+	int j;
+	j = 0;
+	int average,sum=0;
+	while (j < size) {
+		sum = sum + a[j];
+		j = j + 1;
+	}
+	average = sum / size;
+	j = 0;
+	sum = 0;
+	while (j < size) {
+		sum = sum + getSqu(average - a[j]); 
+		j = j + 1;
+	}
+	return sum / size;
+}
+
+int main() {
+    m = getint();
+    n = getint();
+    p = getint();
+    q = getint();
+    a1[0] = constconst[3];
+    a1[1] = n;
+    a1[2] = a1[0];
+    a1[3] = p;
+    a1[4] = q;
+    printf("19373330\n"); //1
+	
+    {
+    	while (i < m) {
+    	    {
+				n = n + 1;
+    			i = i + 1;
+    			if (m > n) continue;
+    			p = getSqu(p + 1);
+    			if (m < q) break;
+			}
+		}
+	}
+	printf("n %d\n",n); 
+	printf("p %d\n",p);
+	printf("i %d\n",i);
+	//4
+	int D_const = getD(const1,5);
+	int D_var = getD(a1,5);
+	printf("sum of two D %d\n",D_const + D_var);
+	//5
+	
+	if (!n > -p) {
+		printf("const D + 10 is %d -_-\n",getD(const1,5) + 2 * 5);
+	}
+	else {
+		{
+			printf("var D * 50 - 2000 is %d \n", getD(a1,5) * 50 - 2000);
+		}
+	}
+	
+	//6
+	sort(a1,0,4);
+	printf("after sort %d %d %d %d %d\n",a1[0],a1[1],a1[2],a1[3],a1[4]);
+	//7
+    printf("Squ const2 + 101 %d\n",sleep(getSquSum(a33,3))); // 9
+	
+    int slee;
+	slee = sleep(441212) * const2[0][1] + const2[1][2] * const2[0][0] + const2[2][2];
+	
+    printf("slee%d\n",slee);
+    printf("sadhiukashjfasodifd51023sad65saf1erwg0fdss5a6d1asd56sa0ds55saad511sa2d31asd556gdsfsadsa\n");
+	
+    return 0;
+}

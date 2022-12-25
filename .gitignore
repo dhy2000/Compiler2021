@@ -7,8 +7,13 @@
 /out/
 
 # Test files
-/testfile/
 *.txt
+*.sy
+*.in
+*.out
+*.asm
+*.s
+*.S
 
 # Archives
 *.zip

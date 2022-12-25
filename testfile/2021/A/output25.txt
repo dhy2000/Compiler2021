@@ -1,0 +1,10 @@
+19373341
+m = 3, n = 24, mm = 27, nn = 342526
+max of mm and nn: 342526; min of mm and nn: 27
+mainConst1 = 10
+Sum of normalConst: 35
+24 is even!
+Sum of array: 3
+sum of array: 24
+Contains odd!
+27 and 342526 contains at least an odd!

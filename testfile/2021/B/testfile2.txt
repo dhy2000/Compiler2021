@@ -1,0 +1,85 @@
+const int a0 = 1;
+const int b0 = 2, c0 = 3;
+int a1 = 0, b1 = 0;
+int c1 = 0;
+
+const int s1[3] = {1,2,3};
+const int s2[2][2] = {{1,2}, {3,4}};
+int s3[3] = {1,2,3};
+int s4[2][2] = {{1,2}, {3,4}};
+
+int dealSet0(int s1[], int s2[][2]) {
+    int i = 0, sum = 0;
+    while (i<2) {
+        sum = sum + s1[i] + s2[i][0] + s2[i][1];
+        i = i + 1;
+    }
+    return sum;
+}
+
+int getnumber() {
+    int instantA,instantB,instantC;
+    instantA = 1 + a0 + (b0 + c0);
+    instantB = instantA * instantA / instantA % b0;
+    instantB = instantA - (instantB + c0);
+	if (b1<a1==a1<a1!=b1>b1!=a1>a1==b1<=b1==b1>=b1) {
+		instantC = 1;
+	}
+    printf("A = %d\n", instantA);
+    printf("B = %d\n", instantB);
+    printf("C = %d\n", instantC);
+    return 1;
+}
+
+int addself(int a) {
+    return a+a;
+}
+
+int multself(int a) {
+    return a*a;
+}
+
+void none(){
+    return;
+}
+
+void minus(int a, int b) {
+}
+
+int main() {
+    int value;
+    int i = 0, cycle;
+    ;
+    {}
+    printf("19231007\n");
+    printf("input recurrent cycle:\n");
+    cycle = getint();
+    printf("cycle is: %d\n", cycle);
+
+    printf("input initial value:\n");
+    value = getint();
+    printf("initial value is: %d\n", value);
+
+    if (!0) {
+        printf("your input is good\n");
+        while (i<cycle) {
+            value = addself(value);
+            value = multself(value);
+            i = i + 1;
+            continue;
+        }
+    }
+    else {
+        printf("your input is zero\n");
+        if (cycle == 0) {
+        }
+    }
+
+    while(1){
+        value = value - getnumber() - dealSet0(s3, s4);
+        printf("final value is: %d\n", value);
+        break;
+    }
+	
+	return 0;
+}

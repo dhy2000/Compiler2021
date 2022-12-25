@@ -1,0 +1,11 @@
+/**
+ * CompUnit → {Decl} {FuncDef} MainFuncDef
+ */
+// 不存在 Decl
+// 不存在 FuncDef
+int main()
+{
+    printf("19241091\n");
+    printf("==================testfile4 end==================");
+    return 0;
+}

@@ -1,0 +1,11 @@
+19373348
+Got a number: 233!
+247
+Got a number: 1!
+-3
+Got a number: 42!
+738
+Got a number: -15!
+1711
+Got a number: 0!
+3667

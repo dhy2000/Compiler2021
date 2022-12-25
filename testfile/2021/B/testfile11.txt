@@ -1,0 +1,61 @@
+const int MAX = 6;
+
+int main()
+{
+    printf("19182616\n");
+    int a = 0;
+    int num = 0;    
+    int i = 2;
+    int c,d;
+    int j = 1, sum;
+    int k;
+    num = getint();
+    c = getint();
+    d = getint();
+    sum = getint();
+    k = getint();
+    if(num >= 2)
+    {
+        while(i<num)
+        {
+            if(num%i==0)
+            a = a + 1;
+            i = i + 1;
+        }
+        if(a!=0){
+            printf("%d is not a prime number\n", num);
+        }else{
+            printf("%d is a prime number\n", num);
+        }
+    }
+    else
+    {
+        printf("%d is neither prime nor composite\n", num);
+    }
+    if(c>0 && d>0)
+    {
+        printf("c and d are both positive\n");
+    }
+    else
+    {
+        printf("Neither c nor d are positive\n");
+    }
+
+    while(1)
+    {
+        sum = sum + 1;
+        printf("%d\n", sum);
+        j = j + 1;
+        if(j > 3)break;
+    }
+    while(k<MAX)
+    {
+        k = k + 1;
+        if(k==3 || k==4)
+        {
+            continue;
+        }
+        printf("%d\n", k);
+    }
+    return 0;
+}

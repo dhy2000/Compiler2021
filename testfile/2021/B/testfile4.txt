@@ -1,0 +1,59 @@
+int count = 0;
+int climbStairs(int n){
+    if (n<0) return 0;
+    if (n==0) return 1;
+    if (n==1) return 1;
+    return climbStairs(n-1) + climbStairs(n-2);
+}
+int sum(int a, int b) {
+    return a + b;
+}
+int return1() {
+    return sum(2,3) + sum(4,5);
+}
+void return2() {
+    count = count + 3;
+    return;
+}
+int SPAS(int n){
+    int product = 1;
+    int sum = 0;
+    int digit;
+    while (n != 0) {
+        digit = n % 10;
+        n = n / 10;
+        product = product * digit;
+        sum = sum + digit;
+    }
+    return product - sum;
+}
+int NOS(int num){
+    int step = 0;
+    while (num != 0) {
+        step = step + 1;
+        if (num % 2 == 1) {
+            num = num - 1;
+            continue;
+        }
+        if (num % 2 != 1) {
+            num = num / 2;
+        }
+    }
+    return step;
+}
+int main() {
+    printf("19231047\n");
+    printf("climb 0 : %d\n", climbStairs(count));
+    return2();
+    printf("climb %d : %d\n", count, climbStairs(count));
+    return2();
+    printf("climb %d : %d\n", count, climbStairs(count));
+    int a = return1();
+    printf("test return1 : %d\n", a);
+    printf("test climb sum %d : %d\n", sum(3,4), climbStairs(sum(3,4)));
+    printf("test product - sum : %d\n", SPAS(1345121324));
+    printf("test nest 1 : %d\n", climbStairs(sum(SPAS(34), SPAS(32))));
+    printf("test nest 2 : %d\n", climbStairs(sum(NOS(14), NOS(6))));
+    printf("test file");
+    return 0;
+}

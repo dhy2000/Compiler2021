@@ -1,0 +1,59 @@
+const int title = 10, useless = 20;
+
+int Fibo(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+    int f1, f2;
+    f1 = Fibo(n - 1);
+    f2 = Fibo(n - 2);
+    return f1 + f2;
+}
+
+void LogicalCount(int n) {
+    printf("Multiply:%d\n", n * n);
+    printf("Division:%d\n", n / n);
+    printf("Delivery:%d\n", n % n);
+    return;
+}
+
+int main() {
+    int num, res;
+    num = getint();
+    printf("20373980\n");
+    printf("Received!Counting...\n");
+    res = Fibo(num);
+    printf("The number you want is %d(Using recursion)\n", res);
+    /* Below will be two loops */
+    int i = 1, j = 1, k = 1, temp;
+    while (i < num) {
+        temp = j;
+        j = j + k;
+        k = temp;
+        i = i + 1;
+        if(i < 0) {
+            break;
+        }
+    }
+    printf("The number you want is %d(Using while block)\n", j);
+    LogicalCount(num);
+    if (num * 10 >= res) {
+        num = num + 10;
+        res = res - 10;
+        num = num * 10;
+        res = res / 10;
+    }
+    printf("%d %d\n", num, res + title);
+    /* Below will be relation expression */
+    int x = 2 * res, y;
+    y = getint();
+    if (x > y) {
+        printf("x is bigger!\n");
+    } else if (x < y) {
+        printf("y is bigger\n");
+    } else if (x == y) {
+        printf("x is equal to y\n");
+    }
+    printf("Finished!");
+    return 0;
+}

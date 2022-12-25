@@ -1,0 +1,88 @@
+int matrix[2][2] = {{1, 1}, {1, 0}};
+const int __res[2][2] = {{5, 5}, {2, 3}};
+const int __useless[4] = {1, 1, 1, 0};
+
+
+void mat_mul(int res[][2], int x[][2], int y[][2]) {
+    res[0][0] = x[0][0] * y[0][0] + x[0][1] * y[1][0];
+    res[0][1] = x[0][0] * y[0][1] + x[0][1] * y[1][1];
+    res[1][0] = x[1][0] * y[0][0] + x[1][1] * y[1][0];
+    res[1][1] = x[1][0] * y[0][1] + x[1][1] * y[1][1];
+    return;
+}
+
+
+void vec_mul(int res[], int mat[][2], int vec[]) {
+    res[0] = vec[0] * mat[0][0] + vec[1] * mat[0][1];
+    res[1] = vec[0] * mat[1][0] + vec[1] * mat[1][1];
+    return;
+}
+
+int __power(int n, int cur[][2], int res[][2]) {
+    if (n == 1) {
+        res[0][0] = cur[0][0];
+        res[0][1] = cur[0][1];
+        res[1][0] = cur[1][0];
+        res[1][1] = cur[1][1];
+        return 0;
+    } else {
+        mat_mul(res, cur, matrix);
+        cur[0][0] = res[0][0];
+        cur[0][1] = res[0][1];
+        cur[1][0] = res[1][0];
+        cur[1][1] = res[1][1];
+        return __power(n - 1, cur, res);
+    }
+    return 0;
+}
+
+int power(int n, int res[][2]) {
+    if (n <= 0) return -1;
+    int temp[2][2] = {{1, 1}, {1, 0}};
+    return __power(n, temp, res);
+}
+
+int error() {
+    printf("Error!\n");
+    return 1;
+}
+
+int output(int r[][2]) {
+    printf("%d %d\n%d %d\n", r[0][0], r[0][1], r[1][0], r[1][1]);
+    return 1;
+}
+
+int main() {
+    const int zero = 0 / 12321 + (0 * 12345);
+    int n;
+    n = getint();
+    int temp[2] = {0, 0};
+    int res[2][2];
+    int vec_list[6][2] = {{1, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 3}, {-1, 1}};
+    printf("20231144\n");
+    printf("a[n] = a[n - 1] + a[n - 2]\n");
+    while (n > zero) {
+        int p;
+        p = getint();
+        int ret = power(p, res);
+        printf("/* input = %d */\n", p);
+        if (ret && error()) {
+            n = n - 1;
+            continue;
+        }
+        if (ret || output(res)) {
+            int i = 0;
+            while (i < 6 || 1) {
+                vec_mul(temp, res, vec_list[i]);
+                printf("when a[0] = %d, a[1] = %d ==> a[%d] = %d\n", vec_list[i][1], vec_list[i][0], p, temp[1]);
+                i = i + 1;
+                if (i >= 6) break;
+                else continue;
+            }
+        }
+        printf("///////////////////////\n");
+        n = -+(1 - n);
+    }
+    printf("/*********** END **********/\n");
+    return 0;
+}

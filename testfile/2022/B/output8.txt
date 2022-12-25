@@ -1,0 +1,22 @@
+20374042
+g_con_a: 1 2 3 4
+g_con_b: 1 4 2 4
+g_con_c: 0 0
+g_a: 0 0 0 0
+g_b: 5 9 10 2
+g_c: 0 0
+con_a: 1 4 4 19
+con_b: 1 9 3 8
+con_c: 0 0
+a: 4 9 6 8
+b: 4 8 -2 249
+c: 249 2
+g_con_a: 2 4 8 1
+g_a: 0 8 239 -282
+g_b: 1 9 -139 24
+g_con_b: -1823 4 10 29424
+g_c: -34181
+g_a sum: -35
+g_con_b[1] sum: 29434
+g_con_b sum: 27615
+real global const b sum: 11

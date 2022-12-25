@@ -1,0 +1,117 @@
+int conflictMap[20][20], record[20], result[20];
+int minGroup = 30, m = 0;
+int global_var = 0;
+
+int func() {
+	global_var = global_var + 1;
+	return 1;
+}
+
+void init() {
+	int i = 0;
+	while(i < 20) {
+		record[i] = 0;
+		result[i] = 0;
+		i = i + 1;
+	}
+	return;
+}
+
+void copy() {
+	int i = 0;
+	while(i < 20) {
+		result[i] = record[i];
+		i = i + 1;
+	}
+	return;
+}
+
+void attribute(int num, int groupNum) {
+    if (num > m) {
+    	if (groupNum < minGroup) {
+    		minGroup = groupNum;
+            copy();
+		}
+        return;
+	}
+    int i = 1;
+    while(i <= groupNum) {
+    	int flag = 0;
+    	int j = 1;
+    	while(j <= m) {
+    		if(conflictMap[num][j] == 1 && record[j] == i) {  //warning!!!!!!!
+    			flag = 1;
+			}
+			j = j + 1;
+		}
+		if(flag == 0) {
+			record[num] = i;
+			attribute(num+1, groupNum);
+			record[num] = 0;
+		}
+		i = i + 1;
+	}
+	record[num] = groupNum + 1;
+    attribute(num + 1, groupNum + 1);
+    return;
+}
+int main()
+{
+	printf("20373360\n");
+	
+	
+	init();
+	int n;
+	n = getint(); 
+    m = getint();
+    int i = 0;
+
+    while(i < n) {
+    	int j = 0;
+    	int temp[3];
+    	while(3) {
+    		int k;
+			k = getint();
+    		temp[j] = k;
+    		if(j >1) break;
+    		else j = j + 1;
+		}
+
+		conflictMap[temp[0]][temp[1]] = 1;
+		conflictMap[temp[1]][temp[0]] = 1;
+		conflictMap[temp[0]][temp[2]] = 1;
+		conflictMap[temp[2]][temp[0]] = 1;
+		conflictMap[temp[1]][temp[2]] = 1;
+		conflictMap[temp[2]][temp[1]] = 1;
+
+    	i = i + 1;
+	}
+
+    attribute(1, 1);
+    printf("input:\n");
+    printf("4\n7\n1 2 3\n2 3 4\n3 4 5\n4 5 6\n");
+    
+    printf("Your answer is:\n");
+    i = 1;
+    while(i <= minGroup) {
+    	int j = 1;
+    	while(j <= m) {
+    		if(result[j] == i) {
+    			printf("%d", j);
+			}
+			j = j + 1;
+		}
+		printf("\n");
+		i = i + 1;
+	}
+	printf("expect:\n");
+	printf("1 4 7\n2 5\n3 6\n");
+
+	if(0 && func()) {
+	}
+	printf("%d\n", global_var);
+	if(1 || func()) {
+	}
+	printf("%d\n", global_var);
+ 	return 0;
+}

@@ -1,0 +1,32 @@
+const int n = 3,arr[3]={3*3,3+3,3/3};
+
+const int tb[3][3] = {{7,5,8},{6,4,4},{3,2,1}};
+
+int tc[1][12] = {{0,1,2,3,4,5,6,7,8,9,10,11}};
+
+int _getAndPrint(int n,int a[][12],int k){
+    printf("\n%d",tb[n%3][(n-1)/3]);
+    printf("\n%dl%dl\n",k,a[0][n]);
+
+    return tb[n%3][(a[0][n])/3];
+}
+
+int main(){
+    printf("20373081\n");
+    tc[0][1] = +8;
+    int c = 1;
+    c = getint();
+    if(!c){
+        int i = -1;
+        while(1){
+            i = i+1;
+            if(i>=3)
+                break;
+            /*
+            real fans' real comment/*
+            */;
+            _getAndPrint(i,tc,i%n);
+        }
+    }
+    return 0;
+}

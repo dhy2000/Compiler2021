@@ -1,0 +1,126 @@
+/*cover yellow, focus on Stmt*/
+const int g_const_1 = 2;
+const int g_const_2[2] = {1, g_const_1};
+const int g_const_3[2][2] = {{1+1, g_const_1-1}, {g_const_1*1, 1/1}};
+const int g_const_4[2] = {0,0};
+const int g_const_5[2] = {1,0};
+const int g_const_6[2][2] = {{0,0},{0,0}};
+const int g_const_7[2][2] = {{1,0}, {1,0}};
+int g_var_1 = 2;
+int g_var_2[2] = {1, g_const_1};
+int g_var_3[2][2] = {{1+1, g_const_1-1}, {g_const_1*1, 1/1}};
+int g_var_4[2] = {1, 1+1};
+int g_var_5[2] = {1, 1};
+int g_var_6[2][2] = {{1, 1}, {1, 1}};
+int g_var_7[2][2] = {{1, 1}, {1+1, 2}};
+int g_var_8;
+int g_var_9[2];
+int g_var_10[2][2];
+int fun_int_1(){
+	return 1;
+}
+int fun_int_2(int a, int b[], int c[][2]){
+	return 1;
+}
+int fun_int_3(int a){
+	return a;
+}
+void fun_void_1(){
+	return;
+}
+void fun_void_2(int a, int b[], int c[][2]){
+	return;
+}
+void fun_void_3(int a){
+	printf("test func, should be 2: %d\n", a);
+	return;
+}
+
+//Exp
+void test_Exp(int a, int b){
+	int c = a + b - a * b / 2 % 3;
+	;
+	printf("test Exp, should be 5: %d\n", c);
+	return;
+}
+
+//Block
+void test_Block(int a){
+	{printf("test Block, should be 2: %d\n", a);}
+	return;
+}
+
+//if
+void test_if(int a, int b){
+	int c = 0;
+	if(!c){
+		if (a != a+b){
+			if (a == b){
+				printf("test if, should be 2, 2: %d, %d\n", a, b);
+			}
+		}
+	}
+	return;
+}
+
+//while
+void test_while(int i, int len){
+	int count = i;
+	while(count <= len){
+		count = count + 1;
+	}
+	printf("test while, should be 6: %d\n", count);
+	return;
+}
+
+//break continue
+void test_break_continue(){
+	int i = 0, j = 1;
+	while(i == 0 && j == 1){
+		j = 0;
+		continue;
+		i = 1;
+	}
+	while(j == 0){
+		j = j + 1;
+		break;
+	}
+	printf("test break continue, should be 0, 1: %d, %d\n", 0, 1);
+	return;
+}
+
+//printf
+void test_printf(int a){
+	printf("test printf, should be 2: %d\n", a);
+	return;
+}
+
+//getint
+void test_getint(){
+	int a;
+	a = getint();
+	printf("test getint, should be 1: %d", a);
+	return;
+}
+
+
+int main(){
+	printf("19373135\n");
+	printf("test func, should be 2: %d\n", fun_int_3(g_var_3[0][0]));
+	fun_void_3(g_var_3[0][0]);
+	//Exp
+	test_Exp(2, 3);
+	//Block
+	test_Block(2);
+	//if
+	test_if(2, 2);
+	//while
+	test_while(0, 5);
+	//break continue
+	test_break_continue();
+	//printf
+	test_printf(2);
+	//getint
+	test_getint();
+	return 0; 
+}

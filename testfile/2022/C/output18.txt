@@ -1,0 +1,9 @@
+20373420
+Fu1_nC(): 3
+func2(): 222
+func_3(): 3
+a is no less than 0!
+b is greater than 0!
+c is exactly zero!
+i break with a value of 128
+func4 result: 2

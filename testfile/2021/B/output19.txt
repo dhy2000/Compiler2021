@@ -1,0 +1,10 @@
+19373135
+test func, should be 2: 2
+test func, should be 2: 2
+test Exp, should be 5: 5
+test Block, should be 2: 2
+test if, should be 2, 2: 2, 2
+test while, should be 6: 6
+test break continue, should be 0, 1: 0, 1
+test printf, should be 2: 2
+test getint, should be 1: 1

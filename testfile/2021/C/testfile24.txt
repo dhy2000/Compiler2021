@@ -1,0 +1,98 @@
+const int p = 88;
+int q = 66, r = 155;
+int s = 15;
+int max(int a, int b) {
+    if (a > b) {
+        return a;
+    }
+    else {
+        return b;
+    }
+    return a;
+}
+int min(int a, int b) {
+    if (a < b) {
+        return a;
+    }
+    else {
+        return b;
+    }
+    return a;
+}
+int scan() {
+    int tmp = 0;
+    tmp = getint();
+    return tmp + 0;
+}
+void print(int num) {
+    printf("%d\n", num);
+    return;
+}
+void noUse(int a) {
+    int b = a;
+}
+int mid(int a, int b, int c) {
+    int m = 0;
+    if (max(a, b) == min(b, c)) {
+        return b;
+    }
+    else {
+        if (max(a, b) != min(a, c))
+            return c;
+        else
+            return a;
+    }
+    return b;
+}
+int factorial(int n) {
+    int i = n;
+    int ret = 1;
+    if (n > 20) {
+        printf("Your Num is too Big!!!\n");
+        return -1;
+    }
+    while (i) {
+        ret = ret * i;
+        i = i - 1;
+    }
+    return ret;
+}
+int main() {
+    int a = max(min(p, q), max(s, scan()));
+    int b = min(r, scan()), c = 58;
+    const int d = 65535;
+    int bool1 = 0, bool2 = 1, bool3 = -1;
+    int tmp = -10;
+    printf("19373022\n");
+    b = b + c - a;
+    printf("b:%d\n", b);
+    ;
+    (bool2 + bool3);
+    bool1;
+    if (!bool1) {
+        printf("Bool1 is false!\n");
+    }
+    2147483647;
+    {    
+        int tmp = 0;
+        tmp = scan();
+        print(tmp + 10);
+        c = tmp;
+    }
+    a = scan();
+    b = scan();
+    c = scan();
+    if (mid(a, b, c) <= a) {
+        printf("Good!,Num is %d\n", a + mid(a, b, c) / 6 * c % 2 - (bool1 * bool3));
+    }
+    else {
+        if (mid(a, b, c) < c) {
+            printf("Oh!?\n");
+        }
+        else {
+            printf("%d\n", factorial(mid(a, b, c) % d));
+        }
+    }
+    noUse(a);
+    return 0;
+}

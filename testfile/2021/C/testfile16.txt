@@ -1,0 +1,110 @@
+void fun1()
+{
+    int j;
+    int k = 4, l = 6;
+    l = k;
+    j = 3;
+    j = (j % 20) - 1 + 9;
+    int i=0;
+    while (i <= 7)
+    {
+        i = i + 1;
+        if (j == i)
+        {
+            k = k + j;
+            continue;
+        }
+        j = j - 1;
+    }
+    printf("j : %d, k : %d, l : %d\n", j, k, l);
+}
+
+int fun2(int a)
+{
+    int b = 1;
+    int num = 1;
+    while (a >= 1)
+    {
+        b = b * a;
+        a = a - 1;
+        if (a == 1)
+        {
+            break;
+        }
+        else if (a != 1)
+        {
+            num = num + 1;
+        }
+    }
+    printf("a! = %d, num = %d\n", b, num);
+    return 1;
+}
+
+int fun3(int a, int b)
+{
+    if (a > b)
+    {
+        return a;
+    }
+    else if (a < b)
+    {
+        return b;
+    }
+    return a;
+}
+
+int gcd(int a, int b)
+{
+    if (a % b == 0)
+    {
+        return b;
+    }
+    return gcd(b, a % b);
+}
+
+int lcm(int a, int b)
+{
+    int gcds = gcd(a, b);
+    return a * b / gcds;
+}
+
+void fun4(int a, int b, int c)
+{
+    int d = (a + b - c) * a;
+    printf("%d\n", d);
+}
+
+int fun5(int a)
+{
+    if (a == 1)
+    {
+        return 1;
+    }
+    else if (a == 2)
+    {
+        return 1;
+    }
+    return fun5(a - 1) + fun5(a - 2);
+}
+
+int main()
+{
+    printf("19373373\n");
+    fun1();
+    fun2(6);
+    printf("%d\n", fun3(2, fun3(3, 6)));
+    int a, b;
+    printf("scanf a, b to get gcd and lcm\n");
+    a = getint();
+    b = getint();
+    printf("gcd is %d\n", gcd(a, b));
+    printf("lcm is %d\n", lcm(a, b));
+    int temp;
+    temp = getint();
+    fun4(temp, 3, 10);
+    printf("scanf a to get Fibonacci\n");
+    int fib;
+    fib = getint();
+    printf("fib is %d\n", fun5(fib));
+    return 0;
+}

@@ -1,0 +1,10 @@
+20373110
+input test:1 1
+calculate test:4 2 1 2, 4 1 0, 4 0
+1
+repite
+excute repite(a) = 1
+repite2
+excute repite2(a) = 1
+excute +f1(x, z, Z) = 1
+excute +f1(x, z, Z) = -1

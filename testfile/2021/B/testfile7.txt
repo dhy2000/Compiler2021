@@ -1,0 +1,93 @@
+
+const int const01=1*1;
+const int const02=1+1*1;
+const int const03=1-1*1;
+const int const1DArray01[3]={0,1,2}, const2DArray01[2][3]={{0,1,2}, {4,5,6}};
+
+
+int var01 = 1;
+int var02 = 1, var03 = 1;
+
+int var1DArr01[3],var2DArr01[2][3];
+
+int var1DArr02[3] = {0,1,2};
+int var2DArr02[2][3] = {{0,1,2}, {3,4,5}};
+
+
+void func01(int param01) {
+    return;
+}
+
+int func02() {
+    
+    return 1;
+}
+
+int func03(int param01) {
+    
+    return 1;
+}
+
+int func04(int param1DArr[], int param2DArr[][3]) {
+
+    return 1;
+}
+
+int main() {
+    printf("19231188");
+    int var01 = 1;
+    int var02 = 1, var03 = 1;
+    int var04;
+
+    int var1DArr01[3],var2DArr01[2][3];
+
+    int var1DArr02[3] = {0,1,2};
+    int var2DArr02[2][3] = {{0,1,2}, {3,4,5}};
+
+    var01 = +1;
+    var01 = -1 + (1) * var02;
+    var01 = 1 / func02();
+    var01 = 1% func03(var02);
+    var01 = 1% func04(var1DArr01, var2DArr02);
+    var01 = func03(var1DArr01[0]);
+
+    if (1) {
+        var01 = 1;
+    }
+    if (1 < 1) {
+        var01 = 1;
+    } else {
+        var01 = 1;
+    }
+
+    if (1>1){}
+    if (1<1 == 1<=1) {}
+    if (1<=1 != 1>= 1) {}
+    if (!1) {}
+    if (1 && 1) {};
+    if (1 ||1 ) {};
+
+    while (0) break ;
+    while (0) continue;
+
+
+
+    var01 = getint();
+    var1DArr01[0] = 0;
+    var2DArr01[0][0] = 0;
+
+    printf("1");
+    printf("%d", var01);
+
+    printf("1");
+    printf("1");
+    printf("1");
+    printf("1");
+    printf("1");
+    printf("1");
+    printf("1");
+
+    0;
+    return 0;
+    
+}

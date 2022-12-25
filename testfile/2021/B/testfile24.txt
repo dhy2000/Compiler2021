@@ -1,0 +1,50 @@
+const int globalConst1 = 11,  globalConst2 = 22;
+const int globalConstArray2[3][2] = {{6,7},{8,9},{10,11}}; 
+const int globalConstArray1[3] = {10,20,30};
+int globalVirable1 = 111, globalVirable2;
+void assignmentArray(int n,int array1[], int array2[][2]){
+    int i = 0;
+    int j = i;
+    int m = n - 1;
+    while(i<3 && i<=m){
+        array1[i] = globalConstArray1[i] / 10 - 10;
+        i = i + 1;
+    }
+    i = i - 1;
+    while(i>=0){
+        array1[i] = globalConstArray1[i] / 10 - 10;
+        while(1){
+            if(j < 2){
+                array2[i][j] = globalConstArray2[i][j] % 6 + 6; 
+                j = j + 1;
+                continue;
+            }
+            else{
+                j = 0;
+                printf("[%d][%d]:%d|%d , [%d]:%d|%d\n",i,j,array2[i][j],globalConstArray2[i][j],i,array1[i],globalConstArray1[i]);
+                break;
+            }
+        }
+        i = i - 1;
+    }
+    return;
+}
+int main(){
+    printf("19373063\n");
+    int localVirable1 = globalConst1;
+    int localVirableArray1[3],localVirableArray2[3][2];
+    int localVirable2 = globalConstArray2[2][0];
+    int n = 3;
+    printf("1.localVirable1 = %d,localVirable2 = %d \n2.\n",localVirable1, localVirable2);
+    
+    assignmentArray(n,localVirableArray1, localVirableArray2);
+    printf("%d?\n",localVirableArray2[1][1]);
+    printf("3.function of kinds of parameters testified\n");
+    ;
+    if(1>0)
+    {
+
+    }
+    printf("4.non exp testified\n");
+    return 0;
+}

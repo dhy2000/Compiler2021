@@ -1,0 +1,150 @@
+
+const int normalConst1 = 10;
+const int normalConst2 = 12, normalConst3 = 13;
+const int array1DConst1[3] = {1, 2, 3};
+const int array2DConst1[3][2] = {{1, 3}, {3, 5}, {5, 7}};
+
+int normalVar1 = 21;
+int normalVar2 = 22, normalVar3 = 23;
+int array1DVar1[4] = {1, 2, 3, 4}; 
+int array2DVar1[2][3]; 
+int sum;
+
+void outputInt(int n) {
+	printf("%d\n", n);
+	return ;
+}
+
+int getArraySum(int num[], int size) { // size < 3
+	int temp = 0;
+	int ans = 0;
+	while (temp < size) {
+		ans = ans + num[temp];
+		temp = temp + 1;
+	}
+	return ans;
+}
+
+void judgeEvenOdd(int n) {
+	if (n % 2 == 0) {
+		printf("%d is even!\n", n);
+	} else {
+		printf("%d is odd!\n", n);
+	}
+	return ;
+}
+
+void judgeArrayAllEven(int para3[][3], int row) {
+	int i = 0, j = 0, flag = 0, temp;
+	while (i < row) {
+		j = 0;
+		while (j < 3) {
+			if (para3[i][j] % 2 == 0) {
+				j = j + 1;
+				continue;
+			} else {
+				temp = para3[i][j];
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 1) {
+			break;
+		}
+		i = i + 1;
+	}
+	if (!flag) {
+		printf("All even!\n");
+	} else {
+		printf("Contains odd! %d\n", temp);
+	}
+	return ;
+}
+
+int cntEvenNum(int para1[], int size) {
+	int i = 0, cnt = 0;
+	while (i <= size - 1) {
+		if (para1[i] % 2 != 0) {
+			i = i + 1;
+			continue;
+		}
+		cnt = cnt + 1;
+		i = i + 1;
+	}
+	printf("array contains %d even number!\n", cnt);
+	return cnt; 
+}
+
+int get2Max(int m, int n) {
+	int ans = m;
+	if (m > n) {
+		ans = m;
+	} else {
+		ans = n;
+	}
+	return ans;
+}
+
+int get2Min(int m, int n) {
+	int ans = m;
+	if (m >= n) {
+		ans = n;
+	} else {
+		ans = m;
+	}
+	return ans;
+}
+
+int main() {
+	printf("19373341\n");
+	int i = 0, j = 0;
+	int n;
+	n = getint();
+	int mm;
+	mm = getint();
+	int nn;
+	nn = getint();
+	int max;
+	max = get2Max(mm, nn);
+	int min;
+	min = get2Min(mm, nn);
+	while (i < 4) {
+		array1DVar1[i] = i * i / 2;
+		i = i + 1;
+	}
+	int m;
+	m = getArraySum(array1DVar1, 4);
+	printf("m = %d, n = %d, mm = %d, nn = %d\n", m, n, mm, nn);
+	printf("max of mm and nn: %d; min of mm and nn: %d\n", max, min);
+	const int mainConst1 = 10;
+	printf("mainConst1 = %d\n", mainConst1);
+	printf("Sum of normalConst: %d\n", normalConst1 + normalConst2 + normalConst3);
+	judgeEvenOdd(n);
+	printf("Sum of array: %d\n", m);
+	i = 0;
+	while (i < 2) {
+		j = 0;
+		while (j < 3) {
+			array2DVar1[i][j] = 10 * i - j;
+			sum = sum + array2DVar1[i][j];
+			j = j + 1;
+		}
+		i = i + 1;
+	}
+	printf("sum of array: %d\n", sum);
+	i = 0;
+	while (i < 2) {
+		j = 0;
+		while (j < 3) {
+			array2DVar1[i][j] = 4 * i * j / 2 + 4 - 2;
+			j = j + 1;
+		}
+		i = i + 1;
+	}
+	cntEvenNum(array1DVar1, 4);
+	judgeArrayAllEven(array2DVar1, 2);
+	if (0) {
+		judgeEvenOdd(array2DVar1[0][0]);
+	}
+	return 0;
+}

@@ -1,0 +1,10 @@
+19231150
+what you enter in is:12308760
+_a=5
+array_c[0] is:1
+array_d[0][0] is:1
+array_d[1][0] is:2
+_a=10
+_a=103
+2 2 2 3 3 3 3 5 29 131
+Over

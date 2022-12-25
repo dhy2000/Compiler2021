@@ -1,0 +1,72 @@
+//#include<stdio.h>
+
+const int global1 = 1;
+const int global2 = 10, global3 = 1;
+int moduleTest1() {
+    printf("Module1 begin...\n");
+    int var1 = 0, var2 = 10, res;
+    while (1) {
+        if (var1 < 5 && var2 > 5) {
+            var1 = var1 + 1;
+            var2 = var2 - 1;
+        }
+        else {
+            break;
+        }
+    }
+    if (var1 == var2 && var1 >= 5 && var2 <= 5) {
+        res = 1;
+    }
+    else {
+        res = 0;
+    }
+    return res;
+}
+
+int moduleTest2() {
+    printf("Module2 begin...\n");
+    //测试空语句
+    ;
+    int res = 0;
+    if (res < 0 || res != 0 || res == 0) {
+        res = res + 1;
+    }
+    return res;
+}
+
+int moduleTest3() {
+    printf("Module3 begin...\n");
+    int i = 1;
+    while (i < global2) {
+        i = global1 + i - 0 / 1;
+    }
+    return i;
+}
+
+int main() {
+    printf("20373237\nTest A begin...\n");
+    int var;
+    var = moduleTest1();
+    if (var) {
+        printf("Module1 passed!\n");
+    }
+    else {
+        printf("Module1 failed!\n");
+    }
+
+    var = moduleTest2();
+    if (!(var)) {
+        printf("Module2 failed!\n");
+    }
+    printf("Module2 passed!\n");
+
+    var = moduleTest3();
+    if (var == 10) {
+        printf("Module3 passed!\n");
+    }
+    else {
+        printf("Module3 failed!\n");
+    }
+    printf("Test A end!\n");
+    return 0;
+}

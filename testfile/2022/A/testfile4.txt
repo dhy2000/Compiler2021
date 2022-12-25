@@ -1,0 +1,125 @@
+const int op = 5;
+int max(int a, int b, int c)
+{
+    int max = a;
+    if(b > max)
+    {
+        max = b;
+    }
+    if(c > max)
+    {
+        max = c;
+    }
+    return max;
+}
+int maxx(int a, int b)
+{
+    int max = a;
+    if(b > max)
+    {
+        max = b;
+    }
+    return max;
+}
+void mxx(int a, int b, int c, int d[][5])
+{
+    int max = a;
+    if(b > max)
+    {
+        max = b;
+    }
+    if(c > max)
+    {
+        max = c;
+    }
+    return;
+}
+int fix()
+{
+    return 1;
+}
+void fixx()
+{
+    
+}
+int minArr(int a[])
+{
+    int i = 0;
+    int j = 0;
+    int temp = 0;
+    while(i < 5)
+    {
+        while(j < 4 - i)
+        {
+            if(a[j] > a[j+1])
+            {
+                temp = a[j];
+                a[j] = a[j+1];
+                a[j+1] = temp;
+            }
+            j = j + 1;
+        }
+        j = 0;
+        i = i + 1;
+    }
+    return a[0];
+}
+int main()
+{
+    const int b = 4, a = 5, c = 6;
+    const int uu = 8, ui = 9;
+    const int e = 3;
+    const int f[1] = {0};
+    const int g[2][2] = {{1,1},{2,2}};
+    int k[5] = {8,7,6,5,4};
+    int h;
+    int r[1];
+    int s[2][2];
+    int l = 9, m = 10;
+    int n = 11;
+    int ouo = 1, sui = 9, siu = 19;
+    int o[2][2] = {{1,1},{2,2}};
+    int p[1] = {0};
+    h = getint();
+    int i = max(3,4,5);
+    int j = minArr(k);
+    int io = maxx(3,4);
+    int t = -1;
+    o[1][1] = 7;
+    p[0] = 9;
+    p[1] = o[1][1];
+    o[1][1] = 99;
+    if(o[1][1] == 99);
+    if(o[1][1] == 98){3;}
+    if((b + 4) >= (h - 4) && h * 4 <= a * 60 && h > 5 || h / 4 < 3 || h % 3 == 1 || h - 1 != 8 || h < max(40, 50, o[1][1]) || !t || -t || +t || fix())
+    {
+        printf("20231077\n");
+    }
+    else
+    {
+        i = 0;
+        while(i < 6)
+        {
+            if(i == 2)
+            {
+                break;
+            }
+            if(i == 3)
+            {
+                i = i + 1;
+                continue;
+            }
+            i = i + 1;
+        }
+    }
+    printf("20231077\n");
+    printf("%d\n",h);
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    return 0;
+}

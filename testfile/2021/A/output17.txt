@@ -1,0 +1,10 @@
+19373487
+the result is:4
+the result is:4
+out of range!!
+the result is:6
+the result is:4
+out of range!!
+the result is:6
+the result is:5
+the result is:4

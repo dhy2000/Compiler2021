@@ -1,0 +1,9 @@
+20373585
+const1_arr2[1][1]:9 <==> correct:9
+test_return:3 <==> correct:3
+test_not:1 <==> correct:1
+test_sum:15 <==> correct:15
+test_ifcomb:-11 <==> correct:-11
+short-circuit logic or ok!
+short-circuit logic and ok!
+c=9 <==> correct:9

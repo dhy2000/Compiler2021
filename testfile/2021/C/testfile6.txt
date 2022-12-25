@@ -1,0 +1,82 @@
+//#include<stdio.h>
+int main(){
+	printf("19231177\n"); /*我是注释*/ 
+	int _ = 1;/**/
+	int a;
+	a = /**/20;
+	int b,c=460;
+	b/**/=30;
+	printf/**/("_ = %d; a = %d; b = %d; c = %d;\n",_,a,/**/b,c);
+	//  可以正确打印一个变量的值。
+	//  打印的字符串中可以包含空格，可以以开头 
+
+	int n1	,n2,n3,n4,n5;
+	n1 = a + b;
+	n2 = c   	- _;
+	n3 = n1      * n2;
+	n4 = n2 		/ n1;
+	n5 = n3 	  % b;
+	printf(	 "%d+%d=%d; %d-%d=%d; %d*%d=%d; %d/%d=%d; %dmod%d=%d\n",a,b,n1,c,_,n2,n1,n2,n3,n2,n1,n4,n3,b,n5);
+	//  单独出现的运算运算正确 
+
+	int a1 = n1+n2+n3,a2=n2-n3-n4,a3=n3*n4*n5,a4=n5/n1/n4,a5=n4%n1%n1;
+	printf("%d+%d+%d=%d; %d-%d-%d=%d; %d*%d*%d=%d; %d/%d/%d=%d; %dmod%dmod%d=%d\n",n1, n2,n3,a1,n2, n3 , n4,a2,n3, n4,n5 ,a3,n5,n1,n2,a4,n4,n5,n1,a5) ;
+	//  连续出现的单种运算正确 
+	;;;
+	
+
+	int m_1 = 10,m_2=17,m_3=23,m_4=37,m_5=43,m_6=71;int r1=m_1+m_2-m_3*m_4/m_5%m_6-m_2*m_3+m_5;
+	int r2 =m_1+(m_2-m_3)*m_4/m_5%(m_6-m_4)*r1;
+
+	// right
+	printf("%d+%d-%d*%d/%dmod%d-%d*%d+%d=%d=%d\n",  m_1,m_2,    m_3,m_4,m_5,m_6,m_2,m_3,m_5,r1,m_1+m_2-m_3*m_4/m_5%m_6-m_2*m_3+m_5);
+	// printf参数里含有表达式，多种运算符混合运算正确。
+//	printf("%d\n",m_1);
+	printf("%d+(%d-%d)*%d/%dmod(%d-%d)*%d=%d\n",m_1,m_2,m_3,m_4,m_5,m_6,m_4,r1,r2);
+	// wrong
+	printf("all chars : !()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\n");
+	
+	int test_1   = 1;
+	int i=5   ;
+	int old   = i;
+	while(i  >   0 ){// /*
+		test_1 = test_1 * i;i = i - 1;}
+	//  循环正常进行 
+	if(test_1==120){
+		test_1 = test_1 + 7;  // */ 
+	} 
+	if(test_1>119==1){
+		test_1 = test_1 + 3;
+	}
+	if (0>=1){
+		printf ("a");
+	}
+	if (1<=0){
+		printf("a");/*** / */
+	}
+	if (!1){
+		printf("b");
+	}
+	printf("%d!+7+3=%d\n",old,test_1);
+	
+	int nn_1 = +1, nn2 = -1,nn3 = +-1,nn4 = -+1,nn5 = -+-1,nn6 = +-+1,nn7=-+-+1,nn8=+-+-1;
+	if (nn_1 + nn2 + nn3 + nn4 + nn5 + nn6 + nn7 + nn8 != 0) ; 
+	if (nn_1 + nn2 + nn3 + nn4 + nn5 + nn6 + nn7 + nn8 != 0) printf("! : error\n");
+
+	int max_int = 2147483647;
+	int min_int = -2147483647;
+	printf("max: %d ; min : %d ; sum : %d\n",max_int,min_int,max_int + min_int);
+
+
+	/** /*** **/
+	int remain = 1;
+	int /** /*** **/remain_index = 0;
+	while (remain_index/** /*** **/ < remain) {
+		printf("19231177\n");
+		remain_index = remain_index + 1;
+	}
+	
+	
+	return 0;
+	
+}

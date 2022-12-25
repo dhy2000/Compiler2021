@@ -1,0 +1,37 @@
+const int CONSTANT = 100;
+
+int fun(int arr[][CONSTANT]) {
+    return 0;
+}
+
+int main() {
+    printf("20373898\n");
+    int a = 0;
+    {
+        int a = 1;
+        printf("%d\n", a);
+    }
+    {
+        int arr[5];
+        int brr[3][2];
+        arr[3] = 1;
+        brr[1][1] = 1;
+        brr[2][1] = 2;
+        printf("%d\n", arr[3]);
+        printf("%d\n", brr[1][1]);
+        int i = 1;
+        printf("%d\n%d\n", arr[i + 2], brr[i + 1][i]);
+    }
+    int i = 1;
+    while (i != 3) {
+        printf("%d\n", i);
+        i = i + 1;
+    }
+    int crr[5][CONSTANT];
+    int y = i + a + 1 + fun(crr);
+    printf("%d\n", y);
+    {
+        printf("%d !()*+,-./0:;<?@[]~^`\n", y);
+    }
+    return 0;
+}

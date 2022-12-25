@@ -1,0 +1,33 @@
+20373623
+
+1 1 1 1 1 1 1 1 1 1
+2 2 2 2 2 2 2 2 2 2
+3 3 3 3 3 3 3 3 3 3
+4 4 4 4 4 4 4 4 4 4
+5 5 5 5 5 5 5 5 5 5
+6 6 6 6 6 6 6 6 6 6
+7 7 7 7 7 7 7 7 7 7
+8 8 8 8 8 8 8 8 8 8
+9 9 9 9 9 9 9 9 9 9
+10 10 10 10 10 10 10 10 10 10
+
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+1 2 3 4 5 6 7 8 9 10
+30250
+100
+200
+300
+Let us solve math problem
+x not equal to y
+Let us solve math problem
+x is not equal to y and x is 100 more than y
+Let us solve math problem
+x is not equal to y and y is 200 more than x

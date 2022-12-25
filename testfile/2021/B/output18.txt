@@ -1,0 +1,10 @@
+19373755
+n1 = 100
+n2-5 = -30
+n2 + n3 = -15
+n2 * n3 = -250
+! ()*+,-./0123456789:;
+<=>?@
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+[]^_`
+abcdefghijklmnopqrstuvwxyz{|}~

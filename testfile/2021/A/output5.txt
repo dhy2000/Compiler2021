@@ -1,0 +1,6 @@
+19231011
+start checking for logic expressions
+check for AND calculation: successfully!
+check for OR calculation: successfully!
+check for short-circuit calculation: successfully!
+end checking

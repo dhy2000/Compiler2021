@@ -1,0 +1,11 @@
+20373649
+This Function has no return!
+multiply_and_add: a=1 b=3 c=9
+Weekday == 2
+redefined ConstA = 2
+multiply_and_add: a=3 b=4 c=8
+The binary of decimal 23 is 10111.
+binary != 0
+The correct sort of the input array is: 4 8 20.
+short circuit evaluation: Or
+globalVal: 1. short circuit evaluation:And

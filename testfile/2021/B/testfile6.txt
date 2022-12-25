@@ -1,0 +1,71 @@
+//#include<stdio.h>
+const int _a = 3+2+-+2%2/1,_12 = 85;
+const int a=3+(1*2)/2*_a;
+const int arrayA[2] = {1,2};
+const int array_b[2][1] = {{1},{arrayA[0]}};
+int array_c[2] = {1,2};
+int array_d[2][1] = {{1},{2}};
+int b=12,c_1;
+int d = _a*_a+_a;
+int func1(int c){
+	return 1;
+}
+void func2(){
+	return;
+}
+void _func1 (){
+	const int _a = 10,_12 = 12;
+	int array_d[2][1] = {{1},{array_c[1]}};
+	int a=3+(1*20)/2*_a;
+	int b=121,c_1;
+	int d = _a*_a+_a+arrayA[0];
+	printf("_a=%d\n",_a);
+	printf("_a=%d\n",a);
+	if(a==0)
+	a = a+-+1;
+	else
+	//scanf("%d",&c_1);
+	//c_1 = getint();
+	//scanf("%d",&c_1);
+	a = 1;
+	while(a<10 && a>0 ){
+		a=a+1;
+		if(a==5 || a==6 && a!=5*1%5 && a<10 && a>5 && a>=5 && a<=6 &&!(1-1)&&a )break;
+		else;
+		a=a+1;
+	}
+	while(a<10){
+		a=a+1;
+		if(a==5) continue;
+	}
+	_a+1;
+	b=_a%2;
+	return;
+}
+int main(){
+	int x;
+	printf("19231150\n");
+	//scanf("%d",&x);
+	x=getint();
+	printf("what you enter in is:%d\n",x);
+	printf("_a=%d\n",_a);
+	printf("array_c[0] is:%d\n",array_c[0]);
+	printf("array_d[0][0] is:%d\n",array_d[0][0]);
+	printf("array_d[1][0] is:%d\n",array_d[1][0]);
+	_func1();
+	int i=2;
+	int ext;
+	while(i<x){
+		ext=x%i;
+		if(ext==0){
+			x=x/i;
+			printf("%d ",i);
+		}
+		else{
+			i=i+1;
+		}
+	
+	}	printf("%d",x);
+	printf("\nOver");
+	return 0;
+}

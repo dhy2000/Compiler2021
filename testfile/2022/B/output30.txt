@@ -1,0 +1,10 @@
+20373649
+The hash of the sorted array is 1010303.
+The hash of the sorted array is 1507146.
+The hash of the sorted array is 5162457.
+The hash of the sorted array is 6754289.
+The hash of the sorted array is 1778059.
+The answer of quick_pow is: 850 2419 9397 8684.
+a < b and b < c are equal.
+The num I input is: 48
+After a complex calculation: d = 2774

@@ -1,0 +1,25 @@
+int __fact(int x, int r) {
+    if (x <= 1) return r;
+    else return __fact(x - 1, (r * x) % 19260817);
+    return 0;
+}
+
+int fact(int x) {
+    return __fact(x, 1);
+}
+
+int main() {
+    int x;
+    x = getint();
+    printf("19373372\n");
+    printf("fact[%d] = %d\n", x, fact(x));
+    printf("fact[1] = %d\n", fact(1));
+    printf("fact[2] = %d\n", fact(2));
+    printf("fact[3] = %d\n", fact(3));
+    printf("fact[4] = %d\n", fact(4));
+    printf("fact[5] = %d\n", fact(5));
+    printf("fact[6] = %d\n", fact(6));
+    printf("fact[7] = %d\n", fact(7));
+    printf("fact[8] = %d\n", fact(8));
+    return 0;
+}

@@ -1,0 +1,15 @@
+void hanoi(int from, int via, int to, int t) {
+	if (t == 0) return;
+	hanoi(from, to, via, t - 1);
+	printf("Move from %d to %d\n", from, to);
+	hanoi(via, from, to, t - 1);
+	return;
+}
+
+int main() {
+	int t;
+	t = getint();
+	printf("20373493\n");
+	hanoi(1, 2, 3, t);
+	return 0;
+}

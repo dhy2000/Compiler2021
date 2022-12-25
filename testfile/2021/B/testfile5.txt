@@ -1,0 +1,247 @@
+/*#include<stdio.h>
+int getint(){
+ int n;
+ scanf("%d",&n);
+ return n; }
+*/
+
+int myfun1(){
+	return 0;	
+}
+void myfun2(){
+	
+}
+void myfun3(){
+	return;
+}
+
+int adder(int a){
+	return a+1;
+}
+
+void swapFirst(int n1[],int n2[]){
+	int temp = n1[0];
+	n1[0] = n2[0];
+	n2[0]=temp;
+}
+
+int array2Fun(int n1[][3],int n2[][3]){
+	return n1[0][1] + n2[0][1];
+}
+
+void testWhile(){
+
+	while(0){
+		;;
+	}
+	int a = 10;
+	while(a>0){
+		a = a - 3;
+	}
+	
+	if (a != -2){
+		printf("while error!");
+	}
+	
+	int b = 4;
+	int c = 2;
+	while(b>0){
+		b = b - 1;
+		c = c * 2; 
+		if (b == 1){
+			break;
+		}
+	}
+	if(c!=16){
+		printf("break error!");
+	}
+	
+	int d = 3;
+	b = 6;
+	while(b>0){
+		b = b - 1;
+		if (b%2 == 1){
+			continue;
+		}
+		d = d * 3;
+	}
+	if (d!=81){
+		printf("continue error!");
+	}
+	
+	int u = 9;
+	while (u>0) u = u-10;
+	
+	while (1) break;
+	
+}
+
+void testIf(){
+	
+	int a = 9;
+	int b = 0;
+	if (a>8){
+		b = b + 1;
+	}else{
+		b = b - 10;
+	}
+	
+	if (a==9){
+		b = b + 1;
+	}
+	
+	if (a < 10){
+		if (a<20){
+			if (a<30){
+				b = b + 1;
+			}
+		}else{
+			b = b - 100;
+		}
+	}
+	
+	if (a == 10){
+		b = b - 1000;
+	}else if (a ==8){
+		b = b - 10000;
+	}else if (a == 9){
+		b = b + 1;
+	}else{
+		b = b - 30000;
+	}
+	
+	if (a > 100){
+		b = b - 3000;
+	}else{
+		if(a == 9){
+			b = b + 1;
+		}
+	}
+	printf("b=%d\n",b);
+}
+
+void testIO(){
+	
+	int n1 = 20 ;
+	n1 = getint();
+	int temp = 10;
+	
+	int n2 , temp2 = 20;
+	n2 = getint();
+	
+	int n3 ;
+	printf("%d\n",temp2);
+	int n4 ;
+	n4 = getint();
+	printf("%d\n",n4);
+	
+}
+
+int testRecurrence(int n){
+	// 变速下降的递归函数 
+	if (n==0){
+		return 1;
+	}
+	int temp;  // 递归函数里的临时变量 
+	if (n==1){
+		temp = 1;
+	}else{
+		temp = testRecurrence(n-2);
+	}
+	return temp * testRecurrence(n-1) * n * testRecurrence(n-1);
+}
+
+
+void testBlock(){
+	int a = 600;
+	{
+		int a = 900;
+		{
+			int b = a;
+			int a = 7;
+			b = b + a;
+			{
+				int a = 1;
+				b = b + 10 * a;
+			}
+			
+			{
+				int a = 2;
+				b = b + 300 * a;
+			}
+			
+			{
+				int a = 3;
+			}
+			b = b + a;
+			printf("testBlock : b=%d\n",b);
+			
+		}
+		
+	}
+}
+
+int clean(int target,int len1,int myArray[],int myArray2[][5],int len){
+	int index = 0;
+	while(index<len1){
+		myArray[index] = target;
+		index = index + 1;
+	}
+	return 0;
+}
+
+int getSumOfArray(int l,int nums[]){
+	int i = 0;
+	int sum = 0;
+	while(i<l){
+		sum = sum + nums[i];
+		i = i + 1;
+	}
+	return (sum + 1 - 1 * 1 / 1) ;
+}
+
+int getSumOfArray2(int l,int line,int nums[][3]){
+	int sum = 0;
+	while(l>0){
+		sum = sum + nums[l-1][line];
+		l = l - 1;
+	}
+	return sum ;
+}
+
+
+int main(){
+	printf("19231177\n");
+	testWhile();
+	testIf();
+	testIO();
+	testBlock();
+	printf("result = %d\n",testRecurrence(5));
+	int n[4] = {1,2,3,4};
+	printf("1 2 3 4 sum is : %d\n",getSumOfArray(4,n));
+	int n2[5][3] = {{1,2,3},{10,20,30},{100,200,300},{1000,2000,3000},{10000,20000,30000}};
+	
+	swapFirst(n2[0],n2[1]);
+	swapFirst(n,n);
+	int temp0 = getSumOfArray2(5,0,n2);
+	int temp = getSumOfArray2(5,1,n2);
+	int temp1 = getSumOfArray2(5,2,n2);
+	int nnn1 = 1 ,nnn2 = 2,nnn3 = 3;
+	printf("line%d is:%d;line%d is : %d;  line%d is : %d;\n",nnn1,temp0,nnn2,temp,nnn3,temp1);
+	
+	printf("%d+2=3\n",1); // 符合语法
+
+	//printf("%d+%d=%d\n",1,2,3);  // 不符合语法
+
+	int p1 = 1,p2 = 2,p3 = 3;
+	printf("%d+%d=%d\n",p1,p2,p3);  // 符合语法
+
+	int remain = 1;
+	int remain_index = 0;
+	while(remain_index < remain){
+		printf("19231177\n");
+		remain_index = remain_index + 1;
+	}
+
+	return 0;
+}

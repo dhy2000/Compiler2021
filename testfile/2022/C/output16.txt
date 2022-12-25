@@ -1,0 +1,5 @@
+(20373335)
+C level,test a code has decl,no func
+con1 is 44
+con2 is 678,con3 is 61
+the left val is -1288

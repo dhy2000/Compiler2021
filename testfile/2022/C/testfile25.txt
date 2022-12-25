@@ -1,0 +1,66 @@
+
+void addNum() {
+    int a,b;
+    a = getint();
+    b = getint();
+    printf("in addNum a=%d,b=%d\n",a,b);
+    int c = (a + b) * 2;
+    int d = +-+b;
+    printf("in addNum c=%d,d=%d\n",c,d);
+    int e = c + d;
+    printf("in addNum e=%d\n",e);
+    int i = 0;
+    int flag = 0;
+    while(i < 3) {
+        if (e % 3 == 0) {
+            //printf("e=%d become even & i=%d, now break\n",e,i);
+            flag = 1;
+            break;
+        } else if (e % 3 == 1){
+            //printf("e=%d become even & i=%d, now continue\n",e,i);
+            flag = 2;
+            continue;
+        }
+        i = i + 1;
+        e = e + i;
+    }
+    printf("e=%d become even",e);
+    printf("out i=%d\n",i);
+    printf("in addNum out flag=%d\n",flag);
+}
+int testMul(int x,int y) {
+    int re = 0;
+    printf("in testMul x=%d y=%d\n",x,y);
+    if (y < 15) {
+        re = x + y;
+    } else if (y <= 20) {
+        re = x % y;
+    } else if (y >= 30) {
+        re = x * y;
+    } else {
+        re = x - y / x;
+    }
+    printf("in testMul get re=%d\n",re);
+    return re;
+}
+void single(int z) {
+    if (!z) {
+        printf("z==0\n");
+    }
+}
+int main() {
+    printf("20373780\n");
+    addNum();
+    int x,y;
+    x = getint();
+    y = getint();
+    if (x > 20) {
+        x = x - 20;
+    }
+    if (x == 20) {}
+    ;
+    int c = testMul(x,y);
+    printf("c=%d\n",c);
+    single(0);
+    return 0;
+}

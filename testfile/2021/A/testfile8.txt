@@ -1,0 +1,107 @@
+const int a=0;
+const int b=10,c=100;
+const int A[2]={0,1};
+const int B[5][5]={{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+int p =0;
+void Func5(int g)
+{
+	return ;
+}
+void Func4(int N[][2])
+{
+	printf("Func4OK\n");
+	return ;
+}
+void Func3(int M[])
+{
+	printf("Func3OK\n");
+	return ;
+}
+int Func2(int z)
+{
+	z=z*(z/z)%z;
+	printf("%d",z);
+	printf("Func2OK\n");
+	return z;
+}
+int Func1(int x,int y)
+{
+	if(x!=y)
+	{
+		if(x>=y)
+		{
+			printf("fb:%d\n",x);
+			return x;
+		}
+		else
+		{
+			printf("sb:%d\n",y);
+			return y;
+		}
+	}
+	printf("Func1OK\n");
+	return -1;
+ } 
+void Func0()
+{
+	int m,n,i=0,j;
+	int C[2];
+	int D[2][2];
+	m=getint();
+	n=getint();
+	while(i<2||i<2)
+	{
+		C[i]=getint();
+		i=i+1;
+		
+	}
+	printf("CscanfOK\n");
+		while(!1);
++8;
+	i=0;
+
+	while(i<=1)
+	{
+		j=0;
+		while(j<2)
+		{
+			D[i][j]=getint();
+			j=j+1;
+		}
+		i=i+1;
+	}
+	printf("DscanfOK\n");
+	m=Func1(m,n);
+	if(m==-1)
+	{
+		printf("same\n");
+		return ;
+	}
+	i=0;
+	while(1)
+	{
+		if(i==0&&i>-1)
+		{
+			i=i-1;
+			printf("continueOK\n");
+			continue;
+			printf("continueGG\n");
+		}
+		printf("breakOK\n");
+		break;
+		printf("breakGG\n");
+	}
+	i=1;
+	i=Func2(i);
+	Func3(C);
+	Func4(D);
+	Func5(C[0]);
+	return ;
+}
+int main()
+{
+	printf("19182619\n");
+	Func0(); 
+	printf("end");
+	return 0;
+}

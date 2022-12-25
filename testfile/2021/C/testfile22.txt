@@ -1,0 +1,132 @@
+//#include <stdio.h>
+//test Decl
+//	test ConstDecl
+const int top = 1;//test ConstDecl.1
+const int sum = 0, all = 0, sum_1 = 23;//test ConstDecl.2
+const int top_2 = top, top_3 = top + 2;//ConstExp
+//	test VarDecl
+int head = 0;
+int stack_top, stack_bottom, bottom;
+int a1;
+int a2 = 2, a3 = 3, a5 = (3 + 2);
+//test FuncDef
+
+void addGloHead() {
+	head = head + 1;
+	return;
+} 
+
+int judgeZero(int a) {
+	if (a == 0) {
+		return 1;
+	}
+	return 0;
+}
+ 
+int findMax(int a, int b) {
+	if (a > b) {
+		return a;
+	}
+	return b;
+}
+
+void blank() {
+}
+
+void testWhile() {
+	int i = 10;
+	while (i != 10);//add
+	while (i >= 5) {
+		if (i != 8) {
+			i = i - 1;
+			continue;
+		}
+		if (i == 8) {
+			break;
+		}
+	}
+}
+
+void testUnaryExp() {
+	int tmp, blk;
+	//primaryExp
+	tmp = sum;
+	tmp = 1;
+	tmp = (a2 * 3);
+	
+	blk = tmp + findMax(a2, a3);
+	blk = blk - (2 * 1);
+	
+	int zero;
+	zero = +5;
+	zero = -7;
+	zero = +-+10;
+}
+
+void testRelExp() {
+	int score = 40;
+	int grade;
+	if (score < 60) {
+		grade = 1;
+	}
+	if (score <= 40) {
+		grade = 0;
+	}
+	if (score > 60) {
+		grade = 3;
+	}
+	if (score >= 85)
+		grade = 5;
+	else {
+		grade = 4;
+	}
+}
+
+void testAddExp() {
+	int b1, b2;
+	b1 = 3 + 4;
+	b2 = 5 - 7;
+} 
+
+void testLogic() {
+	int a1;
+	if (!judgeZero(a5)) {
+		a1 = 10;
+	}
+}
+
+int main() {
+	int tmp;
+	//test MulExp
+	int b1 = 8 / 2;
+	int b2 = a2 * 5;
+	int b3 = b2 % 3;
+	//end
+	tmp = getint();//
+	printf("19373034\n");//1
+	printf("%d\n", tmp);//7
+	
+	printf("%d\n", top);//2
+	
+	printf("%d\n", head);//3
+	addGloHead();
+	printf("%d\n", head);//4
+	
+	tmp = judgeZero(b1);
+	printf("%d\n", tmp);//5
+	
+	tmp = findMax(b2, b3);
+	printf("%d\n", tmp);//6
+
+	blank();
+	testWhile();
+	testUnaryExp();
+	testRelExp();
+	testAddExp();
+	testLogic();
+
+	printf("8\n");
+	printf("9\n");
+	printf("10");
+	return 0;
+} 

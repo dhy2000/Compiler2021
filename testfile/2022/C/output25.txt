@@ -1,0 +1,10 @@
+20373780
+in addNum a=35,b=62
+in addNum c=194,d=-62
+in addNum e=132
+e=132 become evenout i=0
+in addNum out flag=1
+in testMul x=25 y=26
+in testMul get re=24
+c=24
+z==0

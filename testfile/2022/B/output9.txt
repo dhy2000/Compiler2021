@@ -1,0 +1,9 @@
+20373142
+this is the second text line.
+the output of fun_2 is s
+the output of fun_2 is s
+4
+15
+3
+0
+-65

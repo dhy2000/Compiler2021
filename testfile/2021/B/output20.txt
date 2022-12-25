@@ -1,0 +1,9 @@
+19373408 all weak points
+L and Eq is ok (no params)
+Rel is ok (with params)
+Add is ok1
+Add is ok2
+-1
+-1
+1
+1

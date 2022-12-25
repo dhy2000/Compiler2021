@@ -1,0 +1,11 @@
+19241091
+A_GLOBAL = 1
+I am a function with only one param: {{ 3 }} and I return noting.
+I am a function with 2 param: {{ 1, 2 }} and I return noting.
+I am a function without params and I return 0.
+arr2_1_global[1][1] is 4
+Now a_global is 12, it is < 50.
+I am a function with 3 param: {{ 2, 2, 4 }} and I return 22.
+Now main_var_c is 22
+Now main_var_a is 3, it is <= 10
+==================testfile1 end==================

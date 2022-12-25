@@ -1,0 +1,65 @@
+const int cn0 = 12;
+const int cn1 = cn0 + 1, cn2 = cn1 + cn0, cn3 = 76 * 12;
+int vr0 = cn1;
+int vr1;
+int vr2, vr3 = 99, vr4;
+
+int rand() {
+    return 180;
+}
+
+int addSum(int x) {
+    int t = x, sum = 0;
+    while (t>t == t<t) {
+        sum = sum + t;
+        t = t - 1;
+        if (t == 0) break;
+    }
+    return sum;
+}
+
+int gcd(int x, int y) {
+    if (y == 0) return x;
+    else if (x > y) return gcd(x, x % y);
+    return gcd(y, y%x);
+}
+
+void fv0() {
+    return;
+}
+
+void fv1(int x, int y, int z) {
+
+}
+
+int main() {
+    const int cn4 = 23;
+    int vr5 = 0;
+    printf("%d%d%d%d%d%d%d%d\n",1,9,3,7,3,2,7,6);
+    printf(" !()*+,-./0123456789:;<>=?@[]^_`~{}|\n");
+    printf("qwertyuiopasd\nfghjklzxcvbnm");
+    printf("QWERTYUIOPASD\nFGHJKLZXCVBNM");
+    vr5 = getint();
+    vr5 = cn4 * vr5;
+    ;
+    1+1;
+    {
+        if (cn4 >= cn4 != cn4 <= cn4) ;
+        fv0();
+    }
+    while (vr5 > 0) {
+        vr5 = vr5 - 1;
+        if (vr5 % 2 == 1) continue;
+        vr1 = vr1 + 1;
+        vr5 = vr5 / 2;
+    }
+    while((1)){break;}
+    if (1) vr3 = 9;
+    printf("%d\n", vr5);
+    printf("%d %d\n", gcd(72, 18), gcd(vr1, cn4));
+    printf("addSum: %d, %d\n", addSum(14), addSum(vr1));
+    printf("%d\n", +-+1*-+-rand() *(12) -vr1 /2 /2 + -+-100%97%2 - (1+1)*(1+1) *(1+1));
+    printf("1008%d\n", -6);
+    printf("end");
+    return 0;
+}

@@ -1,0 +1,72 @@
+const int a1 = 1;
+const int b1 = 2,c1 = 3;
+int d1 = 4;
+int e1 = 0, f1 = 60;
+int test = 777;
+
+
+int op1(int b2){
+    return a1+b2;
+}
+
+int op2(){
+    return 1;
+}
+
+void op3(){
+    test = 666;
+    return;
+}
+
+int op4(int a3, int b3){
+    return a3 + b3;
+}
+
+
+int main(){
+    int a = 2, b = 3;
+    int c;
+    int d = 1;
+    ;
+    int e = 2*3;
+    printf("20231055\n"); //1
+    d = getint();
+    // d = 5;
+    if (a > 1){
+        printf("a>1\n"); //2
+    }
+    // test /*
+    if (d != 1){
+        printf("d!=1\n"); //3
+    }
+    /*
+    what
+    */
+    else{
+        printf("error\n");
+    }
+    while (e > 0){
+        if (e == 4){
+            break;
+        }
+        if (e != 6){
+            e = e - 1;
+            continue;
+        }
+        printf("%d\n", e); // 4
+        e = e - 1;
+    }
+    c = op4(a, b);
+    printf("%d\n",c); //5
+    c = op1(e);
+    printf("%d\n",c); //6
+    op3();
+    printf("%d\n",test); //7
+    c = op2();
+    printf("%d\n",c); //8
+    c =6 + 5 * 2;
+    printf("%d\n",c); //9
+    c =5 - 8 / 2;
+    printf("%d\n",c); //10
+    return 0;
+}

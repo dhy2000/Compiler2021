@@ -1,0 +1,75 @@
+const int FIB_M[2][2] = {{1, 1}, {1, 0}}, N = 9;
+const int FIB_V[2] = {1, 1};
+
+int a = 5, b = 7, c = 0;
+int lis[5] = {1, 2, 3, 4, 5};
+
+void vector_mult(int ans[], int v[]) {
+    ans[0] = FIB_M[0][0] * v[0] + FIB_M[0][1] * v[1];
+    ans[1] = FIB_M[1][0] * v[0] + FIB_M[1][1] * v[1];
+    return;
+}
+
+
+void matrix_mult(int ans[][2], int x[][2]) {
+    int z[2] = {FIB_M[0][1], FIB_M[0][0]};
+    ans[0][0] = x[0][0] * FIB_M[0][0] + x[0][1] * FIB_M[1][0];;
+    ans[0][1] = x[0][0] * FIB_M[0][1] + x[0][1] * FIB_M[1][1];;;;;
+    ans[1][0] = x[1][0] * FIB_M[0][0] + x[1][1] * FIB_M[1][0];;
+    ans[1][1] = x[1][0] * FIB_M[0][1] + x[1][1] * FIB_M[1][1];;;;;
+    return;
+}
+
+int cal_fib_matrix() {
+    int i = 0;
+    int a[2][2] = {{1, 0}, {0, 1}}, b[2][2];
+
+    while (i < N) {
+        int j = 0;
+        matrix_mult(b, a);
+        while(j < 4) {
+            a[j / 2][j % 2] = b [j / 2][j % 2];
+            j = +(j + 1);
+        }
+        printf("a is [[%d, %d], [%d, %d]]\n", a[0][0], a[0][1], a[1][0], a[1][1]);
+        i = -(-(i + 1));
+    }
+    return i;
+}
+
+int sum(int p, int q, int r) {
+    return p + q + r;
+}
+
+int main() {
+    printf("20373743\n");
+
+    int x;
+    x = getint();
+    printf("input: %d\n", x);
+
+    int turns = cal_fib_matrix();
+    printf("get matrix after %d multplFIB_M turns!\n", turns);
+
+    int vec[2] = {13, 8}, next_vec[2];
+    vector_mult(next_vec, vec);
+    printf("given original vector: [%d, %d]\n", vec[0], vec[1]);
+    printf("get next vector: [%d, %d]!\n", next_vec[0], next_vec[1]);
+    ;;
+
+    if (a != 0 && b != 0) {
+        printf("a and b is true\n");
+    }
+    if (!c) {
+        printf("c is true\n");
+    } else {
+    }
+    if (a != 0 || c != 0) {
+        printf("a || c is true\n");
+    } else {
+    }
+
+    printf("sum of a, b, c is %d\n", sum(a, b, c));
+    printf("sum of lis front id %d\n", sum(lis[0], lis[1], lis[2]));
+    return 0;
+}

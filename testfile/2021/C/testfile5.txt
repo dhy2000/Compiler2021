@@ -1,0 +1,76 @@
+const int zero = 0,one = +1, minus_one = -1;
+const int two = 2;
+const int times = zero;
+int while_times = zero;
+int groups = 10;
+
+int get_max(int a,int b,int c){
+    a/b;
+    int max = a;
+    if(b > max){
+        max = b;
+        if(c > max){
+            max = c;
+        }
+    }
+    return max;
+}
+
+void while_times_cal(){
+    while_times = while_times + 1;
+    return;
+}
+
+int is_prime(int in){
+    int result = zero;
+    int item = two;
+    {
+        
+    }
+    if(in == 2){
+        result = one;
+        ;
+    }else{
+        while(item < in){
+            while_times_cal();
+            if(in%item == 0){
+                result = zero;
+                break;
+            }
+            result = one;
+            item = item + 1;
+        }
+    }
+    return result;
+}
+
+
+
+int main(){
+    int input;
+    printf("16061069\n");
+    printf("input an integer,judge if it is prime number,10 groups in total\n");
+    while(groups != 0){
+        while_times_cal();
+        input = getint();
+        if(input <= 0){
+            printf("input > 0 is needed\n");
+            groups = groups - 1;
+            continue;
+        }
+        if(input == 1){
+            printf("1 is not concerned\n");
+            groups = groups - 1;
+            continue;
+        }else{
+            if(is_prime(input) >= 1){
+                printf("%d is a prime number\n",input);
+            }else{
+                printf("%d is not a prime number\n",input);
+            }
+        }
+        groups = groups - 1;
+    }
+    printf("while times is %d in total\n",while_times);
+    return 0;
+}

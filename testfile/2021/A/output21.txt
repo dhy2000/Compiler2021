@@ -1,0 +1,12 @@
+19373384
+const and var // decl and def test
+expected result: 579, output: 579
+function (def and )call test
+expected result: {{589, 21}, {599, 31}}, output: {{589, 21}, {599, 31}}
+LExp test, falling into infinite loop indicates an error -- pass
+simple echo test, get a integer and read back: 42
+
+
+================================================================================
+                                     PASSED                                     
+================================================================================

@@ -1,0 +1,63 @@
+void condTest() {
+    if (0 == 0) 
+        printf("20");
+    if (0 != 1)
+        printf("37");
+    if (0 < 1)
+        printf("3");
+    if (1 > 0)
+        printf("9");
+    if (0 <= 1)
+        printf("4");
+    if (1 >= 0)
+        printf("4");
+}
+
+void addTest() {
+    int t0 = 1;
+    int t1 = 1 + 1;
+    int t2 = 1 - 1;
+    printf("%d %d %d\n", t0, t1, t2);
+}
+
+void mulTest() {
+    int t0 = 0;
+    int t1 = 1 * 2;
+    int t2 = 3 / 1;
+    int t3 = 3 % 4;
+    printf("%d %d %d %d\n", t0, t1, t2, t3);
+}
+
+int f(int a) { return a; }
+void unaryTest() {
+    int t0 = 0;
+    int t1;
+    t1 = getint();
+    int t2 = f(1);
+    int t3 = -1;
+    printf("%d %d %d %d\n", t0, t1, t2, t3);
+}
+
+void primaryTest() {
+    int t0 = (0);
+    int t1 = t0;
+    int t2 = 1;
+    printf("%d %d %d\n", t0, t1, t2);
+}
+
+void unaryOpTest() {
+    int t0 = +0;
+    int t1 = -1;
+    if (!t0)
+        printf("%d %d\n", t0, t1);
+}
+
+int main() {
+    condTest();
+    addTest();
+    mulTest();
+    unaryTest();
+    primaryTest();
+    unaryOpTest();
+    return 0;
+}

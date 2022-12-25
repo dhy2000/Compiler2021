@@ -1,0 +1,10 @@
+20373486
+_b1 is 1
+_b1 is 2
+_b1 is 3
+_b1 is 4
+_b1 is 5
+_b1 is 6
+_b1 is 7
+b3[0] is 1, b4[0][0] is 0
+good!!!

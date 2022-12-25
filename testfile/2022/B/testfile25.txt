@@ -1,0 +1,116 @@
+const int MAX = 100010;
+int p[100010];
+
+int judge_prime(int num, int prime_count) {
+    int i = 1;
+    if (num != 2) {
+        if (num % 2 == 0)
+            return 0;
+    }
+    while (i < prime_count) {
+        if ((p[i] * p[i]) > num)
+            break;
+        if (num % p[i] != 0) {
+            i = (i + 2);
+        } else {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int cal_prime(int m) {
+    int prime_count = 1;
+    if (m < 2)
+        return 0;
+    if (m == 2)
+        return prime_count;
+    else {
+        int potential_prime = +3;
+        while (potential_prime <= m) {
+            if (judge_prime(potential_prime, prime_count)) {
+                p[prime_count] = potential_prime;
+                prime_count = prime_count + 1;
+            }
+            potential_prime = potential_prime + 2;
+            if (prime_count > MAX) {
+                printf("prime count reaches maximum: %d\n", MAX);
+                break;
+            }
+        }
+        return prime_count;
+    }
+    return prime_count;
+}
+
+void print_prime(int upper_bound) {
+    int i = 0;
+    int prime_count;
+    prime_count = cal_prime(upper_bound);
+    printf("\nprime_count:%d\n", prime_count);
+    printf("prime less or equal than %d are belows:\n", upper_bound);
+    while (i < prime_count) {
+        printf("%d", p[i]);
+        if (i != prime_count - 1)
+            printf(", ");
+        else
+            printf("\n");
+        i = i + 1;
+    }
+    return;
+}
+
+int prime_div(int num, int p[]) {
+    int len = 0, i = 2, prime_count = 0;
+    if (num < 2)
+        return 0;
+    while (i <= num) {
+        while (num % i == 0) {
+            num = num / i;
+            p[prime_count] = i;
+            prime_count = prime_count + 1;
+        }
+
+        if (i == 2)
+            i = 3;
+        else 
+            i = i + 2;
+        
+        if (i * i > num) {
+            p[prime_count] = num;
+            prime_count = prime_count + 1;
+            break;
+        }
+    }
+    return prime_count;
+}
+
+void print_prime_div(int num) {
+    int a[40], i = 0;
+    int prime_count = prime_div(num, a);
+    printf("\nthe prime division of %d are:\n", num);
+    while (prime_count >= i + 1) {
+        if (prime_count > i + 1) {
+            printf("%d, ", a[i]);
+        } else {
+            printf("%d\n", a[i]);
+        }
+        i = i + 1;
+    }
+    return;
+}
+
+int main() {
+    printf("20373743\n");
+    p[0] = 2;
+    int upper_bound;
+    upper_bound = getint();
+    print_prime(upper_bound);
+    print_prime(100);
+
+    int x;
+    x = getint();
+    print_prime_div(x);
+    print_prime_div(1000001);
+    return 0;
+}

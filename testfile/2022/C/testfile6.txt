@@ -1,0 +1,34 @@
+void print(int num)
+{
+    printf("the param is %d\n", num);
+    return ;
+}
+
+int return10() 
+{
+    return 10;
+}
+int main()
+{
+    printf("20231235\n");
+    int first;
+    first = 3;
+    {
+        int first = 4;
+        printf("local first: %d\n", first);
+    }
+    int second = return10();
+
+    while (first < 100) {
+        if (first > second) {
+            break;
+        }
+        first = first + 1;
+        print(first);
+        if (first % 2 == 0) {
+            continue;
+        }
+    }
+
+    return 0;
+}

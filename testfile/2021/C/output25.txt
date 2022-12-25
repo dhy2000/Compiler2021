@@ -1,0 +1,10 @@
+19373341
+the num is 851
+the num is 11
+the num is 13
+the num is 12341
+11 is odd!
+13 is odd!
+max of 11 and 13 is 13
+min of 11 and 13 is 11
+No, 12341 is not a prime! It has a factor 7

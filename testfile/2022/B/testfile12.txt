@@ -1,0 +1,60 @@
+const int fk=1919810;
+const int a[2][2]={{1,2},{4,3}},asd=10;
+const int d[2]={0,0},c11=-114,c=+9;
+
+int aa[2][2]={{1,1+1},{0,0}},b[4]={0,9,8,7};
+int x=-3,y=2,z=514;
+void pt(){
+	printf("\n");
+}
+void work(int a[]){
+	a[2]=a[2]+1;
+	return;
+}
+int test(int a[],int b,int c[][2],int d[]){
+	return a[2]+b+c[0][0]+d[1];
+}
+int fun(){
+	return 1;
+}
+int fxxk(int x,int y){
+	return x+y;
+}
+
+int main(){
+	printf("20373286\n");
+	pt();
+	x=getint();
+	printf("%d\n",x+y+z+c11);
+	{
+		int x;
+		x=asd*asd;
+		printf("%d\n",x/asd);
+		b[2]=x;
+		work(b);
+	}
+	int f=0;
+	if (!f){
+		int p=+-+a[0][0];
+		{
+			int p=2;
+			aa[0][0]=a[0][0];
+			printf("%d\n",test(b,x,aa,aa[1])%p);
+		}
+		{
+			int p=3;
+			printf("%d\n",(a[0][1]-p));
+		}
+	}
+	int f1=fxxk(f,2);
+	if (f){
+		printf("111\n");
+	}else{
+
+	}
+	printf("ajkshbfjhysaefrbh\n");
+	int g=fun()+test(b,f1,aa,aa[0]);
+	printf("+%d-*\n",g);
+	printf("%d %d %d\n",c11,z,fk);
+	return 0;
+}

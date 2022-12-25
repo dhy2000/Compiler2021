@@ -1,0 +1,10 @@
+19231047
+climb 0 : 1
+climb 3 : 3
+climb 6 : 13
+test return1 : 14
+test climb sum 7 : 21
+test product - sum : 2854
+test nest 1 : 13
+test nest 2 : 89
+test file

@@ -1,0 +1,39 @@
+int main() {
+    printf("18375200\n");
+    int _origin, _1, _2, _3, _4, _5, _6, _7, _8, _9;
+    _origin = getint();
+    _1 = _origin * + - +3;
+    printf("%d\n", _1);
+    _2 = (_1 % 10086) % 2333;
+    printf("%d\n", _2);
+    _3 = _2 * (_1 * _1) / 326;
+    printf("%d\n", _3);
+    printf("ppgod7mi");
+    printf("\n%dyoga%d\n", 4396, 7);
+    printf("2333\n\n\n\n");
+    _4 = getint();
+    _5 = 2;
+    if (_4 >= 2) _6 = 1;
+    else _6 = 0;
+    while (_5 <= _4 / 2) {
+        if (_4 % _5 == 0) {
+            _6 = 0;
+            break;
+        }
+        _5 = _5 + 1;
+    }
+    if (_6 == 0)printf("%d is not a prime, with factor %d.\n", _4, _5);
+    else printf("%d is a prime.\n", _4);
+    _7 = getint();
+    _8 = 1;
+    _9 = 1;
+    _2 = 2;
+    while (_2 < _7) {
+        _3 = (_8 + _9) % 1000007;
+        _8 = _9;
+        _9 = _3;
+        _2 = _2 + 1;
+    }
+    printf("The %dth Fibonacci num is %d.", _7, _9);
+    return 0;
+}

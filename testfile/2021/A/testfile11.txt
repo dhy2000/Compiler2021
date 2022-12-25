@@ -1,0 +1,94 @@
+
+void de()
+{
+	return;
+}
+
+int keke(int i,int j)
+{
+	i=i+j;
+	return 0;
+}
+
+int jian()
+{
+	int x,y,z;
+	x=getint();
+	y=getint();
+	z=x-y;
+	return z;
+}
+
+int main()
+{
+	printf("19182620\n");
+	int a,b,c,d, e,f,g=+1,h,j,k,l,o=-1;
+	int i=2,n,m,flag=0;
+	n=getint();
+	while(i<n)
+	{
+		m=n%i;
+		if(m==0)
+		{
+			flag=1;
+			printf("0\n");
+			
+		
+		}
+		i=i+1;
+	
+	}
+
+	c=jian();
+	printf("%d\n",c);
+	d=c+1;
+	e=c*2;
+	if(e<5)
+	{
+	
+		f=c%2;
+	}
+	else f=c/2;
+	
+	if(f!=!3)
+	g=g+1;
+	
+	o=i+(j+1);
+
+	{}
+	;	
+	while(0)
+	{
+		continue;
+	}
+	while(1)
+	{
+		break;
+	}
+	if(c==d)
+	{
+		if(d>=e)
+		{
+			if(e<=f)
+			{
+				if(f!=g)
+				{
+					if(c>1)
+					{
+						a=1;
+					}
+						
+					
+				}
+			
+			}
+		}
+	}
+	keke(a,b);
+	
+	printf("%d\n%d\n%d\n%d\n",d,e,f,g);
+	printf("19182620\n");
+	printf("19182620\n");
+	printf("19182620\n");
+	return 0;
+}

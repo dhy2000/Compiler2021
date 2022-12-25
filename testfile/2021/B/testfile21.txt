@@ -1,0 +1,75 @@
+int global_counter = 0;
+int innerProduct(int a[], int b[], int length){
+    int i = 0;
+    int res = 0;
+    while(i < length){
+        res = res + a[i] * b[i];
+        i = i + 1;
+    }
+    return res;
+}
+void scaleBiasCombination(int res[], int a[], int s1, int b[], int s2, int bias, int length){
+    int i = 0;
+    while(i < length){
+        res[i] = a[i] * s1 + b[i] * s2 + bias + global_counter;
+        i = i + 1;
+    }
+    global_counter = global_counter + 1;
+}
+void elementWiseMultiply(int res[], int a[], int b[], int length){
+    int i = 0;
+    while(i < length){
+        res[i] = a[i] * b[i];
+        i = i + 1;
+    }
+}
+void printVector(int vec[], int length){
+    printf("[%d", vec[0]);
+    int i = 1;
+    while(i < length){
+        printf(", %d", vec[i]);
+        i = i + 1;
+    }
+    printf("]\n");
+}
+int main(){
+	printf("19373384\n");
+	int a[10] = {1, 3, 5, 7, 9, 11, 2, 9, 7, 8};
+	int b[10] = {2, 5, 4, 8, 9, 6, 3, 7, 1, 1};
+	int res1[10], res2[10];
+	int result;
+	printVector(a, 10);
+	printVector(b, 10);
+	result = innerProduct(a, b, 10);
+	int INNER_PRODUCT_ANSWER = 324;
+	printf("Inner product: expect %d, output: %d\n", INNER_PRODUCT_ANSWER, result);
+	if(INNER_PRODUCT_ANSWER != result) return 1;
+	
+	scaleBiasCombination(res1, a, 2, b, 3, 4, 10);
+	int SBC1_RESULT[10] = {12, 25, 26, 42, 49, 44, 17, 43, 21, 23};
+	printf("SBC step 1: expect:");
+	printVector(SBC1_RESULT, 10);
+	printf("output:");
+	printVector(res1, 10);
+	int i = 0;
+	while(i < 10){
+	    if(res1[i] != SBC1_RESULT[i]) return 2;
+	    i = i + 1;
+	}
+	
+	scaleBiasCombination(res2, res1, 2, b, 3, 4, 10);
+	elementWiseMultiply(res1, res2, b, 10);
+	int FINAL_RESULT[10] = {70, 350, 276, 904, 1170, 666, 144, 784, 50, 54};
+	printf("SBC step 2 and EWM: expect:");
+	printVector(FINAL_RESULT, 10);
+	printf("output:");
+	printVector(res1, 10);
+	i = 0;
+	while(i < 10){
+	    if(res1[i] != FINAL_RESULT[i]) return 3;
+	    i = i + 1;
+	}
+	
+	printf("\n\n================================================================================\n                                     PASSED                                     \n================================================================================\n");
+	return 0;
+}

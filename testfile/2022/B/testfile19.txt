@@ -1,0 +1,89 @@
+// 常量声明
+// 常数定义
+const int simple_const_a = 6 / 4;
+const int arr_1d_a[5] = {2, 3, 4, 5, 6};
+const int arr_2d_a[2][2] = {{7, 8}, {9, 10}}, arr_2d_b[3][2] = {{44, 55}, {66, 77}, {88, 99}};
+const int simple_cosnt_b = 11, arr_1d_b[9] = {11, 22, 33, 44, 55, 66, 77, 88, 99};
+// 变量声明
+int simple_var_c = 327;
+int simple_var_d;
+int arr_1d_c[2] = {896, 1}, arr_1d_d[10];
+int arr_2d_c[3][3], arr_2d_d[2][2] = {{3, 56}, {45, 16}}, arr_2d_e[10][10];
+
+void empty_func() {}
+
+void para_only(int a, int b[], int c[][2]) {
+    printf("Successfully call a function with 3 types of paras.\n");
+    return;
+}
+
+void put_stu_id() {
+    printf("20373453\n\n");
+    return;
+}
+
+int sum_arr_1d(int arr[], int length) {
+    int i = 0, sum = 0;
+    while (i <= length - 1) {
+        sum = sum + arr[i];
+        i = i + 1;
+    }
+    return sum;
+}
+
+int get_then_print() {
+    const int const_tmp[2] = {66, 88};
+    int tmp, ans;
+    int ret[2][3];
+
+    tmp = getint();
+    if (tmp > 100) {
+        printf("\nJust get a number [%d] (greater than 100).\n", tmp);
+    } else {
+        printf("\nJust get a number [%d] (smaller than or equal to 100).\n", tmp);
+    }
+    ret[0][0] = tmp;
+    ret[0][1] = tmp + (const_tmp[0] / 2);
+    ret[0][2] = const_tmp[0] * const_tmp[1];
+    ans = sum_arr_1d(ret[0], 3);
+    return ans;
+}
+
+void put_global_simple_var_c() {
+    printf("GLOBAL simple_var_c: %d\n", simple_var_c);
+    ;
+    return;
+}
+
+int main() {
+    int n, ans[10];
+    int t = 10;
+    put_stu_id();
+    empty_func();
+    simple_var_d = arr_1d_b[0] / arr_1d_a[2];
+    para_only(simple_var_d, arr_1d_c, arr_2d_d);
+    while (t) {
+        t = t - 1;
+        n = get_then_print() % 10 + 10;
+        if (n >= 10) n = n - 10;
+        printf("lucky number: %d\n", n);
+        int simple_var_c = 0;
+        int index = 0;
+        while (simple_var_c < 8) {
+            if (simple_var_c == 2) {
+                simple_var_c = simple_var_c + 1;
+                continue;
+            } else {
+                if (n + 1 <= simple_var_c) break;
+            } 
+            printf("(%d)%d\n", simple_var_c, arr_1d_b[simple_var_c]);
+            ans[index] = arr_1d_b[simple_var_c];
+            index = index + 1;
+            simple_var_c = simple_var_c + 1;
+        }
+        if (n + 1 != simple_var_c)
+            printf("The ones digit of the lucky number is greater than 7.\n");
+    }
+    put_global_simple_var_c();
+    return 0;
+}

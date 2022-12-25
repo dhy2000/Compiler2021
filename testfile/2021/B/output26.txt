@@ -1,0 +1,10 @@
+19373341
+m = 3, n = 13, mm = 29, nn = 37
+max of mm and nn: 37; min of mm and nn: 29
+mainConst1 = 10
+Sum of normalConst: 66
+13 is odd!
+Sum of array: 3
+sum of array: 24
+array contains 3 even number!
+All even!

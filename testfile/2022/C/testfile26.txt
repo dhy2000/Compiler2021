@@ -1,0 +1,35 @@
+int cnt = 10;
+
+int main() {
+    int i = -+-+-+-+-(2 + (4 + 5) * 7);
+    int begin, end;
+    begin = getint();
+    end = getint();
+    i = begin;
+    printf("20373935");
+    printf("\n");
+    while(i < end) {
+        if (i <= begin + (end - begin) / 3) {
+            if (i % 4 == 0) {
+                printf("Ha\n");
+                cnt = cnt - 1;
+            }
+        } else if (i < begin + (end - begin) / 2) {
+            if (i % 6 == 0) {
+                printf("Fa\n");
+                cnt = cnt - 1;
+            }
+        } else if (i >= begin + (end - begin) * 3 / 4) {
+            if (i % 8 == 0) {
+                printf("Pa\n");
+                cnt = cnt - 1;
+            }
+        } else if (i > begin + (end - begin) * 5 / 6) {
+            if (i % 10 == 0) {
+                printf("Ja\n");
+            }
+        }
+        i = i + 1;
+    }
+    return 0;
+}

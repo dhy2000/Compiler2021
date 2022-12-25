@@ -1,0 +1,36 @@
+const int max_number = 100;
+const int min_number = 0;
+int a = 0;
+int main(){
+	printf("19231204");
+	printf("\n");
+	int score;
+	int b = 30;
+	score = getint();
+	if (score >= min_number){
+		printf("The score is %d.\n",score);
+	}
+	a = 4 / 2;
+	if (a == 2){
+		printf("Yes!\n");
+	}
+	a = 3 + 5;
+	if (a != 8){
+		printf("No!\n");
+	}else{
+		printf("Yes!\n");
+	}
+	a = 10 * 10;
+	if (a <= max_number){
+		printf("Yes!\n");
+	}
+	if (a < max_number){
+		printf("Yes!\n");
+	}
+	if (a > b) {
+		printf("No!");
+	}else {
+		printf("Yes!");
+	}
+	return 0;
+}

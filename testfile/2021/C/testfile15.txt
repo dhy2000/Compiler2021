@@ -1,0 +1,97 @@
+/*#include<stdio.h>
+int getint(){
+	int n;
+	scanf("%d",&n);
+	return n;
+} 
+*/
+const int singleConstDecl = 23;
+//const int singleConstDecl_0 = singleConstDecl + 123 ,singleConstDecl_1 = singleConstDecl + 3 ;
+const int singleConstDecl_0 = 13 ,singleConstDecl_1 = 3 ;
+
+int singleVarDecl = 3 - 13;
+int singleVarDecl_0 = 23 ,singleVarDecl_1 = +-+(3-13),singleVarDecl_2;
+
+void funcDef_void(){
+	
+}
+
+int funcDef_0(int var){
+    int ans = var * 10;
+    return ans;
+}
+
+int funcDef_1(int var1, int var2){
+	int a = var1 * var2;
+	int b;
+	int c;
+	if (var2 != 0){
+		b = a + var1%var2;
+		c = var1/var2;
+	}
+	else {
+		b = a+var1;
+		c = var1/2;
+	}
+	
+	b = b - a;
+	{
+		;
+		a+b;	
+	}
+	if (a < 0) a = -a;
+	return (1+a)*(b+c);
+}
+void printInt(int var){
+	printf("print int : %d\n",var);
+	return ;
+}
+int main(){
+	printf("19373479\n");
+    int a = 10,b,c,d,e;
+    b = getint();
+    c = getint();
+    d = getint();
+    e = getint();
+    if(b>5){
+        b = 5;
+        
+    }
+    while (a) {
+        a = a - 1;
+        if (c>=a){
+            c = c / (a+1) + a;
+        }
+        if (d <= a){
+            d = d*a;
+        }
+        else{
+            d = d % (a+3);
+        }
+        while(e < d){
+            e = e + a;
+            if (e == b) break;
+            if (e != c) {
+                e  = c + e;
+                continue;
+            }
+        }
+    }
+
+    if(!a){
+        printInt(a);
+    }
+    printInt(b);
+    printInt(c);
+    printInt(d);
+    printInt(e);
+    int f = funcDef_1(e,d);
+    int g = funcDef_1(f, funcDef_0(c));
+    funcDef_void();
+    printInt(f);
+    printInt(g);
+    singleVarDecl_2 = funcDef_1(funcDef_1(singleVarDecl,singleVarDecl_2), funcDef_1(singleConstDecl_0,singleConstDecl_1));
+    printInt(singleVarDecl_2);
+
+	return 0;
+}
